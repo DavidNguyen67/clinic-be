@@ -1,0 +1,5 @@
+- rest:
+    path: /v1/dashboard
+    get:
+      - path: /{userId}
+        to: direct:dashboard

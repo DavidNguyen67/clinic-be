@@ -1,0 +1,9 @@
+- route:
+    id: dashboard-route
+    from:
+      uri: direct:dashboard
+      steps:
+        - process:
+            ref: getProfileProcessor
+        - marshal:
+            json: {}
