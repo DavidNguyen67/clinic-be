@@ -1,5 +1,5 @@
 - rest:
-    path: /v1/dashboard
+    path: /v1/settings
     get:
-      - path: /{userId}
-        to: direct:dashboard
+      - path: /clinic
+        to: direct:clinic-settings

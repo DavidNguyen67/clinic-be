@@ -1,9 +1,9 @@
 - route:
-    id: dashboard-route
+    id: clinic-settings-route
     from:
-      uri: direct:dashboard
+      uri: direct:clinic-settings
       steps:
         - process:
-            ref: getProfileProcessor
+            ref: getClinicSettingsProcessor
         - marshal:
             json: {}
