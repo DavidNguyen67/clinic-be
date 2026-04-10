@@ -3,3 +3,9 @@
     get:
       - path: /clinic
         to: direct:clinic-settings
+
+- rest:
+    path: /v1/doctors
+    post:
+      - path: /
+        to: direct:create-doctor

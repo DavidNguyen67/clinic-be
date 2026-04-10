@@ -7,3 +7,13 @@
             ref: getClinicSettingsProcessor
         - marshal:
             json: {}
+
+- route:
+    id: create-doctor-route
+    from:
+      uri: direct:create-doctor
+      steps:
+        - process:
+            ref: createDoctorProcessor
+        - marshal:
+            json: {}
