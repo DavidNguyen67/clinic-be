@@ -3,14 +3,9 @@
   "brandName": "MedCare",
   "address": "123 Đường Lê Lợi, Quận 1, TP.HCM",
   "phone": "1800 1234",
-  "workingHours": {
-    "Monday": "08:00 - 17:00",
-    "Tuesday": "08:00 - 17:00",
-    "Wednesday": "08:00 - 17:00",
-    "Thursday": "08:00 - 17:00",
-    "Friday": "08:00 - 17:00",
-    "Saturday": "09:00 - 14:00",
-    "Sunday": "Closed"
-  }
+  "workingHours": "7:00 AM - 8:00 PM (Thứ 2 - Chủ nhật)",
+  "privacyPolicyLink": "https://www.medcare.com/privacy-policy.html",
+  "termsOfServiceLink": "https://www.medcare.com/terms-of-service.html",
+  "logoUrl": "https://www.medcare.com/logo.png"
 }
 
