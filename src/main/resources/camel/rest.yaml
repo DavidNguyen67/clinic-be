@@ -24,6 +24,12 @@
         to: direct:top-doctors
 
 - rest:
+    path: /v1/doctors
+    get:
+      - path: /
+        to: direct:doctors
+
+- rest:
     path: /v1/patient-count
     get:
       - path: /

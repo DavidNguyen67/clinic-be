@@ -39,6 +39,16 @@
             json: { }
 
 - route:
+    id: doctors-route
+    from:
+      uri: direct:doctors
+      steps:
+        - process:
+            ref: getAllDoctorsProcessor
+        - marshal:
+            json: { }
+
+- route:
     id: patient-count-route
     from:
       uri: direct:patient-count

@@ -1,5 +1,6 @@
 package com.camel.clinic.dto;
 
+import com.camel.clinic.entity.Specialty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,4 +20,7 @@ public class DoctorDTO {
     private BigDecimal averageRating;
     private String fullName;
     private String pathAvatar;
+    private BigDecimal consultationFee;
+    private String bio;
+    private Specialty specialty;
 }

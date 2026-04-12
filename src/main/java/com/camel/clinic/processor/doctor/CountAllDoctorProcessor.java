@@ -7,8 +7,6 @@ import org.apache.camel.Processor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 
 @Component("countAllDoctorProcessor")
 @AllArgsConstructor
@@ -17,9 +15,7 @@ public class CountAllDoctorProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        Map<String, Object> queryParams = exchange.getIn().getHeaders();
-
-        ResponseEntity<?> response = doctorServiceImp.getAllDoctors(queryParams);
+        ResponseEntity<?> response = doctorServiceImp.countAllDoctors();
 
         exchange.getMessage().setBody(response);
     }

@@ -5,9 +5,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
 public interface DoctorService {
-    ResponseEntity<?> getAllDoctors(Map<String, Object> queryParams);
-
     ResponseEntity<?> countAllDoctors();
 
     ResponseEntity<?> getTopDoctors();
+
+    ResponseEntity<?> filterDoctors(Map<String, Object> queryParams);
 }

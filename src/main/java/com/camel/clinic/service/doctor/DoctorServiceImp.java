@@ -15,9 +15,10 @@ import java.util.Map;
 public class DoctorServiceImp implements DoctorService {
     private final DoctorServiceInv doctorServiceInv;
 
-    public ResponseEntity<?> getAllDoctors(Map<String, Object> queryParams) {
-        return doctorServiceInv.list(queryParams);
+    public ResponseEntity<?> filterDoctors(Map<String, Object> queryParams) {
+        return doctorServiceInv.filterDoctors(queryParams);
     }
+
 
     public ResponseEntity<?> countAllDoctors() {
         return doctorServiceInv.count();
@@ -27,4 +28,5 @@ public class DoctorServiceImp implements DoctorService {
     public ResponseEntity<?> getTopDoctors() {
         return doctorServiceInv.getTopDoctors();
     }
+
 }
