@@ -13,7 +13,11 @@ import org.springframework.stereotype.Service;
 public class DoctorServiceImp implements DoctorService {
     private final DoctorServiceInv doctorServiceInv;
 
-     public ResponseEntity<?> createDoctor(Doctor body) throws JsonProcessingException {
-         return doctorServiceInv.create(body);
+    public ResponseEntity<?> createDoctor(Doctor body) throws JsonProcessingException {
+        return doctorServiceInv.create(body);
+    }
+
+    public ResponseEntity<?> countAllDoctors() {
+        return doctorServiceInv.count();
     }
 }

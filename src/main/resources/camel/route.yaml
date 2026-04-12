@@ -6,7 +6,18 @@
         - process:
             ref: getClinicSettingsProcessor
         - marshal:
-            json: {}
+            json: { }
+
+- route:
+    id: clinic-figures-route
+    from:
+      uri: direct:clinic-figures
+      steps:
+        - process:
+            ref: getClinicFigures
+        - marshal:
+            json: { }
+
 
 - route:
     id: create-doctor-route
@@ -16,4 +27,4 @@
         - process:
             ref: createDoctorProcessor
         - marshal:
-            json: {}
+            json: { }

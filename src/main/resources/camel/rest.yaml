@@ -5,7 +5,7 @@
         to: direct:clinic-settings
 
 - rest:
-    path: /v1/doctors
-    post:
+    path: /v1/clinic-figures
+    get:
       - path: /
-        to: direct:create-doctor
+        to: direct:clinic-figures

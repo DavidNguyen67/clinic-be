@@ -95,6 +95,23 @@ public class BaseService<T extends BaseEntity, R extends JpaRepository<T, UUID> 
         }
     }
 
+    /**
+     * Đếm tổng số bản ghi
+     *
+     * @return tổng số bản ghi
+     */
+    public ResponseEntity<?> count() {
+        try {
+            long total = repository.count();
+            log.info("Counted {} entities", total);
+            return ResponseEntity.ok(Map.of("total", total));
+        } catch (Exception e) {
+            log.error("Error counting entities: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Failed to count entities", "message", e.getMessage()));
+        }
+    }
+
     // ==================== RETRIEVE ====================
 
     /**
