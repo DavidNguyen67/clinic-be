@@ -14,17 +14,55 @@
       uri: direct:clinic-figures
       steps:
         - process:
-            ref: getClinicFigures
+            ref: getClinicFiguresProcessor
         - marshal:
             json: { }
 
-
 - route:
-    id: create-doctor-route
+    id: doctor-count-route
     from:
-      uri: direct:create-doctor
+      uri: direct:doctor-count
       steps:
         - process:
-            ref: createDoctorProcessor
+            ref: countAllDoctorProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: top-doctors-route
+    from:
+      uri: direct:top-doctors
+      steps:
+        - process:
+            ref: getTopDoctorsProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-count-route
+    from:
+      uri: direct:patient-count
+      steps:
+        - process:
+            ref: countAllPatientProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: specialty-count-route
+    from:
+      uri: direct:specialty-count
+      steps:
+        - process:
+            ref: countAllSpecialtiesProcessor
+        - marshal:
+            json: { }
+- route:
+    id: specialty-route
+    from:
+      uri: direct:specialty
+      steps:
+        - process:
+            ref: getAllSpecialtiesProcessor
         - marshal:
             json: { }

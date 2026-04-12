@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.Objects;
 
 
-@Component("getClinicFigures")
+@Component("getClinicFiguresProcessor")
 @AllArgsConstructor
-public class GetClinicFigures implements Processor {
+public class GetClinicFiguresProcessor implements Processor {
     private final PatientServiceImp patientServiceImp;
     private final DoctorServiceImp doctorServiceImp;
     private final SpecialtyServiceImp specialtyServiceImp;

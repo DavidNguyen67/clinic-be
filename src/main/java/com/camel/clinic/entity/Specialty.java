@@ -1,18 +1,14 @@
 package com.camel.clinic.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "specialties", indexes = {
@@ -53,6 +49,7 @@ public class Specialty extends SoftDeletableEntity {
 
     @OneToMany(mappedBy = "specialty", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("specialty-items")
+    @JsonIgnore
     private List<Doctor> doctors = new ArrayList<>();
 
     public enum SpecialtyType {

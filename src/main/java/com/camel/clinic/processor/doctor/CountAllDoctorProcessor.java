@@ -4,18 +4,23 @@ import com.camel.clinic.service.doctor.DoctorServiceImp;
 import lombok.AllArgsConstructor;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-@Component("createDoctorProcessor")
+import java.util.Map;
+
+
+@Component("countAllDoctorProcessor")
 @AllArgsConstructor
-public class CreateDoctorProcessor implements Processor {
+public class CountAllDoctorProcessor implements Processor {
     private final DoctorServiceImp doctorServiceImp;
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        Object body = exchange.getIn().getBody(String.class);
+        Map<String, Object> queryParams = exchange.getIn().getHeaders();
 
-//        ResponseEntity<?> response = doctorServiceImp.createDoctor(body);
-        exchange.getMessage().setBody(body);
+        ResponseEntity<?> response = doctorServiceImp.getAllDoctors(queryParams);
+
+        exchange.getMessage().setBody(response);
     }
 }

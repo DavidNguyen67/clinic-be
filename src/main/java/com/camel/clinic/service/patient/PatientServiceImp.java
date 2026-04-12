@@ -13,7 +13,7 @@ import java.util.Map;
 public class PatientServiceImp implements PatientService {
     private final PatientServiceInv patientServiceInv;
 
-    public ResponseEntity<?> getAllPatient(Map<String, Object> queryParams) {
+    public ResponseEntity<?> getAllPatients(Map<String, Object> queryParams) {
         return patientServiceInv.list(queryParams);
     }
 

@@ -10,20 +10,16 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 
-@Component("getAllPatientProcessor")
+@Component("countAllPatientProcessor")
 @AllArgsConstructor
-public class GetAllPatientProcessor implements Processor {
+public class CountAllPatientProcessor implements Processor {
     private final PatientServiceImp patientServiceImp;
 
     @Override
     public void process(Exchange exchange) throws Exception {
         Map<String, Object> queryParams = exchange.getIn().getHeaders();
-        String queryString = queryParams.entrySet().stream()
-                .map(entry -> entry.getKey() + "=" + entry.getValue())
-                .reduce((a, b) -> a + "&" + b)
-                .orElse("");
 
-        ResponseEntity<?> response = patientServiceImp.getAllPatient(queryParams);
+        ResponseEntity<?> response = patientServiceImp.countAllPatients();
 
         exchange.getMessage().setBody(response);
     }

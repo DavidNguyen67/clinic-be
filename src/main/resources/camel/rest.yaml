@@ -9,3 +9,33 @@
     get:
       - path: /
         to: direct:clinic-figures
+
+#Doctor
+- rest:
+    path: /v1/doctor-count
+    get:
+      - path: /
+        to: direct:doctor-count
+
+- rest:
+    path: /v1/top-doctors
+    get:
+      - path: /
+        to: direct:top-doctors
+
+- rest:
+    path: /v1/patient-count
+    get:
+      - path: /
+        to: direct:patient-count
+
+- rest:
+    path: /v1/specialty-count
+    get:
+      - path: /
+        to: direct:specialty-count
+- rest:
+    path: /v1/specialty
+    get:
+      - path: /
+        to: direct:specialty

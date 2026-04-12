@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class BaseService<T extends BaseEntity, R extends JpaRepository<T, UUID> & JpaSpecificationExecutor<T>> {
+public abstract class BaseService<T extends BaseEntity, R extends JpaRepository<T, UUID> & JpaSpecificationExecutor<T>> {
 
     protected final Supplier<T> entityFactory;
     protected final ObjectMapper objectMapper;
@@ -236,7 +236,7 @@ public class BaseService<T extends BaseEntity, R extends JpaRepository<T, UUID> 
         return filtered;
     }
 
-    private int parseIntParam(Map<String, Object> params, String key, int defaultValue) {
+    protected int parseIntParam(Map<String, Object> params, String key, int defaultValue) {
         Object val = params.get(key);
         if (val == null) return defaultValue;
         try {
@@ -245,4 +245,5 @@ public class BaseService<T extends BaseEntity, R extends JpaRepository<T, UUID> 
             return defaultValue;
         }
     }
+
 }
