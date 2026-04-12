@@ -37,7 +37,17 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             String doctorName = (String) queryParams.getOrDefault("doctorName", null);
             String specialtyName = (String) queryParams.getOrDefault("specialtyName", null);
             String specialtyIdStr = (String) queryParams.getOrDefault("specialtyId", null);
-            UUID specialtyId = specialtyIdStr != null ? UUID.fromString(specialtyIdStr) : null;
+            UUID specialtyId = null;
+            if (specialtyIdStr != null) {
+                try {
+                    specialtyId = UUID.fromString(specialtyIdStr);
+                } catch (IllegalArgumentException e) {
+                    log.warn("Invalid specialtyId format: {}", specialtyIdStr, e);
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Map.of("error", "Invalid specialtyId format",
+                                    "message", "specialtyId must be a valid UUID"));
+                }
+            }
 
             Pageable pageable = PageRequest.of(page, size);
             Page<DoctorDTO> resultPage = repository.filterDoctors(doctorName, specialtyName, specialtyId, pageable);
