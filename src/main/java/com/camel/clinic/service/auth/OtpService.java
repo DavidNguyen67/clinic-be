@@ -1,68 +1,60 @@
 package com.camel.clinic.service.auth;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
-/**
- * Simple in-memory OTP store (email -> otp with expiry) and reset token store.
- *
- * NOTE: For production, replace with Redis.
- */
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class OtpService {
-    private static final long OTP_TTL_MS = 10 * 60 * 1000; // 10 minutes
+
+    private static final long OTP_TTL_MINUTES = 10;
+    private static final String OTP_PREFIX = "otp:";
+    private static final String RESET_TOKEN_PREFIX = "reset_token:";
 
     private final SecureRandom random = new SecureRandom();
-    private final Map<String, OtpValue> otpStore = new ConcurrentHashMap<>();
-    private final Map<String, ResetTokenValue> resetTokenStore = new ConcurrentHashMap<>();
+    private final StringRedisTemplate redisTemplate;
 
     public String generateAndStoreOtp(String email) {
         String otp = String.format("%06d", random.nextInt(1_000_000));
-        otpStore.put(normalize(email), new OtpValue(otp, System.currentTimeMillis() + OTP_TTL_MS));
+        String key = OTP_PREFIX + normalize(email);
+        redisTemplate.opsForValue().set(key, otp, OTP_TTL_MINUTES, TimeUnit.MINUTES);
         return otp;
     }
 
     public String verifyOtpAndIssueResetToken(String email, String otp) {
-        String key = normalize(email);
-        OtpValue v = otpStore.get(key);
-        if (v == null || v.isExpired() || !v.otp().equals(otp)) {
+        String key = OTP_PREFIX + normalize(email);
+        String storedOtp = redisTemplate.opsForValue().get(key);
+
+        if (storedOtp == null || !storedOtp.equals(otp)) {
             return null;
         }
-        otpStore.remove(key);
+        redisTemplate.delete(key);
 
         String resetToken = UUID.randomUUID().toString();
-        resetTokenStore.put(resetToken, new ResetTokenValue(key, System.currentTimeMillis() + OTP_TTL_MS));
+        String tokenKey = RESET_TOKEN_PREFIX + resetToken;
+        redisTemplate.opsForValue().set(tokenKey, normalize(email), OTP_TTL_MINUTES, TimeUnit.MINUTES);
         return resetToken;
     }
 
     public String consumeResetToken(String resetToken) {
-        ResetTokenValue v = resetTokenStore.get(resetToken);
-        if (v == null || v.isExpired()) {
-            resetTokenStore.remove(resetToken);
+        String tokenKey = RESET_TOKEN_PREFIX + resetToken;
+        String email = redisTemplate.opsForValue().get(tokenKey);
+
+        if (email == null) {
             return null;
         }
-        resetTokenStore.remove(resetToken);
-        return v.email();
+        redisTemplate.delete(tokenKey);
+        return email;
     }
 
     private String normalize(String email) {
         return email == null ? null : email.trim().toLowerCase();
     }
-
-    private record OtpValue(String otp, long expiresAtMs) {
-        boolean isExpired() {
-            return System.currentTimeMillis() > expiresAtMs;
-        }
-    }
-
-    private record ResetTokenValue(String email, long expiresAtMs) {
-        boolean isExpired() {
-            return System.currentTimeMillis() > expiresAtMs;
-        }
-    }
 }
-

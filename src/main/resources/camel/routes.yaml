@@ -83,6 +83,8 @@
             ref: validationProcessor
         - process:
             ref: forgotPasswordAuthProcessor
+        - marshal:
+            json: { }
 
 - route:
     id: auth-verify-otp-route
@@ -98,6 +100,8 @@
             ref: validationProcessor
         - process:
             ref: verifyOtpAuthProcessor
+        - marshal:
+            json: { }
 
 - route:
     id: auth-reset-password-route
@@ -113,6 +117,8 @@
             ref: validationProcessor
         - process:
             ref: resetPasswordAuthProcessor
+        - marshal:
+            json: { }
 
 - route:
     id: auth-me-route
@@ -121,7 +127,8 @@
       steps:
         - process:
             ref: meAuthProcessor
-
+        - marshal:
+            json: { }
 - route:
     id: auth-change-password-route
     from:
@@ -136,7 +143,9 @@
             ref: validationProcessor
         - process:
             ref: changePasswordAuthProcessor
-
+        - marshal:
+            json: { }
+            
 - route:
     id: clinic-settings-route
     from:

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Minimal email service.
- *
+ * <p>
  * Current implementation logs OTP to server log.
  * Replace with JavaMailSender (spring-boot-starter-mail) for real email.
  */
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     public void sendOtpEmail(String email, String otp) {
+//        TODO: Implement real email sending using JavaMailSender
         log.info("[DEV-EMAIL] Send OTP to {}: {}", email, otp);
     }
 }
