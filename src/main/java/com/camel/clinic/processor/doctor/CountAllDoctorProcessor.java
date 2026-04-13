@@ -18,5 +18,6 @@ public class CountAllDoctorProcessor implements Processor {
         ResponseEntity<?> response = doctorServiceImp.countAllDoctors();
 
         exchange.getMessage().setBody(response);
+
     }
 }

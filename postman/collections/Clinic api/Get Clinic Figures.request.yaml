@@ -1,0 +1,8 @@
+$kind: http-request
+name: "Get Clinic Figures"
+method: GET
+url: "{{baseUrl}}/api/v1/clinic-figures/"
+headers:
+  - key: Accept
+    value: application/json
+order: 2000

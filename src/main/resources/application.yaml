@@ -24,6 +24,11 @@ spring:
     url: jdbc:postgresql://47.129.48.184:5432/clinic_postgres
     schemas:
       - public
+  data:
+    redis:
+      host: 47.129.48.184
+      port: 6379
+      password: QpHCCS28JmdwWcr8g4-lwS8nWc0Lz-abTn0KJ0Brv2g
   jpa:
     hibernate:
       ddl-auto: validate
@@ -40,6 +45,10 @@ camel:
   servlet:
     mapping:
       context-path: /api/*
+  rest:
+    component: servlet
+    context-path: /api/*
+    binding-mode: off
 
 jwt:
   private-key-path: keys/private_key_pkcs8.pem

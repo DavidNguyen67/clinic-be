@@ -1,0 +1,8 @@
+$kind: http-request
+name: "Get Patient Count"
+method: GET
+url: "{{baseUrl}}/api/v1/patient-count/"
+headers:
+  - key: Accept
+    value: application/json
+order: 8000

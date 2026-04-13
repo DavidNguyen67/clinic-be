@@ -1,0 +1,8 @@
+$kind: http-request
+name: "Get Clinic Settings"
+method: GET
+url: "{{baseUrl}}/api/v1/settings/clinic"
+headers:
+  - key: Accept
+    value: application/json
+order: 1000

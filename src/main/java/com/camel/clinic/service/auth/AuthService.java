@@ -1,35 +1,27 @@
 package com.camel.clinic.service.auth;
 
-import com.camel.clinic.dto.auth.LoginRequest;
-import com.camel.clinic.dto.auth.LoginResponse;
-import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Service;
+import com.camel.clinic.dto.auth.*;
+import org.apache.coyote.BadRequestException;
+import org.springframework.http.ResponseEntity;
 
-@Service
-@AllArgsConstructor
-public class AuthService {
+public interface AuthService {
+    ResponseEntity<?> login(LoginRequestDTO req) throws BadRequestException;
 
-    private final AuthenticationManager authenticationManager;
+    ResponseEntity<?> register(RegisterRequestDTO req) throws BadRequestException;
 
-    public LoginResponse login(LoginRequest req) {
-        Authentication auth;
-        try {
-            auth = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(req.username(), req.password())
-            );
-        } catch (Exception ex) {
-            throw new BadCredentialsException("Invalid username or password");
-        }
+    ResponseEntity<?> refresh(RefreshRequestDTO req) throws BadRequestException;
 
-        return null;
-    }
+    ResponseEntity<?> logout(String refreshToken, String accessToken) throws BadRequestException;
 
-    public void logout() {
-        // no-op
-    }
+    ResponseEntity<?> forgotPassword(ForgotPasswordRequestDTO req) throws BadRequestException;
+
+    ResponseEntity<?> verifyOtp(VerifyOtpRequestDTO req) throws BadRequestException;
+
+    ResponseEntity<?> resetPassword(ResetPasswordRequestDTO req) throws BadRequestException;
+
+    ResponseEntity<?> me(String email) throws BadRequestException;
+
+    ResponseEntity<?> changePassword(ChangePasswordRequestDTO req, String email) throws BadRequestException;
+
 }
 

@@ -1,0 +1,218 @@
+- onException:
+    exception:
+      - java.lang.Exception
+    handled:
+      constant: true
+    steps:
+      - process:
+          ref: exceptionProcessor
+      - marshal:
+          json: { }
+
+- onCompletion:
+    onCompleteOnly: true
+    steps:
+      - process:
+          ref: apiResponseWrapperProcessor
+
+- route:
+    id: auth-register-route
+    from:
+      uri: direct:auth-register
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.RegisterRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: registerAuthProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: auth-login-route
+    from:
+      uri: direct:auth-login
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.LoginRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: loginAuthProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: auth-refresh-route
+    from:
+      uri: direct:auth-refresh
+      steps:
+        - process:
+            ref: refreshAuthProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: auth-logout-route
+    from:
+      uri: direct:auth-logout
+      steps:
+        - process:
+            ref: logoutAuthProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: auth-forgot-password-route
+    from:
+      uri: direct:auth-forgot-password
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.ForgotPasswordRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: forgotPasswordAuthProcessor
+
+- route:
+    id: auth-verify-otp-route
+    from:
+      uri: direct:auth-verify-otp
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.VerifyOtpRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: verifyOtpAuthProcessor
+
+- route:
+    id: auth-reset-password-route
+    from:
+      uri: direct:auth-reset-password
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.ResetPasswordRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: resetPasswordAuthProcessor
+
+- route:
+    id: auth-me-route
+    from:
+      uri: direct:auth-me
+      steps:
+        - process:
+            ref: meAuthProcessor
+
+- route:
+    id: auth-change-password-route
+    from:
+      uri: direct:auth-change-password
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.ChangePasswordRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: changePasswordAuthProcessor
+
+- route:
+    id: clinic-settings-route
+    from:
+      uri: direct:clinic-settings
+      steps:
+        - process:
+            ref: getClinicSettingsProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: clinic-figures-route
+    from:
+      uri: direct:clinic-figures
+      steps:
+        - process:
+            ref: getClinicFiguresProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-count-route
+    from:
+      uri: direct:doctor-count
+      steps:
+        - process:
+            ref: countAllDoctorProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: top-doctors-route
+    from:
+      uri: direct:top-doctors
+      steps:
+        - process:
+            ref: getTopDoctorsProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctors-route
+    from:
+      uri: direct:doctors
+      steps:
+        - process:
+            ref: getAllDoctorsProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-count-route
+    from:
+      uri: direct:patient-count
+      steps:
+        - process:
+            ref: countAllPatientProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: specialty-count-route
+    from:
+      uri: direct:specialty-count
+      steps:
+        - process:
+            ref: countAllSpecialtiesProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: specialty-route
+    from:
+      uri: direct:specialty
+      steps:
+        - process:
+            ref: getAllSpecialtiesProcessor
+        - marshal:
+            json: { }

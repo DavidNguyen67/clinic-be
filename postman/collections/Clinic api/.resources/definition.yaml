@@ -1,0 +1,42 @@
+$kind: collection
+name: Clinic api
+description: >-
+  StartFragment
+
+
+  This collection contains read-only endpoints for the Clinic API. It is
+  designed to help explore and validate core clinic data by retrieving
+  information about doctors, patients, specialties, clinic settings, clinic
+  figures, and summary counts.
+
+
+  The requests in this collection support common lookup and reporting use cases,
+  including:
+
+
+  - Fetching lists of doctors and patients
+      
+  - Retrieving specialty-related data
+      
+  - Getting aggregate counts such as doctor, patient, and specialty totals
+      
+  - Accessing clinic configuration and high-level figures
+      
+  - Reviewing top doctors and other summary information
+      
+
+  All requests use the configured `{{baseUrl}}` variable, making the collection
+  easy to run across environments such as Dev and Staging.
+
+
+  If you want, I can also:
+
+
+  - turn this into a shorter version for the collection metadata,
+      
+  - make it more professional or more API-consumer-friendly,
+      
+  - or update the collection file directly in your local workspace.
+      
+
+  EndFragment

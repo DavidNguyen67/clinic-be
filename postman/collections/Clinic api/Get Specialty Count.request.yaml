@@ -1,0 +1,8 @@
+$kind: http-request
+name: "Get Specialty Count"
+method: GET
+url: "{{baseUrl}}/api/v1/specialty-count/"
+headers:
+  - key: Accept
+    value: application/json
+order: 10000

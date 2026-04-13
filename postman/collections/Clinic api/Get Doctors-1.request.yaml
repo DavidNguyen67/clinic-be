@@ -1,0 +1,17 @@
+$kind: http-request
+name: Get Doctors
+url: "{{baseUrl}}/api/v1/doctors?page=0&size=10&specialtyName=tim m ạch"
+method: GET
+headers:
+  Accept: application/json
+queryParams:
+  - key: doctorName
+    value: pham
+    disabled: true
+  - key: page
+    value: "0"
+  - key: size
+    value: "10"
+  - key: specialtyName
+    value: tim mạch
+order: 6272

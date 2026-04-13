@@ -126,6 +126,7 @@ public class JwtUtil {
         Date expiryDate = new Date(now.getTime() + jwtExpiration);
 
         return Jwts.builder()
+                .id(UUID.randomUUID().toString())
                 .subject(user.getId().toString())
                 .claim("email", user.getEmail())
                 .claim("role", user.getRole().name())
@@ -143,12 +144,29 @@ public class JwtUtil {
         Date expiryDate = new Date(now.getTime() + refreshExpiration);
 
         return Jwts.builder()
+                .id(UUID.randomUUID().toString())
                 .subject(userId.toString())
                 .claim("type", "REFRESH")
                 .issuedAt(now)
                 .expiration(expiryDate)
                 .signWith(getPrivateKey(), Jwts.SIG.RS256)
                 .compact();
+    }
+
+    public String getJtiFromToken(String token) {
+        Claims claims = getClaimsFromToken(token);
+        return claims.getId();
+    }
+
+    public Date getExpirationFromToken(String token) {
+        Claims claims = getClaimsFromToken(token);
+        return claims.getExpiration();
+    }
+
+    public long getRemainingMillis(String token) {
+        Date exp = getExpirationFromToken(token);
+        long remaining = exp.getTime() - System.currentTimeMillis();
+        return Math.max(0, remaining);
     }
 
     public String getUserIdFromToken(String token) {
@@ -227,5 +245,13 @@ public class JwtUtil {
 
     public boolean validateRefreshToken(String token) {
         return validateToken(token) && isRefreshToken(token);
+    }
+
+    public Integer getExpirationSecondsFromToken(String token) {
+        Date exp = getExpirationFromToken(token);
+        long nowMillis = System.currentTimeMillis();
+        long expMillis = exp.getTime();
+        long remainingMillis = expMillis - nowMillis;
+        return Math.toIntExact(Math.max(0, remainingMillis / 1000));
     }
 }

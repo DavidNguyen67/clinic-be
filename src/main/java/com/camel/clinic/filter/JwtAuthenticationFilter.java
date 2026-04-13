@@ -1,6 +1,7 @@
 package com.camel.clinic.filter;
 
 import com.camel.clinic.service.CustomUserDetailsService;
+import com.camel.clinic.service.auth.TokenStoreService;
 import com.camel.clinic.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -17,13 +18,24 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private static final List<String> PUBLIC_PATHS = List.of(
+            "/api/v1/auth/"
+    );
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
+    private final TokenStoreService tokenStoreService;
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return PUBLIC_PATHS.stream().anyMatch(path::startsWith);
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -32,7 +44,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = getJwtFromRequest(request);
 
-            if (StringUtils.hasText(jwt) && jwtUtil.validateToken(jwt)) {
+            if (StringUtils.hasText(jwt) && jwtUtil.validateToken(jwt) && jwtUtil.isAccessToken(jwt)) {
+                String jti = jwtUtil.getJtiFromToken(jwt);
+                if (jti != null && tokenStoreService.isBlacklisted(jti)) {
+                    filterChain.doFilter(request, response);
+                    return;
+                }
                 String email = jwtUtil.getEmailFromToken(jwt);
 
                 UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);

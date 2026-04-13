@@ -28,5 +28,6 @@ public class GetClinicFiguresProcessor implements Processor {
         );
 
         exchange.getIn().setBody(result);
+
     }
 }

@@ -48,5 +48,6 @@ public class GetAllDoctorsProcessor implements Processor {
         ResponseEntity<?> response = doctorServiceImp.filterDoctors(queryParams);
 
         exchange.getMessage().setBody(response);
+
     }
 }

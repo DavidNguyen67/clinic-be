@@ -1,0 +1,8 @@
+$kind: http-request
+name: "Get Doctors"
+method: GET
+url: "{{baseUrl}}/api/v1/doctors/"
+headers:
+  - key: Accept
+    value: application/json
+order: 4500

@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/auth/register"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"email\": \"nguyenvanc@example.com\",\r
+
+    \  \"name\": \"Nguyễn Văn A\",\r
+
+    \  \"phone\": \"0987654323\",\r
+
+    \  \"password\": \"Password@123\",\r
+
+    \  \"dateOfBirth\": \"2000-01-15\",\r
+
+    \  \"gender\": \"MALE\"\r
+
+    }"
+examples: .resources/Register.resources/examples
+order: 4475674260669483

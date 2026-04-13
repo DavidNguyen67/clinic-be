@@ -1,0 +1,7 @@
+$kind: http-request
+name: Get Specialties
+method: GET
+url: "{{baseUrl}}/api/v1/specialty/"
+headers:
+  Accept: application/json
+order: 9000

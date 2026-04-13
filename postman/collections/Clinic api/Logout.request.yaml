@@ -1,0 +1,14 @@
+$kind: http-request
+name: Logout
+url: "{{baseUrl}}/api/v1/auth/logout"
+method: GET
+headers:
+  Cookie: ""
+body:
+  type: json
+  content: ""
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiI4ZDljNjNjNS01ZTRiLTQ1NWMtOWNlOC1kNjZlYTk0M2M2YjkiLCJzdWIiOiI2ZDA0Y2Q4OC1lOTUzLTRhNjAtOGNmZC0xNGQ4N2U5ZDJiYjgiLCJlbWFpbCI6Im5ndXllbnZhbmJAZXhhbXBsZS5jb20iLCJyb2xlIjoiUk9MRV9QQVRJRU5UIiwiZnVsbE5hbWUiOiJOZ3V54buFbiBWxINuIEEiLCJzdGF0dXMiOiJBQ1RJVkUiLCJ0eXBlIjoiQUNDRVNTIiwiaWF0IjoxNzc2MDc1MDAzLCJleHAiOjE3NzYxNjE0MDN9.YOXJrlIYrdobIGN2B_P-eUTy_CRAt13oY9KEL3mn5YpCpFTnERYBdflNZhUXzsymN3NXGNtd2aBVmW1T0S04te4nUii5szI8skfYv8ZNTValQAupDBzUwSSgi2OB8z9LCHiIr4_ShnwGMoa2rneM6hYF0NccOfh-lz0frtcTJqbn_W1_2Bb9NgNxV7FaH9nzDa76FuYyNDHxix0Irlps6Ysm2fyIbcLjfcbkWWJvou3eCYpqNN49FdE8vIrxGp1ZFrm3vgE_6nHHdxYa2QrLR3cTTUw7GYwoTT91Mjpnz_5bJ8HLULmKHC800G5eXyrJMaaTPIdP6YwKnk8udu3IdA
+order: 4475674260671483

@@ -1,0 +1,44 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/auth/login"
+  method: POST
+  body:
+    type: json
+    content: "{\r
+
+      \  \"email\": \"nguyenvanb@example.com\",\r
+
+      \  \"password\": \"Password@123\"\r
+
+      }"
+response:
+  statusCode: 200
+  statusText: ""
+  headers:
+    vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
+    accept: "*/*"
+    accept-encoding: gzip, deflate, br
+    cookie: JSESSIONID=0DA716A969987F861AB0C8FFC368B7CB;
+      refreshToken=eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiIwOTA4ZmVhNS1jZjQ3LTQyOTgtYTk3YS0xZDlhYTA5MTI2NmQiLCJzdWIiOiJmYjQzM2M3Yi03YjgwLTQ1NDItODcyMy1mNTJjMDVhY2Y3NzYiLCJ0eXBlIjoiUkVGUkVTSCIsImlhdCI6MTc3NjA3MjY5OCwiZXhwIjoxNzc2Njc3NDk4fQ.XanKyy5spalu36fI1N-LP72ULdJS7IAhr67YaqKXWI1X59rWT0VcKKuB3V3aWUrHvAo9NxkgM67v5I6NDXs1UpsjUNVE8NKqKzH6rwRRcf831rW6x2kQ8mBm76duK9djD0KoV76KdcJk8hqpABPoFefvWwNMBHsvPPEbwmwq3vbrmBtlDU1WlheJw4dThRykjOSjIQbyGFKpXhpTIYydFa-OBXeDhEgj_7zrLKrQtz6h-XU8NiJXQ98t-yV4aYMwEB1YzdQt-949weolo8dszULaajZq1o3tn2q5698RjetkBF5sU5eOeYJYDYtdKdLPW67GSWjaiTZRa-7LgHm_IA
+    postman-token: f1c5fb90-dc11-41c7-8902-1afcdd62e977
+    set-cookie: refreshToken=eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiI3Mzg4MWFlOC0yZmI4LTQ4OTYtOWNiNy1jYmVjNTk1MjIwOTgiLCJzdWIiOiI2ZDA0Y2Q4OC1lOTUzLTRhNjAtOGNmZC0xNGQ4N2U5ZDJiYjgiLCJ0eXBlIjoiUkVGUkVTSCIsImlhdCI6MTc3NjA3MzA0OSwiZXhwIjoxNzc2Njc3ODQ5fQ.BYST9jOcsV9mhuURVr7lxGYw4w7eg-LTyV2-2OARSSyVDIc4ZpI9PIeaeSjayi69_iwnt2Hd4H1sWy9akIvtf-4Opu9fptj5hpqmMlRTZIloF32Cub-NUbjGnjGbQaVM6m9UqmiNEPPORgizl6RgM-2jAeaImxnx1kzWlmyuXZ4VWtRjYhWXUqK9QlyUwYI0jxuzagpuGj2G93RnVxiVI8kWajAhleA7N79QDX56oGxnvbLRb6ECYKGghWSlnYoQVlAuESkbv3lMY9bFc-YfQ7yugResCNSq2Vix1Hr8CCahf7C2uKML75p8lZqqfDpE3KJvhpQTy_kKRx0X04in_w;
+      HttpOnly; Path=/; Max-Age=604800
+    user-agent: PostmanRuntime/1.3.4
+    x-dto-class: com.camel.clinic.dto.auth.LoginRequestDTO
+    x-content-type-options: nosniff
+    x-xss-protection: "0"
+    cache-control: no-cache, no-store, max-age=0, must-revalidate
+    pragma: no-cache
+    expires: "0"
+    x-frame-options: DENY
+    content-type: application/json
+    transfer-encoding: chunked
+    date: Mon, 13 Apr 2026 09:37:29 GMT
+    keep-alive: timeout=60
+    connection: keep-alive
+  body:
+    type: json
+    content: '{"headers":{},"body":{"accessToken":"eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJjNWY2MmIwMy05YTZlLTQ3MjUtODg5Yy1iMjdiYWFjOGY3NzciLCJzdWIiOiI2ZDA0Y2Q4OC1lOTUzLTRhNjAtOGNmZC0xNGQ4N2U5ZDJiYjgiLCJlbWFpbCI6Im5ndXllbnZhbmJAZXhhbXBsZS5jb20iLCJyb2xlIjoiUk9MRV9QQVRJRU5UIiwiZnVsbE5hbWUiOiJOZ3V54buFbiBWxINuIEEiLCJzdGF0dXMiOiJBQ1RJVkUiLCJ0eXBlIjoiQUNDRVNTIiwiaWF0IjoxNzc2MDczMDQ4LCJleHAiOjE3NzYxNTk0NDh9.kN2uDZ2xETBS2YKLO9svhrBxf_O5xjqMUmXzDjSsDThScKh7m_hDLLMhX7Fn61PKOCvpvvexJ7zmeQ3tVUA5wlIqq2KdFtnDJ0-_Xp1YXS9mDxrV0GpaiO9cWsDgtZ_umtZafDBwJGm0v3Kis7g4AYqsvfwPMP2DgebFfF9iMMwILIQQZtIvde9igXk_IgvT3FyU_gllDkcMgYanX6W6VrvYMfLzbzLljqO5g8wuIDRkMmzo6gMtrLwzTTYyjd2iAA2YGVG_lDFH-bNARLeMUNqGUVxHaazGv1T40T974kbI2lHOd79fSSGNHE7aNU9gkGM5z5mDkbk4TX5TcHRgzA","user":{"id":"6d04cd88-e953-4a60-8cfd-14d87e9d2bb8","email":"nguyenvanb@example.com","phone":"0987654322","fullName":"Nguyễn
+      Văn
+      A","role":"ROLE_PATIENT","status":"ACTIVE"},"refreshToken":"eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiI3Mzg4MWFlOC0yZmI4LTQ4OTYtOWNiNy1jYmVjNTk1MjIwOTgiLCJzdWIiOiI2ZDA0Y2Q4OC1lOTUzLTRhNjAtOGNmZC0xNGQ4N2U5ZDJiYjgiLCJ0eXBlIjoiUkVGUkVTSCIsImlhdCI6MTc3NjA3MzA0OSwiZXhwIjoxNzc2Njc3ODQ5fQ.BYST9jOcsV9mhuURVr7lxGYw4w7eg-LTyV2-2OARSSyVDIc4ZpI9PIeaeSjayi69_iwnt2Hd4H1sWy9akIvtf-4Opu9fptj5hpqmMlRTZIloF32Cub-NUbjGnjGbQaVM6m9UqmiNEPPORgizl6RgM-2jAeaImxnx1kzWlmyuXZ4VWtRjYhWXUqK9QlyUwYI0jxuzagpuGj2G93RnVxiVI8kWajAhleA7N79QDX56oGxnvbLRb6ECYKGghWSlnYoQVlAuESkbv3lMY9bFc-YfQ7yugResCNSq2Vix1Hr8CCahf7C2uKML75p8lZqqfDpE3KJvhpQTy_kKRx0X04in_w"},"statusCode":"OK","statusCodeValue":200}'
+order: 1776073637469
