@@ -1,10 +1,28 @@
 package com.camel.clinic.util;
 
+import com.camel.clinic.dto.api.ApiResponse;
 import com.camel.clinic.dto.Error;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 public class ErrorUtils {
+    /**
+     * New global error response format (preferred):
+     * { "success": false, "error": { "code", "message", "field" } }
+     */
+    public static ResponseEntity<ApiResponse<Void>> createApiErrorResponse(int statusCode, String code, String message, String field) {
+        ApiResponse<Void> body = ApiResponse.error(code, message, field);
+        return new ResponseEntity<>(body, HttpStatus.valueOf(statusCode));
+    }
+
+    public static ResponseEntity<ApiResponse<Void>> createApiErrorResponse(int statusCode, String code, String message) {
+        return createApiErrorResponse(statusCode, code, message, null);
+    }
+
+    public static String defaultErrorCode(int statusCode) {
+        return "ERR" + statusCode;
+    }
+
     public static ResponseEntity<Error> createErrorResponse(int statusCode, String message) {
         Error error = new Error();
         error.setAtType("Error");

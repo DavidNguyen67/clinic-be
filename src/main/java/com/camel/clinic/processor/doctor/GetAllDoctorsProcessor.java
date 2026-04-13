@@ -20,6 +20,7 @@ import java.util.Map;
 public class GetAllDoctorsProcessor implements Processor {
     private final DoctorServiceImp doctorServiceImp;
 
+    //    TODO: Bug filter doctor theo query params
     @Override
     public void process(Exchange exchange) throws Exception {
         Map<String, Object> queryParams = new HashMap<>();

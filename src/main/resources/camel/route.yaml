@@ -5,6 +5,8 @@
       steps:
         - process:
             ref: getClinicSettingsProcessor
+        - process:
+            ref: apiResponseWrapperProcessor
         - marshal:
             json: { }
 
@@ -15,6 +17,8 @@
       steps:
         - process:
             ref: getClinicFiguresProcessor
+        - process:
+            ref: apiResponseWrapperProcessor
         - marshal:
             json: { }
 
@@ -25,6 +29,8 @@
       steps:
         - process:
             ref: countAllDoctorProcessor
+        - process:
+            ref: apiResponseWrapperProcessor
         - marshal:
             json: { }
 
@@ -35,6 +41,8 @@
       steps:
         - process:
             ref: getTopDoctorsProcessor
+        - process:
+            ref: apiResponseWrapperProcessor
         - marshal:
             json: { }
 
@@ -45,6 +53,8 @@
       steps:
         - process:
             ref: getAllDoctorsProcessor
+        - process:
+            ref: apiResponseWrapperProcessor
         - marshal:
             json: { }
 
@@ -55,6 +65,8 @@
       steps:
         - process:
             ref: countAllPatientProcessor
+        - process:
+            ref: apiResponseWrapperProcessor
         - marshal:
             json: { }
 
@@ -65,6 +77,8 @@
       steps:
         - process:
             ref: countAllSpecialtiesProcessor
+        - process:
+            ref: apiResponseWrapperProcessor
         - marshal:
             json: { }
 - route:
@@ -74,5 +88,7 @@
       steps:
         - process:
             ref: getAllSpecialtiesProcessor
+        - process:
+            ref: apiResponseWrapperProcessor
         - marshal:
             json: { }
