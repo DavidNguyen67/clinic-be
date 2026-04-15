@@ -54,6 +54,13 @@
     from:
       uri: direct:auth-refresh
       steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.RefreshRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
         - process:
             ref: refreshAuthProcessor
         - marshal:
@@ -145,7 +152,7 @@
             ref: changePasswordAuthProcessor
         - marshal:
             json: { }
-            
+
 - route:
     id: clinic-settings-route
     from:

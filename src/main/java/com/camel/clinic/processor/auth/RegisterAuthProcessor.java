@@ -21,13 +21,11 @@ public class RegisterAuthProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
         RegisterRequestDTO request = exchange.getIn().getBody(RegisterRequestDTO.class);
         ResponseEntity<?> response = authServiceImp.register(request);
+        Map<String, Object> responseBody = (Map<String, Object>) response.getBody();
 
-        @SuppressWarnings("unchecked")
-        Map<String, Object> body = (Map<String, Object>) response.getBody();
-
-        if (body != null && body.get("refreshToken") != null) {
+        if (responseBody != null && responseBody.get("refreshToken") != null) {
             exchange.getIn().setHeader("Set-Cookie",
-                    "refreshToken=" + body.get("refreshToken") + "; HttpOnly; Path=/; Max-Age=604800");
+                    "refreshToken=" + responseBody.get("refreshToken") + "; HttpOnly; Path=/; Max-Age=604800");
         }
         exchange.getIn().setBody(response);
     }

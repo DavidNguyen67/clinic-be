@@ -13,9 +13,9 @@
         to: direct:auth-reset-password
       - path: /change-password
         to: direct:auth-change-password
-    get:
       - path: /refresh
         to: direct:auth-refresh
+    get:
       - path: /logout
         to: direct:auth-logout
 

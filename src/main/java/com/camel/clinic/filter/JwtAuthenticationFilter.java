@@ -25,7 +25,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final List<String> PUBLIC_PATHS = List.of(
-            "/api/v1/auth/"
+            "/api/v1/auth/",
+            "/api/auth/"
     );
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;

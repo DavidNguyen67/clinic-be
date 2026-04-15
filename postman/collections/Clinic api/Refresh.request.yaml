@@ -1,8 +1,20 @@
 $kind: http-request
 name: Refresh
 url: "{{baseUrl}}/api/v1/auth/refresh"
-method: GET
+method: POST
 body:
   type: json
-  content: ""
+  content: "{\r
+
+    \  \"refreshToken\":
+    \"eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJhNTU1ZmY5MC0wYzQ1LTRjNmEtYWQyZS04MThhYzk5\
+    NmQ2NjYiLCJzdWIiOiIxYjUyNzA3NC03ZWU3LTQ0ZTgtOGE2Yi03NTA5NmEzMTIxNDciLCJ0eXB\
+    lIjoiUkVGUkVTSCIsImlhdCI6MTc3NjI1MzQyMCwiZXhwIjoxNzc2ODU4MjIwfQ.I7KcN4aUC96\
+    zwrU45gEVbOB4fPhXTCPMq6-k4AE6CZ1ACb0Thpd9BhrOQ-8yJAN066637RI0KHUaFZmvGFFtTy\
+    DpxgLyGdNNR2PCt7In3qGVcPyIzlUgRyez7rYWVVB-29IRtK9lYY_7LTr2TmRqasTFTIEuLsXws\
+    9-jEK5Uy_4lTwGlGWrUMdauWliskfuIw7rBbauWNurLH3-61rMgjWB7kX1fDeN0CWBRpWI-NQYz\
+    ZBC1Wyf7wmu_KFLGuc7Zc4FfWqfxJDJwN6M0B04btOVHzsS2hSAVbQAprMmNxzFkK3nf-3bz2cQ\
+    pz0BSr6Lp3PcfUDhGXDpaALzWHCqioA\"\r
+
+    }"
 order: 4475674260670483
