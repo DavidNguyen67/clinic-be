@@ -232,3 +232,13 @@
             ref: getAllSpecialtiesProcessor
         - marshal:
             json: { }
+
+- route:
+    id: slot-availability-route
+    from:
+      uri: direct:slot-availability
+      steps:
+        - process:
+            ref: getSlotGeneratorProcessor
+        - marshal:
+            json: { }

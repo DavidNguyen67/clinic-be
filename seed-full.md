@@ -14,657 +14,1309 @@ INSERT INTO roles (id, name) VALUES
 -- ============================================================
 -- SPECIALTIES
 -- ============================================================
-INSERT INTO specialties (id, created_at, name, slug, description, image, display_order, is_active, specialty_type) VALUES
-('10000000-0000-0000-0000-000000000001', NOW(), 'Tim mạch', 'tim-mach', 'Chuyên khoa điều trị các bệnh về tim và mạch máu', '/images/cardiology.jpg', 1, TRUE, 'GENERAL'),
-('10000000-0000-0000-0000-000000000002', NOW(), 'Thần kinh', 'than-kinh', 'Chuyên khoa chẩn đoán và điều trị bệnh thần kinh', '/images/neurology.jpg', 2, TRUE, 'GENERAL'),
-('10000000-0000-0000-0000-000000000003', NOW(), 'Nhi khoa', 'nhi-khoa', 'Chuyên khoa chăm sóc sức khỏe trẻ em', '/images/pediatrics.jpg', 3, TRUE, 'GENERAL'),
-('10000000-0000-0000-0000-000000000004', NOW(), 'Da liễu', 'da-lieu', 'Chuyên khoa điều trị bệnh về da', '/images/dermatology.jpg', 4, TRUE, 'GENERAL'),
-('10000000-0000-0000-0000-000000000005', NOW(), 'Chỉnh hình', 'chinh-hinh', 'Chuyên khoa xương khớp và cơ bắp', '/images/orthopedics.jpg', 5, TRUE, 'GENERAL'),
-('10000000-0000-0000-0000-000000000006', NOW(), 'Nhãn khoa', 'nhan-khoa', 'Chuyên khoa mắt', '/images/ophthalmology.jpg', 6, TRUE, 'GENERAL'),
-('10000000-0000-0000-0000-000000000007', NOW(), 'Tai Mũi Họng', 'tai-mui-hong', 'Chuyên khoa tai, mũi, họng', '/images/ent.jpg', 7, TRUE, 'GENERAL'),
-('10000000-0000-0000-0000-000000000008', NOW(), 'Sản phụ khoa', 'san-phu-khoa', 'Chuyên khoa phụ sản', '/images/gynecology.jpg', 8, TRUE, 'GENERAL'),
-('10000000-0000-0000-0000-000000000009', NOW(), 'Tiêu hóa', 'tieu-hoa', 'Chuyên khoa hệ tiêu hóa', '/images/gastro.jpg', 9, TRUE, 'GENERAL'),
-('10000000-0000-0000-0000-000000000010', NOW(), 'Nội tiết', 'noi-tiet', 'Chuyên khoa nội tiết và tiểu đường', '/images/endocrine.jpg', 10, TRUE, 'GENERAL'),
-('10000000-0000-0000-0000-000000000011', NOW(), 'Hô hấp', 'ho-hap', 'Chuyên khoa phổi và hô hấp', '/images/respiratory.jpg', 11, TRUE, 'GENERAL'),
-('10000000-0000-0000-0000-000000000012', NOW(), 'Ung bướu', 'ung-buou', 'Chuyên khoa ung thư và u bướu', '/images/oncology.jpg', 12, TRUE, 'SPECIALTY'),
-('10000000-0000-0000-0000-000000000013', NOW(), 'Thận học', 'than-hoc', 'Chuyên khoa thận và tiết niệu', '/images/nephrology.jpg', 13, TRUE, 'SPECIALTY'),
-('10000000-0000-0000-0000-000000000014', NOW(), 'Phục hồi chức năng', 'phuc-hoi-chuc-nang', 'Chuyên khoa phục hồi sau chấn thương', '/images/rehab.jpg', 14, TRUE, 'SPECIALTY'),
-('10000000-0000-0000-0000-000000000015', NOW(), 'Dinh dưỡng', 'dinh-duong', 'Tư vấn dinh dưỡng và sức khỏe', '/images/nutrition.jpg', 15, TRUE, 'GENERAL'),
-('10000000-0000-0000-0000-000000000016', NOW(), 'Tâm lý', 'tam-ly', 'Chuyên khoa sức khỏe tâm thần', '/images/psychology.jpg', 16, TRUE, 'GENERAL'),
-('10000000-0000-0000-0000-000000000017', NOW(), 'Răng Hàm Mặt', 'rang-ham-mat', 'Chuyên khoa răng và hàm mặt', '/images/dental.jpg', 17, TRUE, 'GENERAL'),
-('10000000-0000-0000-0000-000000000018', NOW(), 'Cấp cứu', 'cap-cuu', 'Khoa cấp cứu và điều trị khẩn cấp', '/images/emergency.jpg', 18, TRUE, 'SPECIALTY'),
-('10000000-0000-0000-0000-000000000019', NOW(), 'Xét nghiệm', 'xet-nghiem', 'Dịch vụ xét nghiệm lâm sàng', '/images/lab.jpg', 19, TRUE, 'SPECIALTY'),
-('10000000-0000-0000-0000-000000000020', NOW(), 'Chẩn đoán hình ảnh', 'chan-doan-hinh-anh', 'X-quang, CT, MRI, siêu âm', '/images/radiology.jpg', 20, TRUE, 'SPECIALTY');
+INSERT INTO specialties (id, created_at, name, slug, description, image, display_order, is_active, specialty_type)
+VALUES
+('10000000-0000-0000-0000-000000000001', NOW(), 'Tim mạch', 'tim-mach', 'Chuyên khoa điều trị các bệnh về tim và mạch
+máu', '/images/cardiology.jpg', 1, TRUE, 'GENERAL'),
+('10000000-0000-0000-0000-000000000002', NOW(), 'Thần kinh', 'than-kinh', 'Chuyên khoa chẩn đoán và điều trị bệnh thần
+kinh', '/images/neurology.jpg', 2, TRUE, 'GENERAL'),
+('10000000-0000-0000-0000-000000000003', NOW(), 'Nhi khoa', 'nhi-khoa', 'Chuyên khoa chăm sóc sức khỏe trẻ em', '
+/images/pediatrics.jpg', 3, TRUE, 'GENERAL'),
+('10000000-0000-0000-0000-000000000004', NOW(), 'Da liễu', 'da-lieu', 'Chuyên khoa điều trị bệnh về da', '
+/images/dermatology.jpg', 4, TRUE, 'GENERAL'),
+('10000000-0000-0000-0000-000000000005', NOW(), 'Chỉnh hình', 'chinh-hinh', 'Chuyên khoa xương khớp và cơ bắp', '
+/images/orthopedics.jpg', 5, TRUE, 'GENERAL'),
+('10000000-0000-0000-0000-000000000006', NOW(), 'Nhãn khoa', 'nhan-khoa', 'Chuyên khoa mắt', '
+/images/ophthalmology.jpg', 6, TRUE, 'GENERAL'),
+('10000000-0000-0000-0000-000000000007', NOW(), 'Tai Mũi Họng', 'tai-mui-hong', 'Chuyên khoa tai, mũi, họng', '
+/images/ent.jpg', 7, TRUE, 'GENERAL'),
+('10000000-0000-0000-0000-000000000008', NOW(), 'Sản phụ khoa', 'san-phu-khoa', 'Chuyên khoa phụ sản', '
+/images/gynecology.jpg', 8, TRUE, 'GENERAL'),
+('10000000-0000-0000-0000-000000000009', NOW(), 'Tiêu hóa', 'tieu-hoa', 'Chuyên khoa hệ tiêu hóa', '/images/gastro.jpg',
+9, TRUE, 'GENERAL'),
+('10000000-0000-0000-0000-000000000010', NOW(), 'Nội tiết', 'noi-tiet', 'Chuyên khoa nội tiết và tiểu đường', '
+/images/endocrine.jpg', 10, TRUE, 'GENERAL'),
+('10000000-0000-0000-0000-000000000011', NOW(), 'Hô hấp', 'ho-hap', 'Chuyên khoa phổi và hô hấp', '
+/images/respiratory.jpg', 11, TRUE, 'GENERAL'),
+('10000000-0000-0000-0000-000000000012', NOW(), 'Ung bướu', 'ung-buou', 'Chuyên khoa ung thư và u bướu', '
+/images/oncology.jpg', 12, TRUE, 'SPECIALTY'),
+('10000000-0000-0000-0000-000000000013', NOW(), 'Thận học', 'than-hoc', 'Chuyên khoa thận và tiết niệu', '
+/images/nephrology.jpg', 13, TRUE, 'SPECIALTY'),
+('10000000-0000-0000-0000-000000000014', NOW(), 'Phục hồi chức năng', 'phuc-hoi-chuc-nang', 'Chuyên khoa phục hồi sau
+chấn thương', '/images/rehab.jpg', 14, TRUE, 'SPECIALTY'),
+('10000000-0000-0000-0000-000000000015', NOW(), 'Dinh dưỡng', 'dinh-duong', 'Tư vấn dinh dưỡng và sức khỏe', '
+/images/nutrition.jpg', 15, TRUE, 'GENERAL'),
+('10000000-0000-0000-0000-000000000016', NOW(), 'Tâm lý', 'tam-ly', 'Chuyên khoa sức khỏe tâm thần', '
+/images/psychology.jpg', 16, TRUE, 'GENERAL'),
+('10000000-0000-0000-0000-000000000017', NOW(), 'Răng Hàm Mặt', 'rang-ham-mat', 'Chuyên khoa răng và hàm mặt', '
+/images/dental.jpg', 17, TRUE, 'GENERAL'),
+('10000000-0000-0000-0000-000000000018', NOW(), 'Cấp cứu', 'cap-cuu', 'Khoa cấp cứu và điều trị khẩn cấp', '
+/images/emergency.jpg', 18, TRUE, 'SPECIALTY'),
+('10000000-0000-0000-0000-000000000019', NOW(), 'Xét nghiệm', 'xet-nghiem', 'Dịch vụ xét nghiệm lâm sàng', '
+/images/lab.jpg', 19, TRUE, 'SPECIALTY'),
+('10000000-0000-0000-0000-000000000020', NOW(), 'Chẩn đoán hình ảnh', 'chan-doan-hinh-anh', 'X-quang, CT, MRI, siêu
+âm', '/images/radiology.jpg', 20, TRUE, 'SPECIALTY');
 
 -- ============================================================
 -- SERVICES
 -- ============================================================
-INSERT INTO services (id, created_at, specialty_id, name, slug, description, price, promotional_price, duration, image, is_featured, is_active) VALUES
-('20000000-0000-0000-0000-000000000001', NOW(), '10000000-0000-0000-0000-000000000001', 'Khám tim mạch tổng quát', 'kham-tim-mach-tong-quat', 'Khám và tư vấn bệnh lý tim mạch', 350000, 300000, 30, '/images/svc1.jpg', TRUE, TRUE),
-('20000000-0000-0000-0000-000000000002', NOW(), '10000000-0000-0000-0000-000000000001', 'Siêu âm tim', 'sieu-am-tim', 'Kiểm tra chức năng tim bằng siêu âm', 500000, NULL, 45, '/images/svc2.jpg', TRUE, TRUE),
-('20000000-0000-0000-0000-000000000003', NOW(), '10000000-0000-0000-0000-000000000002', 'Khám thần kinh', 'kham-than-kinh', 'Khám và chẩn đoán bệnh thần kinh', 300000, NULL, 30, '/images/svc3.jpg', FALSE, TRUE),
-('20000000-0000-0000-0000-000000000004', NOW(), '10000000-0000-0000-0000-000000000003', 'Khám nhi tổng quát', 'kham-nhi-tong-quat', 'Khám sức khỏe định kỳ cho trẻ em', 250000, 200000, 30, '/images/svc4.jpg', TRUE, TRUE),
-('20000000-0000-0000-0000-000000000005', NOW(), '10000000-0000-0000-0000-000000000004', 'Khám da liễu', 'kham-da-lieu', 'Chẩn đoán và điều trị bệnh da', 280000, NULL, 30, '/images/svc5.jpg', FALSE, TRUE),
-('20000000-0000-0000-0000-000000000006', NOW(), '10000000-0000-0000-0000-000000000005', 'Khám chỉnh hình', 'kham-chinh-hinh', 'Kiểm tra xương khớp, cơ bắp', 320000, NULL, 30, '/images/svc6.jpg', FALSE, TRUE),
-('20000000-0000-0000-0000-000000000007', NOW(), '10000000-0000-0000-0000-000000000006', 'Khám mắt toàn diện', 'kham-mat-toan-dien', 'Kiểm tra thị lực và sức khỏe mắt', 300000, 250000, 30, '/images/svc7.jpg', TRUE, TRUE),
-('20000000-0000-0000-0000-000000000008', NOW(), '10000000-0000-0000-0000-000000000007', 'Khám tai mũi họng', 'kham-tai-mui-hong', 'Khám và điều trị bệnh tai mũi họng', 270000, NULL, 30, '/images/svc8.jpg', FALSE, TRUE),
-('20000000-0000-0000-0000-000000000009', NOW(), '10000000-0000-0000-0000-000000000008', 'Khám phụ khoa', 'kham-phu-khoa', 'Khám và tư vấn sức khỏe phụ nữ', 350000, NULL, 40, '/images/svc9.jpg', TRUE, TRUE),
-('20000000-0000-0000-0000-000000000010', NOW(), '10000000-0000-0000-0000-000000000009', 'Nội soi dạ dày', 'noi-soi-da-day', 'Nội soi chẩn đoán bệnh dạ dày', 800000, 700000, 60, '/images/svc10.jpg', FALSE, TRUE),
-('20000000-0000-0000-0000-000000000011', NOW(), '10000000-0000-0000-0000-000000000010', 'Xét nghiệm tiểu đường', 'xet-nghiem-tieu-duong', 'Kiểm tra đường huyết và HbA1c', 200000, NULL, 20, '/images/svc11.jpg', FALSE, TRUE),
-('20000000-0000-0000-0000-000000000012', NOW(), '10000000-0000-0000-0000-000000000011', 'Chụp X-quang phổi', 'chup-x-quang-phoi', 'Chụp X-quang kiểm tra phổi', 250000, NULL, 20, '/images/svc12.jpg', FALSE, TRUE),
-('20000000-0000-0000-0000-000000000013', NOW(), '10000000-0000-0000-0000-000000000017', 'Nhổ răng', 'nho-rang', 'Dịch vụ nhổ răng thường và răng khôn', 400000, 350000, 45, '/images/svc13.jpg', FALSE, TRUE),
-('20000000-0000-0000-0000-000000000014', NOW(), '10000000-0000-0000-0000-000000000017', 'Trám răng', 'tram-rang', 'Trám răng sâu và phục hình', 300000, NULL, 30, '/images/svc14.jpg', FALSE, TRUE),
-('20000000-0000-0000-0000-000000000015', NOW(), '10000000-0000-0000-0000-000000000019', 'Xét nghiệm máu tổng quát', 'xet-nghiem-mau-tong-quat', 'Xét nghiệm công thức máu và sinh hóa', 350000, 300000, 20, '/images/svc15.jpg', TRUE, TRUE),
-('20000000-0000-0000-0000-000000000016', NOW(), '10000000-0000-0000-0000-000000000020', 'Chụp CT Scan', 'chup-ct-scan', 'Chụp cắt lớp vi tính toàn thân', 1500000, 1200000, 45, '/images/svc16.jpg', TRUE, TRUE),
-('20000000-0000-0000-0000-000000000017', NOW(), '10000000-0000-0000-0000-000000000020', 'Chụp MRI', 'chup-mri', 'Chụp cộng hưởng từ', 2500000, NULL, 60, '/images/svc17.jpg', FALSE, TRUE),
-('20000000-0000-0000-0000-000000000018', NOW(), '10000000-0000-0000-0000-000000000015', 'Tư vấn dinh dưỡng', 'tu-van-dinh-duong', 'Tư vấn chế độ ăn và sức khỏe', 200000, NULL, 30, '/images/svc18.jpg', FALSE, TRUE),
-('20000000-0000-0000-0000-000000000019', NOW(), '10000000-0000-0000-0000-000000000016', 'Tư vấn tâm lý', 'tu-van-tam-ly', 'Tư vấn và trị liệu tâm lý', 400000, NULL, 60, '/images/svc19.jpg', FALSE, TRUE),
-('20000000-0000-0000-0000-000000000020', NOW(), '10000000-0000-0000-0000-000000000014', 'Vật lý trị liệu', 'vat-ly-tri-lieu', 'Phục hồi chức năng vận động', 300000, 250000, 60, '/images/svc20.jpg', FALSE, TRUE);
+INSERT INTO services (id, created_at, specialty_id, name, slug, description, price, promotional_price, duration, image,
+is_featured, is_active) VALUES
+('20000000-0000-0000-0000-000000000001', NOW(), '10000000-0000-0000-0000-000000000001', 'Khám tim mạch tổng quát', '
+kham-tim-mach-tong-quat', 'Khám và tư vấn bệnh lý tim mạch', 350000, 300000, 30, '/images/svc1.jpg', TRUE, TRUE),
+('20000000-0000-0000-0000-000000000002', NOW(), '10000000-0000-0000-0000-000000000001', 'Siêu âm tim', 'sieu-am-tim', '
+Kiểm tra chức năng tim bằng siêu âm', 500000, NULL, 45, '/images/svc2.jpg', TRUE, TRUE),
+('20000000-0000-0000-0000-000000000003', NOW(), '10000000-0000-0000-0000-000000000002', 'Khám thần kinh', '
+kham-than-kinh', 'Khám và chẩn đoán bệnh thần kinh', 300000, NULL, 30, '/images/svc3.jpg', FALSE, TRUE),
+('20000000-0000-0000-0000-000000000004', NOW(), '10000000-0000-0000-0000-000000000003', 'Khám nhi tổng quát', '
+kham-nhi-tong-quat', 'Khám sức khỏe định kỳ cho trẻ em', 250000, 200000, 30, '/images/svc4.jpg', TRUE, TRUE),
+('20000000-0000-0000-0000-000000000005', NOW(), '10000000-0000-0000-0000-000000000004', 'Khám da liễu', '
+kham-da-lieu', 'Chẩn đoán và điều trị bệnh da', 280000, NULL, 30, '/images/svc5.jpg', FALSE, TRUE),
+('20000000-0000-0000-0000-000000000006', NOW(), '10000000-0000-0000-0000-000000000005', 'Khám chỉnh hình', '
+kham-chinh-hinh', 'Kiểm tra xương khớp, cơ bắp', 320000, NULL, 30, '/images/svc6.jpg', FALSE, TRUE),
+('20000000-0000-0000-0000-000000000007', NOW(), '10000000-0000-0000-0000-000000000006', 'Khám mắt toàn diện', '
+kham-mat-toan-dien', 'Kiểm tra thị lực và sức khỏe mắt', 300000, 250000, 30, '/images/svc7.jpg', TRUE, TRUE),
+('20000000-0000-0000-0000-000000000008', NOW(), '10000000-0000-0000-0000-000000000007', 'Khám tai mũi họng', '
+kham-tai-mui-hong', 'Khám và điều trị bệnh tai mũi họng', 270000, NULL, 30, '/images/svc8.jpg', FALSE, TRUE),
+('20000000-0000-0000-0000-000000000009', NOW(), '10000000-0000-0000-0000-000000000008', 'Khám phụ khoa', '
+kham-phu-khoa', 'Khám và tư vấn sức khỏe phụ nữ', 350000, NULL, 40, '/images/svc9.jpg', TRUE, TRUE),
+('20000000-0000-0000-0000-000000000010', NOW(), '10000000-0000-0000-0000-000000000009', 'Nội soi dạ dày', '
+noi-soi-da-day', 'Nội soi chẩn đoán bệnh dạ dày', 800000, 700000, 60, '/images/svc10.jpg', FALSE, TRUE),
+('20000000-0000-0000-0000-000000000011', NOW(), '10000000-0000-0000-0000-000000000010', 'Xét nghiệm tiểu đường', '
+xet-nghiem-tieu-duong', 'Kiểm tra đường huyết và HbA1c', 200000, NULL, 20, '/images/svc11.jpg', FALSE, TRUE),
+('20000000-0000-0000-0000-000000000012', NOW(), '10000000-0000-0000-0000-000000000011', 'Chụp X-quang phổi', '
+chup-x-quang-phoi', 'Chụp X-quang kiểm tra phổi', 250000, NULL, 20, '/images/svc12.jpg', FALSE, TRUE),
+('20000000-0000-0000-0000-000000000013', NOW(), '10000000-0000-0000-0000-000000000017', 'Nhổ răng', 'nho-rang', 'Dịch vụ
+nhổ răng thường và răng khôn', 400000, 350000, 45, '/images/svc13.jpg', FALSE, TRUE),
+('20000000-0000-0000-0000-000000000014', NOW(), '10000000-0000-0000-0000-000000000017', 'Trám răng', 'tram-rang', 'Trám
+răng sâu và phục hình', 300000, NULL, 30, '/images/svc14.jpg', FALSE, TRUE),
+('20000000-0000-0000-0000-000000000015', NOW(), '10000000-0000-0000-0000-000000000019', 'Xét nghiệm máu tổng quát', '
+xet-nghiem-mau-tong-quat', 'Xét nghiệm công thức máu và sinh hóa', 350000, 300000, 20, '/images/svc15.jpg', TRUE, TRUE),
+('20000000-0000-0000-0000-000000000016', NOW(), '10000000-0000-0000-0000-000000000020', 'Chụp CT Scan', '
+chup-ct-scan', 'Chụp cắt lớp vi tính toàn thân', 1500000, 1200000, 45, '/images/svc16.jpg', TRUE, TRUE),
+('20000000-0000-0000-0000-000000000017', NOW(), '10000000-0000-0000-0000-000000000020', 'Chụp MRI', 'chup-mri', 'Chụp
+cộng hưởng từ', 2500000, NULL, 60, '/images/svc17.jpg', FALSE, TRUE),
+('20000000-0000-0000-0000-000000000018', NOW(), '10000000-0000-0000-0000-000000000015', 'Tư vấn dinh dưỡng', '
+tu-van-dinh-duong', 'Tư vấn chế độ ăn và sức khỏe', 200000, NULL, 30, '/images/svc18.jpg', FALSE, TRUE),
+('20000000-0000-0000-0000-000000000019', NOW(), '10000000-0000-0000-0000-000000000016', 'Tư vấn tâm lý', '
+tu-van-tam-ly', 'Tư vấn và trị liệu tâm lý', 400000, NULL, 60, '/images/svc19.jpg', FALSE, TRUE),
+('20000000-0000-0000-0000-000000000020', NOW(), '10000000-0000-0000-0000-000000000014', 'Vật lý trị liệu', '
+vat-ly-tri-lieu', 'Phục hồi chức năng vận động', 300000, 250000, 60, '/images/svc20.jpg', FALSE, TRUE);
 
 -- ============================================================
 -- USERS (10 doctors + 10 patients + 5 staff + 1 admin = 26, take 20 key ones)
 -- ============================================================
-INSERT INTO users (id, created_at, email, date_of_birth, password_hash, phone, full_name, role, path_avatar, status, gender, email_verified, phone_verified) VALUES
+INSERT INTO users (id, created_at, email, date_of_birth, password_hash, phone, full_name, role, path_avatar, status,
+gender, email_verified, phone_verified) VALUES
 -- Admin
-('A0000000-0000-0000-0000-000000000001', NOW(), 'admin@clinic.vn', '1985-01-01', '$2a$10$hashedpassword1', '0900000001', 'Nguyễn Quản Trị', 'ADMIN', '/avatars/admin1.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000001', NOW(), 'admin@clinic.vn', '1985-01-01', '$2a$
+10$hashedpassword1', '0900000001', 'Nguyễn Quản Trị', 'ADMIN', '/avatars/admin1.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
 -- Doctors
-('A0000000-0000-0000-0000-000000000002', NOW(), 'dr.nam@clinic.vn', '1978-03-15', '$2a$10$hashedpassword2', '0900000002', 'BS. Trần Văn Nam', 'DOCTOR', '/avatars/dr1.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
-('A0000000-0000-0000-0000-000000000003', NOW(), 'dr.lan@clinic.vn', '1980-07-22', '$2a$10$hashedpassword3', '0900000003', 'BS. Lê Thị Lan', 'DOCTOR', '/avatars/dr2.jpg', 'ACTIVE', 'FEMALE', TRUE, TRUE),
-('A0000000-0000-0000-0000-000000000004', NOW(), 'dr.hung@clinic.vn', '1975-11-05', '$2a$10$hashedpassword4', '0900000004', 'BS. Phạm Văn Hùng', 'DOCTOR', '/avatars/dr3.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
-('A0000000-0000-0000-0000-000000000005', NOW(), 'dr.hoa@clinic.vn', '1982-06-18', '$2a$10$hashedpassword5', '0900000005', 'BS. Ngô Thị Hoa', 'DOCTOR', '/avatars/dr4.jpg', 'ACTIVE', 'FEMALE', TRUE, TRUE),
-('A0000000-0000-0000-0000-000000000006', NOW(), 'dr.minh@clinic.vn', '1977-09-30', '$2a$10$hashedpassword6', '0900000006', 'BS. Hoàng Văn Minh', 'DOCTOR', '/avatars/dr5.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
-('A0000000-0000-0000-0000-000000000007', NOW(), 'dr.thu@clinic.vn', '1983-02-14', '$2a$10$hashedpassword7', '0900000007', 'BS. Vũ Thị Thu', 'DOCTOR', '/avatars/dr6.jpg', 'ACTIVE', 'FEMALE', TRUE, TRUE),
-('A0000000-0000-0000-0000-000000000008', NOW(), 'dr.duc@clinic.vn', '1979-04-25', '$2a$10$hashedpassword8', '0900000008', 'BS. Đặng Văn Đức', 'DOCTOR', '/avatars/dr7.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
-('A0000000-0000-0000-0000-000000000009', NOW(), 'dr.linh@clinic.vn', '1986-08-12', '$2a$10$hashedpassword9', '0900000009', 'BS. Bùi Thị Linh', 'DOCTOR', '/avatars/dr8.jpg', 'ACTIVE', 'FEMALE', TRUE, TRUE),
-('A0000000-0000-0000-0000-000000000010', NOW(), 'dr.tuan@clinic.vn', '1974-12-03', '$2a$10$hashedpassword10', '0900000010', 'BS. Đinh Văn Tuấn', 'DOCTOR', '/avatars/dr9.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
-('A0000000-0000-0000-0000-000000000011', NOW(), 'dr.mai@clinic.vn', '1981-05-28', '$2a$10$hashedpassword11', '0900000011', 'BS. Trịnh Thị Mai', 'DOCTOR', '/avatars/dr10.jpg', 'ACTIVE', 'FEMALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000002', NOW(), 'dr.nam@clinic.vn', '1978-03-15', '$2a$10$hashedpassword2', '
+0900000002', 'BS. Trần Văn Nam', 'DOCTOR', '/avatars/dr1.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000003', NOW(), 'dr.lan@clinic.vn', '1980-07-22', '$2a$
+10$hashedpassword3', '0900000003', 'BS. Lê Thị Lan', 'DOCTOR', '/avatars/dr2.jpg', 'ACTIVE', 'FEMALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000004', NOW(), 'dr.hung@clinic.vn', '1975-11-05', '$2a$10$hashedpassword4', '
+0900000004', 'BS. Phạm Văn Hùng', 'DOCTOR', '/avatars/dr3.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000005', NOW(), 'dr.hoa@clinic.vn', '1982-06-18', '$2a$
+10$hashedpassword5', '0900000005', 'BS. Ngô Thị Hoa', 'DOCTOR', '/avatars/dr4.jpg', 'ACTIVE', 'FEMALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000006', NOW(), 'dr.minh@clinic.vn', '1977-09-30', '$2a$10$hashedpassword6', '
+0900000006', 'BS. Hoàng Văn Minh', 'DOCTOR', '/avatars/dr5.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000007', NOW(), 'dr.thu@clinic.vn', '1983-02-14', '$2a$
+10$hashedpassword7', '0900000007', 'BS. Vũ Thị Thu', 'DOCTOR', '/avatars/dr6.jpg', 'ACTIVE', 'FEMALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000008', NOW(), 'dr.duc@clinic.vn', '1979-04-25', '$2a$10$hashedpassword8', '
+0900000008', 'BS. Đặng Văn Đức', 'DOCTOR', '/avatars/dr7.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000009', NOW(), 'dr.linh@clinic.vn', '1986-08-12', '$2a$
+10$hashedpassword9', '0900000009', 'BS. Bùi Thị Linh', 'DOCTOR', '/avatars/dr8.jpg', 'ACTIVE', 'FEMALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000010', NOW(), 'dr.tuan@clinic.vn', '1974-12-03', '$2a$10$hashedpassword10', '
+0900000010', 'BS. Đinh Văn Tuấn', 'DOCTOR', '/avatars/dr9.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000011', NOW(), 'dr.mai@clinic.vn', '1981-05-28', '$2a$
+10$hashedpassword11', '0900000011', 'BS. Trịnh Thị Mai', 'DOCTOR', '/avatars/dr10.jpg', 'ACTIVE', 'FEMALE', TRUE, TRUE),
 -- Staff
-('A0000000-0000-0000-0000-000000000012', NOW(), 'staff.huong@clinic.vn', '1992-01-10', '$2a$10$hashedpassword12', '0900000012', 'Nguyễn Thị Hương', 'STAFF', '/avatars/st1.jpg', 'ACTIVE', 'FEMALE', TRUE, TRUE),
-('A0000000-0000-0000-0000-000000000013', NOW(), 'staff.long@clinic.vn', '1990-07-17', '$2a$10$hashedpassword13', '0900000013', 'Trần Văn Long', 'STAFF', '/avatars/st2.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
-('A0000000-0000-0000-0000-000000000014', NOW(), 'staff.ngan@clinic.vn', '1993-03-08', '$2a$10$hashedpassword14', '0900000014', 'Lê Thị Ngân', 'STAFF', '/avatars/st3.jpg', 'ACTIVE', 'FEMALE', TRUE, TRUE),
-('A0000000-0000-0000-0000-000000000015', NOW(), 'staff.kien@clinic.vn', '1991-11-22', '$2a$10$hashedpassword15', '0900000015', 'Phạm Văn Kiên', 'STAFF', '/avatars/st4.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000012', NOW(), 'staff.huong@clinic.vn', '1992-01-10', '$2a$10$hashedpassword12', '
+0900000012', 'Nguyễn Thị Hương', 'STAFF', '/avatars/st1.jpg', 'ACTIVE', 'FEMALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000013', NOW(), 'staff.long@clinic.vn', '1990-07-17', '$2a$
+10$hashedpassword13', '0900000013', 'Trần Văn Long', 'STAFF', '/avatars/st2.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000014', NOW(), 'staff.ngan@clinic.vn', '1993-03-08', '$2a$10$hashedpassword14', '
+0900000014', 'Lê Thị Ngân', 'STAFF', '/avatars/st3.jpg', 'ACTIVE', 'FEMALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000015', NOW(), 'staff.kien@clinic.vn', '1991-11-22', '$2a$
+10$hashedpassword15', '0900000015', 'Phạm Văn Kiên', 'STAFF', '/avatars/st4.jpg', 'ACTIVE', 'MALE', TRUE, TRUE),
 -- Patients
-('A0000000-0000-0000-0000-000000000016', NOW(), 'patient.an@gmail.com', '1990-05-15', '$2a$10$hashedpassword16', '0900000016', 'Nguyễn Văn An', 'PATIENT', NULL, 'ACTIVE', 'MALE', TRUE, FALSE),
-('A0000000-0000-0000-0000-000000000017', NOW(), 'patient.binh@gmail.com', '1985-09-20', '$2a$10$hashedpassword17', '0900000017', 'Trần Thị Bình', 'PATIENT', NULL, 'ACTIVE', 'FEMALE', TRUE, FALSE),
-('A0000000-0000-0000-0000-000000000018', NOW(), 'patient.cuong@gmail.com', '1978-12-01', '$2a$10$hashedpassword18', '0900000018', 'Lê Văn Cường', 'PATIENT', NULL, 'ACTIVE', 'MALE', FALSE, FALSE),
-('A0000000-0000-0000-0000-000000000019', NOW(), 'patient.dung@gmail.com', '1995-04-10', '$2a$10$hashedpassword19', '0900000019', 'Phạm Thị Dung', 'PATIENT', NULL, 'ACTIVE', 'FEMALE', TRUE, TRUE),
-('A0000000-0000-0000-0000-000000000020', NOW(), 'patient.em@gmail.com', '2000-08-25', '$2a$10$hashedpassword20', '0900000020', 'Hoàng Văn Em', 'PATIENT', NULL, 'ACTIVE', 'MALE', TRUE, FALSE),
-('A0000000-0000-0000-0000-000000000021', NOW(), 'patient.phuong@gmail.com', '1988-02-14', '$2a$10$hashedpassword21', '0900000021', 'Vũ Thị Phương', 'PATIENT', NULL, 'ACTIVE', 'FEMALE', FALSE, FALSE),
-('A0000000-0000-0000-0000-000000000022', NOW(), 'patient.giang@gmail.com', '1972-06-30', '$2a$10$hashedpassword22', '0900000022', 'Đặng Văn Giang', 'PATIENT', NULL, 'ACTIVE', 'MALE', TRUE, TRUE),
-('A0000000-0000-0000-0000-000000000023', NOW(), 'patient.ha@gmail.com', '1993-10-05', '$2a$10$hashedpassword23', '0900000023', 'Bùi Thị Hà', 'PATIENT', NULL, 'ACTIVE', 'FEMALE', TRUE, FALSE),
-('A0000000-0000-0000-0000-000000000024', NOW(), 'patient.ich@gmail.com', '1980-03-18', '$2a$10$hashedpassword24', '0900000024', 'Đinh Văn Ích', 'PATIENT', NULL, 'ACTIVE', 'MALE', FALSE, FALSE),
-('A0000000-0000-0000-0000-000000000025', NOW(), 'patient.kim@gmail.com', '1998-07-07', '$2a$10$hashedpassword25', '0900000025', 'Trịnh Thị Kim', 'PATIENT', NULL, 'ACTIVE', 'FEMALE', TRUE, TRUE),
-('A0000000-0000-0000-0000-000000000026', NOW(), 'patient.lam@gmail.com', '1965-11-11', '$2a$10$hashedpassword26', '0900000026', 'Ngô Văn Lâm', 'PATIENT', NULL, 'INACTIVE', 'MALE', TRUE, FALSE);
+('A0000000-0000-0000-0000-000000000016', NOW(), 'patient.an@gmail.com', '1990-05-15', '$2a$10$hashedpassword16', '
+0900000016', 'Nguyễn Văn An', 'PATIENT', NULL, 'ACTIVE', 'MALE', TRUE, FALSE),
+('A0000000-0000-0000-0000-000000000017', NOW(), 'patient.binh@gmail.com', '1985-09-20', '$2a$
+10$hashedpassword17', '0900000017', 'Trần Thị Bình', 'PATIENT', NULL, 'ACTIVE', 'FEMALE', TRUE, FALSE),
+('A0000000-0000-0000-0000-000000000018', NOW(), 'patient.cuong@gmail.com', '1978-12-01', '$2a$10$hashedpassword18', '
+0900000018', 'Lê Văn Cường', 'PATIENT', NULL, 'ACTIVE', 'MALE', FALSE, FALSE),
+('A0000000-0000-0000-0000-000000000019', NOW(), 'patient.dung@gmail.com', '1995-04-10', '$2a$
+10$hashedpassword19', '0900000019', 'Phạm Thị Dung', 'PATIENT', NULL, 'ACTIVE', 'FEMALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000020', NOW(), 'patient.em@gmail.com', '2000-08-25', '$2a$10$hashedpassword20', '
+0900000020', 'Hoàng Văn Em', 'PATIENT', NULL, 'ACTIVE', 'MALE', TRUE, FALSE),
+('A0000000-0000-0000-0000-000000000021', NOW(), 'patient.phuong@gmail.com', '1988-02-14', '$2a$
+10$hashedpassword21', '0900000021', 'Vũ Thị Phương', 'PATIENT', NULL, 'ACTIVE', 'FEMALE', FALSE, FALSE),
+('A0000000-0000-0000-0000-000000000022', NOW(), 'patient.giang@gmail.com', '1972-06-30', '$2a$10$hashedpassword22', '
+0900000022', 'Đặng Văn Giang', 'PATIENT', NULL, 'ACTIVE', 'MALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000023', NOW(), 'patient.ha@gmail.com', '1993-10-05', '$2a$
+10$hashedpassword23', '0900000023', 'Bùi Thị Hà', 'PATIENT', NULL, 'ACTIVE', 'FEMALE', TRUE, FALSE),
+('A0000000-0000-0000-0000-000000000024', NOW(), 'patient.ich@gmail.com', '1980-03-18', '$2a$10$hashedpassword24', '
+0900000024', 'Đinh Văn Ích', 'PATIENT', NULL, 'ACTIVE', 'MALE', FALSE, FALSE),
+('A0000000-0000-0000-0000-000000000025', NOW(), 'patient.kim@gmail.com', '1998-07-07', '$2a$
+10$hashedpassword25', '0900000025', 'Trịnh Thị Kim', 'PATIENT', NULL, 'ACTIVE', 'FEMALE', TRUE, TRUE),
+('A0000000-0000-0000-0000-000000000026', NOW(), 'patient.lam@gmail.com', '1965-11-11', '$2a$10$hashedpassword26', '
+0900000026', 'Ngô Văn Lâm', 'PATIENT', NULL, 'INACTIVE', 'MALE', TRUE, FALSE);
 
 -- ============================================================
 -- DOCTORS
 -- ============================================================
-INSERT INTO doctors (id, created_at, user_id, doctor_code, specialty_id, degree, experience_years, education, bio, consultation_fee, average_rating, total_reviews, total_patients, is_featured, status) VALUES
-('30000000-0000-0000-0000-000000000001', NOW(), 'A0000000-0000-0000-0000-000000000002', 'DR-0001', '10000000-0000-0000-0000-000000000001', 'Tiến sĩ Y khoa', 15, 'Đại học Y Hà Nội, Bệnh viện Bạch Mai', 'Chuyên gia tim mạch với 15 năm kinh nghiệm', 400000, 4.8, 120, 800, TRUE, 'active'),
-('30000000-0000-0000-0000-000000000002', NOW(), 'A0000000-0000-0000-0000-000000000003', 'DR-0002', '10000000-0000-0000-0000-000000000002', 'Bác sĩ Chuyên khoa II', 12, 'Đại học Y Dược TP.HCM', 'Bác sĩ thần kinh giàu kinh nghiệm', 350000, 4.6, 95, 650, TRUE, 'active'),
-('30000000-0000-0000-0000-000000000003', NOW(), 'A0000000-0000-0000-0000-000000000004', 'DR-0003', '10000000-0000-0000-0000-000000000003', 'Bác sĩ Chuyên khoa I', 18, 'Đại học Y Hà Nội', 'Bác sĩ nhi khoa tận tâm', 300000, 4.9, 200, 1200, TRUE, 'active'),
-('30000000-0000-0000-0000-000000000004', NOW(), 'A0000000-0000-0000-0000-000000000005', 'DR-0004', '10000000-0000-0000-0000-000000000004', 'Thạc sĩ Y khoa', 10, 'Đại học Y Dược Huế', 'Chuyên trị các bệnh da liễu thường gặp', 280000, 4.5, 80, 500, FALSE, 'active'),
-('30000000-0000-0000-0000-000000000005', NOW(), 'A0000000-0000-0000-0000-000000000006', 'DR-0005', '10000000-0000-0000-0000-000000000005', 'Bác sĩ Chuyên khoa II', 20, 'Đại học Y Hà Nội', 'Chuyên gia phẫu thuật chỉnh hình', 450000, 4.7, 150, 900, TRUE, 'active'),
-('30000000-0000-0000-0000-000000000006', NOW(), 'A0000000-0000-0000-0000-000000000007', 'DR-0006', '10000000-0000-0000-0000-000000000006', 'Thạc sĩ Y khoa', 8, 'Đại học Y Dược TP.HCM', 'Bác sĩ nhãn khoa trẻ năng động', 300000, 4.4, 60, 350, FALSE, 'active'),
-('30000000-0000-0000-0000-000000000007', NOW(), 'A0000000-0000-0000-0000-000000000008', 'DR-0007', '10000000-0000-0000-0000-000000000007', 'Bác sĩ Chuyên khoa I', 14, 'Đại học Y Cần Thơ', 'Chuyên khoa tai mũi họng uy tín', 270000, 4.6, 110, 700, FALSE, 'active'),
-('30000000-0000-0000-0000-000000000008', NOW(), 'A0000000-0000-0000-0000-000000000009', 'DR-0008', '10000000-0000-0000-0000-000000000008', 'Tiến sĩ Y khoa', 16, 'Đại học Y Hà Nội', 'Chuyên gia sản phụ khoa hàng đầu', 400000, 4.9, 180, 1100, TRUE, 'active'),
-('30000000-0000-0000-0000-000000000009', NOW(), 'A0000000-0000-0000-0000-000000000010', 'DR-0009', '10000000-0000-0000-0000-000000000009', 'Bác sĩ Chuyên khoa II', 22, 'Đại học Y Hà Nội', 'Chuyên gia nội soi tiêu hóa', 500000, 4.8, 160, 950, TRUE, 'active'),
-('30000000-0000-0000-0000-000000000010', NOW(), 'A0000000-0000-0000-0000-000000000011', 'DR-0010', '10000000-0000-0000-0000-000000000010', 'Thạc sĩ Y khoa', 11, 'Đại học Y Dược TP.HCM', 'Chuyên khoa nội tiết và tiểu đường', 350000, 4.5, 90, 560, FALSE, 'active');
+INSERT INTO doctors (id, created_at, user_id, doctor_code, specialty_id, degree, experience_years, education, bio,
+consultation_fee, average_rating, total_reviews, total_patients, is_featured, status) VALUES
+('30000000-0000-0000-0000-000000000001', NOW(), 'A0000000-0000-0000-0000-000000000002', 'DR-0001', '
+10000000-0000-0000-0000-000000000001', 'Tiến sĩ Y khoa', 15, 'Đại học Y Hà Nội, Bệnh viện Bạch Mai', 'Chuyên gia tim
+mạch với 15 năm kinh nghiệm', 400000, 4.8, 120, 800, TRUE, 'active'),
+('30000000-0000-0000-0000-000000000002', NOW(), 'A0000000-0000-0000-0000-000000000003', 'DR-0002', '
+10000000-0000-0000-0000-000000000002', 'Bác sĩ Chuyên khoa II', 12, 'Đại học Y Dược TP.HCM', 'Bác sĩ thần kinh giàu kinh
+nghiệm', 350000, 4.6, 95, 650, TRUE, 'active'),
+('30000000-0000-0000-0000-000000000003', NOW(), 'A0000000-0000-0000-0000-000000000004', 'DR-0003', '
+10000000-0000-0000-0000-000000000003', 'Bác sĩ Chuyên khoa I', 18, 'Đại học Y Hà Nội', 'Bác sĩ nhi khoa tận tâm',
+300000, 4.9, 200, 1200, TRUE, 'active'),
+('30000000-0000-0000-0000-000000000004', NOW(), 'A0000000-0000-0000-0000-000000000005', 'DR-0004', '
+10000000-0000-0000-0000-000000000004', 'Thạc sĩ Y khoa', 10, 'Đại học Y Dược Huế', 'Chuyên trị các bệnh da liễu thường
+gặp', 280000, 4.5, 80, 500, FALSE, 'active'),
+('30000000-0000-0000-0000-000000000005', NOW(), 'A0000000-0000-0000-0000-000000000006', 'DR-0005', '
+10000000-0000-0000-0000-000000000005', 'Bác sĩ Chuyên khoa II', 20, 'Đại học Y Hà Nội', 'Chuyên gia phẫu thuật chỉnh
+hình', 450000, 4.7, 150, 900, TRUE, 'active'),
+('30000000-0000-0000-0000-000000000006', NOW(), 'A0000000-0000-0000-0000-000000000007', 'DR-0006', '
+10000000-0000-0000-0000-000000000006', 'Thạc sĩ Y khoa', 8, 'Đại học Y Dược TP.HCM', 'Bác sĩ nhãn khoa trẻ năng động',
+300000, 4.4, 60, 350, FALSE, 'active'),
+('30000000-0000-0000-0000-000000000007', NOW(), 'A0000000-0000-0000-0000-000000000008', 'DR-0007', '
+10000000-0000-0000-0000-000000000007', 'Bác sĩ Chuyên khoa I', 14, 'Đại học Y Cần Thơ', 'Chuyên khoa tai mũi họng uy
+tín', 270000, 4.6, 110, 700, FALSE, 'active'),
+('30000000-0000-0000-0000-000000000008', NOW(), 'A0000000-0000-0000-0000-000000000009', 'DR-0008', '
+10000000-0000-0000-0000-000000000008', 'Tiến sĩ Y khoa', 16, 'Đại học Y Hà Nội', 'Chuyên gia sản phụ khoa hàng đầu',
+400000, 4.9, 180, 1100, TRUE, 'active'),
+('30000000-0000-0000-0000-000000000009', NOW(), 'A0000000-0000-0000-0000-000000000010', 'DR-0009', '
+10000000-0000-0000-0000-000000000009', 'Bác sĩ Chuyên khoa II', 22, 'Đại học Y Hà Nội', 'Chuyên gia nội soi tiêu hóa',
+500000, 4.8, 160, 950, TRUE, 'active'),
+('30000000-0000-0000-0000-000000000010', NOW(), 'A0000000-0000-0000-0000-000000000011', 'DR-0010', '
+10000000-0000-0000-0000-000000000010', 'Thạc sĩ Y khoa', 11, 'Đại học Y Dược TP.HCM', 'Chuyên khoa nội tiết và tiểu
+đường', 350000, 4.5, 90, 560, FALSE, 'active');
 
 -- ============================================================
 -- STAFF
 -- ============================================================
 INSERT INTO staff (id, created_at, user_id, staff_code, position, department, hire_date, status) VALUES
-('40000000-0000-0000-0000-000000000001', NOW(), 'A0000000-0000-0000-0000-000000000012', 'ST-0001', 'Điều dưỡng trưởng', 'Khoa Tim mạch', '2018-03-01', 'active'),
-('40000000-0000-0000-0000-000000000002', NOW(), 'A0000000-0000-0000-0000-000000000013', 'ST-0002', 'Kỹ thuật viên xét nghiệm', 'Khoa Xét nghiệm', '2019-06-15', 'active'),
-('40000000-0000-0000-0000-000000000003', NOW(), 'A0000000-0000-0000-0000-000000000014', 'ST-0003', 'Lễ tân', 'Phòng khám tổng quát', '2020-01-10', 'active'),
-('40000000-0000-0000-0000-000000000004', NOW(), 'A0000000-0000-0000-0000-000000000015', 'ST-0004', 'Điều dưỡng', 'Khoa Nhi', '2021-09-01', 'active');
+('40000000-0000-0000-0000-000000000001', NOW(), 'A0000000-0000-0000-0000-000000000012', 'ST-0001', 'Điều dưỡng
+trưởng', 'Khoa Tim mạch', '2018-03-01', 'active'),
+('40000000-0000-0000-0000-000000000002', NOW(), 'A0000000-0000-0000-0000-000000000013', 'ST-0002', 'Kỹ thuật viên xét
+nghiệm', 'Khoa Xét nghiệm', '2019-06-15', 'active'),
+('40000000-0000-0000-0000-000000000003', NOW(), 'A0000000-0000-0000-0000-000000000014', 'ST-0003', 'Lễ tân', 'Phòng khám
+tổng quát', '2020-01-10', 'active'),
+('40000000-0000-0000-0000-000000000004', NOW(), 'A0000000-0000-0000-0000-000000000015', 'ST-0004', 'Điều dưỡng', 'Khoa
+Nhi', '2021-09-01', 'active');
 
 -- ============================================================
 -- PATIENTS
 -- ============================================================
-INSERT INTO patients (id, created_at, user_id, patient_code, date_of_birth, gender, address, insurance_number, blood_type, allergies, chronic_diseases, loyalty_points, total_visits) VALUES
-('50000000-0000-0000-0000-000000000001', NOW(), 'A0000000-0000-0000-0000-000000000016', 'PT-0001', '1990-05-15', 'MALE', '12 Lê Lợi, Hoàn Kiếm, Hà Nội', 'BH123456', 'A+', 'Penicillin', NULL, 150, 5),
-('50000000-0000-0000-0000-000000000002', NOW(), 'A0000000-0000-0000-0000-000000000017', 'PT-0002', '1985-09-20', 'FEMALE', '45 Nguyễn Huệ, Q1, TP.HCM', 'BH234567', 'B+', NULL, 'Tăng huyết áp', 200, 8),
-('50000000-0000-0000-0000-000000000003', NOW(), 'A0000000-0000-0000-0000-000000000018', 'PT-0003', '1978-12-01', 'MALE', '78 Trần Phú, Đà Nẵng', NULL, 'O+', NULL, 'Tiểu đường type 2', 50, 3),
-('50000000-0000-0000-0000-000000000004', NOW(), 'A0000000-0000-0000-0000-000000000019', 'PT-0004', '1995-04-10', 'FEMALE', '23 Hùng Vương, Huế', 'BH345678', 'AB+', 'Sulfa', NULL, 300, 12),
-('50000000-0000-0000-0000-000000000005', NOW(), 'A0000000-0000-0000-0000-000000000020', 'PT-0005', '2000-08-25', 'MALE', '5 Điện Biên Phủ, Q3, TP.HCM', 'BH456789', 'A-', NULL, NULL, 80, 2),
-('50000000-0000-0000-0000-000000000006', NOW(), 'A0000000-0000-0000-0000-000000000021', 'PT-0006', '1988-02-14', 'FEMALE', '90 Bà Triệu, Hà Nội', NULL, 'B-', 'Aspirin', 'Hen suyễn', 120, 6),
-('50000000-0000-0000-0000-000000000007', NOW(), 'A0000000-0000-0000-0000-000000000022', 'PT-0007', '1972-06-30', 'MALE', '34 Lý Thường Kiệt, Hải Phòng', 'BH567890', 'O-', NULL, 'Gout, Tăng mỡ máu', 450, 20),
-('50000000-0000-0000-0000-000000000008', NOW(), 'A0000000-0000-0000-0000-000000000023', 'PT-0008', '1993-10-05', 'FEMALE', '67 Nguyễn Tất Thành, Đà Nẵng', 'BH678901', 'AB-', NULL, NULL, 90, 4),
-('50000000-0000-0000-0000-000000000009', NOW(), 'A0000000-0000-0000-0000-000000000024', 'PT-0009', '1980-03-18', 'MALE', '11 Lê Duẩn, Hà Nội', 'BH789012', 'A+', 'Ibuprofen', 'Viêm loét dạ dày', 60, 7),
-('50000000-0000-0000-0000-000000000010', NOW(), 'A0000000-0000-0000-0000-000000000025', 'PT-0010', '1998-07-07', 'FEMALE', '28 Ngô Quyền, Hà Nội', 'BH890123', 'B+', NULL, NULL, 30, 1),
-('50000000-0000-0000-0000-000000000011', NOW(), 'A0000000-0000-0000-0000-000000000026', 'PT-0011', '1965-11-11', 'MALE', '102 Trường Chinh, Q12, TP.HCM', 'BH901234', 'O+', NULL, 'Tăng huyết áp, Tiểu đường', 500, 25);
+INSERT INTO patients (id, created_at, user_id, patient_code, date_of_birth, gender, address, insurance_number,
+blood_type, allergies, chronic_diseases, loyalty_points, total_visits) VALUES
+('50000000-0000-0000-0000-000000000001', NOW(), 'A0000000-0000-0000-0000-000000000016', 'PT-0001', '1990-05-15', '
+MALE', '12 Lê Lợi, Hoàn Kiếm, Hà Nội', 'BH123456', 'A+', 'Penicillin', NULL, 150, 5),
+('50000000-0000-0000-0000-000000000002', NOW(), 'A0000000-0000-0000-0000-000000000017', 'PT-0002', '1985-09-20', '
+FEMALE', '45 Nguyễn Huệ, Q1, TP.HCM', 'BH234567', 'B+', NULL, 'Tăng huyết áp', 200, 8),
+('50000000-0000-0000-0000-000000000003', NOW(), 'A0000000-0000-0000-0000-000000000018', 'PT-0003', '1978-12-01', '
+MALE', '78 Trần Phú, Đà Nẵng', NULL, 'O+', NULL, 'Tiểu đường type 2', 50, 3),
+('50000000-0000-0000-0000-000000000004', NOW(), 'A0000000-0000-0000-0000-000000000019', 'PT-0004', '1995-04-10', '
+FEMALE', '23 Hùng Vương, Huế', 'BH345678', 'AB+', 'Sulfa', NULL, 300, 12),
+('50000000-0000-0000-0000-000000000005', NOW(), 'A0000000-0000-0000-0000-000000000020', 'PT-0005', '2000-08-25', '
+MALE', '5 Điện Biên Phủ, Q3, TP.HCM', 'BH456789', 'A-', NULL, NULL, 80, 2),
+('50000000-0000-0000-0000-000000000006', NOW(), 'A0000000-0000-0000-0000-000000000021', 'PT-0006', '1988-02-14', '
+FEMALE', '90 Bà Triệu, Hà Nội', NULL, 'B-', 'Aspirin', 'Hen suyễn', 120, 6),
+('50000000-0000-0000-0000-000000000007', NOW(), 'A0000000-0000-0000-0000-000000000022', 'PT-0007', '1972-06-30', '
+MALE', '34 Lý Thường Kiệt, Hải Phòng', 'BH567890', 'O-', NULL, 'Gout, Tăng mỡ máu', 450, 20),
+('50000000-0000-0000-0000-000000000008', NOW(), 'A0000000-0000-0000-0000-000000000023', 'PT-0008', '1993-10-05', '
+FEMALE', '67 Nguyễn Tất Thành, Đà Nẵng', 'BH678901', 'AB-', NULL, NULL, 90, 4),
+('50000000-0000-0000-0000-000000000009', NOW(), 'A0000000-0000-0000-0000-000000000024', 'PT-0009', '1980-03-18', '
+MALE', '11 Lê Duẩn, Hà Nội', 'BH789012', 'A+', 'Ibuprofen', 'Viêm loét dạ dày', 60, 7),
+('50000000-0000-0000-0000-000000000010', NOW(), 'A0000000-0000-0000-0000-000000000025', 'PT-0010', '1998-07-07', '
+FEMALE', '28 Ngô Quyền, Hà Nội', 'BH890123', 'B+', NULL, NULL, 30, 1),
+('50000000-0000-0000-0000-000000000011', NOW(), 'A0000000-0000-0000-0000-000000000026', 'PT-0011', '1965-11-11', '
+MALE', '102 Trường Chinh, Q12, TP.HCM', 'BH901234', 'O+', NULL, 'Tăng huyết áp, Tiểu đường', 500, 25);
 
 -- ============================================================
 -- DOCTOR SCHEDULES
 -- ============================================================
-INSERT INTO doctor_schedules (id, created_at, doctor_id, day_of_week, start_time, end_time, slot_duration, max_patients_per_slot, location, is_active) VALUES
-('60000000-0000-0000-0000-000000000001', NOW(), '30000000-0000-0000-0000-000000000001', 1, '2025-01-01 08:00:00', '2025-01-01 12:00:00', 30, 1, 'Phòng 101', TRUE),
-('60000000-0000-0000-0000-000000000002', NOW(), '30000000-0000-0000-0000-000000000001', 3, '2025-01-01 14:00:00', '2025-01-01 17:00:00', 30, 1, 'Phòng 101', TRUE),
-('60000000-0000-0000-0000-000000000003', NOW(), '30000000-0000-0000-0000-000000000002', 2, '2025-01-01 08:00:00', '2025-01-01 11:30:00', 30, 1, 'Phòng 202', TRUE),
-('60000000-0000-0000-0000-000000000004', NOW(), '30000000-0000-0000-0000-000000000002', 4, '2025-01-01 13:00:00', '2025-01-01 16:30:00', 30, 1, 'Phòng 202', TRUE),
-('60000000-0000-0000-0000-000000000005', NOW(), '30000000-0000-0000-0000-000000000003', 1, '2025-01-01 07:30:00', '2025-01-01 11:30:00', 30, 2, 'Phòng Nhi 1', TRUE),
-('60000000-0000-0000-0000-000000000006', NOW(), '30000000-0000-0000-0000-000000000003', 2, '2025-01-01 07:30:00', '2025-01-01 11:30:00', 30, 2, 'Phòng Nhi 1', TRUE),
-('60000000-0000-0000-0000-000000000007', NOW(), '30000000-0000-0000-0000-000000000004', 3, '2025-01-01 08:00:00', '2025-01-01 12:00:00', 30, 1, 'Phòng 305', TRUE),
-('60000000-0000-0000-0000-000000000008', NOW(), '30000000-0000-0000-0000-000000000005', 1, '2025-01-01 08:00:00', '2025-01-01 12:00:00', 30, 1, 'Phòng Mổ A', TRUE),
-('60000000-0000-0000-0000-000000000009', NOW(), '30000000-0000-0000-0000-000000000006', 5, '2025-01-01 08:00:00', '2025-01-01 11:30:00', 30, 1, 'Phòng Mắt', TRUE),
-('60000000-0000-0000-0000-000000000010', NOW(), '30000000-0000-0000-0000-000000000007', 2, '2025-01-01 13:30:00', '2025-01-01 17:00:00', 30, 1, 'Phòng TMH', TRUE),
-('60000000-0000-0000-0000-000000000011', NOW(), '30000000-0000-0000-0000-000000000008', 1, '2025-01-01 08:00:00', '2025-01-01 12:00:00', 40, 1, 'Phòng Sản 1', TRUE),
-('60000000-0000-0000-0000-000000000012', NOW(), '30000000-0000-0000-0000-000000000009', 4, '2025-01-01 07:30:00', '2025-01-01 11:00:00', 60, 1, 'Phòng Nội soi', TRUE),
-('60000000-0000-0000-0000-000000000013', NOW(), '30000000-0000-0000-0000-000000000010', 3, '2025-01-01 08:00:00', '2025-01-01 12:00:00', 30, 1, 'Phòng Nội tiết', TRUE),
-('60000000-0000-0000-0000-000000000014', NOW(), '30000000-0000-0000-0000-000000000001', 5, '2025-01-01 08:00:00', '2025-01-01 12:00:00', 30, 1, 'Phòng 101', TRUE),
-('60000000-0000-0000-0000-000000000015', NOW(), '30000000-0000-0000-0000-000000000002', 6, '2025-01-01 08:00:00', '2025-01-01 11:00:00', 30, 1, 'Phòng 202', TRUE),
-('60000000-0000-0000-0000-000000000016', NOW(), '30000000-0000-0000-0000-000000000005', 3, '2025-01-01 13:00:00', '2025-01-01 17:00:00', 30, 1, 'Phòng Mổ B', TRUE),
-('60000000-0000-0000-0000-000000000017', NOW(), '30000000-0000-0000-0000-000000000003', 5, '2025-01-01 07:30:00', '2025-01-01 11:30:00', 30, 2, 'Phòng Nhi 1', TRUE),
-('60000000-0000-0000-0000-000000000018', NOW(), '30000000-0000-0000-0000-000000000008', 3, '2025-01-01 13:00:00', '2025-01-01 17:00:00', 40, 1, 'Phòng Sản 2', TRUE),
-('60000000-0000-0000-0000-000000000019', NOW(), '30000000-0000-0000-0000-000000000009', 6, '2025-01-01 07:30:00', '2025-01-01 10:30:00', 60, 1, 'Phòng Nội soi', TRUE),
-('60000000-0000-0000-0000-000000000020', NOW(), '30000000-0000-0000-0000-000000000010', 5, '2025-01-01 13:00:00', '2025-01-01 17:00:00', 30, 1, 'Phòng Nội tiết', TRUE);
+INSERT INTO doctor_schedules (id, created_at, doctor_id, day_of_week, start_time, end_time, slot_duration,
+max_patients_per_slot, location, is_active) VALUES
+('60000000-0000-0000-0000-000000000001', NOW(), 'a0000000-0000-0000-0000-000000000001', 1, '2025-01-01 08:00:00', '
+2025-01-01 12:00:00', 30, 1, 'Phòng 101', TRUE),
+('60000000-0000-0000-0000-000000000002', NOW(), 'a0000000-0000-0000-0000-000000000001', 3, '2025-01-01 14:00:00', '
+2025-01-01 17:00:00', 30, 1, 'Phòng 101', TRUE),
+('60000000-0000-0000-0000-000000000003', NOW(), 'a0000000-0000-0000-0000-000000000002', 2, '2025-01-01 08:00:00', '
+2025-01-01 11:30:00', 30, 1, 'Phòng 202', TRUE),
+('60000000-0000-0000-0000-000000000004', NOW(), 'a0000000-0000-0000-0000-000000000002', 4, '2025-01-01 13:00:00', '
+2025-01-01 16:30:00', 30, 1, 'Phòng 202', TRUE),
+('60000000-0000-0000-0000-000000000005', NOW(), 'a0000000-0000-0000-0000-000000000003', 1, '2025-01-01 07:30:00', '
+2025-01-01 11:30:00', 30, 2, 'Phòng Nhi 1', TRUE),
+('60000000-0000-0000-0000-000000000006', NOW(), 'a0000000-0000-0000-0000-000000000003', 2, '2025-01-01 07:30:00', '
+2025-01-01 11:30:00', 30, 2, 'Phòng Nhi 1', TRUE),
+('60000000-0000-0000-0000-000000000007', NOW(), 'a0000000-0000-0000-0000-000000000004', 3, '2025-01-01 08:00:00', '
+2025-01-01 12:00:00', 30, 1, 'Phòng 305', TRUE),
+('60000000-0000-0000-0000-000000000008', NOW(), 'a0000000-0000-0000-0000-000000000005', 1, '2025-01-01 08:00:00', '
+2025-01-01 12:00:00', 30, 1, 'Phòng Mổ A', TRUE),
+('60000000-0000-0000-0000-000000000009', NOW(), 'a0000000-0000-0000-0000-000000000006', 5, '2025-01-01 08:00:00', '
+2025-01-01 11:30:00', 30, 1, 'Phòng Mắt', TRUE),
+('60000000-0000-0000-0000-000000000010', NOW(), 'a0000000-0000-0000-0000-000000000007', 2, '2025-01-01 13:30:00', '
+2025-01-01 17:00:00', 30, 1, 'Phòng TMH', TRUE),
+('60000000-0000-0000-0000-000000000011', NOW(), 'a0000000-0000-0000-0000-000000000008', 1, '2025-01-01 08:00:00', '
+2025-01-01 12:00:00', 40, 1, 'Phòng Sản 1', TRUE),
+('60000000-0000-0000-0000-000000000012', NOW(), 'a0000000-0000-0000-0000-000000000009', 4, '2025-01-01 07:30:00', '
+2025-01-01 11:00:00', 60, 1, 'Phòng Nội soi', TRUE),
+('60000000-0000-0000-0000-000000000013', NOW(), 'a0000000-0000-0000-0000-000000000010', 3, '2025-01-01 08:00:00', '
+2025-01-01 12:00:00', 30, 1, 'Phòng Nội tiết', TRUE),
+('60000000-0000-0000-0000-000000000014', NOW(), 'a0000000-0000-0000-0000-000000000001', 5, '2025-01-01 08:00:00', '
+2025-01-01 12:00:00', 30, 1, 'Phòng 101', TRUE),
+('60000000-0000-0000-0000-000000000015', NOW(), 'a0000000-0000-0000-0000-000000000002', 6, '2025-01-01 08:00:00', '
+2025-01-01 11:00:00', 30, 1, 'Phòng 202', TRUE),
+('60000000-0000-0000-0000-000000000016', NOW(), 'a0000000-0000-0000-0000-000000000005', 3, '2025-01-01 13:00:00', '
+2025-01-01 17:00:00', 30, 1, 'Phòng Mổ B', TRUE),
+('60000000-0000-0000-0000-000000000017', NOW(), 'a0000000-0000-0000-0000-000000000003', 5, '2025-01-01 07:30:00', '
+2025-01-01 11:30:00', 30, 2, 'Phòng Nhi 1', TRUE),
+('60000000-0000-0000-0000-000000000018', NOW(), 'a0000000-0000-0000-0000-000000000008', 3, '2025-01-01 13:00:00', '
+2025-01-01 17:00:00', 40, 1, 'Phòng Sản 2', TRUE),
+('60000000-0000-0000-0000-000000000019', NOW(), 'a0000000-0000-0000-0000-000000000009', 6, '2025-01-01 07:30:00', '
+2025-01-01 10:30:00', 60, 1, 'Phòng Nội soi', TRUE),
+('60000000-0000-0000-0000-000000000020', NOW(), 'a0000000-0000-0000-0000-000000000010', 5, '2025-01-01 13:00:00', '
+2025-01-01 17:00:00', 30, 1, 'Phòng Nội tiết', TRUE);
 
 -- ============================================================
 -- APPOINTMENTS
 -- ============================================================
-INSERT INTO appointments (id, created_at, appointment_code, patient_id, doctor_id, service_id, appointment_date, start_time, end_time, status, booking_type, reason, symptoms, notes, queue_number) VALUES
-('70000000-0000-0000-0000-000000000001', NOW(), 'APT-0001', '50000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', '2025-04-01', '2025-04-01 08:00:00', '2025-04-01 08:30:00', 'completed', 'online', 'Đau ngực, khó thở', 'Tim đập nhanh', NULL, 1),
-('70000000-0000-0000-0000-000000000002', NOW(), 'APT-0002', '50000000-0000-0000-0000-000000000002', '30000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000003', '2025-04-01', '2025-04-01 08:00:00', '2025-04-01 08:30:00', 'completed', 'online', 'Đau đầu thường xuyên', 'Chóng mặt, buồn nôn', NULL, 1),
-('70000000-0000-0000-0000-000000000003', NOW(), 'APT-0003', '50000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000009', '20000000-0000-0000-0000-000000000010', '2025-04-02', '2025-04-02 08:00:00', '2025-04-02 09:00:00', 'completed', 'offline', 'Đau dạ dày', 'Đau thượng vị, ợ chua', NULL, 1),
-('70000000-0000-0000-0000-000000000004', NOW(), 'APT-0004', '50000000-0000-0000-0000-000000000004', '30000000-0000-0000-0000-000000000003', '20000000-0000-0000-0000-000000000004', '2025-04-02', '2025-04-02 08:30:00', '2025-04-02 09:00:00', 'completed', 'online', 'Trẻ sốt cao', 'Sốt 39°C, ho', NULL, 2),
-('70000000-0000-0000-0000-000000000005', NOW(), 'APT-0005', '50000000-0000-0000-0000-000000000005', '30000000-0000-0000-0000-000000000004', '20000000-0000-0000-0000-000000000005', '2025-04-03', '2025-04-03 09:00:00', '2025-04-03 09:30:00', 'completed', 'online', 'Nổi mề đay', 'Ngứa, nổi ban đỏ', NULL, 1),
-('70000000-0000-0000-0000-000000000006', NOW(), 'APT-0006', '50000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000008', '20000000-0000-0000-0000-000000000009', '2025-04-03', '2025-04-03 08:00:00', '2025-04-03 08:40:00', 'completed', 'online', 'Kiểm tra thai kỳ', 'Thai 12 tuần', NULL, 1),
-('70000000-0000-0000-0000-000000000007', NOW(), 'APT-0007', '50000000-0000-0000-0000-000000000007', '30000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000002', '2025-04-04', '2025-04-04 14:00:00', '2025-04-04 14:45:00', 'completed', 'offline', 'Siêu âm tim định kỳ', NULL, NULL, 1),
-('70000000-0000-0000-0000-000000000008', NOW(), 'APT-0008', '50000000-0000-0000-0000-000000000008', '30000000-0000-0000-0000-000000000006', '20000000-0000-0000-0000-000000000007', '2025-04-04', '2025-04-04 08:30:00', '2025-04-04 09:00:00', 'completed', 'online', 'Mờ mắt', 'Mỏi mắt khi nhìn gần', NULL, 1),
-('70000000-0000-0000-0000-000000000009', NOW(), 'APT-0009', '50000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000007', '20000000-0000-0000-0000-000000000008', '2025-04-05', '2025-04-05 13:30:00', '2025-04-05 14:00:00', 'confirmed', 'online', 'Viêm tai giữa', 'Đau tai, chảy dịch', NULL, 1),
-('70000000-0000-0000-0000-000000000010', NOW(), 'APT-0010', '50000000-0000-0000-0000-000000000010', '30000000-0000-0000-0000-000000000010', '20000000-0000-0000-0000-000000000011', '2025-04-05', '2025-04-05 08:00:00', '2025-04-05 08:30:00', 'confirmed', 'online', 'Kiểm tra đường huyết', NULL, NULL, 1),
-('70000000-0000-0000-0000-000000000011', NOW(), 'APT-0011', '50000000-0000-0000-0000-000000000011', '30000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', '2025-04-06', '2025-04-06 09:00:00', '2025-04-06 09:30:00', 'confirmed', 'offline', 'Tái khám tim mạch', NULL, 'Bệnh nhân cao tuổi', 2),
-('70000000-0000-0000-0000-000000000012', NOW(), 'APT-0012', '50000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000005', '20000000-0000-0000-0000-000000000006', '2025-04-07', '2025-04-07 08:00:00', '2025-04-07 08:30:00', 'pending', 'online', 'Đau khớp gối', 'Sưng đau khớp gối phải', NULL, 1),
-('70000000-0000-0000-0000-000000000013', NOW(), 'APT-0013', '50000000-0000-0000-0000-000000000002', '30000000-0000-0000-0000-000000000010', '20000000-0000-0000-0000-000000000011', '2025-04-07', '2025-04-07 08:30:00', '2025-04-07 09:00:00', 'pending', 'online', 'Khám nội tiết', 'Mệt mỏi, tăng cân', NULL, 2),
-('70000000-0000-0000-0000-000000000014', NOW(), 'APT-0014', '50000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000003', '2025-04-08', '2025-04-08 09:00:00', '2025-04-08 09:30:00', 'cancelled', 'online', 'Đau đầu', NULL, 'Bệnh nhân hủy lịch', 1),
-('70000000-0000-0000-0000-000000000015', NOW(), 'APT-0015', '50000000-0000-0000-0000-000000000004', '30000000-0000-0000-0000-000000000008', '20000000-0000-0000-0000-000000000009', '2025-04-09', '2025-04-09 08:00:00', '2025-04-09 08:40:00', 'pending', 'online', 'Siêu âm thai', 'Thai 20 tuần', NULL, 1),
-('70000000-0000-0000-0000-000000000016', NOW(), 'APT-0016', '50000000-0000-0000-0000-000000000005', '30000000-0000-0000-0000-000000000003', '20000000-0000-0000-0000-000000000004', '2025-04-09', '2025-04-09 08:00:00', '2025-04-09 08:30:00', 'pending', 'offline', 'Trẻ tiêm phòng', NULL, NULL, 1),
-('70000000-0000-0000-0000-000000000017', NOW(), 'APT-0017', '50000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000004', '20000000-0000-0000-0000-000000000005', '2025-04-10', '2025-04-10 09:00:00', '2025-04-10 09:30:00', 'pending', 'online', 'Tái khám da liễu', NULL, NULL, 1),
-('70000000-0000-0000-0000-000000000018', NOW(), 'APT-0018', '50000000-0000-0000-0000-000000000007', '30000000-0000-0000-0000-000000000009', '20000000-0000-0000-0000-000000000010', '2025-04-10', '2025-04-10 07:30:00', '2025-04-10 08:30:00', 'confirmed', 'offline', 'Nội soi kiểm tra định kỳ', NULL, NULL, 1),
-('70000000-0000-0000-0000-000000000019', NOW(), 'APT-0019', '50000000-0000-0000-0000-000000000008', '30000000-0000-0000-0000-000000000007', '20000000-0000-0000-0000-000000000008', '2025-04-11', '2025-04-11 14:00:00', '2025-04-11 14:30:00', 'pending', 'online', 'Nghe kém', 'Ù tai sau cúm', NULL, 1),
-('70000000-0000-0000-0000-000000000020', NOW(), 'APT-0020', '50000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000005', '20000000-0000-0000-0000-000000000006', '2025-04-12', '2025-04-12 08:00:00', '2025-04-12 08:30:00', 'pending', 'online', 'Đau lưng mãn tính', 'Đau thắt lưng L4-L5', NULL, 1);
+INSERT INTO appointments (id, created_at, appointment_code, patient_id, doctor_id, service_id, appointment_date,
+start_time, end_time, status, booking_type, reason, symptoms, notes, queue_number) VALUES
+('70000000-0000-0000-0000-000000000001', NOW(), 'APT-0001', '50000000-0000-0000-0000-000000000001', '
+30000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', '2025-04-01', '2025-04-01 08:00:00', '
+2025-04-01 08:30:00', 'completed', 'online', 'Đau ngực, khó thở', 'Tim đập nhanh', NULL, 1),
+('70000000-0000-0000-0000-000000000002', NOW(), 'APT-0002', '50000000-0000-0000-0000-000000000002', '
+30000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000003', '2025-04-01', '2025-04-01 08:00:00', '
+2025-04-01 08:30:00', 'completed', 'online', 'Đau đầu thường xuyên', 'Chóng mặt, buồn nôn', NULL, 1),
+('70000000-0000-0000-0000-000000000003', NOW(), 'APT-0003', '50000000-0000-0000-0000-000000000003', '
+30000000-0000-0000-0000-000000000009', '20000000-0000-0000-0000-000000000010', '2025-04-02', '2025-04-02 08:00:00', '
+2025-04-02 09:00:00', 'completed', 'offline', 'Đau dạ dày', 'Đau thượng vị, ợ chua', NULL, 1),
+('70000000-0000-0000-0000-000000000004', NOW(), 'APT-0004', '50000000-0000-0000-0000-000000000004', '
+30000000-0000-0000-0000-000000000003', '20000000-0000-0000-0000-000000000004', '2025-04-02', '2025-04-02 08:30:00', '
+2025-04-02 09:00:00', 'completed', 'online', 'Trẻ sốt cao', 'Sốt 39°C, ho', NULL, 2),
+('70000000-0000-0000-0000-000000000005', NOW(), 'APT-0005', '50000000-0000-0000-0000-000000000005', '
+30000000-0000-0000-0000-000000000004', '20000000-0000-0000-0000-000000000005', '2025-04-03', '2025-04-03 09:00:00', '
+2025-04-03 09:30:00', 'completed', 'online', 'Nổi mề đay', 'Ngứa, nổi ban đỏ', NULL, 1),
+('70000000-0000-0000-0000-000000000006', NOW(), 'APT-0006', '50000000-0000-0000-0000-000000000006', '
+30000000-0000-0000-0000-000000000008', '20000000-0000-0000-0000-000000000009', '2025-04-03', '2025-04-03 08:00:00', '
+2025-04-03 08:40:00', 'completed', 'online', 'Kiểm tra thai kỳ', 'Thai 12 tuần', NULL, 1),
+('70000000-0000-0000-0000-000000000007', NOW(), 'APT-0007', '50000000-0000-0000-0000-000000000007', '
+30000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000002', '2025-04-04', '2025-04-04 14:00:00', '
+2025-04-04 14:45:00', 'completed', 'offline', 'Siêu âm tim định kỳ', NULL, NULL, 1),
+('70000000-0000-0000-0000-000000000008', NOW(), 'APT-0008', '50000000-0000-0000-0000-000000000008', '
+30000000-0000-0000-0000-000000000006', '20000000-0000-0000-0000-000000000007', '2025-04-04', '2025-04-04 08:30:00', '
+2025-04-04 09:00:00', 'completed', 'online', 'Mờ mắt', 'Mỏi mắt khi nhìn gần', NULL, 1),
+('70000000-0000-0000-0000-000000000009', NOW(), 'APT-0009', '50000000-0000-0000-0000-000000000009', '
+30000000-0000-0000-0000-000000000007', '20000000-0000-0000-0000-000000000008', '2025-04-05', '2025-04-05 13:30:00', '
+2025-04-05 14:00:00', 'confirmed', 'online', 'Viêm tai giữa', 'Đau tai, chảy dịch', NULL, 1),
+('70000000-0000-0000-0000-000000000010', NOW(), 'APT-0010', '50000000-0000-0000-0000-000000000010', '
+30000000-0000-0000-0000-000000000010', '20000000-0000-0000-0000-000000000011', '2025-04-05', '2025-04-05 08:00:00', '
+2025-04-05 08:30:00', 'confirmed', 'online', 'Kiểm tra đường huyết', NULL, NULL, 1),
+('70000000-0000-0000-0000-000000000011', NOW(), 'APT-0011', '50000000-0000-0000-0000-000000000011', '
+30000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', '2025-04-06', '2025-04-06 09:00:00', '
+2025-04-06 09:30:00', 'confirmed', 'offline', 'Tái khám tim mạch', NULL, 'Bệnh nhân cao tuổi', 2),
+('70000000-0000-0000-0000-000000000012', NOW(), 'APT-0012', '50000000-0000-0000-0000-000000000001', '
+30000000-0000-0000-0000-000000000005', '20000000-0000-0000-0000-000000000006', '2025-04-07', '2025-04-07 08:00:00', '
+2025-04-07 08:30:00', 'pending', 'online', 'Đau khớp gối', 'Sưng đau khớp gối phải', NULL, 1),
+('70000000-0000-0000-0000-000000000013', NOW(), 'APT-0013', '50000000-0000-0000-0000-000000000002', '
+30000000-0000-0000-0000-000000000010', '20000000-0000-0000-0000-000000000011', '2025-04-07', '2025-04-07 08:30:00', '
+2025-04-07 09:00:00', 'pending', 'online', 'Khám nội tiết', 'Mệt mỏi, tăng cân', NULL, 2),
+('70000000-0000-0000-0000-000000000014', NOW(), 'APT-0014', '50000000-0000-0000-0000-000000000003', '
+30000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000003', '2025-04-08', '2025-04-08 09:00:00', '
+2025-04-08 09:30:00', 'cancelled', 'online', 'Đau đầu', NULL, 'Bệnh nhân hủy lịch', 1),
+('70000000-0000-0000-0000-000000000015', NOW(), 'APT-0015', '50000000-0000-0000-0000-000000000004', '
+30000000-0000-0000-0000-000000000008', '20000000-0000-0000-0000-000000000009', '2025-04-09', '2025-04-09 08:00:00', '
+2025-04-09 08:40:00', 'pending', 'online', 'Siêu âm thai', 'Thai 20 tuần', NULL, 1),
+('70000000-0000-0000-0000-000000000016', NOW(), 'APT-0016', '50000000-0000-0000-0000-000000000005', '
+30000000-0000-0000-0000-000000000003', '20000000-0000-0000-0000-000000000004', '2025-04-09', '2025-04-09 08:00:00', '
+2025-04-09 08:30:00', 'pending', 'offline', 'Trẻ tiêm phòng', NULL, NULL, 1),
+('70000000-0000-0000-0000-000000000017', NOW(), 'APT-0017', '50000000-0000-0000-0000-000000000006', '
+30000000-0000-0000-0000-000000000004', '20000000-0000-0000-0000-000000000005', '2025-04-10', '2025-04-10 09:00:00', '
+2025-04-10 09:30:00', 'pending', 'online', 'Tái khám da liễu', NULL, NULL, 1),
+('70000000-0000-0000-0000-000000000018', NOW(), 'APT-0018', '50000000-0000-0000-0000-000000000007', '
+30000000-0000-0000-0000-000000000009', '20000000-0000-0000-0000-000000000010', '2025-04-10', '2025-04-10 07:30:00', '
+2025-04-10 08:30:00', 'confirmed', 'offline', 'Nội soi kiểm tra định kỳ', NULL, NULL, 1),
+('70000000-0000-0000-0000-000000000019', NOW(), 'APT-0019', '50000000-0000-0000-0000-000000000008', '
+30000000-0000-0000-0000-000000000007', '20000000-0000-0000-0000-000000000008', '2025-04-11', '2025-04-11 14:00:00', '
+2025-04-11 14:30:00', 'pending', 'online', 'Nghe kém', 'Ù tai sau cúm', NULL, 1),
+('70000000-0000-0000-0000-000000000020', NOW(), 'APT-0020', '50000000-0000-0000-0000-000000000009', '
+30000000-0000-0000-0000-000000000005', '20000000-0000-0000-0000-000000000006', '2025-04-12', '2025-04-12 08:00:00', '
+2025-04-12 08:30:00', 'pending', 'online', 'Đau lưng mãn tính', 'Đau thắt lưng L4-L5', NULL, 1);
 
 -- ============================================================
 -- DOCTOR LEAVE
 -- ============================================================
 INSERT INTO doctor_leave (id, created_at, doctor_id, leave_date, start_time, end_time, reason, status) VALUES
-('80000000-0000-0000-0000-000000000001', NOW(), '30000000-0000-0000-0000-000000000001', '2025-04-15', NULL, NULL, 'Hội nghị tim mạch quốc tế', 'approved'),
-('80000000-0000-0000-0000-000000000002', NOW(), '30000000-0000-0000-0000-000000000002', '2025-04-16', '2025-04-16 13:00:00', '2025-04-16 17:00:00', 'Việc gia đình', 'approved'),
-('80000000-0000-0000-0000-000000000003', NOW(), '30000000-0000-0000-0000-000000000003', '2025-04-20', NULL, NULL, 'Đào tạo chuyên môn', 'pending'),
-('80000000-0000-0000-0000-000000000004', NOW(), '30000000-0000-0000-0000-000000000004', '2025-04-18', '2025-04-18 08:00:00', '2025-04-18 12:00:00', 'Khám sức khỏe cá nhân', 'approved'),
-('80000000-0000-0000-0000-000000000005', NOW(), '30000000-0000-0000-0000-000000000005', '2025-05-01', NULL, NULL, 'Nghỉ lễ', 'approved'),
-('80000000-0000-0000-0000-000000000006', NOW(), '30000000-0000-0000-0000-000000000006', '2025-04-22', '2025-04-22 08:00:00', '2025-04-22 11:30:00', 'Báo cáo khoa học', 'pending'),
-('80000000-0000-0000-0000-000000000007', NOW(), '30000000-0000-0000-0000-000000000007', '2025-04-25', NULL, NULL, 'Ốm', 'approved'),
-('80000000-0000-0000-0000-000000000008', NOW(), '30000000-0000-0000-0000-000000000008', '2025-04-17', '2025-04-17 13:00:00', '2025-04-17 17:00:00', 'Tập huấn siêu âm', 'approved'),
-('80000000-0000-0000-0000-000000000009', NOW(), '30000000-0000-0000-0000-000000000009', '2025-04-30', NULL, NULL, 'Phẫu thuật nội soi hội thảo', 'pending'),
-('80000000-0000-0000-0000-000000000010', NOW(), '30000000-0000-0000-0000-000000000010', '2025-04-24', NULL, NULL, 'Nghỉ phép năm', 'approved'),
-('80000000-0000-0000-0000-000000000011', NOW(), '30000000-0000-0000-0000-000000000001', '2025-05-05', NULL, NULL, 'Hội thảo khoa học', 'pending'),
-('80000000-0000-0000-0000-000000000012', NOW(), '30000000-0000-0000-0000-000000000002', '2025-05-08', '2025-05-08 08:00:00', '2025-05-08 12:00:00', 'Kiểm tra sức khỏe', 'pending'),
-('80000000-0000-0000-0000-000000000013', NOW(), '30000000-0000-0000-0000-000000000003', '2025-05-10', NULL, NULL, 'Cưới em', 'approved'),
-('80000000-0000-0000-0000-000000000014', NOW(), '30000000-0000-0000-0000-000000000004', '2025-05-12', '2025-05-12 13:00:00', '2025-05-12 17:00:00', 'Hội thảo da liễu', 'pending'),
-('80000000-0000-0000-0000-000000000015', NOW(), '30000000-0000-0000-0000-000000000005', '2025-05-15', NULL, NULL, 'Nghỉ phép năm', 'pending'),
-('80000000-0000-0000-0000-000000000016', NOW(), '30000000-0000-0000-0000-000000000006', '2025-05-20', NULL, NULL, 'Khóa học nhãn khoa', 'approved'),
-('80000000-0000-0000-0000-000000000017', NOW(), '30000000-0000-0000-0000-000000000007', '2025-05-22', NULL, NULL, 'Ốm', 'rejected'),
-('80000000-0000-0000-0000-000000000018', NOW(), '30000000-0000-0000-0000-000000000008', '2025-05-25', NULL, NULL, 'Hội nghị sản khoa', 'pending'),
-('80000000-0000-0000-0000-000000000019', NOW(), '30000000-0000-0000-0000-000000000009', '2025-06-01', NULL, NULL, 'Nghỉ lễ', 'approved'),
-('80000000-0000-0000-0000-000000000020', NOW(), '30000000-0000-0000-0000-000000000010', '2025-06-05', NULL, NULL, 'Đào tạo nội tiết', 'pending');
+('80000000-0000-0000-0000-000000000001', NOW(), '30000000-0000-0000-0000-000000000001', '2025-04-15', NULL, NULL, 'Hội
+nghị tim mạch quốc tế', 'approved'),
+('80000000-0000-0000-0000-000000000002', NOW(), '30000000-0000-0000-0000-000000000002', '2025-04-16', '2025-04-16 13:00:
+00', '2025-04-16 17:00:00', 'Việc gia đình', 'approved'),
+('80000000-0000-0000-0000-000000000003', NOW(), '30000000-0000-0000-0000-000000000003', '2025-04-20', NULL, NULL, 'Đào
+tạo chuyên môn', 'pending'),
+('80000000-0000-0000-0000-000000000004', NOW(), '30000000-0000-0000-0000-000000000004', '2025-04-18', '2025-04-18 08:00:
+00', '2025-04-18 12:00:00', 'Khám sức khỏe cá nhân', 'approved'),
+('80000000-0000-0000-0000-000000000005', NOW(), '30000000-0000-0000-0000-000000000005', '2025-05-01', NULL, NULL, 'Nghỉ
+lễ', 'approved'),
+('80000000-0000-0000-0000-000000000006', NOW(), '30000000-0000-0000-0000-000000000006', '2025-04-22', '2025-04-22 08:00:
+00', '2025-04-22 11:30:00', 'Báo cáo khoa học', 'pending'),
+('80000000-0000-0000-0000-000000000007', NOW(), '30000000-0000-0000-0000-000000000007', '2025-04-25', NULL, NULL, '
+Ốm', 'approved'),
+('80000000-0000-0000-0000-000000000008', NOW(), '30000000-0000-0000-0000-000000000008', '2025-04-17', '2025-04-17 13:00:
+00', '2025-04-17 17:00:00', 'Tập huấn siêu âm', 'approved'),
+('80000000-0000-0000-0000-000000000009', NOW(), '30000000-0000-0000-0000-000000000009', '2025-04-30', NULL, NULL, 'Phẫu
+thuật nội soi hội thảo', 'pending'),
+('80000000-0000-0000-0000-000000000010', NOW(), '30000000-0000-0000-0000-000000000010', '2025-04-24', NULL, NULL, 'Nghỉ
+phép năm', 'approved'),
+('80000000-0000-0000-0000-000000000011', NOW(), '30000000-0000-0000-0000-000000000001', '2025-05-05', NULL, NULL, 'Hội
+thảo khoa học', 'pending'),
+('80000000-0000-0000-0000-000000000012', NOW(), '30000000-0000-0000-0000-000000000002', '2025-05-08', '2025-05-08 08:00:
+00', '2025-05-08 12:00:00', 'Kiểm tra sức khỏe', 'pending'),
+('80000000-0000-0000-0000-000000000013', NOW(), '30000000-0000-0000-0000-000000000003', '2025-05-10', NULL, NULL, 'Cưới
+em', 'approved'),
+('80000000-0000-0000-0000-000000000014', NOW(), '30000000-0000-0000-0000-000000000004', '2025-05-12', '2025-05-12 13:00:
+00', '2025-05-12 17:00:00', 'Hội thảo da liễu', 'pending'),
+('80000000-0000-0000-0000-000000000015', NOW(), '30000000-0000-0000-0000-000000000005', '2025-05-15', NULL, NULL, 'Nghỉ
+phép năm', 'pending'),
+('80000000-0000-0000-0000-000000000016', NOW(), '30000000-0000-0000-0000-000000000006', '2025-05-20', NULL, NULL, 'Khóa
+học nhãn khoa', 'approved'),
+('80000000-0000-0000-0000-000000000017', NOW(), '30000000-0000-0000-0000-000000000007', '2025-05-22', NULL, NULL, '
+Ốm', 'rejected'),
+('80000000-0000-0000-0000-000000000018', NOW(), '30000000-0000-0000-0000-000000000008', '2025-05-25', NULL, NULL, 'Hội
+nghị sản khoa', 'pending'),
+('80000000-0000-0000-0000-000000000019', NOW(), '30000000-0000-0000-0000-000000000009', '2025-06-01', NULL, NULL, 'Nghỉ
+lễ', 'approved'),
+('80000000-0000-0000-0000-000000000020', NOW(), '30000000-0000-0000-0000-000000000010', '2025-06-05', NULL, NULL, 'Đào
+tạo nội tiết', 'pending');
 
 -- ============================================================
 -- DOCTOR PERFORMANCE
 -- ============================================================
-INSERT INTO doctor_performance (id, created_at, doctor_id, month, year, total_appointments, completed_appointments, cancelled_appointments, total_patients, average_rating, total_revenue) VALUES
-('90000000-0000-0000-0000-000000000001', NOW(), '30000000-0000-0000-0000-000000000001', 3, 2025, 85, 78, 5, 75, 4.8, 31200000),
-('90000000-0000-0000-0000-000000000002', NOW(), '30000000-0000-0000-0000-000000000002', 3, 2025, 70, 65, 3, 62, 4.6, 22750000),
-('90000000-0000-0000-0000-000000000003', NOW(), '30000000-0000-0000-0000-000000000003', 3, 2025, 110, 105, 4, 98, 4.9, 31500000),
-('90000000-0000-0000-0000-000000000004', NOW(), '30000000-0000-0000-0000-000000000004', 3, 2025, 60, 55, 4, 52, 4.5, 15400000),
-('90000000-0000-0000-0000-000000000005', NOW(), '30000000-0000-0000-0000-000000000005', 3, 2025, 45, 42, 2, 42, 4.7, 18900000),
-('90000000-0000-0000-0000-000000000006', NOW(), '30000000-0000-0000-0000-000000000006', 3, 2025, 55, 50, 3, 50, 4.4, 15000000),
-('90000000-0000-0000-0000-000000000007', NOW(), '30000000-0000-0000-0000-000000000007', 3, 2025, 75, 70, 5, 68, 4.6, 18900000),
-('90000000-0000-0000-0000-000000000008', NOW(), '30000000-0000-0000-0000-000000000008', 3, 2025, 90, 85, 3, 82, 4.9, 34000000),
-('90000000-0000-0000-0000-000000000009', NOW(), '30000000-0000-0000-0000-000000000009', 3, 2025, 40, 38, 1, 38, 4.8, 19000000),
-('90000000-0000-0000-0000-000000000010', NOW(), '30000000-0000-0000-0000-000000000010', 3, 2025, 65, 60, 4, 58, 4.5, 21000000),
-('90000000-0000-0000-0000-000000000011', NOW(), '30000000-0000-0000-0000-000000000001', 2, 2025, 80, 74, 4, 72, 4.7, 29600000),
-('90000000-0000-0000-0000-000000000012', NOW(), '30000000-0000-0000-0000-000000000002', 2, 2025, 68, 63, 3, 60, 4.6, 22050000),
-('90000000-0000-0000-0000-000000000013', NOW(), '30000000-0000-0000-0000-000000000003', 2, 2025, 105, 100, 3, 95, 4.8, 30000000),
-('90000000-0000-0000-0000-000000000014', NOW(), '30000000-0000-0000-0000-000000000004', 2, 2025, 58, 54, 3, 51, 4.5, 15120000),
-('90000000-0000-0000-0000-000000000015', NOW(), '30000000-0000-0000-0000-000000000005', 2, 2025, 42, 40, 2, 40, 4.7, 18000000),
-('90000000-0000-0000-0000-000000000016', NOW(), '30000000-0000-0000-0000-000000000006', 2, 2025, 52, 48, 3, 48, 4.4, 14400000),
-('90000000-0000-0000-0000-000000000017', NOW(), '30000000-0000-0000-0000-000000000007', 2, 2025, 72, 68, 4, 65, 4.5, 18360000),
-('90000000-0000-0000-0000-000000000018', NOW(), '30000000-0000-0000-0000-000000000008', 2, 2025, 88, 83, 3, 80, 4.9, 33200000),
-('90000000-0000-0000-0000-000000000019', NOW(), '30000000-0000-0000-0000-000000000009', 2, 2025, 38, 36, 1, 36, 4.8, 18000000),
-('90000000-0000-0000-0000-000000000020', NOW(), '30000000-0000-0000-0000-000000000010', 2, 2025, 62, 58, 3, 55, 4.4, 20300000);
+INSERT INTO doctor_performance (id, created_at, doctor_id, month, year, total_appointments, completed_appointments,
+cancelled_appointments, total_patients, average_rating, total_revenue) VALUES
+('90000000-0000-0000-0000-000000000001', NOW(), '30000000-0000-0000-0000-000000000001', 3, 2025, 85, 78, 5, 75, 4.8,
+31200000),
+('90000000-0000-0000-0000-000000000002', NOW(), '30000000-0000-0000-0000-000000000002', 3, 2025, 70, 65, 3, 62, 4.6,
+22750000),
+('90000000-0000-0000-0000-000000000003', NOW(), '30000000-0000-0000-0000-000000000003', 3, 2025, 110, 105, 4, 98, 4.9,
+31500000),
+('90000000-0000-0000-0000-000000000004', NOW(), '30000000-0000-0000-0000-000000000004', 3, 2025, 60, 55, 4, 52, 4.5,
+15400000),
+('90000000-0000-0000-0000-000000000005', NOW(), '30000000-0000-0000-0000-000000000005', 3, 2025, 45, 42, 2, 42, 4.7,
+18900000),
+('90000000-0000-0000-0000-000000000006', NOW(), '30000000-0000-0000-0000-000000000006', 3, 2025, 55, 50, 3, 50, 4.4,
+15000000),
+('90000000-0000-0000-0000-000000000007', NOW(), '30000000-0000-0000-0000-000000000007', 3, 2025, 75, 70, 5, 68, 4.6,
+18900000),
+('90000000-0000-0000-0000-000000000008', NOW(), '30000000-0000-0000-0000-000000000008', 3, 2025, 90, 85, 3, 82, 4.9,
+34000000),
+('90000000-0000-0000-0000-000000000009', NOW(), '30000000-0000-0000-0000-000000000009', 3, 2025, 40, 38, 1, 38, 4.8,
+19000000),
+('90000000-0000-0000-0000-000000000010', NOW(), '30000000-0000-0000-0000-000000000010', 3, 2025, 65, 60, 4, 58, 4.5,
+21000000),
+('90000000-0000-0000-0000-000000000011', NOW(), '30000000-0000-0000-0000-000000000001', 2, 2025, 80, 74, 4, 72, 4.7,
+29600000),
+('90000000-0000-0000-0000-000000000012', NOW(), '30000000-0000-0000-0000-000000000002', 2, 2025, 68, 63, 3, 60, 4.6,
+22050000),
+('90000000-0000-0000-0000-000000000013', NOW(), '30000000-0000-0000-0000-000000000003', 2, 2025, 105, 100, 3, 95, 4.8,
+30000000),
+('90000000-0000-0000-0000-000000000014', NOW(), '30000000-0000-0000-0000-000000000004', 2, 2025, 58, 54, 3, 51, 4.5,
+15120000),
+('90000000-0000-0000-0000-000000000015', NOW(), '30000000-0000-0000-0000-000000000005', 2, 2025, 42, 40, 2, 40, 4.7,
+18000000),
+('90000000-0000-0000-0000-000000000016', NOW(), '30000000-0000-0000-0000-000000000006', 2, 2025, 52, 48, 3, 48, 4.4,
+14400000),
+('90000000-0000-0000-0000-000000000017', NOW(), '30000000-0000-0000-0000-000000000007', 2, 2025, 72, 68, 4, 65, 4.5,
+18360000),
+('90000000-0000-0000-0000-000000000018', NOW(), '30000000-0000-0000-0000-000000000008', 2, 2025, 88, 83, 3, 80, 4.9,
+33200000),
+('90000000-0000-0000-0000-000000000019', NOW(), '30000000-0000-0000-0000-000000000009', 2, 2025, 38, 36, 1, 36, 4.8,
+18000000),
+('90000000-0000-0000-0000-000000000020', NOW(), '30000000-0000-0000-0000-000000000010', 2, 2025, 62, 58, 3, 55, 4.4,
+20300000);
 
 -- ============================================================
 -- MEDICAL RECORDS
 -- ============================================================
-INSERT INTO medical_records (id, created_at, record_code, appointment_id, patient_id, doctor_id, chief_complaint, vital_signs, diagnosis, treatment_plan, follow_up_date, doctor_notes) VALUES
-('B0000000-0000-0000-0000-000000000001', NOW(), 'MR-0001', '70000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001', 'Đau ngực, khó thở', '{"bp":"130/85","hr":90,"temp":36.8,"spo2":97}', 'Rối loạn nhịp tim nhẹ', 'Thuốc chống loạn nhịp, theo dõi 1 tháng', '2025-05-01', 'Bệnh nhân cần giảm stress'),
-('B0000000-0000-0000-0000-000000000002', NOW(), 'MR-0002', '70000000-0000-0000-0000-000000000002', '50000000-0000-0000-0000-000000000002', '30000000-0000-0000-0000-000000000002', 'Đau đầu thường xuyên', '{"bp":"140/90","hr":78,"temp":36.5,"spo2":98}', 'Đau đầu do căng thẳng / Tăng huyết áp', 'Thuốc hạ áp, nghỉ ngơi', '2025-05-01', 'Cần kiểm soát huyết áp'),
-('B0000000-0000-0000-0000-000000000003', NOW(), 'MR-0003', '70000000-0000-0000-0000-000000000003', '50000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000009', 'Đau dạ dày', '{"bp":"120/80","hr":72,"temp":36.7,"spo2":99}', 'Viêm loét dạ dày tá tràng', 'Kháng sinh, thuốc bảo vệ dạ dày', '2025-05-02', 'Kiêng rượu bia, đồ cay'),
-('B0000000-0000-0000-0000-000000000004', NOW(), 'MR-0004', '70000000-0000-0000-0000-000000000004', '50000000-0000-0000-0000-000000000004', '30000000-0000-0000-0000-000000000003', 'Trẻ sốt cao 39°C, ho', '{"bp":"95/60","hr":110,"temp":39.1,"spo2":96}', 'Viêm đường hô hấp trên', 'Hạ sốt, kháng sinh, theo dõi', '2025-04-12', 'Uống nhiều nước'),
-('B0000000-0000-0000-0000-000000000005', NOW(), 'MR-0005', '70000000-0000-0000-0000-000000000005', '50000000-0000-0000-0000-000000000005', '30000000-0000-0000-0000-000000000004', 'Nổi mề đay toàn thân', '{"bp":"118/76","hr":80,"temp":37.0,"spo2":99}', 'Dị ứng da – Mề đay cấp', 'Kháng histamine, tránh tác nhân gây dị ứng', '2025-04-17', 'Tránh hải sản, đậu phộng'),
-('B0000000-0000-0000-0000-000000000006', NOW(), 'MR-0006', '70000000-0000-0000-0000-000000000006', '50000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000008', 'Kiểm tra thai kỳ tuần 12', '{"bp":"110/70","hr":76,"temp":36.6,"spo2":99}', 'Thai 12 tuần phát triển bình thường', 'Bổ sung acid folic, vitamin tổng hợp', '2025-05-03', 'Siêu âm lần 2 tại tuần 20'),
-('B0000000-0000-0000-0000-000000000007', NOW(), 'MR-0007', '70000000-0000-0000-0000-000000000007', '50000000-0000-0000-0000-000000000007', '30000000-0000-0000-0000-000000000001', 'Siêu âm tim định kỳ', '{"bp":"145/95","hr":82,"temp":36.9,"spo2":97}', 'Hẹp van hai lá nhẹ', 'Theo dõi, dùng thuốc lợi tiểu', '2025-07-04', 'Tái khám 3 tháng'),
-('B0000000-0000-0000-0000-000000000008', NOW(), 'MR-0008', '70000000-0000-0000-0000-000000000008', '50000000-0000-0000-0000-000000000008', '30000000-0000-0000-0000-000000000006', 'Mờ mắt, mỏi mắt', '{"bp":"116/74","hr":74,"temp":36.5,"spo2":99}', 'Cận thị độ 2.5 - Khô mắt', 'Kính cận, thuốc nhỏ mắt dưỡng ẩm', '2025-10-04', 'Đeo kính đúng số'),
-('B0000000-0000-0000-0000-000000000009', NOW(), 'MR-0009', '70000000-0000-0000-0000-000000000009', '50000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000007', 'Viêm tai giữa phải', '{"bp":"122/80","hr":78,"temp":37.5,"spo2":98}', 'Viêm tai giữa cấp tính', 'Kháng sinh, thuốc nhỏ tai', '2025-04-19', 'Tránh để nước vào tai'),
-('B0000000-0000-0000-0000-000000000010', NOW(), 'MR-0010', '70000000-0000-0000-0000-000000000010', '50000000-0000-0000-0000-000000000010', '30000000-0000-0000-0000-000000000010', 'Kiểm tra đường huyết', '{"bp":"115/75","hr":70,"temp":36.6,"spo2":99}', 'Tiền tiểu đường (Glucose 6.5 mmol/L)', 'Chế độ ăn kiêng, tập thể dục', '2025-05-05', 'Xét nghiệm lại sau 1 tháng');
+INSERT INTO medical_records (id, created_at, record_code, appointment_id, patient_id, doctor_id, chief_complaint,
+vital_signs, diagnosis, treatment_plan, follow_up_date, doctor_notes) VALUES
+('B0000000-0000-0000-0000-000000000001', NOW(), 'MR-0001', '70000000-0000-0000-0000-000000000001', '
+50000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001', 'Đau ngực, khó thở', '{"bp":"130/85","
+hr":90,"temp":36.8,"spo2":97}', 'Rối loạn nhịp tim nhẹ', 'Thuốc chống loạn nhịp, theo dõi 1 tháng', '2025-05-01', 'Bệnh
+nhân cần giảm stress'),
+('B0000000-0000-0000-0000-000000000002', NOW(), 'MR-0002', '70000000-0000-0000-0000-000000000002', '
+50000000-0000-0000-0000-000000000002', '30000000-0000-0000-0000-000000000002', 'Đau đầu thường xuyên', '{"bp":"140/90","
+hr":78,"temp":36.5,"spo2":98}', 'Đau đầu do căng thẳng / Tăng huyết áp', 'Thuốc hạ áp, nghỉ ngơi', '2025-05-01', 'Cần
+kiểm soát huyết áp'),
+('B0000000-0000-0000-0000-000000000003', NOW(), 'MR-0003', '70000000-0000-0000-0000-000000000003', '
+50000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000009', 'Đau dạ dày', '{"bp":"120/80","hr":72,"
+temp":36.7,"spo2":99}', 'Viêm loét dạ dày tá tràng', 'Kháng sinh, thuốc bảo vệ dạ dày', '2025-05-02', 'Kiêng rượu bia,
+đồ cay'),
+('B0000000-0000-0000-0000-000000000004', NOW(), 'MR-0004', '70000000-0000-0000-0000-000000000004', '
+50000000-0000-0000-0000-000000000004', '30000000-0000-0000-0000-000000000003', 'Trẻ sốt cao 39°C, ho', '{"bp":"95/60","
+hr":110,"temp":39.1,"spo2":96}', 'Viêm đường hô hấp trên', 'Hạ sốt, kháng sinh, theo dõi', '2025-04-12', 'Uống nhiều
+nước'),
+('B0000000-0000-0000-0000-000000000005', NOW(), 'MR-0005', '70000000-0000-0000-0000-000000000005', '
+50000000-0000-0000-0000-000000000005', '30000000-0000-0000-0000-000000000004', 'Nổi mề đay toàn thân', '{"bp":"118/76","
+hr":80,"temp":37.0,"spo2":99}', 'Dị ứng da – Mề đay cấp', 'Kháng histamine, tránh tác nhân gây dị ứng', '2025-04-17', '
+Tránh hải sản, đậu phộng'),
+('B0000000-0000-0000-0000-000000000006', NOW(), 'MR-0006', '70000000-0000-0000-0000-000000000006', '
+50000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000008', 'Kiểm tra thai kỳ tuần 12', '{"bp":"
+110/70","hr":76,"temp":36.6,"spo2":99}', 'Thai 12 tuần phát triển bình thường', 'Bổ sung acid folic, vitamin tổng
+hợp', '2025-05-03', 'Siêu âm lần 2 tại tuần 20'),
+('B0000000-0000-0000-0000-000000000007', NOW(), 'MR-0007', '70000000-0000-0000-0000-000000000007', '
+50000000-0000-0000-0000-000000000007', '30000000-0000-0000-0000-000000000001', 'Siêu âm tim định kỳ', '{"bp":"145/95","
+hr":82,"temp":36.9,"spo2":97}', 'Hẹp van hai lá nhẹ', 'Theo dõi, dùng thuốc lợi tiểu', '2025-07-04', 'Tái khám 3
+tháng'),
+('B0000000-0000-0000-0000-000000000008', NOW(), 'MR-0008', '70000000-0000-0000-0000-000000000008', '
+50000000-0000-0000-0000-000000000008', '30000000-0000-0000-0000-000000000006', 'Mờ mắt, mỏi mắt', '{"bp":"116/74","hr":
+74,"temp":36.5,"spo2":99}', 'Cận thị độ 2.5 - Khô mắt', 'Kính cận, thuốc nhỏ mắt dưỡng ẩm', '2025-10-04', 'Đeo kính đúng
+số'),
+('B0000000-0000-0000-0000-000000000009', NOW(), 'MR-0009', '70000000-0000-0000-0000-000000000009', '
+50000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000007', 'Viêm tai giữa phải', '{"bp":"122/80","
+hr":78,"temp":37.5,"spo2":98}', 'Viêm tai giữa cấp tính', 'Kháng sinh, thuốc nhỏ tai', '2025-04-19', 'Tránh để nước vào
+tai'),
+('B0000000-0000-0000-0000-000000000010', NOW(), 'MR-0010', '70000000-0000-0000-0000-000000000010', '
+50000000-0000-0000-0000-000000000010', '30000000-0000-0000-0000-000000000010', 'Kiểm tra đường huyết', '{"bp":"115/75","
+hr":70,"temp":36.6,"spo2":99}', 'Tiền tiểu đường (Glucose 6.5 mmol/L)', 'Chế độ ăn kiêng, tập thể dục', '2025-05-05', '
+Xét nghiệm lại sau 1 tháng');
 
 -- ============================================================
 -- MEDICATIONS
 -- ============================================================
 INSERT INTO medications (id, created_at, name, generic_name, category, form, strength, unit, price, is_active) VALUES
-('C0000000-0000-0000-0000-000000000001', NOW(), 'Amoxicillin 500mg', 'Amoxicillin', 'Kháng sinh', 'Viên nang', '500mg', 'viên', 3500, TRUE),
-('C0000000-0000-0000-0000-000000000002', NOW(), 'Metformin 850mg', 'Metformin HCl', 'Tiểu đường', 'Viên nén', '850mg', 'viên', 1500, TRUE),
-('C0000000-0000-0000-0000-000000000003', NOW(), 'Amlodipine 5mg', 'Amlodipine Besylate', 'Tim mạch', 'Viên nén', '5mg', 'viên', 2000, TRUE),
-('C0000000-0000-0000-0000-000000000004', NOW(), 'Omeprazole 20mg', 'Omeprazole', 'Tiêu hóa', 'Viên nang', '20mg', 'viên', 2500, TRUE),
-('C0000000-0000-0000-0000-000000000005', NOW(), 'Cetirizine 10mg', 'Cetirizine HCl', 'Dị ứng', 'Viên nén', '10mg', 'viên', 1200, TRUE),
-('C0000000-0000-0000-0000-000000000006', NOW(), 'Paracetamol 500mg', 'Paracetamol', 'Giảm đau hạ sốt', 'Viên nén', '500mg', 'viên', 500, TRUE),
-('C0000000-0000-0000-0000-000000000007', NOW(), 'Ibuprofen 400mg', 'Ibuprofen', 'Chống viêm', 'Viên nén', '400mg', 'viên', 1800, TRUE),
-('C0000000-0000-0000-0000-000000000008', NOW(), 'Atorvastatin 20mg', 'Atorvastatin Calcium', 'Mỡ máu', 'Viên nén', '20mg', 'viên', 4500, TRUE),
-('C0000000-0000-0000-0000-000000000009', NOW(), 'Losartan 50mg', 'Losartan Potassium', 'Tim mạch', 'Viên nén', '50mg', 'viên', 3000, TRUE),
-('C0000000-0000-0000-0000-000000000010', NOW(), 'Vitamin D3 1000IU', 'Cholecalciferol', 'Vitamin', 'Viên nang mềm', '1000IU', 'viên', 2000, TRUE),
-('C0000000-0000-0000-0000-000000000011', NOW(), 'Acid Folic 5mg', 'Acid Folic', 'Vitamin', 'Viên nén', '5mg', 'viên', 800, TRUE),
-('C0000000-0000-0000-0000-000000000012', NOW(), 'Furosemide 40mg', 'Furosemide', 'Lợi tiểu', 'Viên nén', '40mg', 'viên', 1500, TRUE),
-('C0000000-0000-0000-0000-000000000013', NOW(), 'Clarithromycin 500mg', 'Clarithromycin', 'Kháng sinh', 'Viên nén', '500mg', 'viên', 8000, TRUE),
-('C0000000-0000-0000-0000-000000000014', NOW(), 'Prednisolone 5mg', 'Prednisolone', 'Corticosteroid', 'Viên nén', '5mg', 'viên', 1200, TRUE),
-('C0000000-0000-0000-0000-000000000015', NOW(), 'Azithromycin 250mg', 'Azithromycin', 'Kháng sinh', 'Viên nang', '250mg', 'viên', 12000, TRUE),
-('C0000000-0000-0000-0000-000000000016', NOW(), 'Bisoprolol 5mg', 'Bisoprolol Fumarate', 'Tim mạch', 'Viên nén', '5mg', 'viên', 3500, TRUE),
-('C0000000-0000-0000-0000-000000000017', NOW(), 'Allopurinol 300mg', 'Allopurinol', 'Gout', 'Viên nén', '300mg', 'viên', 2000, TRUE),
-('C0000000-0000-0000-0000-000000000018', NOW(), 'Calcium 500mg + D3', 'Calcium Carbonate', 'Vitamin khoáng', 'Viên nén', '500mg', 'viên', 2500, TRUE),
-('C0000000-0000-0000-0000-000000000019', NOW(), 'Dexamethasone 0.5mg', 'Dexamethasone', 'Corticosteroid', 'Viên nén', '0.5mg', 'viên', 1000, TRUE),
-('C0000000-0000-0000-0000-000000000020', NOW(), 'Pantoprazole 40mg', 'Pantoprazole Sodium', 'Tiêu hóa', 'Viên bao tan', '40mg', 'viên', 4000, TRUE);
+('C0000000-0000-0000-0000-000000000001', NOW(), 'Amoxicillin 500mg', 'Amoxicillin', 'Kháng sinh', 'Viên nang', '
+500mg', 'viên', 3500, TRUE),
+('C0000000-0000-0000-0000-000000000002', NOW(), 'Metformin 850mg', 'Metformin HCl', 'Tiểu đường', 'Viên nén', '850mg', '
+viên', 1500, TRUE),
+('C0000000-0000-0000-0000-000000000003', NOW(), 'Amlodipine 5mg', 'Amlodipine Besylate', 'Tim mạch', 'Viên nén', '
+5mg', 'viên', 2000, TRUE),
+('C0000000-0000-0000-0000-000000000004', NOW(), 'Omeprazole 20mg', 'Omeprazole', 'Tiêu hóa', 'Viên nang', '20mg', '
+viên', 2500, TRUE),
+('C0000000-0000-0000-0000-000000000005', NOW(), 'Cetirizine 10mg', 'Cetirizine HCl', 'Dị ứng', 'Viên nén', '10mg', '
+viên', 1200, TRUE),
+('C0000000-0000-0000-0000-000000000006', NOW(), 'Paracetamol 500mg', 'Paracetamol', 'Giảm đau hạ sốt', 'Viên nén', '
+500mg', 'viên', 500, TRUE),
+('C0000000-0000-0000-0000-000000000007', NOW(), 'Ibuprofen 400mg', 'Ibuprofen', 'Chống viêm', 'Viên nén', '400mg', '
+viên', 1800, TRUE),
+('C0000000-0000-0000-0000-000000000008', NOW(), 'Atorvastatin 20mg', 'Atorvastatin Calcium', 'Mỡ máu', 'Viên nén', '
+20mg', 'viên', 4500, TRUE),
+('C0000000-0000-0000-0000-000000000009', NOW(), 'Losartan 50mg', 'Losartan Potassium', 'Tim mạch', 'Viên nén', '50mg', '
+viên', 3000, TRUE),
+('C0000000-0000-0000-0000-000000000010', NOW(), 'Vitamin D3 1000IU', 'Cholecalciferol', 'Vitamin', 'Viên nang mềm', '
+1000IU', 'viên', 2000, TRUE),
+('C0000000-0000-0000-0000-000000000011', NOW(), 'Acid Folic 5mg', 'Acid Folic', 'Vitamin', 'Viên nén', '5mg', 'viên',
+800, TRUE),
+('C0000000-0000-0000-0000-000000000012', NOW(), 'Furosemide 40mg', 'Furosemide', 'Lợi tiểu', 'Viên nén', '40mg', 'viên',
+1500, TRUE),
+('C0000000-0000-0000-0000-000000000013', NOW(), 'Clarithromycin 500mg', 'Clarithromycin', 'Kháng sinh', 'Viên nén', '
+500mg', 'viên', 8000, TRUE),
+('C0000000-0000-0000-0000-000000000014', NOW(), 'Prednisolone 5mg', 'Prednisolone', 'Corticosteroid', 'Viên nén', '
+5mg', 'viên', 1200, TRUE),
+('C0000000-0000-0000-0000-000000000015', NOW(), 'Azithromycin 250mg', 'Azithromycin', 'Kháng sinh', 'Viên nang', '
+250mg', 'viên', 12000, TRUE),
+('C0000000-0000-0000-0000-000000000016', NOW(), 'Bisoprolol 5mg', 'Bisoprolol Fumarate', 'Tim mạch', 'Viên nén', '
+5mg', 'viên', 3500, TRUE),
+('C0000000-0000-0000-0000-000000000017', NOW(), 'Allopurinol 300mg', 'Allopurinol', 'Gout', 'Viên nén', '300mg', 'viên',
+2000, TRUE),
+('C0000000-0000-0000-0000-000000000018', NOW(), 'Calcium 500mg + D3', 'Calcium Carbonate', 'Vitamin khoáng', 'Viên
+nén', '500mg', 'viên', 2500, TRUE),
+('C0000000-0000-0000-0000-000000000019', NOW(), 'Dexamethasone 0.5mg', 'Dexamethasone', 'Corticosteroid', 'Viên nén', '
+0.5mg', 'viên', 1000, TRUE),
+('C0000000-0000-0000-0000-000000000020', NOW(), 'Pantoprazole 40mg', 'Pantoprazole Sodium', 'Tiêu hóa', 'Viên bao
+tan', '40mg', 'viên', 4000, TRUE);
 
 -- ============================================================
 -- PRESCRIPTIONS
 -- ============================================================
-INSERT INTO prescriptions (id, created_at, prescription_code, medical_record_id, patient_id, doctor_id, prescription_date, notes, status) VALUES
-('D0000000-0000-0000-0000-000000000001', NOW(), 'RX-0001', 'B0000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001', NOW(), 'Uống thuốc đúng giờ, không bỏ liều', 'active'),
-('D0000000-0000-0000-0000-000000000002', NOW(), 'RX-0002', 'B0000000-0000-0000-0000-000000000002', '50000000-0000-0000-0000-000000000002', '30000000-0000-0000-0000-000000000002', NOW(), 'Kiểm tra huyết áp hàng ngày', 'active'),
-('D0000000-0000-0000-0000-000000000003', NOW(), 'RX-0003', 'B0000000-0000-0000-0000-000000000003', '50000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000009', NOW(), 'Ăn uống điều độ', 'active'),
-('D0000000-0000-0000-0000-000000000004', NOW(), 'RX-0004', 'B0000000-0000-0000-0000-000000000004', '50000000-0000-0000-0000-000000000004', '30000000-0000-0000-0000-000000000003', NOW(), 'Tái khám nếu sốt không giảm sau 3 ngày', 'active'),
-('D0000000-0000-0000-0000-000000000005', NOW(), 'RX-0005', 'B0000000-0000-0000-0000-000000000005', '50000000-0000-0000-0000-000000000005', '30000000-0000-0000-0000-000000000004', NOW(), 'Tránh các thức ăn gây dị ứng', 'active'),
-('D0000000-0000-0000-0000-000000000006', NOW(), 'RX-0006', 'B0000000-0000-0000-0000-000000000006', '50000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000008', NOW(), 'Bổ sung vitamin đầy đủ', 'active'),
-('D0000000-0000-0000-0000-000000000007', NOW(), 'RX-0007', 'B0000000-0000-0000-0000-000000000007', '50000000-0000-0000-0000-000000000007', '30000000-0000-0000-0000-000000000001', NOW(), 'Uống thuốc buổi sáng trước ăn', 'active'),
-('D0000000-0000-0000-0000-000000000008', NOW(), 'RX-0008', 'B0000000-0000-0000-0000-000000000008', '50000000-0000-0000-0000-000000000008', '30000000-0000-0000-0000-000000000006', NOW(), 'Nhỏ mắt 4 lần/ngày', 'active'),
-('D0000000-0000-0000-0000-000000000009', NOW(), 'RX-0009', 'B0000000-0000-0000-0000-000000000009', '50000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000007', NOW(), 'Không tự ý ngưng kháng sinh', 'active'),
-('D0000000-0000-0000-0000-000000000010', NOW(), 'RX-0010', 'B0000000-0000-0000-0000-000000000010', '50000000-0000-0000-0000-000000000010', '30000000-0000-0000-0000-000000000010', NOW(), 'Ăn ít đường, tập thể dục 30 phút/ngày', 'active');
+INSERT INTO prescriptions (id, created_at, prescription_code, medical_record_id, patient_id, doctor_id,
+prescription_date, notes, status) VALUES
+('D0000000-0000-0000-0000-000000000001', NOW(), 'RX-0001', 'B0000000-0000-0000-0000-000000000001', '
+50000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001', NOW(), 'Uống thuốc đúng giờ, không bỏ
+liều', 'active'),
+('D0000000-0000-0000-0000-000000000002', NOW(), 'RX-0002', 'B0000000-0000-0000-0000-000000000002', '
+50000000-0000-0000-0000-000000000002', '30000000-0000-0000-0000-000000000002', NOW(), 'Kiểm tra huyết áp hàng ngày', '
+active'),
+('D0000000-0000-0000-0000-000000000003', NOW(), 'RX-0003', 'B0000000-0000-0000-0000-000000000003', '
+50000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000009', NOW(), 'Ăn uống điều độ', 'active'),
+('D0000000-0000-0000-0000-000000000004', NOW(), 'RX-0004', 'B0000000-0000-0000-0000-000000000004', '
+50000000-0000-0000-0000-000000000004', '30000000-0000-0000-0000-000000000003', NOW(), 'Tái khám nếu sốt không giảm sau 3
+ngày', 'active'),
+('D0000000-0000-0000-0000-000000000005', NOW(), 'RX-0005', 'B0000000-0000-0000-0000-000000000005', '
+50000000-0000-0000-0000-000000000005', '30000000-0000-0000-0000-000000000004', NOW(), 'Tránh các thức ăn gây dị ứng', '
+active'),
+('D0000000-0000-0000-0000-000000000006', NOW(), 'RX-0006', 'B0000000-0000-0000-0000-000000000006', '
+50000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000008', NOW(), 'Bổ sung vitamin đầy đủ', '
+active'),
+('D0000000-0000-0000-0000-000000000007', NOW(), 'RX-0007', 'B0000000-0000-0000-0000-000000000007', '
+50000000-0000-0000-0000-000000000007', '30000000-0000-0000-0000-000000000001', NOW(), 'Uống thuốc buổi sáng trước ăn', '
+active'),
+('D0000000-0000-0000-0000-000000000008', NOW(), 'RX-0008', 'B0000000-0000-0000-0000-000000000008', '
+50000000-0000-0000-0000-000000000008', '30000000-0000-0000-0000-000000000006', NOW(), 'Nhỏ mắt 4 lần/ngày', 'active'),
+('D0000000-0000-0000-0000-000000000009', NOW(), 'RX-0009', 'B0000000-0000-0000-0000-000000000009', '
+50000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000007', NOW(), 'Không tự ý ngưng kháng sinh', '
+active'),
+('D0000000-0000-0000-0000-000000000010', NOW(), 'RX-0010', 'B0000000-0000-0000-0000-000000000010', '
+50000000-0000-0000-0000-000000000010', '30000000-0000-0000-0000-000000000010', NOW(), 'Ăn ít đường, tập thể dục 30
+phút/ngày', 'active');
 
 -- ============================================================
 -- PRESCRIPTION ITEMS
 -- ============================================================
-INSERT INTO prescription_items (id, created_at, prescription_id, medication_id, dosage, frequency, duration, quantity, instructions) VALUES
-('E0000000-0000-0000-0000-000000000001', NOW(), 'D0000000-0000-0000-0000-000000000001', 'C0000000-0000-0000-0000-000000000016', '5mg', '1 lần/ngày', '30 ngày', 30, 'Uống buổi sáng'),
-('E0000000-0000-0000-0000-000000000002', NOW(), 'D0000000-0000-0000-0000-000000000001', 'C0000000-0000-0000-0000-000000000012', '40mg', '1 lần/ngày', '30 ngày', 30, 'Uống buổi sáng'),
-('E0000000-0000-0000-0000-000000000003', NOW(), 'D0000000-0000-0000-0000-000000000002', 'C0000000-0000-0000-0000-000000000003', '5mg', '1 lần/ngày', '30 ngày', 30, 'Uống buổi tối'),
-('E0000000-0000-0000-0000-000000000004', NOW(), 'D0000000-0000-0000-0000-000000000002', 'C0000000-0000-0000-0000-000000000009', '50mg', '1 lần/ngày', '30 ngày', 30, 'Uống buổi sáng'),
-('E0000000-0000-0000-0000-000000000005', NOW(), 'D0000000-0000-0000-0000-000000000003', 'C0000000-0000-0000-0000-000000000013', '500mg', '2 lần/ngày', '14 ngày', 28, 'Uống sau ăn'),
-('E0000000-0000-0000-0000-000000000006', NOW(), 'D0000000-0000-0000-0000-000000000003', 'C0000000-0000-0000-0000-000000000020', '40mg', '1 lần/ngày', '30 ngày', 30, 'Uống trước ăn 30 phút'),
-('E0000000-0000-0000-0000-000000000007', NOW(), 'D0000000-0000-0000-0000-000000000004', 'C0000000-0000-0000-0000-000000000006', '500mg', '3 lần/ngày', '5 ngày', 15, 'Uống khi sốt > 38.5°C'),
-('E0000000-0000-0000-0000-000000000008', NOW(), 'D0000000-0000-0000-0000-000000000004', 'C0000000-0000-0000-0000-000000000001', '250mg', '3 lần/ngày', '7 ngày', 21, 'Uống sau ăn'),
-('E0000000-0000-0000-0000-000000000009', NOW(), 'D0000000-0000-0000-0000-000000000005', 'C0000000-0000-0000-0000-000000000005', '10mg', '1 lần/ngày', '7 ngày', 7, 'Uống buổi tối'),
-('E0000000-0000-0000-0000-000000000010', NOW(), 'D0000000-0000-0000-0000-000000000005', 'C0000000-0000-0000-0000-000000000014', '5mg', '2 lần/ngày', '3 ngày', 6, 'Uống sau ăn'),
-('E0000000-0000-0000-0000-000000000011', NOW(), 'D0000000-0000-0000-0000-000000000006', 'C0000000-0000-0000-0000-000000000011', '5mg', '1 lần/ngày', '90 ngày', 90, 'Uống sáng'),
-('E0000000-0000-0000-0000-000000000012', NOW(), 'D0000000-0000-0000-0000-000000000006', 'C0000000-0000-0000-0000-000000000010', '1000IU', '1 lần/ngày', '90 ngày', 90, 'Uống sau ăn'),
-('E0000000-0000-0000-0000-000000000013', NOW(), 'D0000000-0000-0000-0000-000000000007', 'C0000000-0000-0000-0000-000000000012', '40mg', '1 lần/ngày', '90 ngày', 90, 'Uống sáng'),
-('E0000000-0000-0000-0000-000000000014', NOW(), 'D0000000-0000-0000-0000-000000000007', 'C0000000-0000-0000-0000-000000000017', '300mg', '1 lần/ngày', '90 ngày', 90, 'Uống sau ăn tối'),
-('E0000000-0000-0000-0000-000000000015', NOW(), 'D0000000-0000-0000-0000-000000000008', 'C0000000-0000-0000-0000-000000000006', '500mg', '2 lần/ngày', '3 ngày', 6, 'Khi đau nhức mắt'),
-('E0000000-0000-0000-0000-000000000016', NOW(), 'D0000000-0000-0000-0000-000000000009', 'C0000000-0000-0000-0000-000000000015', '250mg', '1 lần/ngày', '5 ngày', 5, 'Uống 1 giờ trước ăn'),
-('E0000000-0000-0000-0000-000000000017', NOW(), 'D0000000-0000-0000-0000-000000000009', 'C0000000-0000-0000-0000-000000000019', '0.5mg', '2 lần/ngày', '7 ngày', 14, 'Uống sau ăn'),
-('E0000000-0000-0000-0000-000000000018', NOW(), 'D0000000-0000-0000-0000-000000000010', 'C0000000-0000-0000-0000-000000000002', '850mg', '1 lần/ngày', '30 ngày', 30, 'Uống trong bữa ăn'),
-('E0000000-0000-0000-0000-000000000019', NOW(), 'D0000000-0000-0000-0000-000000000010', 'C0000000-0000-0000-0000-000000000010', '1000IU', '1 lần/ngày', '30 ngày', 30, 'Uống sau ăn'),
-('E0000000-0000-0000-0000-000000000020', NOW(), 'D0000000-0000-0000-0000-000000000003', 'C0000000-0000-0000-0000-000000000004', '20mg', '2 lần/ngày', '30 ngày', 60, 'Uống trước ăn 30 phút');
+INSERT INTO prescription_items (id, created_at, prescription_id, medication_id, dosage, frequency, duration, quantity,
+instructions) VALUES
+('E0000000-0000-0000-0000-000000000001', NOW(), 'D0000000-0000-0000-0000-000000000001', '
+C0000000-0000-0000-0000-000000000016', '5mg', '1 lần/ngày', '30 ngày', 30, 'Uống buổi sáng'),
+('E0000000-0000-0000-0000-000000000002', NOW(), 'D0000000-0000-0000-0000-000000000001', '
+C0000000-0000-0000-0000-000000000012', '40mg', '1 lần/ngày', '30 ngày', 30, 'Uống buổi sáng'),
+('E0000000-0000-0000-0000-000000000003', NOW(), 'D0000000-0000-0000-0000-000000000002', '
+C0000000-0000-0000-0000-000000000003', '5mg', '1 lần/ngày', '30 ngày', 30, 'Uống buổi tối'),
+('E0000000-0000-0000-0000-000000000004', NOW(), 'D0000000-0000-0000-0000-000000000002', '
+C0000000-0000-0000-0000-000000000009', '50mg', '1 lần/ngày', '30 ngày', 30, 'Uống buổi sáng'),
+('E0000000-0000-0000-0000-000000000005', NOW(), 'D0000000-0000-0000-0000-000000000003', '
+C0000000-0000-0000-0000-000000000013', '500mg', '2 lần/ngày', '14 ngày', 28, 'Uống sau ăn'),
+('E0000000-0000-0000-0000-000000000006', NOW(), 'D0000000-0000-0000-0000-000000000003', '
+C0000000-0000-0000-0000-000000000020', '40mg', '1 lần/ngày', '30 ngày', 30, 'Uống trước ăn 30 phút'),
+('E0000000-0000-0000-0000-000000000007', NOW(), 'D0000000-0000-0000-0000-000000000004', '
+C0000000-0000-0000-0000-000000000006', '500mg', '3 lần/ngày', '5 ngày', 15, 'Uống khi sốt > 38.5°C'),
+('E0000000-0000-0000-0000-000000000008', NOW(), 'D0000000-0000-0000-0000-000000000004', '
+C0000000-0000-0000-0000-000000000001', '250mg', '3 lần/ngày', '7 ngày', 21, 'Uống sau ăn'),
+('E0000000-0000-0000-0000-000000000009', NOW(), 'D0000000-0000-0000-0000-000000000005', '
+C0000000-0000-0000-0000-000000000005', '10mg', '1 lần/ngày', '7 ngày', 7, 'Uống buổi tối'),
+('E0000000-0000-0000-0000-000000000010', NOW(), 'D0000000-0000-0000-0000-000000000005', '
+C0000000-0000-0000-0000-000000000014', '5mg', '2 lần/ngày', '3 ngày', 6, 'Uống sau ăn'),
+('E0000000-0000-0000-0000-000000000011', NOW(), 'D0000000-0000-0000-0000-000000000006', '
+C0000000-0000-0000-0000-000000000011', '5mg', '1 lần/ngày', '90 ngày', 90, 'Uống sáng'),
+('E0000000-0000-0000-0000-000000000012', NOW(), 'D0000000-0000-0000-0000-000000000006', '
+C0000000-0000-0000-0000-000000000010', '1000IU', '1 lần/ngày', '90 ngày', 90, 'Uống sau ăn'),
+('E0000000-0000-0000-0000-000000000013', NOW(), 'D0000000-0000-0000-0000-000000000007', '
+C0000000-0000-0000-0000-000000000012', '40mg', '1 lần/ngày', '90 ngày', 90, 'Uống sáng'),
+('E0000000-0000-0000-0000-000000000014', NOW(), 'D0000000-0000-0000-0000-000000000007', '
+C0000000-0000-0000-0000-000000000017', '300mg', '1 lần/ngày', '90 ngày', 90, 'Uống sau ăn tối'),
+('E0000000-0000-0000-0000-000000000015', NOW(), 'D0000000-0000-0000-0000-000000000008', '
+C0000000-0000-0000-0000-000000000006', '500mg', '2 lần/ngày', '3 ngày', 6, 'Khi đau nhức mắt'),
+('E0000000-0000-0000-0000-000000000016', NOW(), 'D0000000-0000-0000-0000-000000000009', '
+C0000000-0000-0000-0000-000000000015', '250mg', '1 lần/ngày', '5 ngày', 5, 'Uống 1 giờ trước ăn'),
+('E0000000-0000-0000-0000-000000000017', NOW(), 'D0000000-0000-0000-0000-000000000009', '
+C0000000-0000-0000-0000-000000000019', '0.5mg', '2 lần/ngày', '7 ngày', 14, 'Uống sau ăn'),
+('E0000000-0000-0000-0000-000000000018', NOW(), 'D0000000-0000-0000-0000-000000000010', '
+C0000000-0000-0000-0000-000000000002', '850mg', '1 lần/ngày', '30 ngày', 30, 'Uống trong bữa ăn'),
+('E0000000-0000-0000-0000-000000000019', NOW(), 'D0000000-0000-0000-0000-000000000010', '
+C0000000-0000-0000-0000-000000000010', '1000IU', '1 lần/ngày', '30 ngày', 30, 'Uống sau ăn'),
+('E0000000-0000-0000-0000-000000000020', NOW(), 'D0000000-0000-0000-0000-000000000003', '
+C0000000-0000-0000-0000-000000000004', '20mg', '2 lần/ngày', '30 ngày', 60, 'Uống trước ăn 30 phút');
 
 -- ============================================================
 -- INVOICES
 -- ============================================================
-INSERT INTO invoices (id, created_at, invoice_code, appointment_id, patient_id, invoice_date, subtotal, discount_amount, total_amount, insurance_covered, patient_paid, balance, status) VALUES
-('F0000000-0000-0000-0000-000000000001', NOW(), 'INV-0001', '70000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000001', NOW(), 750000, 0, 750000, 0, 750000, 0, 'paid'),
-('F0000000-0000-0000-0000-000000000002', NOW(), 'INV-0002', '70000000-0000-0000-0000-000000000002', '50000000-0000-0000-0000-000000000002', NOW(), 580000, 50000, 530000, 200000, 330000, 0, 'paid'),
-('F0000000-0000-0000-0000-000000000003', NOW(), 'INV-0003', '70000000-0000-0000-0000-000000000003', '50000000-0000-0000-0000-000000000003', NOW(), 1200000, 0, 1200000, 300000, 900000, 0, 'paid'),
-('F0000000-0000-0000-0000-000000000004', NOW(), 'INV-0004', '70000000-0000-0000-0000-000000000004', '50000000-0000-0000-0000-000000000004', NOW(), 450000, 0, 450000, 450000, 0, 0, 'paid'),
-('F0000000-0000-0000-0000-000000000005', NOW(), 'INV-0005', '70000000-0000-0000-0000-000000000005', '50000000-0000-0000-0000-000000000005', NOW(), 380000, 30000, 350000, 0, 350000, 0, 'paid'),
-('F0000000-0000-0000-0000-000000000006', NOW(), 'INV-0006', '70000000-0000-0000-0000-000000000006', '50000000-0000-0000-0000-000000000006', NOW(), 620000, 0, 620000, 310000, 310000, 0, 'paid'),
-('F0000000-0000-0000-0000-000000000007', NOW(), 'INV-0007', '70000000-0000-0000-0000-000000000007', '50000000-0000-0000-0000-000000000007', NOW(), 850000, 0, 850000, 0, 850000, 0, 'paid'),
-('F0000000-0000-0000-0000-000000000008', NOW(), 'INV-0008', '70000000-0000-0000-0000-000000000008', '50000000-0000-0000-0000-000000000008', NOW(), 420000, 50000, 370000, 0, 370000, 0, 'paid'),
-('F0000000-0000-0000-0000-000000000009', NOW(), 'INV-0009', '70000000-0000-0000-0000-000000000009', '50000000-0000-0000-0000-000000000009', NOW(), 430000, 0, 430000, 215000, 215000, 0, 'paid'),
-('F0000000-0000-0000-0000-000000000010', NOW(), 'INV-0010', '70000000-0000-0000-0000-000000000010', '50000000-0000-0000-0000-000000000010', NOW(), 350000, 0, 350000, 0, 200000, 150000, 'partial'),
-('F0000000-0000-0000-0000-000000000011', NOW(), 'INV-0011', '70000000-0000-0000-0000-000000000011', '50000000-0000-0000-0000-000000000011', NOW(), 650000, 0, 650000, 325000, 0, 325000, 'pending'),
-('F0000000-0000-0000-0000-000000000012', NOW(), 'INV-0012', '70000000-0000-0000-0000-000000000012', '50000000-0000-0000-0000-000000000001', NOW(), 520000, 0, 520000, 0, 0, 520000, 'pending'),
-('F0000000-0000-0000-0000-000000000013', NOW(), 'INV-0013', '70000000-0000-0000-0000-000000000013', '50000000-0000-0000-0000-000000000002', NOW(), 480000, 0, 480000, 0, 0, 480000, 'pending'),
-('F0000000-0000-0000-0000-000000000014', NOW(), 'INV-0014', '70000000-0000-0000-0000-000000000015', '50000000-0000-0000-0000-000000000004', NOW(), 700000, 0, 700000, 350000, 0, 350000, 'pending'),
-('F0000000-0000-0000-0000-000000000015', NOW(), 'INV-0015', '70000000-0000-0000-0000-000000000016', '50000000-0000-0000-0000-000000000005', NOW(), 320000, 0, 320000, 320000, 0, 0, 'pending'),
-('F0000000-0000-0000-0000-000000000016', NOW(), 'INV-0016', '70000000-0000-0000-0000-000000000018', '50000000-0000-0000-0000-000000000007', NOW(), 950000, 100000, 850000, 0, 850000, 0, 'paid'),
-('F0000000-0000-0000-0000-000000000017', NOW(), 'INV-0017', NULL, '50000000-0000-0000-0000-000000000003', NOW(), 500000, 0, 500000, 250000, 250000, 0, 'paid'),
-('F0000000-0000-0000-0000-000000000018', NOW(), 'INV-0018', NULL, '50000000-0000-0000-0000-000000000007', NOW(), 420000, 42000, 378000, 0, 378000, 0, 'paid'),
-('F0000000-0000-0000-0000-000000000019', NOW(), 'INV-0019', NULL, '50000000-0000-0000-0000-000000000011', NOW(), 880000, 0, 880000, 440000, 0, 440000, 'overdue'),
-('F0000000-0000-0000-0000-000000000020', NOW(), 'INV-0020', NULL, '50000000-0000-0000-0000-000000000009', NOW(), 650000, 0, 650000, 0, 650000, 0, 'paid');
+INSERT INTO invoices (id, created_at, invoice_code, appointment_id, patient_id, invoice_date, subtotal, discount_amount,
+total_amount, insurance_covered, patient_paid, balance, status) VALUES
+('F0000000-0000-0000-0000-000000000001', NOW(), 'INV-0001', '70000000-0000-0000-0000-000000000001', '
+50000000-0000-0000-0000-000000000001', NOW(), 750000, 0, 750000, 0, 750000, 0, 'paid'),
+('F0000000-0000-0000-0000-000000000002', NOW(), 'INV-0002', '70000000-0000-0000-0000-000000000002', '
+50000000-0000-0000-0000-000000000002', NOW(), 580000, 50000, 530000, 200000, 330000, 0, 'paid'),
+('F0000000-0000-0000-0000-000000000003', NOW(), 'INV-0003', '70000000-0000-0000-0000-000000000003', '
+50000000-0000-0000-0000-000000000003', NOW(), 1200000, 0, 1200000, 300000, 900000, 0, 'paid'),
+('F0000000-0000-0000-0000-000000000004', NOW(), 'INV-0004', '70000000-0000-0000-0000-000000000004', '
+50000000-0000-0000-0000-000000000004', NOW(), 450000, 0, 450000, 450000, 0, 0, 'paid'),
+('F0000000-0000-0000-0000-000000000005', NOW(), 'INV-0005', '70000000-0000-0000-0000-000000000005', '
+50000000-0000-0000-0000-000000000005', NOW(), 380000, 30000, 350000, 0, 350000, 0, 'paid'),
+('F0000000-0000-0000-0000-000000000006', NOW(), 'INV-0006', '70000000-0000-0000-0000-000000000006', '
+50000000-0000-0000-0000-000000000006', NOW(), 620000, 0, 620000, 310000, 310000, 0, 'paid'),
+('F0000000-0000-0000-0000-000000000007', NOW(), 'INV-0007', '70000000-0000-0000-0000-000000000007', '
+50000000-0000-0000-0000-000000000007', NOW(), 850000, 0, 850000, 0, 850000, 0, 'paid'),
+('F0000000-0000-0000-0000-000000000008', NOW(), 'INV-0008', '70000000-0000-0000-0000-000000000008', '
+50000000-0000-0000-0000-000000000008', NOW(), 420000, 50000, 370000, 0, 370000, 0, 'paid'),
+('F0000000-0000-0000-0000-000000000009', NOW(), 'INV-0009', '70000000-0000-0000-0000-000000000009', '
+50000000-0000-0000-0000-000000000009', NOW(), 430000, 0, 430000, 215000, 215000, 0, 'paid'),
+('F0000000-0000-0000-0000-000000000010', NOW(), 'INV-0010', '70000000-0000-0000-0000-000000000010', '
+50000000-0000-0000-0000-000000000010', NOW(), 350000, 0, 350000, 0, 200000, 150000, 'partial'),
+('F0000000-0000-0000-0000-000000000011', NOW(), 'INV-0011', '70000000-0000-0000-0000-000000000011', '
+50000000-0000-0000-0000-000000000011', NOW(), 650000, 0, 650000, 325000, 0, 325000, 'pending'),
+('F0000000-0000-0000-0000-000000000012', NOW(), 'INV-0012', '70000000-0000-0000-0000-000000000012', '
+50000000-0000-0000-0000-000000000001', NOW(), 520000, 0, 520000, 0, 0, 520000, 'pending'),
+('F0000000-0000-0000-0000-000000000013', NOW(), 'INV-0013', '70000000-0000-0000-0000-000000000013', '
+50000000-0000-0000-0000-000000000002', NOW(), 480000, 0, 480000, 0, 0, 480000, 'pending'),
+('F0000000-0000-0000-0000-000000000014', NOW(), 'INV-0014', '70000000-0000-0000-0000-000000000015', '
+50000000-0000-0000-0000-000000000004', NOW(), 700000, 0, 700000, 350000, 0, 350000, 'pending'),
+('F0000000-0000-0000-0000-000000000015', NOW(), 'INV-0015', '70000000-0000-0000-0000-000000000016', '
+50000000-0000-0000-0000-000000000005', NOW(), 320000, 0, 320000, 320000, 0, 0, 'pending'),
+('F0000000-0000-0000-0000-000000000016', NOW(), 'INV-0016', '70000000-0000-0000-0000-000000000018', '
+50000000-0000-0000-0000-000000000007', NOW(), 950000, 100000, 850000, 0, 850000, 0, 'paid'),
+('F0000000-0000-0000-0000-000000000017', NOW(), 'INV-0017', NULL, '50000000-0000-0000-0000-000000000003', NOW(), 500000,
+0, 500000, 250000, 250000, 0, 'paid'),
+('F0000000-0000-0000-0000-000000000018', NOW(), 'INV-0018', NULL, '50000000-0000-0000-0000-000000000007', NOW(), 420000,
+42000, 378000, 0, 378000, 0, 'paid'),
+('F0000000-0000-0000-0000-000000000019', NOW(), 'INV-0019', NULL, '50000000-0000-0000-0000-000000000011', NOW(), 880000,
+0, 880000, 440000, 0, 440000, 'overdue'),
+('F0000000-0000-0000-0000-000000000020', NOW(), 'INV-0020', NULL, '50000000-0000-0000-0000-000000000009', NOW(), 650000,
+0, 650000, 0, 650000, 0, 'paid');
 
 -- ============================================================
 -- INVOICE ITEMS
 -- ============================================================
 INSERT INTO invoice_items (id, created_at, invoice_id, item_type, item_name, quantity, unit_price, total_price) VALUES
-('G0000000-0000-0000-0000-000000000001', NOW(), 'F0000000-0000-0000-0000-000000000001', 'service', 'Khám tim mạch tổng quát', 1, 350000, 350000),
-('G0000000-0000-0000-0000-000000000002', NOW(), 'F0000000-0000-0000-0000-000000000001', 'medication', 'Bisoprolol 5mg x30', 30, 3500, 105000),
-('G0000000-0000-0000-0000-000000000003', NOW(), 'F0000000-0000-0000-0000-000000000001', 'medication', 'Furosemide 40mg x30', 30, 1500, 45000),
-('G0000000-0000-0000-0000-000000000004', NOW(), 'F0000000-0000-0000-0000-000000000002', 'service', 'Khám thần kinh', 1, 300000, 300000),
-('G0000000-0000-0000-0000-000000000005', NOW(), 'F0000000-0000-0000-0000-000000000002', 'medication', 'Amlodipine 5mg x30', 30, 2000, 60000),
-('G0000000-0000-0000-0000-000000000006', NOW(), 'F0000000-0000-0000-0000-000000000002', 'medication', 'Losartan 50mg x30', 30, 3000, 90000),
-('G0000000-0000-0000-0000-000000000007', NOW(), 'F0000000-0000-0000-0000-000000000003', 'service', 'Nội soi dạ dày', 1, 800000, 800000),
-('G0000000-0000-0000-0000-000000000008', NOW(), 'F0000000-0000-0000-0000-000000000003', 'medication', 'Clarithromycin 500mg x28', 28, 8000, 224000),
-('G0000000-0000-0000-0000-000000000009', NOW(), 'F0000000-0000-0000-0000-000000000003', 'medication', 'Pantoprazole 40mg x30', 30, 4000, 120000),
-('G0000000-0000-0000-0000-000000000010', NOW(), 'F0000000-0000-0000-0000-000000000004', 'service', 'Khám nhi tổng quát', 1, 250000, 250000),
-('G0000000-0000-0000-0000-000000000011', NOW(), 'F0000000-0000-0000-0000-000000000004', 'medication', 'Paracetamol 500mg x15', 15, 500, 7500),
-('G0000000-0000-0000-0000-000000000012', NOW(), 'F0000000-0000-0000-0000-000000000004', 'medication', 'Amoxicillin 250mg x21', 21, 3500, 73500),
-('G0000000-0000-0000-0000-000000000013', NOW(), 'F0000000-0000-0000-0000-000000000005', 'service', 'Khám da liễu', 1, 280000, 280000),
-('G0000000-0000-0000-0000-000000000014', NOW(), 'F0000000-0000-0000-0000-000000000005', 'medication', 'Cetirizine 10mg x7', 7, 1200, 8400),
-('G0000000-0000-0000-0000-000000000015', NOW(), 'F0000000-0000-0000-0000-000000000005', 'medication', 'Prednisolone 5mg x6', 6, 1200, 7200),
-('G0000000-0000-0000-0000-000000000016', NOW(), 'F0000000-0000-0000-0000-000000000006', 'service', 'Khám phụ khoa', 1, 350000, 350000),
-('G0000000-0000-0000-0000-000000000017', NOW(), 'F0000000-0000-0000-0000-000000000006', 'medication', 'Acid Folic 5mg x90', 90, 800, 72000),
-('G0000000-0000-0000-0000-000000000018', NOW(), 'F0000000-0000-0000-0000-000000000006', 'medication', 'Vitamin D3 1000IU x90', 90, 2000, 180000),
-('G0000000-0000-0000-0000-000000000019', NOW(), 'F0000000-0000-0000-0000-000000000007', 'service', 'Siêu âm tim', 1, 500000, 500000),
-('G0000000-0000-0000-0000-000000000020', NOW(), 'F0000000-0000-0000-0000-000000000007', 'medication', 'Furosemide 40mg x90', 90, 1500, 135000);
+('G0000000-0000-0000-0000-000000000001', NOW(), 'F0000000-0000-0000-0000-000000000001', 'service', 'Khám tim mạch tổng
+quát', 1, 350000, 350000),
+('G0000000-0000-0000-0000-000000000002', NOW(), 'F0000000-0000-0000-0000-000000000001', 'medication', 'Bisoprolol 5mg
+x30', 30, 3500, 105000),
+('G0000000-0000-0000-0000-000000000003', NOW(), 'F0000000-0000-0000-0000-000000000001', 'medication', 'Furosemide 40mg
+x30', 30, 1500, 45000),
+('G0000000-0000-0000-0000-000000000004', NOW(), 'F0000000-0000-0000-0000-000000000002', 'service', 'Khám thần kinh', 1,
+300000, 300000),
+('G0000000-0000-0000-0000-000000000005', NOW(), 'F0000000-0000-0000-0000-000000000002', 'medication', 'Amlodipine 5mg
+x30', 30, 2000, 60000),
+('G0000000-0000-0000-0000-000000000006', NOW(), 'F0000000-0000-0000-0000-000000000002', 'medication', 'Losartan 50mg
+x30', 30, 3000, 90000),
+('G0000000-0000-0000-0000-000000000007', NOW(), 'F0000000-0000-0000-0000-000000000003', 'service', 'Nội soi dạ dày', 1,
+800000, 800000),
+('G0000000-0000-0000-0000-000000000008', NOW(), 'F0000000-0000-0000-0000-000000000003', 'medication', 'Clarithromycin
+500mg x28', 28, 8000, 224000),
+('G0000000-0000-0000-0000-000000000009', NOW(), 'F0000000-0000-0000-0000-000000000003', 'medication', 'Pantoprazole 40mg
+x30', 30, 4000, 120000),
+('G0000000-0000-0000-0000-000000000010', NOW(), 'F0000000-0000-0000-0000-000000000004', 'service', 'Khám nhi tổng quát',
+1, 250000, 250000),
+('G0000000-0000-0000-0000-000000000011', NOW(), 'F0000000-0000-0000-0000-000000000004', 'medication', 'Paracetamol 500mg
+x15', 15, 500, 7500),
+('G0000000-0000-0000-0000-000000000012', NOW(), 'F0000000-0000-0000-0000-000000000004', 'medication', 'Amoxicillin 250mg
+x21', 21, 3500, 73500),
+('G0000000-0000-0000-0000-000000000013', NOW(), 'F0000000-0000-0000-0000-000000000005', 'service', 'Khám da liễu', 1,
+280000, 280000),
+('G0000000-0000-0000-0000-000000000014', NOW(), 'F0000000-0000-0000-0000-000000000005', 'medication', 'Cetirizine 10mg
+x7', 7, 1200, 8400),
+('G0000000-0000-0000-0000-000000000015', NOW(), 'F0000000-0000-0000-0000-000000000005', 'medication', 'Prednisolone 5mg
+x6', 6, 1200, 7200),
+('G0000000-0000-0000-0000-000000000016', NOW(), 'F0000000-0000-0000-0000-000000000006', 'service', 'Khám phụ khoa', 1,
+350000, 350000),
+('G0000000-0000-0000-0000-000000000017', NOW(), 'F0000000-0000-0000-0000-000000000006', 'medication', 'Acid Folic 5mg
+x90', 90, 800, 72000),
+('G0000000-0000-0000-0000-000000000018', NOW(), 'F0000000-0000-0000-0000-000000000006', 'medication', 'Vitamin D3 1000IU
+x90', 90, 2000, 180000),
+('G0000000-0000-0000-0000-000000000019', NOW(), 'F0000000-0000-0000-0000-000000000007', 'service', 'Siêu âm tim', 1,
+500000, 500000),
+('G0000000-0000-0000-0000-000000000020', NOW(), 'F0000000-0000-0000-0000-000000000007', 'medication', 'Furosemide 40mg
+x90', 90, 1500, 135000);
 
 -- ============================================================
 -- PAYMENTS
 -- ============================================================
-INSERT INTO payments (id, created_at, payment_code, invoice_id, patient_id, amount, payment_method, payment_date, status) VALUES
-('H0000000-0000-0000-0000-000000000001', NOW(), 'PAY-0001', 'F0000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000001', 750000, 'cash', NOW(), 'completed'),
-('H0000000-0000-0000-0000-000000000002', NOW(), 'PAY-0002', 'F0000000-0000-0000-0000-000000000002', '50000000-0000-0000-0000-000000000002', 330000, 'card', NOW(), 'completed'),
-('H0000000-0000-0000-0000-000000000003', NOW(), 'PAY-0003', 'F0000000-0000-0000-0000-000000000003', '50000000-0000-0000-0000-000000000003', 900000, 'transfer', NOW(), 'completed'),
-('H0000000-0000-0000-0000-000000000004', NOW(), 'PAY-0004', 'F0000000-0000-0000-0000-000000000004', '50000000-0000-0000-0000-000000000004', 0, 'insurance', NOW(), 'completed'),
-('H0000000-0000-0000-0000-000000000005', NOW(), 'PAY-0005', 'F0000000-0000-0000-0000-000000000005', '50000000-0000-0000-0000-000000000005', 350000, 'cash', NOW(), 'completed'),
-('H0000000-0000-0000-0000-000000000006', NOW(), 'PAY-0006', 'F0000000-0000-0000-0000-000000000006', '50000000-0000-0000-0000-000000000006', 310000, 'transfer', NOW(), 'completed'),
-('H0000000-0000-0000-0000-000000000007', NOW(), 'PAY-0007', 'F0000000-0000-0000-0000-000000000007', '50000000-0000-0000-0000-000000000007', 850000, 'card', NOW(), 'completed'),
-('H0000000-0000-0000-0000-000000000008', NOW(), 'PAY-0008', 'F0000000-0000-0000-0000-000000000008', '50000000-0000-0000-0000-000000000008', 370000, 'cash', NOW(), 'completed'),
-('H0000000-0000-0000-0000-000000000009', NOW(), 'PAY-0009', 'F0000000-0000-0000-0000-000000000009', '50000000-0000-0000-0000-000000000009', 215000, 'cash', NOW(), 'completed'),
-('H0000000-0000-0000-0000-000000000010', NOW(), 'PAY-0010', 'F0000000-0000-0000-0000-000000000010', '50000000-0000-0000-0000-000000000010', 200000, 'transfer', NOW(), 'completed'),
-('H0000000-0000-0000-0000-000000000011', NOW(), 'PAY-0011', 'F0000000-0000-0000-0000-000000000016', '50000000-0000-0000-0000-000000000007', 850000, 'card', NOW(), 'completed'),
-('H0000000-0000-0000-0000-000000000012', NOW(), 'PAY-0012', 'F0000000-0000-0000-0000-000000000017', '50000000-0000-0000-0000-000000000003', 250000, 'cash', NOW(), 'completed'),
-('H0000000-0000-0000-0000-000000000013', NOW(), 'PAY-0013', 'F0000000-0000-0000-0000-000000000018', '50000000-0000-0000-0000-000000000007', 378000, 'transfer', NOW(), 'completed'),
-('H0000000-0000-0000-0000-000000000014', NOW(), 'PAY-0014', 'F0000000-0000-0000-0000-000000000020', '50000000-0000-0000-0000-000000000009', 650000, 'card', NOW(), 'completed'),
-('H0000000-0000-0000-0000-000000000015', NOW(), 'PAY-0015', 'F0000000-0000-0000-0000-000000000011', '50000000-0000-0000-0000-000000000011', 0, 'pending', NOW(), 'pending'),
-('H0000000-0000-0000-0000-000000000016', NOW(), 'PAY-0016', 'F0000000-0000-0000-0000-000000000012', '50000000-0000-0000-0000-000000000001', 0, 'pending', NOW(), 'pending'),
-('H0000000-0000-0000-0000-000000000017', NOW(), 'PAY-0017', 'F0000000-0000-0000-0000-000000000013', '50000000-0000-0000-0000-000000000002', 0, 'pending', NOW(), 'pending'),
-('H0000000-0000-0000-0000-000000000018', NOW(), 'PAY-0018', 'F0000000-0000-0000-0000-000000000019', '50000000-0000-0000-0000-000000000011', 0, 'pending', NOW(), 'failed'),
-('H0000000-0000-0000-0000-000000000019', NOW(), 'PAY-0019', 'F0000000-0000-0000-0000-000000000014', '50000000-0000-0000-0000-000000000004', 0, 'pending', NOW(), 'pending'),
-('H0000000-0000-0000-0000-000000000020', NOW(), 'PAY-0020', 'F0000000-0000-0000-0000-000000000015', '50000000-0000-0000-0000-000000000005', 0, 'insurance', NOW(), 'pending');
+INSERT INTO payments (id, created_at, payment_code, invoice_id, patient_id, amount, payment_method, payment_date,
+status) VALUES
+('H0000000-0000-0000-0000-000000000001', NOW(), 'PAY-0001', 'F0000000-0000-0000-0000-000000000001', '
+50000000-0000-0000-0000-000000000001', 750000, 'cash', NOW(), 'completed'),
+('H0000000-0000-0000-0000-000000000002', NOW(), 'PAY-0002', 'F0000000-0000-0000-0000-000000000002', '
+50000000-0000-0000-0000-000000000002', 330000, 'card', NOW(), 'completed'),
+('H0000000-0000-0000-0000-000000000003', NOW(), 'PAY-0003', 'F0000000-0000-0000-0000-000000000003', '
+50000000-0000-0000-0000-000000000003', 900000, 'transfer', NOW(), 'completed'),
+('H0000000-0000-0000-0000-000000000004', NOW(), 'PAY-0004', 'F0000000-0000-0000-0000-000000000004', '
+50000000-0000-0000-0000-000000000004', 0, 'insurance', NOW(), 'completed'),
+('H0000000-0000-0000-0000-000000000005', NOW(), 'PAY-0005', 'F0000000-0000-0000-0000-000000000005', '
+50000000-0000-0000-0000-000000000005', 350000, 'cash', NOW(), 'completed'),
+('H0000000-0000-0000-0000-000000000006', NOW(), 'PAY-0006', 'F0000000-0000-0000-0000-000000000006', '
+50000000-0000-0000-0000-000000000006', 310000, 'transfer', NOW(), 'completed'),
+('H0000000-0000-0000-0000-000000000007', NOW(), 'PAY-0007', 'F0000000-0000-0000-0000-000000000007', '
+50000000-0000-0000-0000-000000000007', 850000, 'card', NOW(), 'completed'),
+('H0000000-0000-0000-0000-000000000008', NOW(), 'PAY-0008', 'F0000000-0000-0000-0000-000000000008', '
+50000000-0000-0000-0000-000000000008', 370000, 'cash', NOW(), 'completed'),
+('H0000000-0000-0000-0000-000000000009', NOW(), 'PAY-0009', 'F0000000-0000-0000-0000-000000000009', '
+50000000-0000-0000-0000-000000000009', 215000, 'cash', NOW(), 'completed'),
+('H0000000-0000-0000-0000-000000000010', NOW(), 'PAY-0010', 'F0000000-0000-0000-0000-000000000010', '
+50000000-0000-0000-0000-000000000010', 200000, 'transfer', NOW(), 'completed'),
+('H0000000-0000-0000-0000-000000000011', NOW(), 'PAY-0011', 'F0000000-0000-0000-0000-000000000016', '
+50000000-0000-0000-0000-000000000007', 850000, 'card', NOW(), 'completed'),
+('H0000000-0000-0000-0000-000000000012', NOW(), 'PAY-0012', 'F0000000-0000-0000-0000-000000000017', '
+50000000-0000-0000-0000-000000000003', 250000, 'cash', NOW(), 'completed'),
+('H0000000-0000-0000-0000-000000000013', NOW(), 'PAY-0013', 'F0000000-0000-0000-0000-000000000018', '
+50000000-0000-0000-0000-000000000007', 378000, 'transfer', NOW(), 'completed'),
+('H0000000-0000-0000-0000-000000000014', NOW(), 'PAY-0014', 'F0000000-0000-0000-0000-000000000020', '
+50000000-0000-0000-0000-000000000009', 650000, 'card', NOW(), 'completed'),
+('H0000000-0000-0000-0000-000000000015', NOW(), 'PAY-0015', 'F0000000-0000-0000-0000-000000000011', '
+50000000-0000-0000-0000-000000000011', 0, 'pending', NOW(), 'pending'),
+('H0000000-0000-0000-0000-000000000016', NOW(), 'PAY-0016', 'F0000000-0000-0000-0000-000000000012', '
+50000000-0000-0000-0000-000000000001', 0, 'pending', NOW(), 'pending'),
+('H0000000-0000-0000-0000-000000000017', NOW(), 'PAY-0017', 'F0000000-0000-0000-0000-000000000013', '
+50000000-0000-0000-0000-000000000002', 0, 'pending', NOW(), 'pending'),
+('H0000000-0000-0000-0000-000000000018', NOW(), 'PAY-0018', 'F0000000-0000-0000-0000-000000000019', '
+50000000-0000-0000-0000-000000000011', 0, 'pending', NOW(), 'failed'),
+('H0000000-0000-0000-0000-000000000019', NOW(), 'PAY-0019', 'F0000000-0000-0000-0000-000000000014', '
+50000000-0000-0000-0000-000000000004', 0, 'pending', NOW(), 'pending'),
+('H0000000-0000-0000-0000-000000000020', NOW(), 'PAY-0020', 'F0000000-0000-0000-0000-000000000015', '
+50000000-0000-0000-0000-000000000005', 0, 'insurance', NOW(), 'pending');
 
 -- ============================================================
 -- REVIEWS
 -- ============================================================
 INSERT INTO reviews (id, created_at, patient_id, doctor_id, appointment_id, rating, title, content, status) VALUES
-('I0000000-0000-0000-0000-000000000001', NOW(), '50000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001', '70000000-0000-0000-0000-000000000001', 5, 'Bác sĩ rất tận tâm', 'BS. Nam khám kỹ, giải thích rõ ràng và chu đáo. Rất hài lòng.', 'approved'),
-('I0000000-0000-0000-0000-000000000002', NOW(), '50000000-0000-0000-0000-000000000002', '30000000-0000-0000-0000-000000000002', '70000000-0000-0000-0000-000000000002', 4, 'Khám nhanh chóng', 'Bác sĩ khám khá nhanh nhưng vẫn đảm bảo chất lượng.', 'approved'),
-('I0000000-0000-0000-0000-000000000003', NOW(), '50000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000009', '70000000-0000-0000-0000-000000000003', 5, 'Nội soi rất chuyên nghiệp', 'Thủ thuật nhanh, ít đau. Bác sĩ giải thích kết quả rất rõ ràng.', 'approved'),
-('I0000000-0000-0000-0000-000000000004', NOW(), '50000000-0000-0000-0000-000000000004', '30000000-0000-0000-0000-000000000003', '70000000-0000-0000-0000-000000000004', 5, 'Bác sĩ nhi rất dễ thương với trẻ', 'Bé không khóc vì bác sĩ khéo léo. Cảm ơn bác sĩ Hùng!', 'approved'),
-('I0000000-0000-0000-0000-000000000005', NOW(), '50000000-0000-0000-0000-000000000005', '30000000-0000-0000-0000-000000000004', '70000000-0000-0000-0000-000000000005', 4, 'Điều trị hiệu quả', 'Uống thuốc 2 ngày đã đỡ ngứa nhiều. Bác sĩ nhiệt tình.', 'approved'),
-('I0000000-0000-0000-0000-000000000006', NOW(), '50000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000008', '70000000-0000-0000-0000-000000000006', 5, 'Bác sĩ sản rất chu đáo', 'Tư vấn thai kỳ rất cẩn thận, tôi cảm thấy yên tâm hơn rất nhiều.', 'approved'),
-('I0000000-0000-0000-0000-000000000007', NOW(), '50000000-0000-0000-0000-000000000007', '30000000-0000-0000-0000-000000000001', '70000000-0000-0000-0000-000000000007', 5, 'Chuyên gia tim mạch giỏi', 'BS. Nam chẩn đoán chính xác bệnh của tôi sau nhiều năm điều trị không khỏi.', 'approved'),
-('I0000000-0000-0000-0000-000000000008', NOW(), '50000000-0000-0000-0000-000000000008', '30000000-0000-0000-0000-000000000006', '70000000-0000-0000-0000-000000000008', 4, 'Khám mắt tỉ mỉ', 'Bác sĩ kiểm tra rất kỹ, đo thị lực chính xác.', 'approved'),
-('I0000000-0000-0000-0000-000000000009', NOW(), '50000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000007', '70000000-0000-0000-0000-000000000009', 3, 'Ổn nhưng chờ lâu', 'Bác sĩ khám ổn nhưng phải chờ hơn 1 tiếng.', 'approved'),
-('I0000000-0000-0000-0000-000000000010', NOW(), '50000000-0000-0000-0000-000000000010', '30000000-0000-0000-0000-000000000010', '70000000-0000-0000-0000-000000000010', 4, 'Tư vấn dinh dưỡng tốt', 'Bác sĩ hướng dẫn ăn uống rất chi tiết để kiểm soát đường huyết.', 'approved'),
-('I0000000-0000-0000-0000-000000000011', NOW(), '50000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001', NULL, 5, 'Tái khám lần 2 vẫn rất tốt', 'Bác sĩ nhớ bệnh án của tôi, điều trị liên tục và hiệu quả.', 'approved'),
-('I0000000-0000-0000-0000-000000000012', NOW(), '50000000-0000-0000-0000-000000000002', '30000000-0000-0000-0000-000000000002', NULL, 4, 'Huyết áp đã ổn định', 'Sau 1 tháng điều trị, huyết áp của tôi đã về mức bình thường.', 'approved'),
-('I0000000-0000-0000-0000-000000000013', NOW(), '50000000-0000-0000-0000-000000000011', '30000000-0000-0000-0000-000000000001', NULL, 5, 'Bác sĩ giỏi, phòng khám sạch sẽ', 'Phòng khám hiện đại, nhân viên thân thiện. Sẽ giới thiệu người thân.', 'approved'),
-('I0000000-0000-0000-0000-000000000014', NOW(), '50000000-0000-0000-0000-000000000007', '30000000-0000-0000-0000-000000000009', NULL, 5, 'Bác sĩ nội soi giỏi nhất', 'Đã đi nhiều nơi nhưng BS. Tuấn là người nội soi nhẹ nhàng nhất.', 'approved'),
-('I0000000-0000-0000-0000-000000000015', NOW(), '50000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000009', NULL, 4, 'Hết đau dạ dày', 'Điều trị đúng phác đồ, dạ dày tôi đã khỏi hẳn sau 2 tuần.', 'approved'),
-('I0000000-0000-0000-0000-000000000016', NOW(), '50000000-0000-0000-0000-000000000004', '30000000-0000-0000-0000-000000000008', NULL, 5, 'Thai kỳ khỏe mạnh', 'Bác sĩ Linh rất quan tâm và cẩn thận trong suốt thai kỳ.', 'approved'),
-('I0000000-0000-0000-0000-000000000017', NOW(), '50000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000007', NULL, 2, 'Cần cải thiện thời gian chờ', 'Bác sĩ khám tốt nhưng hệ thống đặt lịch bị trùng khiến chờ rất lâu.', 'pending'),
-('I0000000-0000-0000-0000-000000000018', NOW(), '50000000-0000-0000-0000-000000000005', '30000000-0000-0000-0000-000000000003', NULL, 5, 'Con tôi hay cười với bác sĩ Hùng', 'Bác sĩ rất vui tính và khéo léo với trẻ em. 10 điểm.', 'approved'),
-('I0000000-0000-0000-0000-000000000019', NOW(), '50000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000004', NULL, 4, 'Da mặt cải thiện rõ', 'Sau liệu trình 2 tuần, da mặt đã hết mụn và sáng hơn.', 'approved'),
-('I0000000-0000-0000-0000-000000000020', NOW(), '50000000-0000-0000-0000-000000000008', '30000000-0000-0000-0000-000000000006', NULL, 3, 'Khám ổn, cần thêm tư vấn', 'Bác sĩ kê toa đúng nhưng giải thích chưa đủ về cách dùng kính.', 'approved');
+('I0000000-0000-0000-0000-000000000001', NOW(), '50000000-0000-0000-0000-000000000001', '
+30000000-0000-0000-0000-000000000001', '70000000-0000-0000-0000-000000000001', 5, 'Bác sĩ rất tận tâm', 'BS. Nam khám
+kỹ, giải thích rõ ràng và chu đáo. Rất hài lòng.', 'approved'),
+('I0000000-0000-0000-0000-000000000002', NOW(), '50000000-0000-0000-0000-000000000002', '
+30000000-0000-0000-0000-000000000002', '70000000-0000-0000-0000-000000000002', 4, 'Khám nhanh chóng', 'Bác sĩ khám khá
+nhanh nhưng vẫn đảm bảo chất lượng.', 'approved'),
+('I0000000-0000-0000-0000-000000000003', NOW(), '50000000-0000-0000-0000-000000000003', '
+30000000-0000-0000-0000-000000000009', '70000000-0000-0000-0000-000000000003', 5, 'Nội soi rất chuyên nghiệp', 'Thủ
+thuật nhanh, ít đau. Bác sĩ giải thích kết quả rất rõ ràng.', 'approved'),
+('I0000000-0000-0000-0000-000000000004', NOW(), '50000000-0000-0000-0000-000000000004', '
+30000000-0000-0000-0000-000000000003', '70000000-0000-0000-0000-000000000004', 5, 'Bác sĩ nhi rất dễ thương với trẻ', '
+Bé không khóc vì bác sĩ khéo léo. Cảm ơn bác sĩ Hùng!', 'approved'),
+('I0000000-0000-0000-0000-000000000005', NOW(), '50000000-0000-0000-0000-000000000005', '
+30000000-0000-0000-0000-000000000004', '70000000-0000-0000-0000-000000000005', 4, 'Điều trị hiệu quả', 'Uống thuốc 2
+ngày đã đỡ ngứa nhiều. Bác sĩ nhiệt tình.', 'approved'),
+('I0000000-0000-0000-0000-000000000006', NOW(), '50000000-0000-0000-0000-000000000006', '
+30000000-0000-0000-0000-000000000008', '70000000-0000-0000-0000-000000000006', 5, 'Bác sĩ sản rất chu đáo', 'Tư vấn thai
+kỳ rất cẩn thận, tôi cảm thấy yên tâm hơn rất nhiều.', 'approved'),
+('I0000000-0000-0000-0000-000000000007', NOW(), '50000000-0000-0000-0000-000000000007', '
+30000000-0000-0000-0000-000000000001', '70000000-0000-0000-0000-000000000007', 5, 'Chuyên gia tim mạch giỏi', 'BS. Nam
+chẩn đoán chính xác bệnh của tôi sau nhiều năm điều trị không khỏi.', 'approved'),
+('I0000000-0000-0000-0000-000000000008', NOW(), '50000000-0000-0000-0000-000000000008', '
+30000000-0000-0000-0000-000000000006', '70000000-0000-0000-0000-000000000008', 4, 'Khám mắt tỉ mỉ', 'Bác sĩ kiểm tra rất
+kỹ, đo thị lực chính xác.', 'approved'),
+('I0000000-0000-0000-0000-000000000009', NOW(), '50000000-0000-0000-0000-000000000009', '
+30000000-0000-0000-0000-000000000007', '70000000-0000-0000-0000-000000000009', 3, 'Ổn nhưng chờ lâu', 'Bác sĩ khám ổn
+nhưng phải chờ hơn 1 tiếng.', 'approved'),
+('I0000000-0000-0000-0000-000000000010', NOW(), '50000000-0000-0000-0000-000000000010', '
+30000000-0000-0000-0000-000000000010', '70000000-0000-0000-0000-000000000010', 4, 'Tư vấn dinh dưỡng tốt', 'Bác sĩ hướng
+dẫn ăn uống rất chi tiết để kiểm soát đường huyết.', 'approved'),
+('I0000000-0000-0000-0000-000000000011', NOW(), '50000000-0000-0000-0000-000000000001', '
+30000000-0000-0000-0000-000000000001', NULL, 5, 'Tái khám lần 2 vẫn rất tốt', 'Bác sĩ nhớ bệnh án của tôi, điều trị liên
+tục và hiệu quả.', 'approved'),
+('I0000000-0000-0000-0000-000000000012', NOW(), '50000000-0000-0000-0000-000000000002', '
+30000000-0000-0000-0000-000000000002', NULL, 4, 'Huyết áp đã ổn định', 'Sau 1 tháng điều trị, huyết áp của tôi đã về mức
+bình thường.', 'approved'),
+('I0000000-0000-0000-0000-000000000013', NOW(), '50000000-0000-0000-0000-000000000011', '
+30000000-0000-0000-0000-000000000001', NULL, 5, 'Bác sĩ giỏi, phòng khám sạch sẽ', 'Phòng khám hiện đại, nhân viên thân
+thiện. Sẽ giới thiệu người thân.', 'approved'),
+('I0000000-0000-0000-0000-000000000014', NOW(), '50000000-0000-0000-0000-000000000007', '
+30000000-0000-0000-0000-000000000009', NULL, 5, 'Bác sĩ nội soi giỏi nhất', 'Đã đi nhiều nơi nhưng BS. Tuấn là người nội
+soi nhẹ nhàng nhất.', 'approved'),
+('I0000000-0000-0000-0000-000000000015', NOW(), '50000000-0000-0000-0000-000000000003', '
+30000000-0000-0000-0000-000000000009', NULL, 4, 'Hết đau dạ dày', 'Điều trị đúng phác đồ, dạ dày tôi đã khỏi hẳn sau 2
+tuần.', 'approved'),
+('I0000000-0000-0000-0000-000000000016', NOW(), '50000000-0000-0000-0000-000000000004', '
+30000000-0000-0000-0000-000000000008', NULL, 5, 'Thai kỳ khỏe mạnh', 'Bác sĩ Linh rất quan tâm và cẩn thận trong suốt
+thai kỳ.', 'approved'),
+('I0000000-0000-0000-0000-000000000017', NOW(), '50000000-0000-0000-0000-000000000009', '
+30000000-0000-0000-0000-000000000007', NULL, 2, 'Cần cải thiện thời gian chờ', 'Bác sĩ khám tốt nhưng hệ thống đặt lịch
+bị trùng khiến chờ rất lâu.', 'pending'),
+('I0000000-0000-0000-0000-000000000018', NOW(), '50000000-0000-0000-0000-000000000005', '
+30000000-0000-0000-0000-000000000003', NULL, 5, 'Con tôi hay cười với bác sĩ Hùng', 'Bác sĩ rất vui tính và khéo léo với
+trẻ em. 10 điểm.', 'approved'),
+('I0000000-0000-0000-0000-000000000019', NOW(), '50000000-0000-0000-0000-000000000006', '
+30000000-0000-0000-0000-000000000004', NULL, 4, 'Da mặt cải thiện rõ', 'Sau liệu trình 2 tuần, da mặt đã hết mụn và sáng
+hơn.', 'approved'),
+('I0000000-0000-0000-0000-000000000020', NOW(), '50000000-0000-0000-0000-000000000008', '
+30000000-0000-0000-0000-000000000006', NULL, 3, 'Khám ổn, cần thêm tư vấn', 'Bác sĩ kê toa đúng nhưng giải thích chưa đủ
+về cách dùng kính.', 'approved');
 
 -- ============================================================
 -- LOYALTY TRANSACTIONS
 -- ============================================================
-INSERT INTO loyalty_transactions (id, created_at, patient_id, transaction_type, points, reference_type, reference_id, description, balance_after, expires_at) VALUES
-('J0000000-0000-0000-0000-000000000001', NOW(), '50000000-0000-0000-0000-000000000001', 'earn', 75, 'appointment', 1, 'Điểm thưởng lần khám APT-0001', 75, NOW() + INTERVAL '1 year'),
-('J0000000-0000-0000-0000-000000000002', NOW(), '50000000-0000-0000-0000-000000000001', 'earn', 52, 'appointment', 12, 'Điểm thưởng lần khám APT-0012', 127, NOW() + INTERVAL '1 year'),
-('J0000000-0000-0000-0000-000000000003', NOW(), '50000000-0000-0000-0000-000000000001', 'redeem', -52, 'invoice', 1, 'Đổi điểm giảm giá hóa đơn', 75, NULL),
-('J0000000-0000-0000-0000-000000000004', NOW(), '50000000-0000-0000-0000-000000000002', 'earn', 53, 'appointment', 2, 'Điểm thưởng lần khám APT-0002', 53, NOW() + INTERVAL '1 year'),
-('J0000000-0000-0000-0000-000000000005', NOW(), '50000000-0000-0000-0000-000000000002', 'earn', 48, 'appointment', 13, 'Điểm thưởng lần khám APT-0013', 101, NOW() + INTERVAL '1 year'),
-('J0000000-0000-0000-0000-000000000006', NOW(), '50000000-0000-0000-0000-000000000003', 'earn', 90, 'appointment', 3, 'Điểm thưởng nội soi APT-0003', 90, NOW() + INTERVAL '1 year'),
-('J0000000-0000-0000-0000-000000000007', NOW(), '50000000-0000-0000-0000-000000000004', 'earn', 0, 'appointment', 4, 'Bảo hiểm thanh toán 100% - không tích điểm', 300, NULL),
-('J0000000-0000-0000-0000-000000000008', NOW(), '50000000-0000-0000-0000-000000000004', 'earn', 70, 'appointment', 15, 'Điểm thưởng thai kỳ', 370, NOW() + INTERVAL '1 year'),
-('J0000000-0000-0000-0000-000000000009', NOW(), '50000000-0000-0000-0000-000000000005', 'earn', 35, 'appointment', 5, 'Điểm thưởng APT-0005', 35, NOW() + INTERVAL '1 year'),
-('J0000000-0000-0000-0000-000000000010', NOW(), '50000000-0000-0000-0000-000000000007', 'earn', 85, 'appointment', 7, 'Điểm thưởng siêu âm tim', 85, NOW() + INTERVAL '1 year'),
-('J0000000-0000-0000-0000-000000000011', NOW(), '50000000-0000-0000-0000-000000000007', 'earn', 85, 'appointment', 18, 'Điểm thưởng nội soi APT-0018', 170, NOW() + INTERVAL '1 year'),
-('J0000000-0000-0000-0000-000000000012', NOW(), '50000000-0000-0000-0000-000000000007', 'bonus', 200, 'loyalty', NULL, 'Thưởng khách hàng thân thiết - 20 lần khám', 370, NOW() + INTERVAL '2 year'),
-('J0000000-0000-0000-0000-000000000013', NOW(), '50000000-0000-0000-0000-000000000007', 'redeem', -100, 'invoice', 7, 'Đổi điểm giảm giá 100k', 270, NULL),
-('J0000000-0000-0000-0000-000000000014', NOW(), '50000000-0000-0000-0000-000000000006', 'earn', 31, 'appointment', 6, 'Điểm thưởng APT-0006', 31, NOW() + INTERVAL '1 year'),
-('J0000000-0000-0000-0000-000000000015', NOW(), '50000000-0000-0000-0000-000000000009', 'earn', 22, 'appointment', 9, 'Điểm thưởng APT-0009', 22, NOW() + INTERVAL '1 year'),
-('J0000000-0000-0000-0000-000000000016', NOW(), '50000000-0000-0000-0000-000000000010', 'earn', 20, 'appointment', 10, 'Điểm thưởng APT-0010', 20, NOW() + INTERVAL '1 year'),
-('J0000000-0000-0000-0000-000000000017', NOW(), '50000000-0000-0000-0000-000000000011', 'earn', 88, 'appointment', 11, 'Điểm thưởng APT-0011', 88, NOW() + INTERVAL '1 year'),
-('J0000000-0000-0000-0000-000000000018', NOW(), '50000000-0000-0000-0000-000000000011', 'bonus', 250, 'loyalty', NULL, 'Thưởng khách hàng VIP - 25 lần khám', 338, NOW() + INTERVAL '2 year'),
-('J0000000-0000-0000-0000-000000000019', NOW(), '50000000-0000-0000-0000-000000000011', 'expire', -88, 'loyalty', NULL, 'Điểm hết hạn', 500, NULL),
-('J0000000-0000-0000-0000-000000000020', NOW(), '50000000-0000-0000-0000-000000000008', 'earn', 37, 'appointment', 8, 'Điểm thưởng APT-0008', 37, NOW() + INTERVAL '1 year');
+INSERT INTO loyalty_transactions (id, created_at, patient_id, transaction_type, points, reference_type, reference_id,
+description, balance_after, expires_at) VALUES
+('J0000000-0000-0000-0000-000000000001', NOW(), '50000000-0000-0000-0000-000000000001', 'earn', 75, 'appointment', 1, '
+Điểm thưởng lần khám APT-0001', 75, NOW() + INTERVAL '1 year'),
+('J0000000-0000-0000-0000-000000000002', NOW(), '50000000-0000-0000-0000-000000000001', 'earn', 52, 'appointment', 12, '
+Điểm thưởng lần khám APT-0012', 127, NOW() + INTERVAL '1 year'),
+('J0000000-0000-0000-0000-000000000003', NOW(), '50000000-0000-0000-0000-000000000001', 'redeem', -52, 'invoice', 1, '
+Đổi điểm giảm giá hóa đơn', 75, NULL),
+('J0000000-0000-0000-0000-000000000004', NOW(), '50000000-0000-0000-0000-000000000002', 'earn', 53, 'appointment', 2, '
+Điểm thưởng lần khám APT-0002', 53, NOW() + INTERVAL '1 year'),
+('J0000000-0000-0000-0000-000000000005', NOW(), '50000000-0000-0000-0000-000000000002', 'earn', 48, 'appointment', 13, '
+Điểm thưởng lần khám APT-0013', 101, NOW() + INTERVAL '1 year'),
+('J0000000-0000-0000-0000-000000000006', NOW(), '50000000-0000-0000-0000-000000000003', 'earn', 90, 'appointment', 3, '
+Điểm thưởng nội soi APT-0003', 90, NOW() + INTERVAL '1 year'),
+('J0000000-0000-0000-0000-000000000007', NOW(), '50000000-0000-0000-0000-000000000004', 'earn', 0, 'appointment', 4, '
+Bảo hiểm thanh toán 100% - không tích điểm', 300, NULL),
+('J0000000-0000-0000-0000-000000000008', NOW(), '50000000-0000-0000-0000-000000000004', 'earn', 70, 'appointment', 15, '
+Điểm thưởng thai kỳ', 370, NOW() + INTERVAL '1 year'),
+('J0000000-0000-0000-0000-000000000009', NOW(), '50000000-0000-0000-0000-000000000005', 'earn', 35, 'appointment', 5, '
+Điểm thưởng APT-0005', 35, NOW() + INTERVAL '1 year'),
+('J0000000-0000-0000-0000-000000000010', NOW(), '50000000-0000-0000-0000-000000000007', 'earn', 85, 'appointment', 7, '
+Điểm thưởng siêu âm tim', 85, NOW() + INTERVAL '1 year'),
+('J0000000-0000-0000-0000-000000000011', NOW(), '50000000-0000-0000-0000-000000000007', 'earn', 85, 'appointment', 18, '
+Điểm thưởng nội soi APT-0018', 170, NOW() + INTERVAL '1 year'),
+('J0000000-0000-0000-0000-000000000012', NOW(), '50000000-0000-0000-0000-000000000007', 'bonus', 200, 'loyalty', NULL, '
+Thưởng khách hàng thân thiết - 20 lần khám', 370, NOW() + INTERVAL '2 year'),
+('J0000000-0000-0000-0000-000000000013', NOW(), '50000000-0000-0000-0000-000000000007', 'redeem', -100, 'invoice', 7, '
+Đổi điểm giảm giá 100k', 270, NULL),
+('J0000000-0000-0000-0000-000000000014', NOW(), '50000000-0000-0000-0000-000000000006', 'earn', 31, 'appointment', 6, '
+Điểm thưởng APT-0006', 31, NOW() + INTERVAL '1 year'),
+('J0000000-0000-0000-0000-000000000015', NOW(), '50000000-0000-0000-0000-000000000009', 'earn', 22, 'appointment', 9, '
+Điểm thưởng APT-0009', 22, NOW() + INTERVAL '1 year'),
+('J0000000-0000-0000-0000-000000000016', NOW(), '50000000-0000-0000-0000-000000000010', 'earn', 20, 'appointment', 10, '
+Điểm thưởng APT-0010', 20, NOW() + INTERVAL '1 year'),
+('J0000000-0000-0000-0000-000000000017', NOW(), '50000000-0000-0000-0000-000000000011', 'earn', 88, 'appointment', 11, '
+Điểm thưởng APT-0011', 88, NOW() + INTERVAL '1 year'),
+('J0000000-0000-0000-0000-000000000018', NOW(), '50000000-0000-0000-0000-000000000011', 'bonus', 250, 'loyalty', NULL, '
+Thưởng khách hàng VIP - 25 lần khám', 338, NOW() + INTERVAL '2 year'),
+('J0000000-0000-0000-0000-000000000019', NOW(), '50000000-0000-0000-0000-000000000011', 'expire', -88, 'loyalty',
+NULL, 'Điểm hết hạn', 500, NULL),
+('J0000000-0000-0000-0000-000000000020', NOW(), '50000000-0000-0000-0000-000000000008', 'earn', 37, 'appointment', 8, '
+Điểm thưởng APT-0008', 37, NOW() + INTERVAL '1 year');
 
 -- ============================================================
 -- PROMOTIONS
 -- ============================================================
-INSERT INTO promotions (id, created_at, code, name, description, discount_type, discount_value, min_purchase_amount, max_discount_amount, usage_limit, usage_count, usage_per_user, applicable_services, start_date, end_date, is_active) VALUES
-('K0000000-0000-0000-0000-000000000001', NOW(), 'WELCOME10', 'Chào mừng bệnh nhân mới', 'Giảm 10% cho lần khám đầu tiên', 'percentage', 10, 200000, 100000, 500, 123, 1, NULL, '2025-01-01', '2025-12-31', TRUE),
-('K0000000-0000-0000-0000-000000000002', NOW(), 'SUMMER25', 'Khuyến mãi hè 2025', 'Giảm 25% dịch vụ khám tổng quát tháng 6-8', 'percentage', 25, 300000, 200000, 200, 45, 1, NULL, '2025-06-01', '2025-08-31', TRUE),
-('K0000000-0000-0000-0000-000000000003', NOW(), 'SAVE100K', 'Tiết kiệm 100K', 'Giảm 100.000đ cho hóa đơn từ 500K', 'fixed', 100000, 500000, NULL, 300, 87, 1, NULL, '2025-03-01', '2025-06-30', TRUE),
-('K0000000-0000-0000-0000-000000000004', NOW(), 'HEART20', 'Tuần lễ tim mạch', 'Giảm 20% dịch vụ khám tim mạch', 'percentage', 20, 0, 150000, 100, 32, 1, '["20000000-0000-0000-0000-000000000001","20000000-0000-0000-0000-000000000002"]', '2025-04-07', '2025-04-13', TRUE),
-('K0000000-0000-0000-0000-000000000005', NOW(), 'BABY15', 'Chăm sóc mẹ và bé', 'Giảm 15% dịch vụ nhi khoa và sản khoa', 'percentage', 15, 0, 100000, 200, 78, 2, '["20000000-0000-0000-0000-000000000004","20000000-0000-0000-0000-000000000009"]', '2025-01-01', '2025-12-31', TRUE),
-('K0000000-0000-0000-0000-000000000006', NOW(), 'VIP50K', 'Ưu đãi khách hàng VIP', 'Giảm 50K cho bệnh nhân từ 10 lần khám', 'fixed', 50000, 0, NULL, NULL, 156, 10, NULL, '2025-01-01', '2025-12-31', TRUE),
-('K0000000-0000-0000-0000-000000000007', NOW(), 'CHECKUP30', 'Khám sức khỏe tổng quát', 'Giảm 30% gói khám tổng quát', 'percentage', 30, 0, 300000, 150, 22, 1, NULL, '2025-04-01', '2025-04-30', TRUE),
-('K0000000-0000-0000-0000-000000000008', NOW(), 'LABTEST', 'Xét nghiệm khuyến mãi', 'Miễn phí xét nghiệm máu khi khám lâm sàng', 'fixed', 350000, 300000, NULL, 100, 41, 1, '["20000000-0000-0000-0000-000000000015"]', '2025-04-01', '2025-04-30', TRUE),
-('K0000000-0000-0000-0000-000000000009', NOW(), 'DENTAL20', 'Nha khoa tháng 4', 'Giảm 20% dịch vụ nha khoa', 'percentage', 20, 0, 200000, 80, 15, 2, '["20000000-0000-0000-0000-000000000013","20000000-0000-0000-0000-000000000014"]', '2025-04-01', '2025-04-30', TRUE),
-('K0000000-0000-0000-0000-000000000010', NOW(), 'IMAGING15', 'Chẩn đoán hình ảnh', 'Giảm 15% CT Scan và MRI', 'percentage', 15, 0, 500000, 50, 8, 1, '["20000000-0000-0000-0000-000000000016","20000000-0000-0000-0000-000000000017"]', '2025-04-01', '2025-06-30', TRUE),
-('K0000000-0000-0000-0000-000000000011', NOW(), 'NEWYR2025', 'Năm mới 2025', 'Giảm 20% toàn bộ dịch vụ tuần đầu năm', 'percentage', 20, 0, 300000, 1000, 324, 1, NULL, '2025-01-01', '2025-01-07', FALSE),
-('K0000000-0000-0000-0000-000000000012', NOW(), 'WOMENS8', 'Ngày Quốc tế Phụ nữ', 'Giảm 30% dịch vụ phụ khoa ngày 8/3', 'percentage', 30, 0, 200000, 50, 50, 1, '["20000000-0000-0000-0000-000000000009"]', '2025-03-08', '2025-03-08', FALSE),
-('K0000000-0000-0000-0000-000000000013', NOW(), 'ELDER10', 'Ưu đãi người cao tuổi', 'Giảm 10% cho bệnh nhân trên 60 tuổi', 'percentage', 10, 0, 150000, NULL, 89, 10, NULL, '2025-01-01', '2025-12-31', TRUE),
-('K0000000-0000-0000-0000-000000000014', NOW(), 'REFER200', 'Giới thiệu bạn bè', 'Nhận 200K khi giới thiệu bệnh nhân mới', 'fixed', 200000, 0, NULL, NULL, 34, 5, NULL, '2025-01-01', '2025-12-31', TRUE),
-('K0000000-0000-0000-0000-000000000015', NOW(), 'ONLINE10', 'Đặt lịch online', 'Giảm 10K khi đặt lịch qua app', 'fixed', 10000, 0, NULL, NULL, 412, 10, NULL, '2025-01-01', '2025-12-31', TRUE),
-('K0000000-0000-0000-0000-000000000016', NOW(), 'REHAB10', 'Phục hồi chức năng', 'Giảm 10% gói vật lý trị liệu', 'percentage', 10, 0, 100000, 100, 18, 3, '["20000000-0000-0000-0000-000000000020"]', '2025-01-01', '2025-12-31', TRUE),
-('K0000000-0000-0000-0000-000000000017', NOW(), 'DIABETES', 'Kiểm soát tiểu đường', 'Giảm 15% gói theo dõi tiểu đường', 'percentage', 15, 0, 200000, 200, 55, 4, '["20000000-0000-0000-0000-000000000011"]', '2025-01-01', '2025-12-31', TRUE),
-('K0000000-0000-0000-0000-000000000018', NOW(), 'MENTALHEALTH', 'Sức khỏe tâm thần', 'Giảm 20% tư vấn tâm lý', 'percentage', 20, 0, 150000, 100, 12, 3, '["20000000-0000-0000-0000-000000000019"]', '2025-01-01', '2025-12-31', TRUE),
-('K0000000-0000-0000-0000-000000000019', NOW(), 'FAMILY30', 'Gói gia đình', 'Giảm 30K khi đặt lịch cho 2 thành viên', 'fixed', 30000, 0, NULL, 500, 67, 1, NULL, '2025-01-01', '2025-12-31', TRUE),
-('K0000000-0000-0000-0000-000000000020', NOW(), 'FLASH50K', 'Flash Sale 24h', 'Giảm 50K cho 50 khách đầu tiên', 'fixed', 50000, 200000, NULL, 50, 50, 1, NULL, '2025-04-05', '2025-04-05', FALSE);
+INSERT INTO promotions (id, created_at, code, name, description, discount_type, discount_value, min_purchase_amount,
+max_discount_amount, usage_limit, usage_count, usage_per_user, applicable_services, start_date, end_date, is_active)
+VALUES
+('K0000000-0000-0000-0000-000000000001', NOW(), 'WELCOME10', 'Chào mừng bệnh nhân mới', 'Giảm 10% cho lần khám đầu
+tiên', 'percentage', 10, 200000, 100000, 500, 123, 1, NULL, '2025-01-01', '2025-12-31', TRUE),
+('K0000000-0000-0000-0000-000000000002', NOW(), 'SUMMER25', 'Khuyến mãi hè 2025', 'Giảm 25% dịch vụ khám tổng quát tháng
+6-8', 'percentage', 25, 300000, 200000, 200, 45, 1, NULL, '2025-06-01', '2025-08-31', TRUE),
+('K0000000-0000-0000-0000-000000000003', NOW(), 'SAVE100K', 'Tiết kiệm 100K', 'Giảm 100.000đ cho hóa đơn từ 500K', '
+fixed', 100000, 500000, NULL, 300, 87, 1, NULL, '2025-03-01', '2025-06-30', TRUE),
+('K0000000-0000-0000-0000-000000000004', NOW(), 'HEART20', 'Tuần lễ tim mạch', 'Giảm 20% dịch vụ khám tim mạch', '
+percentage', 20, 0, 150000, 100, 32,
+1, '["20000000-0000-0000-0000-000000000001","20000000-0000-0000-0000-000000000002"]', '2025-04-07', '2025-04-13', TRUE),
+('K0000000-0000-0000-0000-000000000005', NOW(), 'BABY15', 'Chăm sóc mẹ và bé', 'Giảm 15% dịch vụ nhi khoa và sản
+khoa', 'percentage', 15, 0, 100000, 200, 78,
+2, '["20000000-0000-0000-0000-000000000004","20000000-0000-0000-0000-000000000009"]', '2025-01-01', '2025-12-31', TRUE),
+('K0000000-0000-0000-0000-000000000006', NOW(), 'VIP50K', 'Ưu đãi khách hàng VIP', 'Giảm 50K cho bệnh nhân từ 10 lần
+khám', 'fixed', 50000, 0, NULL, NULL, 156, 10, NULL, '2025-01-01', '2025-12-31', TRUE),
+('K0000000-0000-0000-0000-000000000007', NOW(), 'CHECKUP30', 'Khám sức khỏe tổng quát', 'Giảm 30% gói khám tổng quát', '
+percentage', 30, 0, 300000, 150, 22, 1, NULL, '2025-04-01', '2025-04-30', TRUE),
+('K0000000-0000-0000-0000-000000000008', NOW(), 'LABTEST', 'Xét nghiệm khuyến mãi', 'Miễn phí xét nghiệm máu khi khám
+lâm sàng', 'fixed', 350000, 300000, NULL, 100, 41, 1, '["20000000-0000-0000-0000-000000000015"]', '2025-04-01', '
+2025-04-30', TRUE),
+('K0000000-0000-0000-0000-000000000009', NOW(), 'DENTAL20', 'Nha khoa tháng 4', 'Giảm 20% dịch vụ nha khoa', '
+percentage', 20, 0, 200000, 80, 15,
+2, '["20000000-0000-0000-0000-000000000013","20000000-0000-0000-0000-000000000014"]', '2025-04-01', '2025-04-30', TRUE),
+('K0000000-0000-0000-0000-000000000010', NOW(), 'IMAGING15', 'Chẩn đoán hình ảnh', 'Giảm 15% CT Scan và MRI', '
+percentage', 15, 0, 500000, 50, 8,
+1, '["20000000-0000-0000-0000-000000000016","20000000-0000-0000-0000-000000000017"]', '2025-04-01', '2025-06-30', TRUE),
+('K0000000-0000-0000-0000-000000000011', NOW(), 'NEWYR2025', 'Năm mới 2025', 'Giảm 20% toàn bộ dịch vụ tuần đầu năm', '
+percentage', 20, 0, 300000, 1000, 324, 1, NULL, '2025-01-01', '2025-01-07', FALSE),
+('K0000000-0000-0000-0000-000000000012', NOW(), 'WOMENS8', 'Ngày Quốc tế Phụ nữ', 'Giảm 30% dịch vụ phụ khoa ngày
+8/3', 'percentage', 30, 0, 200000, 50, 50, 1, '["20000000-0000-0000-0000-000000000009"]', '2025-03-08', '2025-03-08',
+FALSE),
+('K0000000-0000-0000-0000-000000000013', NOW(), 'ELDER10', 'Ưu đãi người cao tuổi', 'Giảm 10% cho bệnh nhân trên 60
+tuổi', 'percentage', 10, 0, 150000, NULL, 89, 10, NULL, '2025-01-01', '2025-12-31', TRUE),
+('K0000000-0000-0000-0000-000000000014', NOW(), 'REFER200', 'Giới thiệu bạn bè', 'Nhận 200K khi giới thiệu bệnh nhân
+mới', 'fixed', 200000, 0, NULL, NULL, 34, 5, NULL, '2025-01-01', '2025-12-31', TRUE),
+('K0000000-0000-0000-0000-000000000015', NOW(), 'ONLINE10', 'Đặt lịch online', 'Giảm 10K khi đặt lịch qua app', 'fixed',
+10000, 0, NULL, NULL, 412, 10, NULL, '2025-01-01', '2025-12-31', TRUE),
+('K0000000-0000-0000-0000-000000000016', NOW(), 'REHAB10', 'Phục hồi chức năng', 'Giảm 10% gói vật lý trị liệu', '
+percentage', 10, 0, 100000, 100, 18, 3, '["20000000-0000-0000-0000-000000000020"]', '2025-01-01', '2025-12-31', TRUE),
+('K0000000-0000-0000-0000-000000000017', NOW(), 'DIABETES', 'Kiểm soát tiểu đường', 'Giảm 15% gói theo dõi tiểu
+đường', 'percentage', 15, 0, 200000, 200, 55, 4, '["20000000-0000-0000-0000-000000000011"]', '2025-01-01', '2025-12-31',
+TRUE),
+('K0000000-0000-0000-0000-000000000018', NOW(), 'MENTALHEALTH', 'Sức khỏe tâm thần', 'Giảm 20% tư vấn tâm lý', '
+percentage', 20, 0, 150000, 100, 12, 3, '["20000000-0000-0000-0000-000000000019"]', '2025-01-01', '2025-12-31', TRUE),
+('K0000000-0000-0000-0000-000000000019', NOW(), 'FAMILY30', 'Gói gia đình', 'Giảm 30K khi đặt lịch cho 2 thành viên', '
+fixed', 30000, 0, NULL, 500, 67, 1, NULL, '2025-01-01', '2025-12-31', TRUE),
+('K0000000-0000-0000-0000-000000000020', NOW(), 'FLASH50K', 'Flash Sale 24h', 'Giảm 50K cho 50 khách đầu tiên', 'fixed',
+50000, 200000, NULL, 50, 50, 1, NULL, '2025-04-05', '2025-04-05', FALSE);
 
 -- ============================================================
 -- PROMOTION USAGE
 -- ============================================================
 INSERT INTO promotion_usage (id, created_at, promotion_id, user_id, invoice_id, discount_amount, used_at) VALUES
-('L0000000-0000-0000-0000-000000000001', NOW(), 'K0000000-0000-0000-0000-000000000001', 'A0000000-0000-0000-0000-000000000016', 'F0000000-0000-0000-0000-000000000001', 75000, NOW()),
-('L0000000-0000-0000-0000-000000000002', NOW(), 'K0000000-0000-0000-0000-000000000003', 'A0000000-0000-0000-0000-000000000017', 'F0000000-0000-0000-0000-000000000002', 100000, NOW()),
-('L0000000-0000-0000-0000-000000000003', NOW(), 'K0000000-0000-0000-0000-000000000001', 'A0000000-0000-0000-0000-000000000020', 'F0000000-0000-0000-0000-000000000005', 35000, NOW()),
-('L0000000-0000-0000-0000-000000000004', NOW(), 'K0000000-0000-0000-0000-000000000005', 'A0000000-0000-0000-0000-000000000021', 'F0000000-0000-0000-0000-000000000006', 0, NOW()),
-('L0000000-0000-0000-0000-000000000005', NOW(), 'K0000000-0000-0000-0000-000000000006', 'A0000000-0000-0000-0000-000000000022', 'F0000000-0000-0000-0000-000000000007', 50000, NOW()),
-('L0000000-0000-0000-0000-000000000006', NOW(), 'K0000000-0000-0000-0000-000000000001', 'A0000000-0000-0000-0000-000000000023', 'F0000000-0000-0000-0000-000000000008', 42000, NOW()),
-('L0000000-0000-0000-0000-000000000007', NOW(), 'K0000000-0000-0000-0000-000000000013', 'A0000000-0000-0000-0000-000000000026', 'F0000000-0000-0000-0000-000000000016', 100000, NOW()),
-('L0000000-0000-0000-0000-000000000008', NOW(), 'K0000000-0000-0000-0000-000000000015', 'A0000000-0000-0000-0000-000000000016', 'F0000000-0000-0000-0000-000000000001', 10000, NOW()),
-('L0000000-0000-0000-0000-000000000009', NOW(), 'K0000000-0000-0000-0000-000000000004', 'A0000000-0000-0000-0000-000000000022', 'F0000000-0000-0000-0000-000000000007', 100000, NOW()),
-('L0000000-0000-0000-0000-000000000010', NOW(), 'K0000000-0000-0000-0000-000000000007', 'A0000000-0000-0000-0000-000000000024', 'F0000000-0000-0000-0000-000000000020', 195000, NOW()),
-('L0000000-0000-0000-0000-000000000011', NOW(), 'K0000000-0000-0000-0000-000000000003', 'A0000000-0000-0000-0000-000000000019', 'F0000000-0000-0000-0000-000000000004', 100000, NOW()),
-('L0000000-0000-0000-0000-000000000012', NOW(), 'K0000000-0000-0000-0000-000000000017', 'A0000000-0000-0000-0000-000000000018', 'F0000000-0000-0000-0000-000000000003', 52500, NOW()),
-('L0000000-0000-0000-0000-000000000013', NOW(), 'K0000000-0000-0000-0000-000000000015', 'A0000000-0000-0000-0000-000000000017', 'F0000000-0000-0000-0000-000000000002', 10000, NOW()),
-('L0000000-0000-0000-0000-000000000014', NOW(), 'K0000000-0000-0000-0000-000000000015', 'A0000000-0000-0000-0000-000000000020', 'F0000000-0000-0000-0000-000000000005', 10000, NOW()),
-('L0000000-0000-0000-0000-000000000015', NOW(), 'K0000000-0000-0000-0000-000000000006', 'A0000000-0000-0000-0000-000000000022', 'F0000000-0000-0000-0000-000000000018', 50000, NOW()),
-('L0000000-0000-0000-0000-000000000016', NOW(), 'K0000000-0000-0000-0000-000000000005', 'A0000000-0000-0000-0000-000000000019', 'F0000000-0000-0000-0000-000000000014', 52500, NOW()),
-('L0000000-0000-0000-0000-000000000017', NOW(), 'K0000000-0000-0000-0000-000000000016', 'A0000000-0000-0000-0000-000000000022', NULL, 30000, NOW()),
-('L0000000-0000-0000-0000-000000000018', NOW(), 'K0000000-0000-0000-0000-000000000008', 'A0000000-0000-0000-0000-000000000025', NULL, 350000, NOW()),
-('L0000000-0000-0000-0000-000000000019', NOW(), 'K0000000-0000-0000-0000-000000000009', 'A0000000-0000-0000-0000-000000000016', NULL, 80000, NOW()),
-('L0000000-0000-0000-0000-000000000020', NOW(), 'K0000000-0000-0000-0000-000000000010', 'A0000000-0000-0000-0000-000000000024', NULL, 225000, NOW());
+('L0000000-0000-0000-0000-000000000001', NOW(), 'K0000000-0000-0000-0000-000000000001', '
+A0000000-0000-0000-0000-000000000016', 'F0000000-0000-0000-0000-000000000001', 75000, NOW()),
+('L0000000-0000-0000-0000-000000000002', NOW(), 'K0000000-0000-0000-0000-000000000003', '
+A0000000-0000-0000-0000-000000000017', 'F0000000-0000-0000-0000-000000000002', 100000, NOW()),
+('L0000000-0000-0000-0000-000000000003', NOW(), 'K0000000-0000-0000-0000-000000000001', '
+A0000000-0000-0000-0000-000000000020', 'F0000000-0000-0000-0000-000000000005', 35000, NOW()),
+('L0000000-0000-0000-0000-000000000004', NOW(), 'K0000000-0000-0000-0000-000000000005', '
+A0000000-0000-0000-0000-000000000021', 'F0000000-0000-0000-0000-000000000006', 0, NOW()),
+('L0000000-0000-0000-0000-000000000005', NOW(), 'K0000000-0000-0000-0000-000000000006', '
+A0000000-0000-0000-0000-000000000022', 'F0000000-0000-0000-0000-000000000007', 50000, NOW()),
+('L0000000-0000-0000-0000-000000000006', NOW(), 'K0000000-0000-0000-0000-000000000001', '
+A0000000-0000-0000-0000-000000000023', 'F0000000-0000-0000-0000-000000000008', 42000, NOW()),
+('L0000000-0000-0000-0000-000000000007', NOW(), 'K0000000-0000-0000-0000-000000000013', '
+A0000000-0000-0000-0000-000000000026', 'F0000000-0000-0000-0000-000000000016', 100000, NOW()),
+('L0000000-0000-0000-0000-000000000008', NOW(), 'K0000000-0000-0000-0000-000000000015', '
+A0000000-0000-0000-0000-000000000016', 'F0000000-0000-0000-0000-000000000001', 10000, NOW()),
+('L0000000-0000-0000-0000-000000000009', NOW(), 'K0000000-0000-0000-0000-000000000004', '
+A0000000-0000-0000-0000-000000000022', 'F0000000-0000-0000-0000-000000000007', 100000, NOW()),
+('L0000000-0000-0000-0000-000000000010', NOW(), 'K0000000-0000-0000-0000-000000000007', '
+A0000000-0000-0000-0000-000000000024', 'F0000000-0000-0000-0000-000000000020', 195000, NOW()),
+('L0000000-0000-0000-0000-000000000011', NOW(), 'K0000000-0000-0000-0000-000000000003', '
+A0000000-0000-0000-0000-000000000019', 'F0000000-0000-0000-0000-000000000004', 100000, NOW()),
+('L0000000-0000-0000-0000-000000000012', NOW(), 'K0000000-0000-0000-0000-000000000017', '
+A0000000-0000-0000-0000-000000000018', 'F0000000-0000-0000-0000-000000000003', 52500, NOW()),
+('L0000000-0000-0000-0000-000000000013', NOW(), 'K0000000-0000-0000-0000-000000000015', '
+A0000000-0000-0000-0000-000000000017', 'F0000000-0000-0000-0000-000000000002', 10000, NOW()),
+('L0000000-0000-0000-0000-000000000014', NOW(), 'K0000000-0000-0000-0000-000000000015', '
+A0000000-0000-0000-0000-000000000020', 'F0000000-0000-0000-0000-000000000005', 10000, NOW()),
+('L0000000-0000-0000-0000-000000000015', NOW(), 'K0000000-0000-0000-0000-000000000006', '
+A0000000-0000-0000-0000-000000000022', 'F0000000-0000-0000-0000-000000000018', 50000, NOW()),
+('L0000000-0000-0000-0000-000000000016', NOW(), 'K0000000-0000-0000-0000-000000000005', '
+A0000000-0000-0000-0000-000000000019', 'F0000000-0000-0000-0000-000000000014', 52500, NOW()),
+('L0000000-0000-0000-0000-000000000017', NOW(), 'K0000000-0000-0000-0000-000000000016', '
+A0000000-0000-0000-0000-000000000022', NULL, 30000, NOW()),
+('L0000000-0000-0000-0000-000000000018', NOW(), 'K0000000-0000-0000-0000-000000000008', '
+A0000000-0000-0000-0000-000000000025', NULL, 350000, NOW()),
+('L0000000-0000-0000-0000-000000000019', NOW(), 'K0000000-0000-0000-0000-000000000009', '
+A0000000-0000-0000-0000-000000000016', NULL, 80000, NOW()),
+('L0000000-0000-0000-0000-000000000020', NOW(), 'K0000000-0000-0000-0000-000000000010', '
+A0000000-0000-0000-0000-000000000024', NULL, 225000, NOW());
 
 -- ============================================================
 -- MEDICAL EQUIPMENT
 -- ============================================================
-INSERT INTO medical_equipment (id, created_at, equipment_code, name, category, manufacturer, model, serial_number, purchase_date, purchase_price, warranty_expiry, location, status, last_maintenance_date, next_maintenance_date, maintenance_interval_days, notes) VALUES
-('M0000000-0000-0000-0000-000000000001', NOW(), 'EQ-0001', 'Máy siêu âm tim 4D', 'Chẩn đoán hình ảnh', 'GE Healthcare', 'LOGIQ E10', 'SN-GE-001', '2022-01-15', 850000000, '2027-01-15', 'Phòng Tim mạch 101', 'operational', '2025-01-15', '2025-04-15', 90, NULL),
-('M0000000-0000-0000-0000-000000000002', NOW(), 'EQ-0002', 'Máy CT Scanner 64 lát', 'Chẩn đoán hình ảnh', 'Siemens', 'SOMATOM X.cite', 'SN-SIE-001', '2021-06-01', 6500000000, '2026-06-01', 'Phòng CT Scan', 'operational', '2025-02-01', '2025-05-01', 90, 'Bảo trì định kỳ hàng quý'),
-('M0000000-0000-0000-0000-000000000003', NOW(), 'EQ-0003', 'Máy MRI 1.5 Tesla', 'Chẩn đoán hình ảnh', 'Philips', 'Ingenia 1.5T', 'SN-PHI-001', '2023-03-20', 12000000000, '2028-03-20', 'Phòng MRI', 'operational', '2025-03-20', '2025-06-20', 90, NULL),
-('M0000000-0000-0000-0000-000000000004', NOW(), 'EQ-0004', 'Máy X-quang kỹ thuật số', 'Chẩn đoán hình ảnh', 'Canon Medical', 'CXDI-810C', 'SN-CAN-001', '2020-09-10', 320000000, '2025-09-10', 'Phòng X-quang', 'operational', '2025-01-10', '2025-04-10', 90, NULL),
-('M0000000-0000-0000-0000-000000000005', NOW(), 'EQ-0005', 'Máy điện tim 12 chuyển đạo', 'Tim mạch', 'Nihon Kohden', 'ECG-2350', 'SN-NK-001', '2021-11-25', 45000000, '2026-11-25', 'Phòng Tim mạch 101', 'operational', '2025-02-25', '2025-05-25', 90, NULL),
-('M0000000-0000-0000-0000-000000000006', NOW(), 'EQ-0006', 'Máy nội soi dạ dày', 'Nội soi', 'Olympus', 'GIF-HQ290', 'SN-OLY-001', '2022-07-08', 380000000, '2027-07-08', 'Phòng Nội soi', 'operational', '2025-03-08', '2025-06-08', 90, NULL),
-('M0000000-0000-0000-0000-000000000007', NOW(), 'EQ-0007', 'Máy xét nghiệm sinh hóa tự động', 'Xét nghiệm', 'Roche', 'COBAS c502', 'SN-ROC-001', '2022-04-12', 1200000000, '2027-04-12', 'Phòng Xét nghiệm', 'operational', '2025-01-12', '2025-04-12', 90, NULL),
-('M0000000-0000-0000-0000-000000000008', NOW(), 'EQ-0008', 'Máy huyết học tự động', 'Xét nghiệm', 'Sysmex', 'XN-1000', 'SN-SYS-001', '2021-08-30', 650000000, '2026-08-30', 'Phòng Xét nghiệm', 'operational', '2025-02-28', '2025-05-28', 90, NULL),
-('M0000000-0000-0000-0000-000000000009', NOW(), 'EQ-0009', 'Máy đo mật độ xương', 'Chỉnh hình', 'Hologic', 'Horizon DXA', 'SN-HOL-001', '2023-01-05', 780000000, '2028-01-05', 'Phòng Chỉnh hình', 'operational', '2025-01-05', '2025-04-05', 90, NULL),
-('M0000000-0000-0000-0000-000000000010', NOW(), 'EQ-0010', 'Kính hiển vi quang học', 'Xét nghiệm', 'Leica', 'DM2000 LED', 'SN-LEI-001', '2020-05-20', 85000000, '2025-05-20', 'Phòng Xét nghiệm', 'operational', '2025-01-20', '2025-04-20', 90, NULL),
-('M0000000-0000-0000-0000-000000000011', NOW(), 'EQ-0011', 'Giường phẫu thuật điện', 'Phòng mổ', 'Stryker', 'Secure II MedSurg', 'SN-STR-001', '2022-10-15', 250000000, '2027-10-15', 'Phòng Mổ A', 'operational', '2025-01-15', '2025-04-15', 90, NULL),
-('M0000000-0000-0000-0000-000000000012', NOW(), 'EQ-0012', 'Máy gây mê', 'Phòng mổ', 'Draeger', 'Perseus A500', 'SN-DRA-001', '2021-03-01', 1800000000, '2026-03-01', 'Phòng Mổ A', 'maintenance', '2025-03-01', '2025-04-01', 30, 'Đang bảo trì theo lịch'),
-('M0000000-0000-0000-0000-000000000013', NOW(), 'EQ-0013', 'Máy thở ICU', 'Hồi sức', 'Hamilton Medical', 'Hamilton-C6', 'SN-HAM-001', '2023-05-10', 950000000, '2028-05-10', 'Phòng ICU', 'operational', '2025-03-10', '2025-06-10', 90, NULL),
-('M0000000-0000-0000-0000-000000000014', NOW(), 'EQ-0014', 'Monitor theo dõi bệnh nhân', 'Hồi sức', 'Mindray', 'BeneVision N17', 'SN-MIN-001', '2022-12-20', 180000000, '2027-12-20', 'Phòng ICU', 'operational', '2025-03-20', '2025-06-20', 90, NULL),
-('M0000000-0000-0000-0000-000000000015', NOW(), 'EQ-0015', 'Máy siêu âm xách tay', 'Chẩn đoán hình ảnh', 'Sonosite', 'M-Turbo', 'SN-SON-001', '2021-07-14', 180000000, '2026-07-14', 'Phòng cấp cứu', 'operational', '2025-01-14', '2025-04-14', 90, NULL),
-('M0000000-0000-0000-0000-000000000016', NOW(), 'EQ-0016', 'Máy đo đường huyết liên tục', 'Nội tiết', 'Abbott', 'FreeStyle Libre 3', 'SN-ABB-001', '2023-09-01', 25000000, '2025-09-01', 'Phòng Nội tiết', 'operational', '2025-03-01', '2025-06-01', 90, NULL),
-('M0000000-0000-0000-0000-000000000017', NOW(), 'EQ-0017', 'Tủ lạnh bảo quản vaccine', 'Bảo quản', 'Haier', 'HYC-200', 'SN-HAI-001', '2022-02-28', 35000000, '2027-02-28', 'Phòng Nhi', 'operational', '2025-02-28', '2025-05-28', 90, NULL),
-('M0000000-0000-0000-0000-000000000018', NOW(), 'EQ-0018', 'Đèn mổ trần LED', 'Phòng mổ', 'Trumpf Medical', 'iLED 7', 'SN-TRU-001', '2022-10-15', 420000000, '2027-10-15', 'Phòng Mổ B', 'decommissioned', '2024-10-15', NULL, 180, 'Hỏng bóng đèn, chờ thay thế'),
-('M0000000-0000-0000-0000-000000000019', NOW(), 'EQ-0019', 'Máy kéo cột sống', 'Phục hồi chức năng', 'Chattanooga', 'Triton DTS', 'SN-CHA-001', '2021-06-20', 95000000, '2026-06-20', 'Phòng Vật lý trị liệu', 'operational', '2025-03-20', '2025-06-20', 90, NULL),
-('M0000000-0000-0000-0000-000000000020', NOW(), 'EQ-0020', 'Máy laser điều trị da', 'Da liễu', 'Cutera', 'Excel V+', 'SN-CUT-001', '2023-11-01', 680000000, '2028-11-01', 'Phòng Da liễu', 'operational', '2025-03-01', '2025-06-01', 90, NULL);
+INSERT INTO medical_equipment (id, created_at, equipment_code, name, category, manufacturer, model, serial_number,
+purchase_date, purchase_price, warranty_expiry, location, status, last_maintenance_date, next_maintenance_date,
+maintenance_interval_days, notes) VALUES
+('M0000000-0000-0000-0000-000000000001', NOW(), 'EQ-0001', 'Máy siêu âm tim 4D', 'Chẩn đoán hình ảnh', 'GE
+Healthcare', 'LOGIQ E10', 'SN-GE-001', '2022-01-15', 850000000, '2027-01-15', 'Phòng Tim mạch 101', 'operational', '
+2025-01-15', '2025-04-15', 90, NULL),
+('M0000000-0000-0000-0000-000000000002', NOW(), 'EQ-0002', 'Máy CT Scanner 64 lát', 'Chẩn đoán hình ảnh', 'Siemens', '
+SOMATOM X.cite', 'SN-SIE-001', '2021-06-01', 6500000000, '2026-06-01', 'Phòng CT Scan', 'operational', '2025-02-01', '
+2025-05-01', 90, 'Bảo trì định kỳ hàng quý'),
+('M0000000-0000-0000-0000-000000000003', NOW(), 'EQ-0003', 'Máy MRI 1.5 Tesla', 'Chẩn đoán hình ảnh', 'Philips', '
+Ingenia 1.5T', 'SN-PHI-001', '2023-03-20', 12000000000, '2028-03-20', 'Phòng MRI', 'operational', '2025-03-20', '
+2025-06-20', 90, NULL),
+('M0000000-0000-0000-0000-000000000004', NOW(), 'EQ-0004', 'Máy X-quang kỹ thuật số', 'Chẩn đoán hình ảnh', 'Canon
+Medical', 'CXDI-810C', 'SN-CAN-001', '2020-09-10', 320000000, '2025-09-10', 'Phòng X-quang', 'operational', '
+2025-01-10', '2025-04-10', 90, NULL),
+('M0000000-0000-0000-0000-000000000005', NOW(), 'EQ-0005', 'Máy điện tim 12 chuyển đạo', 'Tim mạch', 'Nihon Kohden', '
+ECG-2350', 'SN-NK-001', '2021-11-25', 45000000, '2026-11-25', 'Phòng Tim mạch 101', 'operational', '2025-02-25', '
+2025-05-25', 90, NULL),
+('M0000000-0000-0000-0000-000000000006', NOW(), 'EQ-0006', 'Máy nội soi dạ dày', 'Nội soi', 'Olympus', 'GIF-HQ290', '
+SN-OLY-001', '2022-07-08', 380000000, '2027-07-08', 'Phòng Nội soi', 'operational', '2025-03-08', '2025-06-08', 90,
+NULL),
+('M0000000-0000-0000-0000-000000000007', NOW(), 'EQ-0007', 'Máy xét nghiệm sinh hóa tự động', 'Xét nghiệm', 'Roche', '
+COBAS c502', 'SN-ROC-001', '2022-04-12', 1200000000, '2027-04-12', 'Phòng Xét nghiệm', 'operational', '2025-01-12', '
+2025-04-12', 90, NULL),
+('M0000000-0000-0000-0000-000000000008', NOW(), 'EQ-0008', 'Máy huyết học tự động', 'Xét nghiệm', 'Sysmex', 'XN-1000', '
+SN-SYS-001', '2021-08-30', 650000000, '2026-08-30', 'Phòng Xét nghiệm', 'operational', '2025-02-28', '2025-05-28', 90,
+NULL),
+('M0000000-0000-0000-0000-000000000009', NOW(), 'EQ-0009', 'Máy đo mật độ xương', 'Chỉnh hình', 'Hologic', 'Horizon
+DXA', 'SN-HOL-001', '2023-01-05', 780000000, '2028-01-05', 'Phòng Chỉnh hình', 'operational', '2025-01-05', '
+2025-04-05', 90, NULL),
+('M0000000-0000-0000-0000-000000000010', NOW(), 'EQ-0010', 'Kính hiển vi quang học', 'Xét nghiệm', 'Leica', 'DM2000
+LED', 'SN-LEI-001', '2020-05-20', 85000000, '2025-05-20', 'Phòng Xét nghiệm', 'operational', '2025-01-20', '2025-04-20',
+90, NULL),
+('M0000000-0000-0000-0000-000000000011', NOW(), 'EQ-0011', 'Giường phẫu thuật điện', 'Phòng mổ', 'Stryker', 'Secure II
+MedSurg', 'SN-STR-001', '2022-10-15', 250000000, '2027-10-15', 'Phòng Mổ A', 'operational', '2025-01-15', '2025-04-15',
+90, NULL),
+('M0000000-0000-0000-0000-000000000012', NOW(), 'EQ-0012', 'Máy gây mê', 'Phòng mổ', 'Draeger', 'Perseus A500', '
+SN-DRA-001', '2021-03-01', 1800000000, '2026-03-01', 'Phòng Mổ A', 'maintenance', '2025-03-01', '2025-04-01', 30, 'Đang
+bảo trì theo lịch'),
+('M0000000-0000-0000-0000-000000000013', NOW(), 'EQ-0013', 'Máy thở ICU', 'Hồi sức', 'Hamilton Medical', '
+Hamilton-C6', 'SN-HAM-001', '2023-05-10', 950000000, '2028-05-10', 'Phòng ICU', 'operational', '2025-03-10', '
+2025-06-10', 90, NULL),
+('M0000000-0000-0000-0000-000000000014', NOW(), 'EQ-0014', 'Monitor theo dõi bệnh nhân', 'Hồi sức', 'Mindray', '
+BeneVision N17', 'SN-MIN-001', '2022-12-20', 180000000, '2027-12-20', 'Phòng ICU', 'operational', '2025-03-20', '
+2025-06-20', 90, NULL),
+('M0000000-0000-0000-0000-000000000015', NOW(), 'EQ-0015', 'Máy siêu âm xách tay', 'Chẩn đoán hình ảnh', 'Sonosite', '
+M-Turbo', 'SN-SON-001', '2021-07-14', 180000000, '2026-07-14', 'Phòng cấp cứu', 'operational', '2025-01-14', '
+2025-04-14', 90, NULL),
+('M0000000-0000-0000-0000-000000000016', NOW(), 'EQ-0016', 'Máy đo đường huyết liên tục', 'Nội tiết', 'Abbott', '
+FreeStyle Libre 3', 'SN-ABB-001', '2023-09-01', 25000000, '2025-09-01', 'Phòng Nội tiết', 'operational', '2025-03-01', '
+2025-06-01', 90, NULL),
+('M0000000-0000-0000-0000-000000000017', NOW(), 'EQ-0017', 'Tủ lạnh bảo quản vaccine', 'Bảo quản', 'Haier', 'HYC-200', '
+SN-HAI-001', '2022-02-28', 35000000, '2027-02-28', 'Phòng Nhi', 'operational', '2025-02-28', '2025-05-28', 90, NULL),
+('M0000000-0000-0000-0000-000000000018', NOW(), 'EQ-0018', 'Đèn mổ trần LED', 'Phòng mổ', 'Trumpf Medical', 'iLED 7', '
+SN-TRU-001', '2022-10-15', 420000000, '2027-10-15', 'Phòng Mổ B', 'decommissioned', '2024-10-15', NULL, 180, 'Hỏng bóng
+đèn, chờ thay thế'),
+('M0000000-0000-0000-0000-000000000019', NOW(), 'EQ-0019', 'Máy kéo cột sống', 'Phục hồi chức năng', 'Chattanooga', '
+Triton DTS', 'SN-CHA-001', '2021-06-20', 95000000, '2026-06-20', 'Phòng Vật lý trị liệu', 'operational', '2025-03-20', '
+2025-06-20', 90, NULL),
+('M0000000-0000-0000-0000-000000000020', NOW(), 'EQ-0020', 'Máy laser điều trị da', 'Da liễu', 'Cutera', 'Excel V+', '
+SN-CUT-001', '2023-11-01', 680000000, '2028-11-01', 'Phòng Da liễu', 'operational', '2025-03-01', '2025-06-01', 90,
+NULL);
 
 -- ============================================================
 -- INVENTORY
 -- ============================================================
-INSERT INTO inventory (id, created_at, medication_id, batch_number, quantity, expiry_date, supplier, status, alert_threshold) VALUES
-('N0000000-0000-0000-0000-000000000001', NOW(), 'C0000000-0000-0000-0000-000000000001', 'BATCH-AMX-001', 5000, '2026-12-31', 'Công ty Dược phẩm Hậu Giang', 'in_stock', 200),
-('N0000000-0000-0000-0000-000000000002', NOW(), 'C0000000-0000-0000-0000-000000000002', 'BATCH-MET-001', 3000, '2026-06-30', 'Công ty Dược phẩm Imexpharm', 'in_stock', 100),
-('N0000000-0000-0000-0000-000000000003', NOW(), 'C0000000-0000-0000-0000-000000000003', 'BATCH-AML-001', 2500, '2027-03-31', 'Công ty Dược phẩm DHG Pharma', 'in_stock', 100),
-('N0000000-0000-0000-0000-000000000004', NOW(), 'C0000000-0000-0000-0000-000000000004', 'BATCH-OMP-001', 4000, '2026-09-30', 'Công ty Dược phẩm Dược Hậu Giang', 'in_stock', 150),
-('N0000000-0000-0000-0000-000000000005', NOW(), 'C0000000-0000-0000-0000-000000000005', 'BATCH-CET-001', 3500, '2026-12-31', 'Công ty Dược phẩm Pymepharco', 'in_stock', 100),
-('N0000000-0000-0000-0000-000000000006', NOW(), 'C0000000-0000-0000-0000-000000000006', 'BATCH-PCT-001', 8000, '2027-06-30', 'Công ty Dược phẩm OPC', 'in_stock', 300),
-('N0000000-0000-0000-0000-000000000007', NOW(), 'C0000000-0000-0000-0000-000000000007', 'BATCH-IBU-001', 2000, '2026-08-31', 'Công ty Dược phẩm Domesco', 'in_stock', 100),
-('N0000000-0000-0000-0000-000000000008', NOW(), 'C0000000-0000-0000-0000-000000000008', 'BATCH-ATO-001', 1500, '2026-11-30', 'Pfizer Vietnam', 'in_stock', 50),
-('N0000000-0000-0000-0000-000000000009', NOW(), 'C0000000-0000-0000-0000-000000000009', 'BATCH-LOS-001', 2000, '2027-01-31', 'MSD Vietnam', 'in_stock', 80),
-('N0000000-0000-0000-0000-000000000010', NOW(), 'C0000000-0000-0000-0000-000000000010', 'BATCH-VD3-001', 5000, '2027-09-30', 'Công ty Dược phẩm Nam Hà', 'in_stock', 200),
-('N0000000-0000-0000-0000-000000000011', NOW(), 'C0000000-0000-0000-0000-000000000011', 'BATCH-FOL-001', 10000, '2027-12-31', 'Công ty Dược phẩm Mekophar', 'in_stock', 300),
-('N0000000-0000-0000-0000-000000000012', NOW(), 'C0000000-0000-0000-0000-000000000012', 'BATCH-FUR-001', 1800, '2026-05-31', 'Công ty Dược phẩm Danapha', 'in_stock', 80),
-('N0000000-0000-0000-0000-000000000013', NOW(), 'C0000000-0000-0000-0000-000000000013', 'BATCH-CLA-001', 800, '2026-04-30', 'Abbott Vietnam', 'low_stock', 100),
-('N0000000-0000-0000-0000-000000000014', NOW(), 'C0000000-0000-0000-0000-000000000014', 'BATCH-PRE-001', 2500, '2026-10-31', 'Công ty Dược phẩm Hà Tây', 'in_stock', 100),
-('N0000000-0000-0000-0000-000000000015', NOW(), 'C0000000-0000-0000-0000-000000000015', 'BATCH-AZI-001', 600, '2025-06-30', 'Pfizer Vietnam', 'low_stock', 100),
-('N0000000-0000-0000-0000-000000000016', NOW(), 'C0000000-0000-0000-0000-000000000016', 'BATCH-BIS-001', 2200, '2027-02-28', 'AstraZeneca Vietnam', 'in_stock', 80),
-('N0000000-0000-0000-0000-000000000017', NOW(), 'C0000000-0000-0000-0000-000000000017', 'BATCH-ALL-001', 1500, '2026-07-31', 'Công ty Dược phẩm Pharbaco', 'in_stock', 60),
-('N0000000-0000-0000-0000-000000000018', NOW(), 'C0000000-0000-0000-0000-000000000018', 'BATCH-CAL-001', 4500, '2027-04-30', 'Công ty Dược phẩm Dược Khoa', 'in_stock', 150),
-('N0000000-0000-0000-0000-000000000019', NOW(), 'C0000000-0000-0000-0000-000000000019', 'BATCH-DEX-001', 50, '2025-05-31', 'Công ty Dược phẩm Vidipha', 'expired', 50),
-('N0000000-0000-0000-0000-000000000020', NOW(), 'C0000000-0000-0000-0000-000000000020', 'BATCH-PAN-001', 3000, '2026-10-31', 'Takeda Vietnam', 'in_stock', 100);
+INSERT INTO inventory (id, created_at, medication_id, batch_number, quantity, expiry_date, supplier, status,
+alert_threshold) VALUES
+('N0000000-0000-0000-0000-000000000001', NOW(), 'C0000000-0000-0000-0000-000000000001', 'BATCH-AMX-001', 5000, '
+2026-12-31', 'Công ty Dược phẩm Hậu Giang', 'in_stock', 200),
+('N0000000-0000-0000-0000-000000000002', NOW(), 'C0000000-0000-0000-0000-000000000002', 'BATCH-MET-001', 3000, '
+2026-06-30', 'Công ty Dược phẩm Imexpharm', 'in_stock', 100),
+('N0000000-0000-0000-0000-000000000003', NOW(), 'C0000000-0000-0000-0000-000000000003', 'BATCH-AML-001', 2500, '
+2027-03-31', 'Công ty Dược phẩm DHG Pharma', 'in_stock', 100),
+('N0000000-0000-0000-0000-000000000004', NOW(), 'C0000000-0000-0000-0000-000000000004', 'BATCH-OMP-001', 4000, '
+2026-09-30', 'Công ty Dược phẩm Dược Hậu Giang', 'in_stock', 150),
+('N0000000-0000-0000-0000-000000000005', NOW(), 'C0000000-0000-0000-0000-000000000005', 'BATCH-CET-001', 3500, '
+2026-12-31', 'Công ty Dược phẩm Pymepharco', 'in_stock', 100),
+('N0000000-0000-0000-0000-000000000006', NOW(), 'C0000000-0000-0000-0000-000000000006', 'BATCH-PCT-001', 8000, '
+2027-06-30', 'Công ty Dược phẩm OPC', 'in_stock', 300),
+('N0000000-0000-0000-0000-000000000007', NOW(), 'C0000000-0000-0000-0000-000000000007', 'BATCH-IBU-001', 2000, '
+2026-08-31', 'Công ty Dược phẩm Domesco', 'in_stock', 100),
+('N0000000-0000-0000-0000-000000000008', NOW(), 'C0000000-0000-0000-0000-000000000008', 'BATCH-ATO-001', 1500, '
+2026-11-30', 'Pfizer Vietnam', 'in_stock', 50),
+('N0000000-0000-0000-0000-000000000009', NOW(), 'C0000000-0000-0000-0000-000000000009', 'BATCH-LOS-001', 2000, '
+2027-01-31', 'MSD Vietnam', 'in_stock', 80),
+('N0000000-0000-0000-0000-000000000010', NOW(), 'C0000000-0000-0000-0000-000000000010', 'BATCH-VD3-001', 5000, '
+2027-09-30', 'Công ty Dược phẩm Nam Hà', 'in_stock', 200),
+('N0000000-0000-0000-0000-000000000011', NOW(), 'C0000000-0000-0000-0000-000000000011', 'BATCH-FOL-001', 10000, '
+2027-12-31', 'Công ty Dược phẩm Mekophar', 'in_stock', 300),
+('N0000000-0000-0000-0000-000000000012', NOW(), 'C0000000-0000-0000-0000-000000000012', 'BATCH-FUR-001', 1800, '
+2026-05-31', 'Công ty Dược phẩm Danapha', 'in_stock', 80),
+('N0000000-0000-0000-0000-000000000013', NOW(), 'C0000000-0000-0000-0000-000000000013', 'BATCH-CLA-001', 800, '
+2026-04-30', 'Abbott Vietnam', 'low_stock', 100),
+('N0000000-0000-0000-0000-000000000014', NOW(), 'C0000000-0000-0000-0000-000000000014', 'BATCH-PRE-001', 2500, '
+2026-10-31', 'Công ty Dược phẩm Hà Tây', 'in_stock', 100),
+('N0000000-0000-0000-0000-000000000015', NOW(), 'C0000000-0000-0000-0000-000000000015', 'BATCH-AZI-001', 600, '
+2025-06-30', 'Pfizer Vietnam', 'low_stock', 100),
+('N0000000-0000-0000-0000-000000000016', NOW(), 'C0000000-0000-0000-0000-000000000016', 'BATCH-BIS-001', 2200, '
+2027-02-28', 'AstraZeneca Vietnam', 'in_stock', 80),
+('N0000000-0000-0000-0000-000000000017', NOW(), 'C0000000-0000-0000-0000-000000000017', 'BATCH-ALL-001', 1500, '
+2026-07-31', 'Công ty Dược phẩm Pharbaco', 'in_stock', 60),
+('N0000000-0000-0000-0000-000000000018', NOW(), 'C0000000-0000-0000-0000-000000000018', 'BATCH-CAL-001', 4500, '
+2027-04-30', 'Công ty Dược phẩm Dược Khoa', 'in_stock', 150),
+('N0000000-0000-0000-0000-000000000019', NOW(), 'C0000000-0000-0000-0000-000000000019', 'BATCH-DEX-001', 50, '
+2025-05-31', 'Công ty Dược phẩm Vidipha', 'expired', 50),
+('N0000000-0000-0000-0000-000000000020', NOW(), 'C0000000-0000-0000-0000-000000000020', 'BATCH-PAN-001', 3000, '
+2026-10-31', 'Takeda Vietnam', 'in_stock', 100);
 
 -- ============================================================
 -- EQUIPMENT MAINTENANCE
 -- ============================================================
-INSERT INTO equipment_maintenance (id, created_at, equipment_id, maintenance_type, scheduled_date, completed_date, performed_by, cost, description, issues_found, actions_taken, status) VALUES
-('O0000000-0000-0000-0000-000000000001', NOW(), 'M0000000-0000-0000-0000-000000000001', 'routine', '2025-01-15', '2025-01-15', 'Kỹ thuật viên GE', 5000000, 'Bảo trì định kỳ máy siêu âm tim', NULL, 'Làm sạch đầu dò, cập nhật phần mềm', 'completed'),
-('O0000000-0000-0000-0000-000000000002', NOW(), 'M0000000-0000-0000-0000-000000000002', 'routine', '2025-02-01', '2025-02-01', 'Kỹ thuật viên Siemens', 15000000, 'Bảo trì định kỳ CT Scanner', NULL, 'Hiệu chỉnh detector, bôi trơn bàn bệnh nhân', 'completed'),
-('O0000000-0000-0000-0000-000000000003', NOW(), 'M0000000-0000-0000-0000-000000000003', 'routine', '2025-03-20', '2025-03-20', 'Kỹ thuật viên Philips', 20000000, 'Bảo trì định kỳ máy MRI', NULL, 'Hiệu chỉnh từ trường, thay helium', 'completed'),
-('O0000000-0000-0000-0000-000000000004', NOW(), 'M0000000-0000-0000-0000-000000000004', 'routine', '2025-01-10', '2025-01-10', 'Phòng kỹ thuật nội bộ', 1500000, 'Bảo trì máy X-quang', NULL, 'Làm sạch thiết bị, kiểm tra độ chuẩn', 'completed'),
-('O0000000-0000-0000-0000-000000000005', NOW(), 'M0000000-0000-0000-0000-000000000012', 'preventive', '2025-03-01', '2025-03-01', 'Kỹ thuật viên Draeger', 8000000, 'Bảo trì máy gây mê', 'Van khí bị mòn nhẹ', 'Thay van khí, kiểm tra hệ thống', 'completed'),
-('O0000000-0000-0000-0000-000000000006', NOW(), 'M0000000-0000-0000-0000-000000000006', 'routine', '2025-03-08', '2025-03-08', 'Kỹ thuật viên Olympus', 6000000, 'Bảo trì máy nội soi', NULL, 'Vệ sinh ống soi, kiểm tra nguồn sáng', 'completed'),
-('O0000000-0000-0000-0000-000000000007', NOW(), 'M0000000-0000-0000-0000-000000000007', 'routine', '2025-01-12', '2025-01-12', 'Kỹ thuật viên Roche', 12000000, 'Bảo trì máy sinh hóa', NULL, 'Thay bộ lọc, hiệu chỉnh máy', 'completed'),
-('O0000000-0000-0000-0000-000000000008', NOW(), 'M0000000-0000-0000-0000-000000000018', 'repair', '2024-11-01', NULL, 'Trumpf Vietnam', 3500000, 'Sửa chữa đèn mổ', 'Bóng LED bị cháy, mạch điện điều khiển lỗi', NULL, 'in_progress'),
-('O0000000-0000-0000-0000-000000000009', NOW(), 'M0000000-0000-0000-0000-000000000005', 'routine', '2025-02-25', '2025-02-25', 'Phòng kỹ thuật nội bộ', 500000, 'Bảo trì máy điện tim', NULL, 'Kiểm tra điện cực, thay giấy in', 'completed'),
-('O0000000-0000-0000-0000-000000000010', NOW(), 'M0000000-0000-0000-0000-000000000008', 'routine', '2025-02-28', '2025-02-28', 'Kỹ thuật viên Sysmex', 8000000, 'Bảo trì máy huyết học', NULL, 'Hiệu chỉnh, thay dung dịch hiệu chuẩn', 'completed'),
-('O0000000-0000-0000-0000-000000000011', NOW(), 'M0000000-0000-0000-0000-000000000001', 'routine', '2025-04-15', NULL, 'Kỹ thuật viên GE', NULL, 'Bảo trì định kỳ Q2/2025', NULL, NULL, 'scheduled'),
-('O0000000-0000-0000-0000-000000000012', NOW(), 'M0000000-0000-0000-0000-000000000002', 'routine', '2025-05-01', NULL, 'Kỹ thuật viên Siemens', NULL, 'Bảo trì định kỳ Q2/2025', NULL, NULL, 'scheduled'),
-('O0000000-0000-0000-0000-000000000013', NOW(), 'M0000000-0000-0000-0000-000000000009', 'routine', '2025-04-05', NULL, 'Phòng kỹ thuật nội bộ', NULL, 'Bảo trì máy đo mật độ xương', NULL, NULL, 'scheduled'),
-('O0000000-0000-0000-0000-000000000014', NOW(), 'M0000000-0000-0000-0000-000000000015', 'routine', '2025-04-14', NULL, 'Phòng kỹ thuật nội bộ', NULL, 'Kiểm tra máy siêu âm xách tay', NULL, NULL, 'scheduled'),
-('O0000000-0000-0000-0000-000000000015', NOW(), 'M0000000-0000-0000-0000-000000000013', 'routine', '2025-06-10', NULL, 'Hamilton Vietnam', NULL, 'Bảo trì máy thở ICU', NULL, NULL, 'scheduled'),
-('O0000000-0000-0000-0000-000000000016', NOW(), 'M0000000-0000-0000-0000-000000000019', 'routine', '2025-06-20', NULL, 'Phòng kỹ thuật nội bộ', NULL, 'Bảo trì máy kéo cột sống', NULL, NULL, 'scheduled'),
-('O0000000-0000-0000-0000-000000000017', NOW(), 'M0000000-0000-0000-0000-000000000020', 'routine', '2025-06-01', NULL, 'Kỹ thuật viên Cutera', NULL, 'Bảo trì máy laser da liễu', NULL, NULL, 'scheduled'),
-('O0000000-0000-0000-0000-000000000018', NOW(), 'M0000000-0000-0000-0000-000000000010', 'routine', '2025-04-20', NULL, 'Phòng kỹ thuật nội bộ', NULL, 'Kiểm tra kính hiển vi', NULL, NULL, 'scheduled'),
-('O0000000-0000-0000-0000-000000000019', NOW(), 'M0000000-0000-0000-0000-000000000016', 'routine', '2025-06-01', NULL, 'Abbott Vietnam', NULL, 'Hiệu chỉnh máy đo đường huyết', NULL, NULL, 'scheduled'),
-('O0000000-0000-0000-0000-000000000020', NOW(), 'M0000000-0000-0000-0000-000000000004', 'routine', '2025-04-10', NULL, 'Phòng kỹ thuật nội bộ', NULL, 'Bảo trì định kỳ máy X-quang Q2/2025', NULL, NULL, 'scheduled');
+INSERT INTO equipment_maintenance (id, created_at, equipment_id, maintenance_type, scheduled_date, completed_date,
+performed_by, cost, description, issues_found, actions_taken, status) VALUES
+('O0000000-0000-0000-0000-000000000001', NOW(), 'M0000000-0000-0000-0000-000000000001', 'routine', '2025-01-15', '
+2025-01-15', 'Kỹ thuật viên GE', 5000000, 'Bảo trì định kỳ máy siêu âm tim', NULL, 'Làm sạch đầu dò, cập nhật phần
+mềm', 'completed'),
+('O0000000-0000-0000-0000-000000000002', NOW(), 'M0000000-0000-0000-0000-000000000002', 'routine', '2025-02-01', '
+2025-02-01', 'Kỹ thuật viên Siemens', 15000000, 'Bảo trì định kỳ CT Scanner', NULL, 'Hiệu chỉnh detector, bôi trơn bàn
+bệnh nhân', 'completed'),
+('O0000000-0000-0000-0000-000000000003', NOW(), 'M0000000-0000-0000-0000-000000000003', 'routine', '2025-03-20', '
+2025-03-20', 'Kỹ thuật viên Philips', 20000000, 'Bảo trì định kỳ máy MRI', NULL, 'Hiệu chỉnh từ trường, thay helium', '
+completed'),
+('O0000000-0000-0000-0000-000000000004', NOW(), 'M0000000-0000-0000-0000-000000000004', 'routine', '2025-01-10', '
+2025-01-10', 'Phòng kỹ thuật nội bộ', 1500000, 'Bảo trì máy X-quang', NULL, 'Làm sạch thiết bị, kiểm tra độ chuẩn', '
+completed'),
+('O0000000-0000-0000-0000-000000000005', NOW(), 'M0000000-0000-0000-0000-000000000012', 'preventive', '2025-03-01', '
+2025-03-01', 'Kỹ thuật viên Draeger', 8000000, 'Bảo trì máy gây mê', 'Van khí bị mòn nhẹ', 'Thay van khí, kiểm tra hệ
+thống', 'completed'),
+('O0000000-0000-0000-0000-000000000006', NOW(), 'M0000000-0000-0000-0000-000000000006', 'routine', '2025-03-08', '
+2025-03-08', 'Kỹ thuật viên Olympus', 6000000, 'Bảo trì máy nội soi', NULL, 'Vệ sinh ống soi, kiểm tra nguồn sáng', '
+completed'),
+('O0000000-0000-0000-0000-000000000007', NOW(), 'M0000000-0000-0000-0000-000000000007', 'routine', '2025-01-12', '
+2025-01-12', 'Kỹ thuật viên Roche', 12000000, 'Bảo trì máy sinh hóa', NULL, 'Thay bộ lọc, hiệu chỉnh máy', 'completed'),
+('O0000000-0000-0000-0000-000000000008', NOW(), 'M0000000-0000-0000-0000-000000000018', 'repair', '2024-11-01', NULL, '
+Trumpf Vietnam', 3500000, 'Sửa chữa đèn mổ', 'Bóng LED bị cháy, mạch điện điều khiển lỗi', NULL, 'in_progress'),
+('O0000000-0000-0000-0000-000000000009', NOW(), 'M0000000-0000-0000-0000-000000000005', 'routine', '2025-02-25', '
+2025-02-25', 'Phòng kỹ thuật nội bộ', 500000, 'Bảo trì máy điện tim', NULL, 'Kiểm tra điện cực, thay giấy in', '
+completed'),
+('O0000000-0000-0000-0000-000000000010', NOW(), 'M0000000-0000-0000-0000-000000000008', 'routine', '2025-02-28', '
+2025-02-28', 'Kỹ thuật viên Sysmex', 8000000, 'Bảo trì máy huyết học', NULL, 'Hiệu chỉnh, thay dung dịch hiệu chuẩn', '
+completed'),
+('O0000000-0000-0000-0000-000000000011', NOW(), 'M0000000-0000-0000-0000-000000000001', 'routine', '2025-04-15', NULL, '
+Kỹ thuật viên GE', NULL, 'Bảo trì định kỳ Q2/2025', NULL, NULL, 'scheduled'),
+('O0000000-0000-0000-0000-000000000012', NOW(), 'M0000000-0000-0000-0000-000000000002', 'routine', '2025-05-01', NULL, '
+Kỹ thuật viên Siemens', NULL, 'Bảo trì định kỳ Q2/2025', NULL, NULL, 'scheduled'),
+('O0000000-0000-0000-0000-000000000013', NOW(), 'M0000000-0000-0000-0000-000000000009', 'routine', '2025-04-05', NULL, '
+Phòng kỹ thuật nội bộ', NULL, 'Bảo trì máy đo mật độ xương', NULL, NULL, 'scheduled'),
+('O0000000-0000-0000-0000-000000000014', NOW(), 'M0000000-0000-0000-0000-000000000015', 'routine', '2025-04-14', NULL, '
+Phòng kỹ thuật nội bộ', NULL, 'Kiểm tra máy siêu âm xách tay', NULL, NULL, 'scheduled'),
+('O0000000-0000-0000-0000-000000000015', NOW(), 'M0000000-0000-0000-0000-000000000013', 'routine', '2025-06-10', NULL, '
+Hamilton Vietnam', NULL, 'Bảo trì máy thở ICU', NULL, NULL, 'scheduled'),
+('O0000000-0000-0000-0000-000000000016', NOW(), 'M0000000-0000-0000-0000-000000000019', 'routine', '2025-06-20', NULL, '
+Phòng kỹ thuật nội bộ', NULL, 'Bảo trì máy kéo cột sống', NULL, NULL, 'scheduled'),
+('O0000000-0000-0000-0000-000000000017', NOW(), 'M0000000-0000-0000-0000-000000000020', 'routine', '2025-06-01', NULL, '
+Kỹ thuật viên Cutera', NULL, 'Bảo trì máy laser da liễu', NULL, NULL, 'scheduled'),
+('O0000000-0000-0000-0000-000000000018', NOW(), 'M0000000-0000-0000-0000-000000000010', 'routine', '2025-04-20', NULL, '
+Phòng kỹ thuật nội bộ', NULL, 'Kiểm tra kính hiển vi', NULL, NULL, 'scheduled'),
+('O0000000-0000-0000-0000-000000000019', NOW(), 'M0000000-0000-0000-0000-000000000016', 'routine', '2025-06-01', NULL, '
+Abbott Vietnam', NULL, 'Hiệu chỉnh máy đo đường huyết', NULL, NULL, 'scheduled'),
+('O0000000-0000-0000-0000-000000000020', NOW(), 'M0000000-0000-0000-0000-000000000004', 'routine', '2025-04-10', NULL, '
+Phòng kỹ thuật nội bộ', NULL, 'Bảo trì định kỳ máy X-quang Q2/2025', NULL, NULL, 'scheduled');
 
 -- ============================================================
 -- REVENUE REPORTS
 -- ============================================================
-INSERT INTO revenue_reports (id, created_at, report_type, report_date, start_date, end_date, total_revenue, service_revenue, medication_revenue, lab_test_revenue, total_appointments, total_patients) VALUES
-('P0000000-0000-0000-0000-000000000001', NOW(), 'monthly', '2025-01-31', '2025-01-01', '2025-01-31', 850000000, 520000000, 180000000, 150000000, 1850, 1200),
-('P0000000-0000-0000-0000-000000000002', NOW(), 'monthly', '2025-02-28', '2025-02-01', '2025-02-28', 780000000, 480000000, 165000000, 135000000, 1720, 1100),
-('P0000000-0000-0000-0000-000000000003', NOW(), 'monthly', '2025-03-31', '2025-03-01', '2025-03-31', 920000000, 560000000, 195000000, 165000000, 2010, 1350),
-('P0000000-0000-0000-0000-000000000004', NOW(), 'weekly', '2025-03-07', '2025-03-01', '2025-03-07', 210000000, 128000000, 45000000, 37000000, 460, 310),
-('P0000000-0000-0000-0000-000000000005', NOW(), 'weekly', '2025-03-14', '2025-03-08', '2025-03-14', 230000000, 140000000, 50000000, 40000000, 500, 340),
-('P0000000-0000-0000-0000-000000000006', NOW(), 'weekly', '2025-03-21', '2025-03-15', '2025-03-21', 225000000, 135000000, 48000000, 42000000, 485, 325),
-('P0000000-0000-0000-0000-000000000007', NOW(), 'weekly', '2025-03-28', '2025-03-22', '2025-03-28', 255000000, 157000000, 52000000, 46000000, 565, 375),
-('P0000000-0000-0000-0000-000000000008', NOW(), 'quarterly', '2025-03-31', '2025-01-01', '2025-03-31', 2550000000, 1560000000, 540000000, 450000000, 5580, 3650),
-('P0000000-0000-0000-0000-000000000009', NOW(), 'daily', '2025-04-01', '2025-04-01', '2025-04-01', 32000000, 19500000, 7000000, 5500000, 70, 48),
-('P0000000-0000-0000-0000-000000000010', NOW(), 'daily', '2025-04-02', '2025-04-02', '2025-04-02', 28500000, 17500000, 6200000, 4800000, 62, 42),
-('P0000000-0000-0000-0000-000000000011', NOW(), 'daily', '2025-04-03', '2025-04-03', '2025-04-03', 35000000, 21000000, 8000000, 6000000, 76, 52),
-('P0000000-0000-0000-0000-000000000012', NOW(), 'daily', '2025-04-04', '2025-04-04', '2025-04-04', 30500000, 18500000, 6800000, 5200000, 66, 45),
-('P0000000-0000-0000-0000-000000000013', NOW(), 'daily', '2025-04-05', '2025-04-05', '2025-04-05', 27000000, 16500000, 5800000, 4700000, 58, 40),
-('P0000000-0000-0000-0000-000000000014', NOW(), 'monthly', '2024-12-31', '2024-12-01', '2024-12-31', 870000000, 530000000, 185000000, 155000000, 1900, 1250),
-('P0000000-0000-0000-0000-000000000015', NOW(), 'monthly', '2024-11-30', '2024-11-01', '2024-11-30', 820000000, 500000000, 178000000, 142000000, 1800, 1180),
-('P0000000-0000-0000-0000-000000000016', NOW(), 'quarterly', '2024-12-31', '2024-10-01', '2024-12-31', 2480000000, 1510000000, 525000000, 445000000, 5420, 3520),
-('P0000000-0000-0000-0000-000000000017', NOW(), 'yearly', '2024-12-31', '2024-01-01', '2024-12-31', 9800000000, 5980000000, 2100000000, 1720000000, 21500, 14200),
-('P0000000-0000-0000-0000-000000000018', NOW(), 'weekly', '2025-04-04', '2025-03-29', '2025-04-04', 185000000, 113000000, 40000000, 32000000, 402, 270),
-('P0000000-0000-0000-0000-000000000019', NOW(), 'daily', '2025-04-06', '2025-04-06', '2025-04-06', 29000000, 17800000, 6300000, 4900000, 63, 43),
-('P0000000-0000-0000-0000-000000000020', NOW(), 'daily', '2025-04-07', '2025-04-07', '2025-04-07', 31500000, 19200000, 7000000, 5300000, 68, 46);
+INSERT INTO revenue_reports (id, created_at, report_type, report_date, start_date, end_date, total_revenue,
+service_revenue, medication_revenue, lab_test_revenue, total_appointments, total_patients) VALUES
+('P0000000-0000-0000-0000-000000000001', NOW(), 'monthly', '2025-01-31', '2025-01-01', '2025-01-31', 850000000,
+520000000, 180000000, 150000000, 1850, 1200),
+('P0000000-0000-0000-0000-000000000002', NOW(), 'monthly', '2025-02-28', '2025-02-01', '2025-02-28', 780000000,
+480000000, 165000000, 135000000, 1720, 1100),
+('P0000000-0000-0000-0000-000000000003', NOW(), 'monthly', '2025-03-31', '2025-03-01', '2025-03-31', 920000000,
+560000000, 195000000, 165000000, 2010, 1350),
+('P0000000-0000-0000-0000-000000000004', NOW(), 'weekly', '2025-03-07', '2025-03-01', '2025-03-07', 210000000,
+128000000, 45000000, 37000000, 460, 310),
+('P0000000-0000-0000-0000-000000000005', NOW(), 'weekly', '2025-03-14', '2025-03-08', '2025-03-14', 230000000,
+140000000, 50000000, 40000000, 500, 340),
+('P0000000-0000-0000-0000-000000000006', NOW(), 'weekly', '2025-03-21', '2025-03-15', '2025-03-21', 225000000,
+135000000, 48000000, 42000000, 485, 325),
+('P0000000-0000-0000-0000-000000000007', NOW(), 'weekly', '2025-03-28', '2025-03-22', '2025-03-28', 255000000,
+157000000, 52000000, 46000000, 565, 375),
+('P0000000-0000-0000-0000-000000000008', NOW(), 'quarterly', '2025-03-31', '2025-01-01', '2025-03-31', 2550000000,
+1560000000, 540000000, 450000000, 5580, 3650),
+('P0000000-0000-0000-0000-000000000009', NOW(), 'daily', '2025-04-01', '2025-04-01', '2025-04-01', 32000000, 19500000,
+7000000, 5500000, 70, 48),
+('P0000000-0000-0000-0000-000000000010', NOW(), 'daily', '2025-04-02', '2025-04-02', '2025-04-02', 28500000, 17500000,
+6200000, 4800000, 62, 42),
+('P0000000-0000-0000-0000-000000000011', NOW(), 'daily', '2025-04-03', '2025-04-03', '2025-04-03', 35000000, 21000000,
+8000000, 6000000, 76, 52),
+('P0000000-0000-0000-0000-000000000012', NOW(), 'daily', '2025-04-04', '2025-04-04', '2025-04-04', 30500000, 18500000,
+6800000, 5200000, 66, 45),
+('P0000000-0000-0000-0000-000000000013', NOW(), 'daily', '2025-04-05', '2025-04-05', '2025-04-05', 27000000, 16500000,
+5800000, 4700000, 58, 40),
+('P0000000-0000-0000-0000-000000000014', NOW(), 'monthly', '2024-12-31', '2024-12-01', '2024-12-31', 870000000,
+530000000, 185000000, 155000000, 1900, 1250),
+('P0000000-0000-0000-0000-000000000015', NOW(), 'monthly', '2024-11-30', '2024-11-01', '2024-11-30', 820000000,
+500000000, 178000000, 142000000, 1800, 1180),
+('P0000000-0000-0000-0000-000000000016', NOW(), 'quarterly', '2024-12-31', '2024-10-01', '2024-12-31', 2480000000,
+1510000000, 525000000, 445000000, 5420, 3520),
+('P0000000-0000-0000-0000-000000000017', NOW(), 'yearly', '2024-12-31', '2024-01-01', '2024-12-31', 9800000000,
+5980000000, 2100000000, 1720000000, 21500, 14200),
+('P0000000-0000-0000-0000-000000000018', NOW(), 'weekly', '2025-04-04', '2025-03-29', '2025-04-04', 185000000,
+113000000, 40000000, 32000000, 402, 270),
+('P0000000-0000-0000-0000-000000000019', NOW(), 'daily', '2025-04-06', '2025-04-06', '2025-04-06', 29000000, 17800000,
+6300000, 4900000, 63, 43),
+('P0000000-0000-0000-0000-000000000020', NOW(), 'daily', '2025-04-07', '2025-04-07', '2025-04-07', 31500000, 19200000,
+7000000, 5300000, 68, 46);
 
 -- ============================================================
 -- DAILY REPORTS
 -- ============================================================
-INSERT INTO daily_reports (id, created_at, report_date, total_appointments, completed_appointments, cancelled_appointments, new_patients, returning_patients, total_revenue, cash_revenue, online_revenue, insurance_revenue, pending_payments) VALUES
-('Q0000000-0000-0000-0000-000000000001', NOW(), '2025-04-01', 70, 65, 3, 12, 58, 32000000, 12000000, 10000000, 8000000, 2000000),
-('Q0000000-0000-0000-0000-000000000002', NOW(), '2025-04-02', 62, 58, 2, 8, 54, 28500000, 10500000, 9000000, 7500000, 1500000),
-('Q0000000-0000-0000-0000-000000000003', NOW(), '2025-04-03', 76, 70, 4, 15, 61, 35000000, 13500000, 11000000, 9000000, 1500000),
-('Q0000000-0000-0000-0000-000000000004', NOW(), '2025-04-04', 66, 62, 2, 10, 56, 30500000, 11500000, 9800000, 7800000, 1400000),
-('Q0000000-0000-0000-0000-000000000005', NOW(), '2025-04-05', 58, 54, 3, 7, 51, 27000000, 10200000, 8600000, 7000000, 1200000),
-('Q0000000-0000-0000-0000-000000000006', NOW(), '2025-04-06', 63, 59, 2, 9, 54, 29000000, 11000000, 9200000, 7400000, 1400000),
-('Q0000000-0000-0000-0000-000000000007', NOW(), '2025-04-07', 68, 64, 3, 11, 57, 31500000, 12000000, 10000000, 8000000, 1500000),
-('Q0000000-0000-0000-0000-000000000008', NOW(), '2025-03-31', 72, 68, 2, 14, 58, 33000000, 12500000, 10500000, 8500000, 1500000),
-('Q0000000-0000-0000-0000-000000000009', NOW(), '2025-03-30', 65, 61, 3, 9, 56, 30000000, 11300000, 9500000, 7800000, 1400000),
-('Q0000000-0000-0000-0000-000000000010', NOW(), '2025-03-29', 60, 56, 2, 8, 52, 27500000, 10500000, 8800000, 7200000, 1000000),
-('Q0000000-0000-0000-0000-000000000011', NOW(), '2025-03-28', 80, 75, 4, 16, 64, 37000000, 14000000, 11800000, 9500000, 1700000),
-('Q0000000-0000-0000-0000-000000000012', NOW(), '2025-03-27', 75, 71, 3, 13, 62, 34500000, 13000000, 11000000, 9000000, 1500000),
-('Q0000000-0000-0000-0000-000000000013', NOW(), '2025-03-26', 68, 64, 2, 11, 57, 31000000, 11800000, 9900000, 8000000, 1300000),
-('Q0000000-0000-0000-0000-000000000014', NOW(), '2025-03-25', 72, 67, 4, 12, 60, 33000000, 12500000, 10500000, 8500000, 1500000),
-('Q0000000-0000-0000-0000-000000000015', NOW(), '2025-03-24', 64, 60, 3, 9, 55, 29500000, 11100000, 9400000, 7600000, 1400000),
-('Q0000000-0000-0000-0000-000000000016', NOW(), '2025-03-23', 55, 52, 2, 7, 48, 25500000, 9700000, 8100000, 6500000, 1200000),
-('Q0000000-0000-0000-0000-000000000017', NOW(), '2025-03-22', 57, 53, 3, 8, 49, 26200000, 9900000, 8400000, 6700000, 1200000),
-('Q0000000-0000-0000-0000-000000000018', NOW(), '2025-03-21', 74, 70, 3, 13, 61, 34000000, 12800000, 10800000, 8800000, 1600000),
-('Q0000000-0000-0000-0000-000000000019', NOW(), '2025-03-20', 70, 66, 3, 11, 59, 32200000, 12200000, 10300000, 8300000, 1400000),
-('Q0000000-0000-0000-0000-000000000020', NOW(), '2025-03-19', 66, 62, 2, 10, 56, 30200000, 11500000, 9700000, 7700000, 1300000);
+INSERT INTO daily_reports (id, created_at, report_date, total_appointments, completed_appointments,
+cancelled_appointments, new_patients, returning_patients, total_revenue, cash_revenue, online_revenue,
+insurance_revenue, pending_payments) VALUES
+('Q0000000-0000-0000-0000-000000000001', NOW(), '2025-04-01', 70, 65, 3, 12, 58, 32000000, 12000000, 10000000, 8000000,
+2000000),
+('Q0000000-0000-0000-0000-000000000002', NOW(), '2025-04-02', 62, 58, 2, 8, 54, 28500000, 10500000, 9000000, 7500000,
+1500000),
+('Q0000000-0000-0000-0000-000000000003', NOW(), '2025-04-03', 76, 70, 4, 15, 61, 35000000, 13500000, 11000000, 9000000,
+1500000),
+('Q0000000-0000-0000-0000-000000000004', NOW(), '2025-04-04', 66, 62, 2, 10, 56, 30500000, 11500000, 9800000, 7800000,
+1400000),
+('Q0000000-0000-0000-0000-000000000005', NOW(), '2025-04-05', 58, 54, 3, 7, 51, 27000000, 10200000, 8600000, 7000000,
+1200000),
+('Q0000000-0000-0000-0000-000000000006', NOW(), '2025-04-06', 63, 59, 2, 9, 54, 29000000, 11000000, 9200000, 7400000,
+1400000),
+('Q0000000-0000-0000-0000-000000000007', NOW(), '2025-04-07', 68, 64, 3, 11, 57, 31500000, 12000000, 10000000, 8000000,
+1500000),
+('Q0000000-0000-0000-0000-000000000008', NOW(), '2025-03-31', 72, 68, 2, 14, 58, 33000000, 12500000, 10500000, 8500000,
+1500000),
+('Q0000000-0000-0000-0000-000000000009', NOW(), '2025-03-30', 65, 61, 3, 9, 56, 30000000, 11300000, 9500000, 7800000,
+1400000),
+('Q0000000-0000-0000-0000-000000000010', NOW(), '2025-03-29', 60, 56, 2, 8, 52, 27500000, 10500000, 8800000, 7200000,
+1000000),
+('Q0000000-0000-0000-0000-000000000011', NOW(), '2025-03-28', 80, 75, 4, 16, 64, 37000000, 14000000, 11800000, 9500000,
+1700000),
+('Q0000000-0000-0000-0000-000000000012', NOW(), '2025-03-27', 75, 71, 3, 13, 62, 34500000, 13000000, 11000000, 9000000,
+1500000),
+('Q0000000-0000-0000-0000-000000000013', NOW(), '2025-03-26', 68, 64, 2, 11, 57, 31000000, 11800000, 9900000, 8000000,
+1300000),
+('Q0000000-0000-0000-0000-000000000014', NOW(), '2025-03-25', 72, 67, 4, 12, 60, 33000000, 12500000, 10500000, 8500000,
+1500000),
+('Q0000000-0000-0000-0000-000000000015', NOW(), '2025-03-24', 64, 60, 3, 9, 55, 29500000, 11100000, 9400000, 7600000,
+1400000),
+('Q0000000-0000-0000-0000-000000000016', NOW(), '2025-03-23', 55, 52, 2, 7, 48, 25500000, 9700000, 8100000, 6500000,
+1200000),
+('Q0000000-0000-0000-0000-000000000017', NOW(), '2025-03-22', 57, 53, 3, 8, 49, 26200000, 9900000, 8400000, 6700000,
+1200000),
+('Q0000000-0000-0000-0000-000000000018', NOW(), '2025-03-21', 74, 70, 3, 13, 61, 34000000, 12800000, 10800000, 8800000,
+1600000),
+('Q0000000-0000-0000-0000-000000000019', NOW(), '2025-03-20', 70, 66, 3, 11, 59, 32200000, 12200000, 10300000, 8300000,
+1400000),
+('Q0000000-0000-0000-0000-000000000020', NOW(), '2025-03-19', 66, 62, 2, 10, 56, 30200000, 11500000, 9700000, 7700000,
+1300000);
 
 -- ============================================================
 -- FAQs
 -- ============================================================
 INSERT INTO faqs (id, created_at, category, question, answer, display_order, is_active) VALUES
-('R0000000-0000-0000-0000-000000000001', NOW(), 'Đặt lịch', 'Làm thế nào để đặt lịch khám online?', 'Bạn có thể đặt lịch qua website hoặc ứng dụng di động bằng cách chọn bác sĩ, chọn ngày giờ và điền thông tin cá nhân.', 1, TRUE),
-('R0000000-0000-0000-0000-000000000002', NOW(), 'Đặt lịch', 'Tôi có thể hủy hoặc đổi lịch hẹn không?', 'Bạn có thể hủy hoặc đổi lịch hẹn trước 2 giờ so với giờ hẹn mà không bị tính phí.', 2, TRUE),
-('R0000000-0000-0000-0000-000000000003', NOW(), 'Đặt lịch', 'Có thể đặt lịch cho người thân không?', 'Có, bạn có thể đặt lịch cho người thân bằng cách điền thông tin của họ khi đặt lịch.', 3, TRUE),
-('R0000000-0000-0000-0000-000000000004', NOW(), 'Thanh toán', 'Phòng khám chấp nhận những hình thức thanh toán nào?', 'Chúng tôi chấp nhận: tiền mặt, thẻ ngân hàng, chuyển khoản, và các ví điện tử phổ biến (MoMo, ZaloPay, VNPay).', 1, TRUE),
-('R0000000-0000-0000-0000-000000000005', NOW(), 'Thanh toán', 'Bảo hiểm y tế có được chấp nhận không?', 'Có, chúng tôi chấp nhận thẻ bảo hiểm y tế theo quy định của nhà nước. Vui lòng mang theo thẻ BHYT khi đến khám.', 2, TRUE),
-('R0000000-0000-0000-0000-000000000006', NOW(), 'Thanh toán', 'Hóa đơn có được gửi qua email không?', 'Có, sau khi thanh toán, hóa đơn điện tử sẽ được gửi tự động đến email đã đăng ký.', 3, TRUE),
-('R0000000-0000-0000-0000-000000000007', NOW(), 'Dịch vụ', 'Phòng khám có dịch vụ khám ngoài giờ không?', 'Hiện tại chúng tôi phục vụ từ 7:30 - 17:30 các ngày trong tuần và 7:30 - 12:00 thứ 7.', 1, TRUE),
-('R0000000-0000-0000-0000-000000000008', NOW(), 'Dịch vụ', 'Có thể nhận kết quả xét nghiệm online không?', 'Có, kết quả xét nghiệm sẽ được cập nhật vào tài khoản của bạn và gửi qua email khi có kết quả.', 2, TRUE),
-('R0000000-0000-0000-0000-000000000009', NOW(), 'Dịch vụ', 'Phòng khám có dịch vụ khám tại nhà không?', 'Hiện tại chúng tôi chưa cung cấp dịch vụ khám tại nhà. Vui lòng liên hệ hotline để biết thêm thông tin.', 3, TRUE),
-('R0000000-0000-0000-0000-000000000010', NOW(), 'Hồ sơ bệnh án', 'Làm thế nào để xem lại lịch sử khám bệnh?', 'Đăng nhập vào tài khoản và vào mục "Hồ sơ sức khỏe" để xem toàn bộ lịch sử khám và đơn thuốc.', 1, TRUE),
-('R0000000-0000-0000-0000-000000000011', NOW(), 'Hồ sơ bệnh án', 'Thông tin y tế của tôi có được bảo mật không?', 'Tuyệt đối. Thông tin y tế của bạn được mã hóa và bảo mật theo tiêu chuẩn quốc tế, chỉ bác sĩ điều trị mới được truy cập.', 2, TRUE),
-('R0000000-0000-0000-0000-000000000012', NOW(), 'Hồ sơ bệnh án', 'Tôi có thể yêu cầu bản sao hồ sơ bệnh án không?', 'Có, bạn có thể yêu cầu bản sao hồ sơ bệnh án tại quầy lễ tân hoặc qua email với đầy đủ giấy tờ xác minh.', 3, TRUE),
-('R0000000-0000-0000-0000-000000000013', NOW(), 'Tài khoản', 'Làm thế nào để đặt lại mật khẩu?', 'Nhấn vào "Quên mật khẩu" trên trang đăng nhập và làm theo hướng dẫn gửi đến email của bạn.', 1, TRUE),
-('R0000000-0000-0000-0000-000000000014', NOW(), 'Tài khoản', 'Tôi có thể thay đổi thông tin cá nhân không?', 'Có, bạn có thể cập nhật thông tin cá nhân trong phần "Cài đặt tài khoản" sau khi đăng nhập.', 2, TRUE),
-('R0000000-0000-0000-0000-000000000015', NOW(), 'Điểm thưởng', 'Chương trình điểm thưởng hoạt động như thế nào?', 'Mỗi 10.000đ thanh toán = 1 điểm thưởng. 100 điểm = 10.000đ giảm giá cho lần khám tiếp theo.', 1, TRUE),
-('R0000000-0000-0000-0000-000000000016', NOW(), 'Điểm thưởng', 'Điểm thưởng có hết hạn không?', 'Điểm thưởng có hiệu lực trong 1 năm kể từ ngày tích lũy. Điểm sắp hết hạn sẽ được thông báo trước 30 ngày.', 2, TRUE),
-('R0000000-0000-0000-0000-000000000017', NOW(), 'Bác sĩ', 'Làm sao biết bác sĩ nào phù hợp với bệnh của tôi?', 'Bạn có thể tìm kiếm bác sĩ theo chuyên khoa, xem hồ sơ, đánh giá và kinh nghiệm để lựa chọn phù hợp nhất.', 1, TRUE),
-('R0000000-0000-0000-0000-000000000018', NOW(), 'Bác sĩ', 'Tôi có thể chọn bác sĩ mình muốn không?', 'Có, bạn hoàn toàn có thể chọn bác sĩ yêu thích khi đặt lịch, tùy thuộc vào lịch trống của bác sĩ đó.', 2, TRUE),
-('R0000000-0000-0000-0000-000000000019', NOW(), 'Khẩn cấp', 'Tôi nên làm gì trong trường hợp khẩn cấp?', 'Trong trường hợp khẩn cấp, hãy gọi ngay 115 hoặc đến phòng cấp cứu gần nhất. Hotline phòng khám: 1900-xxxx.', 1, TRUE),
-('R0000000-0000-0000-0000-000000000020', NOW(), 'Đặt lịch', 'Thời gian chờ trung bình khi đến khám là bao lâu?', 'Với lịch hẹn online, thời gian chờ trung bình chỉ 10-15 phút. Chúng tôi cam kết đúng giờ hẹn.', 4, TRUE);
+('R0000000-0000-0000-0000-000000000001', NOW(), 'Đặt lịch', 'Làm thế nào để đặt lịch khám online?', 'Bạn có thể đặt lịch
+qua website hoặc ứng dụng di động bằng cách chọn bác sĩ, chọn ngày giờ và điền thông tin cá nhân.', 1, TRUE),
+('R0000000-0000-0000-0000-000000000002', NOW(), 'Đặt lịch', 'Tôi có thể hủy hoặc đổi lịch hẹn không?', 'Bạn có thể hủy
+hoặc đổi lịch hẹn trước 2 giờ so với giờ hẹn mà không bị tính phí.', 2, TRUE),
+('R0000000-0000-0000-0000-000000000003', NOW(), 'Đặt lịch', 'Có thể đặt lịch cho người thân không?', 'Có, bạn có thể đặt
+lịch cho người thân bằng cách điền thông tin của họ khi đặt lịch.', 3, TRUE),
+('R0000000-0000-0000-0000-000000000004', NOW(), 'Thanh toán', 'Phòng khám chấp nhận những hình thức thanh toán nào?', '
+Chúng tôi chấp nhận: tiền mặt, thẻ ngân hàng, chuyển khoản, và các ví điện tử phổ biến (MoMo, ZaloPay, VNPay).', 1,
+TRUE),
+('R0000000-0000-0000-0000-000000000005', NOW(), 'Thanh toán', 'Bảo hiểm y tế có được chấp nhận không?', 'Có, chúng tôi
+chấp nhận thẻ bảo hiểm y tế theo quy định của nhà nước. Vui lòng mang theo thẻ BHYT khi đến khám.', 2, TRUE),
+('R0000000-0000-0000-0000-000000000006', NOW(), 'Thanh toán', 'Hóa đơn có được gửi qua email không?', 'Có, sau khi thanh
+toán, hóa đơn điện tử sẽ được gửi tự động đến email đã đăng ký.', 3, TRUE),
+('R0000000-0000-0000-0000-000000000007', NOW(), 'Dịch vụ', 'Phòng khám có dịch vụ khám ngoài giờ không?', 'Hiện tại
+chúng tôi phục vụ từ 7:30 - 17:30 các ngày trong tuần và 7:30 - 12:00 thứ 7.', 1, TRUE),
+('R0000000-0000-0000-0000-000000000008', NOW(), 'Dịch vụ', 'Có thể nhận kết quả xét nghiệm online không?', 'Có, kết quả
+xét nghiệm sẽ được cập nhật vào tài khoản của bạn và gửi qua email khi có kết quả.', 2, TRUE),
+('R0000000-0000-0000-0000-000000000009', NOW(), 'Dịch vụ', 'Phòng khám có dịch vụ khám tại nhà không?', 'Hiện tại chúng
+tôi chưa cung cấp dịch vụ khám tại nhà. Vui lòng liên hệ hotline để biết thêm thông tin.', 3, TRUE),
+('R0000000-0000-0000-0000-000000000010', NOW(), 'Hồ sơ bệnh án', 'Làm thế nào để xem lại lịch sử khám bệnh?', 'Đăng nhập
+vào tài khoản và vào mục "Hồ sơ sức khỏe" để xem toàn bộ lịch sử khám và đơn thuốc.', 1, TRUE),
+('R0000000-0000-0000-0000-000000000011', NOW(), 'Hồ sơ bệnh án', 'Thông tin y tế của tôi có được bảo mật không?', 'Tuyệt
+đối. Thông tin y tế của bạn được mã hóa và bảo mật theo tiêu chuẩn quốc tế, chỉ bác sĩ điều trị mới được truy cập.', 2,
+TRUE),
+('R0000000-0000-0000-0000-000000000012', NOW(), 'Hồ sơ bệnh án', 'Tôi có thể yêu cầu bản sao hồ sơ bệnh án không?', 'Có,
+bạn có thể yêu cầu bản sao hồ sơ bệnh án tại quầy lễ tân hoặc qua email với đầy đủ giấy tờ xác minh.', 3, TRUE),
+('R0000000-0000-0000-0000-000000000013', NOW(), 'Tài khoản', 'Làm thế nào để đặt lại mật khẩu?', 'Nhấn vào "Quên mật
+khẩu" trên trang đăng nhập và làm theo hướng dẫn gửi đến email của bạn.', 1, TRUE),
+('R0000000-0000-0000-0000-000000000014', NOW(), 'Tài khoản', 'Tôi có thể thay đổi thông tin cá nhân không?', 'Có, bạn có
+thể cập nhật thông tin cá nhân trong phần "Cài đặt tài khoản" sau khi đăng nhập.', 2, TRUE),
+('R0000000-0000-0000-0000-000000000015', NOW(), 'Điểm thưởng', 'Chương trình điểm thưởng hoạt động như thế nào?', 'Mỗi
+10.000đ thanh toán = 1 điểm thưởng. 100 điểm = 10.000đ giảm giá cho lần khám tiếp theo.', 1, TRUE),
+('R0000000-0000-0000-0000-000000000016', NOW(), 'Điểm thưởng', 'Điểm thưởng có hết hạn không?', 'Điểm thưởng có hiệu lực
+trong 1 năm kể từ ngày tích lũy. Điểm sắp hết hạn sẽ được thông báo trước 30 ngày.', 2, TRUE),
+('R0000000-0000-0000-0000-000000000017', NOW(), 'Bác sĩ', 'Làm sao biết bác sĩ nào phù hợp với bệnh của tôi?', 'Bạn có
+thể tìm kiếm bác sĩ theo chuyên khoa, xem hồ sơ, đánh giá và kinh nghiệm để lựa chọn phù hợp nhất.', 1, TRUE),
+('R0000000-0000-0000-0000-000000000018', NOW(), 'Bác sĩ', 'Tôi có thể chọn bác sĩ mình muốn không?', 'Có, bạn hoàn toàn
+có thể chọn bác sĩ yêu thích khi đặt lịch, tùy thuộc vào lịch trống của bác sĩ đó.', 2, TRUE),
+('R0000000-0000-0000-0000-000000000019', NOW(), 'Khẩn cấp', 'Tôi nên làm gì trong trường hợp khẩn cấp?', 'Trong trường
+hợp khẩn cấp, hãy gọi ngay 115 hoặc đến phòng cấp cứu gần nhất. Hotline phòng khám: 1900-xxxx.', 1, TRUE),
+('R0000000-0000-0000-0000-000000000020', NOW(), 'Đặt lịch', 'Thời gian chờ trung bình khi đến khám là bao lâu?', 'Với
+lịch hẹn online, thời gian chờ trung bình chỉ 10-15 phút. Chúng tôi cam kết đúng giờ hẹn.', 4, TRUE);
 
 -- ============================================================
 -- PASSWORD RESET TOKENS
 -- ============================================================
 INSERT INTO password_reset_tokens (id, user_id, token, expiry_date, used, created_at) VALUES
-('S0000000-0000-0000-0000-000000000001', 'A0000000-0000-0000-0000-000000000016', 'token_a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4', NOW() + INTERVAL '1 hour', FALSE, NOW()),
-('S0000000-0000-0000-0000-000000000002', 'A0000000-0000-0000-0000-000000000017', 'token_b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5', NOW() + INTERVAL '1 hour', FALSE, NOW()),
-('S0000000-0000-0000-0000-000000000003', 'A0000000-0000-0000-0000-000000000018', 'token_c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6', NOW() - INTERVAL '2 hour', TRUE, NOW() - INTERVAL '3 hour'),
-('S0000000-0000-0000-0000-000000000004', 'A0000000-0000-0000-0000-000000000019', 'token_d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1', NOW() - INTERVAL '1 day', TRUE, NOW() - INTERVAL '1 day' - INTERVAL '1 hour'),
-('S0000000-0000-0000-0000-000000000005', 'A0000000-0000-0000-0000-000000000020', 'token_e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2', NOW() + INTERVAL '45 minute', FALSE, NOW()),
-('S0000000-0000-0000-0000-000000000006', 'A0000000-0000-0000-0000-000000000021', 'token_f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3', NOW() - INTERVAL '3 day', TRUE, NOW() - INTERVAL '3 day' - INTERVAL '1 hour'),
-('S0000000-0000-0000-0000-000000000007', 'A0000000-0000-0000-0000-000000000022', 'token_a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6', NOW() + INTERVAL '30 minute', FALSE, NOW()),
-('S0000000-0000-0000-0000-000000000008', 'A0000000-0000-0000-0000-000000000023', 'token_b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7', NOW() - INTERVAL '6 hour', FALSE, NOW() - INTERVAL '7 hour'),
-('S0000000-0000-0000-0000-000000000009', 'A0000000-0000-0000-0000-000000000024', 'token_c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8', NOW() - INTERVAL '2 day', TRUE, NOW() - INTERVAL '2 day' - INTERVAL '1 hour'),
-('S0000000-0000-0000-0000-000000000010', 'A0000000-0000-0000-0000-000000000025', 'token_d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9', NOW() + INTERVAL '55 minute', FALSE, NOW()),
-('S0000000-0000-0000-0000-000000000011', 'A0000000-0000-0000-0000-000000000002', 'token_e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0', NOW() - INTERVAL '5 day', TRUE, NOW() - INTERVAL '5 day' - INTERVAL '1 hour'),
-('S0000000-0000-0000-0000-000000000012', 'A0000000-0000-0000-0000-000000000003', 'token_f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1', NOW() - INTERVAL '4 day', TRUE, NOW() - INTERVAL '4 day' - INTERVAL '1 hour'),
-('S0000000-0000-0000-0000-000000000013', 'A0000000-0000-0000-0000-000000000026', 'token_a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2', NOW() + INTERVAL '20 minute', FALSE, NOW()),
-('S0000000-0000-0000-0000-000000000014', 'A0000000-0000-0000-0000-000000000012', 'token_b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3', NOW() - INTERVAL '10 day', TRUE, NOW() - INTERVAL '10 day' - INTERVAL '1 hour'),
-('S0000000-0000-0000-0000-000000000015', 'A0000000-0000-0000-0000-000000000013', 'token_c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4', NOW() - INTERVAL '7 day', TRUE, NOW() - INTERVAL '7 day' - INTERVAL '1 hour'),
-('S0000000-0000-0000-0000-000000000016', 'A0000000-0000-0000-0000-000000000014', 'token_d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5', NOW() + INTERVAL '15 minute', FALSE, NOW()),
-('S0000000-0000-0000-0000-000000000017', 'A0000000-0000-0000-0000-000000000015', 'token_e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6', NOW() - INTERVAL '1 hour', FALSE, NOW() - INTERVAL '2 hour'),
-('S0000000-0000-0000-0000-000000000018', 'A0000000-0000-0000-0000-000000000016', 'token_f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7', NOW() - INTERVAL '15 day', TRUE, NOW() - INTERVAL '15 day' - INTERVAL '1 hour'),
-('S0000000-0000-0000-0000-000000000019', 'A0000000-0000-0000-0000-000000000017', 'token_a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8', NOW() - INTERVAL '12 day', TRUE, NOW() - INTERVAL '12 day' - INTERVAL '1 hour'),
-('S0000000-0000-0000-0000-000000000020', 'A0000000-0000-0000-0000-000000000001', 'token_b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9', NOW() - INTERVAL '20 day', TRUE, NOW() - INTERVAL '20 day' - INTERVAL '1 hour');
+('S0000000-0000-0000-0000-000000000001', 'A0000000-0000-0000-0000-000000000016', '
+token_a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4', NOW() + INTERVAL '1 hour', FALSE, NOW()),
+('S0000000-0000-0000-0000-000000000002', 'A0000000-0000-0000-0000-000000000017', '
+token_b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5', NOW() + INTERVAL '1 hour', FALSE, NOW()),
+('S0000000-0000-0000-0000-000000000003', 'A0000000-0000-0000-0000-000000000018', '
+token_c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6', NOW() - INTERVAL '2 hour', TRUE, NOW() - INTERVAL '3 hour'),
+('S0000000-0000-0000-0000-000000000004', 'A0000000-0000-0000-0000-000000000019', '
+token_d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1', NOW() - INTERVAL '1 day', TRUE, NOW() - INTERVAL '1 day' - INTERVAL '1 hour'),
+('S0000000-0000-0000-0000-000000000005', 'A0000000-0000-0000-0000-000000000020', '
+token_e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2', NOW() + INTERVAL '45 minute', FALSE, NOW()),
+('S0000000-0000-0000-0000-000000000006', 'A0000000-0000-0000-0000-000000000021', '
+token_f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3', NOW() - INTERVAL '3 day', TRUE, NOW() - INTERVAL '3 day' - INTERVAL '1 hour'),
+('S0000000-0000-0000-0000-000000000007', 'A0000000-0000-0000-0000-000000000022', '
+token_a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6', NOW() + INTERVAL '30 minute', FALSE, NOW()),
+('S0000000-0000-0000-0000-000000000008', 'A0000000-0000-0000-0000-000000000023', '
+token_b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7', NOW() - INTERVAL '6 hour', FALSE, NOW() - INTERVAL '7 hour'),
+('S0000000-0000-0000-0000-000000000009', 'A0000000-0000-0000-0000-000000000024', '
+token_c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8', NOW() - INTERVAL '2 day', TRUE, NOW() - INTERVAL '2 day' - INTERVAL '1 hour'),
+('S0000000-0000-0000-0000-000000000010', 'A0000000-0000-0000-0000-000000000025', '
+token_d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9', NOW() + INTERVAL '55 minute', FALSE, NOW()),
+('S0000000-0000-0000-0000-000000000011', 'A0000000-0000-0000-0000-000000000002', '
+token_e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0', NOW() - INTERVAL '5 day', TRUE, NOW() - INTERVAL '5 day' - INTERVAL '1 hour'),
+('S0000000-0000-0000-0000-000000000012', 'A0000000-0000-0000-0000-000000000003', '
+token_f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1', NOW() - INTERVAL '4 day', TRUE, NOW() - INTERVAL '4 day' - INTERVAL '1 hour'),
+('S0000000-0000-0000-0000-000000000013', 'A0000000-0000-0000-0000-000000000026', '
+token_a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2', NOW() + INTERVAL '20 minute', FALSE, NOW()),
+('S0000000-0000-0000-0000-000000000014', 'A0000000-0000-0000-0000-000000000012', '
+token_b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3', NOW() - INTERVAL '10 day', TRUE, NOW() - INTERVAL '10 day' - INTERVAL '1
+hour'),
+('S0000000-0000-0000-0000-000000000015', 'A0000000-0000-0000-0000-000000000013', '
+token_c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4', NOW() - INTERVAL '7 day', TRUE, NOW() - INTERVAL '7 day' - INTERVAL '1 hour'),
+('S0000000-0000-0000-0000-000000000016', 'A0000000-0000-0000-0000-000000000014', '
+token_d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5', NOW() + INTERVAL '15 minute', FALSE, NOW()),
+('S0000000-0000-0000-0000-000000000017', 'A0000000-0000-0000-0000-000000000015', '
+token_e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6', NOW() - INTERVAL '1 hour', FALSE, NOW() - INTERVAL '2 hour'),
+('S0000000-0000-0000-0000-000000000018', 'A0000000-0000-0000-0000-000000000016', '
+token_f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7', NOW() - INTERVAL '15 day', TRUE, NOW() - INTERVAL '15 day' - INTERVAL '1
+hour'),
+('S0000000-0000-0000-0000-000000000019', 'A0000000-0000-0000-0000-000000000017', '
+token_a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8', NOW() - INTERVAL '12 day', TRUE, NOW() - INTERVAL '12 day' - INTERVAL '1
+hour'),
+('S0000000-0000-0000-0000-000000000020', 'A0000000-0000-0000-0000-000000000001', '
+token_b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9', NOW() - INTERVAL '20 day', TRUE, NOW() - INTERVAL '20 day' - INTERVAL '1
+hour');
 
 -- ============================================================
 -- END OF SEED DATA

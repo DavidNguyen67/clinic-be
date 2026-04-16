@@ -14,7 +14,9 @@ public record UserResponseDTO(
         String fullName,
         Role.RoleName role,
         User.UserStatus status,
-        String pathAvatar
+        String pathAvatar,
+        String dob,
+        User.Gender gender
 ) {
     public static UserResponseDTO from(User u) {
         return UserResponseDTO.builder()
@@ -25,6 +27,8 @@ public record UserResponseDTO(
                 .role(u.getRole())
                 .status(u.getStatus())
                 .pathAvatar(u.getPathAvatar())
+                .dob(u.getDateOfBirth())
+                .gender(u.getGender())
                 .build();
     }
 }

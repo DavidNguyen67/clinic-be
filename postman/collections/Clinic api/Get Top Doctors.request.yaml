@@ -1,8 +1,7 @@
 $kind: http-request
-name: "Get Top Doctors"
+name: Get Top Doctors
 method: GET
-url: "{{baseUrl}}/api/v1/top-doctors/"
+url: "{{baseUrl}}/api/v1/top-doctor"
 headers:
-  - key: Accept
-    value: application/json
+  Accept: application/json
 order: 7000

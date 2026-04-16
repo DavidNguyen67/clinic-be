@@ -6,6 +6,10 @@
   "workingHours": "7:00 AM - 8:00 PM (Thứ 2 - Chủ nhật)",
   "privacyPolicyLink": "https://www.medcare.com/privacy-policy.html",
   "termsOfServiceLink": "https://www.medcare.com/terms-of-service.html",
-  "logoUrl": "https://www.medcare.com/logo.png"
+  "logoUrl": "https://www.medcare.com/logo.png",
+  "avgRating": 4.9,
+  "pathToBranchImage": "https://images.unsplash.com/photo-1764727291644-5dcb0b1a0375?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600",
+  "slogan": "<h1 class=\"text-4xl md:text-5xl text-white mb-6\" style=\"font-weight: 700; line-height: 1.2;\">Đặt lịch khám<br><span class=\"text-yellow-300\">Nhanh chóng</span> &amp;<br>Tiện lợi</h1>",
+  "description": "ệ thống đặt lịch khám bệnh trực tuyến. Chọn bác sĩ, chọn thời gian phù hợp, nhận xác nhận ngay lập tức."
 }
 

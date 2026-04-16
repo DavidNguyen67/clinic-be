@@ -1,8 +1,7 @@
-package com.camel.clinic.processor.doctor;
+package com.camel.clinic.processor.slotGenerator;
 
-import com.camel.clinic.service.doctor.DoctorServiceImp;
+import com.camel.clinic.service.slotGenerator.SlotGeneratorServiceImp;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.springframework.http.ResponseEntity;
@@ -10,20 +9,18 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@Component("getAllDoctorsProcessor")
-@AllArgsConstructor
-@Slf4j
-public class GetAllDoctorsProcessor implements Processor {
-    private final DoctorServiceImp doctorServiceImp;
 
-    //    TODO: Bug filter doctor theo query params
+@Component("getSlotGeneratorProcessor")
+@AllArgsConstructor
+public class GetSlotGeneratorProcessor implements Processor {
+    private final SlotGeneratorServiceImp slotGeneratorServiceImp;
+
     @Override
     public void process(Exchange exchange) throws Exception {
         Map<String, Object> queryParams = exchange.getIn().getHeaders();
 
-        ResponseEntity<?> response = doctorServiceImp.filterDoctors(queryParams);
+        ResponseEntity<?> response = slotGeneratorServiceImp.getAvailableSlots(queryParams);
 
         exchange.getMessage().setBody(response);
-
     }
 }
