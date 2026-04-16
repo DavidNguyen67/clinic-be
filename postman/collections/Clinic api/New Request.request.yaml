@@ -1,0 +1,12 @@
+$kind: http-request
+name: New Request
+url: "{{baseUrl}}/api/v1/slot-availability?doctorId="
+method: GET
+queryParams:
+  - key: doctorId
+    value: ""
+    $type: ""
+  - key: date
+    value: ""
+    $type: ""
+order: 4482728040821633
