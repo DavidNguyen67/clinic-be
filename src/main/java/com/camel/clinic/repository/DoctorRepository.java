@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -44,4 +45,13 @@ public interface DoctorRepository extends JpaRepository<Doctor, UUID>, JpaSpecif
             @Param("specialtyId") UUID specialtyId,
             Pageable pageable
     );
+
+    @Query("""
+            SELECT d
+            FROM Doctor d
+            LEFT JOIN Specialty s ON d MEMBER OF s.doctors
+            LEFT JOIN DoctorSchedule ds ON ds.doctor.id = d.id AND ds.deletedAt IS NULL
+            WHERE d.user.id = :userId
+            AND d.deletedAt IS NULL""")
+    Optional<DoctorDTO> findByUserId(UUID userId);
 }

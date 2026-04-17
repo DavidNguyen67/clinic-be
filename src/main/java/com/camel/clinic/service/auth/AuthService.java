@@ -23,5 +23,7 @@ public interface AuthService {
 
     ResponseEntity<?> changePassword(ChangePasswordRequestDTO req, String email) throws BadRequestException;
 
+    ResponseEntity<?> getUserProfile(String email) throws BadRequestException;
+
 }
 

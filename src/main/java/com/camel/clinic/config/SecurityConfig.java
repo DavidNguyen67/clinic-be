@@ -50,8 +50,7 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(restAuthenticationEntryPoint)
                         .accessDeniedHandler(restAccessDeniedHandler)
-                )
-                .authorizeHttpRequests(auth -> auth
+                ).authorizeHttpRequests(auth -> auth
                         .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                                 "/api/v1/auth/**",
@@ -65,6 +64,7 @@ public class SecurityConfig {
                                 "/api/v1/slot-availability",
                                 "/api/v1/specialty-count"
                         ).permitAll()
+                        .requestMatchers("/api/v1/doctor/**").hasAuthority("DOCTOR")
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

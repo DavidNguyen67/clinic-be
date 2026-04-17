@@ -10,4 +10,18 @@ public interface DoctorService {
     ResponseEntity<?> getTopDoctors();
 
     ResponseEntity<?> filterDoctors(Map<String, Object> queryParams);
+
+    // Doctor Schedule Management
+    ResponseEntity<?> getDoctorSchedules();
+
+    ResponseEntity<?> addDoctorSchedule(Map<String, Object> requestBody);
+
+    ResponseEntity<?> deleteDoctorSchedule(String scheduleId);
+
+    // Doctor Leave Management
+    ResponseEntity<?> requestDoctorLeave(Map<String, Object> requestBody);
+
+    ResponseEntity<?> getDoctorLeaves(String doctorId, String role);
+
+    ResponseEntity<?> approveDoctorLeave(String leaveId, Map<String, Object> requestBody, String role);
 }

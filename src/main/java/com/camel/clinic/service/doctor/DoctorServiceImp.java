@@ -29,4 +29,33 @@ public class DoctorServiceImp implements DoctorService {
         return doctorServiceInv.getTopDoctors();
     }
 
+    @Override
+    public ResponseEntity<?> getDoctorSchedules() {
+        return doctorServiceInv.getDoctorSchedules();
+    }
+
+    @Override
+    public ResponseEntity<?> addDoctorSchedule(Map<String, Object> requestBody) {
+        return doctorServiceInv.addDoctorSchedule(requestBody);
+    }
+
+    @Override
+    public ResponseEntity<?> deleteDoctorSchedule(String scheduleId) {
+        return doctorServiceInv.deleteDoctorSchedule(scheduleId);
+    }
+
+    @Override
+    public ResponseEntity<?> requestDoctorLeave(Map<String, Object> requestBody) {
+        return doctorServiceInv.requestDoctorLeave(requestBody);
+    }
+
+    @Override
+    public ResponseEntity<?> getDoctorLeaves(String doctorId, String role) {
+        return doctorServiceInv.getDoctorLeaves(doctorId, role);
+    }
+
+    @Override
+    public ResponseEntity<?> approveDoctorLeave(String leaveId, Map<String, Object> requestBody, String role) {
+        return doctorServiceInv.approveDoctorLeave(leaveId, requestBody, role);
+    }
 }

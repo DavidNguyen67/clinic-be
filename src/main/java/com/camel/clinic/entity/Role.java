@@ -1,14 +1,10 @@
 package com.camel.clinic.entity;
 
-import java.util.UUID;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.UUID;
 
 @Entity
 @Table(name = "roles")
@@ -28,9 +24,9 @@ public class Role {
     private RoleName name;
 
     public enum RoleName {
-        ROLE_ADMIN,
-        ROLE_DOCTOR,
-        ROLE_PATIENT,
-        ROLE_STAFF
+        ADMIN,
+        DOCTOR,
+        PATIENT,
+        STAFF
     }
 }

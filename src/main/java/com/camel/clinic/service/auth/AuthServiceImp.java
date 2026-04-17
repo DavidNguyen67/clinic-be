@@ -230,4 +230,13 @@ public class AuthServiceImp implements AuthService {
         authServiceInv.save(user);
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    public ResponseEntity<?> getUserProfile(String email) throws BadRequestException {
+        User user = authServiceInv.findByEmail(email)
+                .orElseThrow(() -> new BadRequestException("User not found"));
+
+        UserProfileDTO profile = authServiceInv.buildUserProfileDTO(user);
+        return ResponseEntity.ok(profile);
+    }
 }

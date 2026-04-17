@@ -24,6 +24,8 @@
     get:
       - path: /me
         to: direct:auth-me
+      - path: /profile
+        to: direct:auth-get-profile
 
 - rest:
     path: /v1/settings
@@ -78,3 +80,27 @@
     get:
       - path: /
         to: direct:slot-availability
+
+- rest:
+    path: /v1/doctor/schedule
+    get:
+      - path: /
+        to: direct:doctor-get-schedule
+    post:
+      - path: /
+        to: direct:doctor-add-schedule
+    delete:
+      - path: /{id}
+        to: direct:doctor-delete-schedule
+
+- rest:
+    path: /v1/doctor/leaves
+    post:
+      - path: /
+        to: direct:doctor-request-leave
+    get:
+      - path: /
+        to: direct:doctor-get-leaves
+    patch:
+      - path: /{id}/approve
+        to: direct:doctor-approve-leave

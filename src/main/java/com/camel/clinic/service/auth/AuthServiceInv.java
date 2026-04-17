@@ -1,6 +1,12 @@
 package com.camel.clinic.service.auth;
 
+import com.camel.clinic.dto.DoctorDTO;
+import com.camel.clinic.dto.auth.UserProfileDTO;
+import com.camel.clinic.entity.Patient;
+import com.camel.clinic.entity.Role;
 import com.camel.clinic.entity.User;
+import com.camel.clinic.repository.DoctorRepository;
+import com.camel.clinic.repository.PatientRepository;
 import com.camel.clinic.repository.UserRepository;
 import com.camel.clinic.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +20,13 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class AuthServiceInv extends BaseService<User, UserRepository> {
-    public AuthServiceInv(UserRepository repository) {
+    private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
+
+    public AuthServiceInv(UserRepository repository, DoctorRepository doctorRepository, PatientRepository patientRepository) {
         super(User::new, repository);
+        this.doctorRepository = doctorRepository;
+        this.patientRepository = patientRepository;
     }
 
     public Optional<User> findByEmail(String email) {
@@ -36,5 +47,79 @@ public class AuthServiceInv extends BaseService<User, UserRepository> {
 
     public List<String> findEmailsBatch(Pageable pageable) {
         return repository.findEmailsBatch(pageable);
+    }
+
+    public UserProfileDTO buildUserProfileDTO(User user) {
+        UserProfileDTO profile = new UserProfileDTO();
+        profile.setId(user.getId());
+        profile.setEmail(user.getEmail());
+        profile.setFullName(user.getFullName());
+        profile.setPhone(user.getPhone());
+        profile.setRole(String.valueOf(user.getRole()));
+        profile.setGender(String.valueOf(user.getGender()));
+        profile.setDateOfBirth(user.getDateOfBirth());
+        profile.setPathAvatar(user.getPathAvatar());
+        profile.setStatus(user.getStatus().toString());
+        profile.setEmailVerified(user.getEmailVerified());
+        profile.setPhoneVerified(user.getPhoneVerified());
+        if (user.getLastLogin() != null) {
+            profile.setLastLogin(user.getLastLogin().getTime());
+        }
+
+        // Load doctor info if user is a doctor
+        if (Role.RoleName.DOCTOR.equals(user.getRole())) {
+            Optional<DoctorDTO> doctor = doctorRepository.findByUserId(user.getId());
+
+            if (doctor.isPresent()) {
+                DoctorDTO doc = doctor.get();
+                UserProfileDTO.DoctorProfileDTO doctorDTO = new UserProfileDTO.DoctorProfileDTO();
+                doctorDTO.setId(doc.getId());
+                doctorDTO.setExperienceYears(doc.getExperienceYears());
+                doctorDTO.setDegree(doc.getDegree());
+                doctorDTO.setEducation(doc.getEducation());
+                doctorDTO.setBio(doc.getBio());
+                doctorDTO.setConsultationFee(doc.getConsultationFee().doubleValue());
+                doctorDTO.setAverageRating(doc.getAverageRating().doubleValue());
+                doctorDTO.setTotalReviews(doc.getTotalReviews());
+
+                // Specialty
+                if (doc.getSpecialty() != null) {
+                    UserProfileDTO.DoctorProfileDTO.SpecialtyDTO specialtyDTO =
+                            new UserProfileDTO.DoctorProfileDTO.SpecialtyDTO();
+                    specialtyDTO.setId(doc.getSpecialty().getId());
+                    specialtyDTO.setName(doc.getSpecialty().getName());
+                    specialtyDTO.setSlug(doc.getSpecialty().getSlug());
+                    specialtyDTO.setDescription(doc.getSpecialty().getDescription());
+                    doctorDTO.setSpecialty(specialtyDTO);
+                }
+
+                profile.setDoctor(doctorDTO);
+            }
+        }
+
+        // Load patient info if user is a patient
+        if (Role.RoleName.PATIENT.equals(user.getRole())) {
+            Optional<Patient> patient = patientRepository.findAll().stream()
+                    .filter(p -> p.getUser().getId().equals(user.getId()))
+                    .findFirst();
+
+            if (patient.isPresent()) {
+                Patient pat = patient.get();
+                UserProfileDTO.PatientProfileDTO patientDTO = new UserProfileDTO.PatientProfileDTO();
+                patientDTO.setId(pat.getId());
+                patientDTO.setPatientCode(pat.getPatientCode());
+                patientDTO.setAddress(pat.getAddress());
+                patientDTO.setInsuranceNumber(pat.getInsuranceNumber());
+                patientDTO.setBloodType(String.valueOf(pat.getBloodType()));
+                patientDTO.setAllergies(pat.getAllergies());
+                patientDTO.setChronicDiseases(pat.getChronicDiseases());
+                patientDTO.setLoyaltyPoints(pat.getLoyaltyPoints());
+                patientDTO.setTotalVisits(pat.getTotalVisits());
+
+                profile.setPatient(patientDTO);
+            }
+        }
+
+        return profile;
     }
 }

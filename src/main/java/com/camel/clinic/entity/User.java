@@ -4,11 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -47,7 +43,7 @@ public class User extends SoftDeletableEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private Role.RoleName role = Role.RoleName.ROLE_PATIENT;
+    private Role.RoleName role = Role.RoleName.PATIENT;
 
     @Column(length = 500)
     private String pathAvatar;

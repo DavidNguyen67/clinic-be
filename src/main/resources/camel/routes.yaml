@@ -136,6 +136,17 @@
             ref: meAuthProcessor
         - marshal:
             json: { }
+
+- route:
+    id: auth-get-profile-route
+    from:
+      uri: direct:auth-get-profile
+      steps:
+        - process:
+            ref: getUserProfileProcessor
+        - marshal:
+            json: { }
+
 - route:
     id: auth-change-password-route
     from:
@@ -240,5 +251,86 @@
       steps:
         - process:
             ref: getSlotGeneratorProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-get-schedule-route
+    from:
+      uri: direct:doctor-get-schedule
+      steps:
+        - process:
+            ref: getDoctorScheduleProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-add-schedule-route
+    from:
+      uri: direct:doctor-add-schedule
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.doctor.DoctorScheduleRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: addDoctorScheduleProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-delete-schedule-route
+    from:
+      uri: direct:doctor-delete-schedule
+      steps:
+        - process:
+            ref: deleteDoctorScheduleProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-request-leave-route
+    from:
+      uri: direct:doctor-request-leave
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.doctor.DoctorLeaveRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: requestDoctorLeaveProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-get-leaves-route
+    from:
+      uri: direct:doctor-get-leaves
+      steps:
+        - process:
+            ref: getDoctorLeavesProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-approve-leave-route
+    from:
+      uri: direct:doctor-approve-leave
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.doctor.DoctorLeaveApproveRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: approveDoctorLeaveProcessor
         - marshal:
             json: { }
