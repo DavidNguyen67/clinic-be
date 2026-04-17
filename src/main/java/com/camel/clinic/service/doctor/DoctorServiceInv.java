@@ -98,7 +98,7 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
     public ResponseEntity<?> getDoctorSchedules() {
         try {
             User currentUser = getCurrentUser();
-            DoctorDTO doctor = doctorRepository.findByUserId(currentUser.getId())
+            Doctor doctor = doctorRepository.findByUserId(currentUser.getId())
                     .orElseThrow(() -> new NotFoundException("Doctor not found"));
 
             List<DoctorSchedule> schedules = doctorScheduleRepository.findByDoctorId(doctor.getId());

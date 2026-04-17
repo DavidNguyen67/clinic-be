@@ -53,5 +53,5 @@ public interface DoctorRepository extends JpaRepository<Doctor, UUID>, JpaSpecif
             LEFT JOIN DoctorSchedule ds ON ds.doctor.id = d.id AND ds.deletedAt IS NULL
             WHERE d.user.id = :userId
             AND d.deletedAt IS NULL""")
-    Optional<DoctorDTO> findByUserId(UUID userId);
+    Optional<Doctor> findByUserId(UUID userId);
 }

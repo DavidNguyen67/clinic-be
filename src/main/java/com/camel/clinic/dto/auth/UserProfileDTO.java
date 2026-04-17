@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -52,7 +53,8 @@ public class UserProfileDTO {
         // Specialty
         private SpecialtyDTO specialty;
 
-        private ScheduleDTO schedule;
+        private List<ScheduleDTO> schedules;
+
 
         @Data
         @NoArgsConstructor
@@ -69,6 +71,7 @@ public class UserProfileDTO {
         @AllArgsConstructor
         public static class ScheduleDTO {
             private UUID id;
+            private Integer dayOfWeek;
             private String startTime;
             private String endTime;
         }

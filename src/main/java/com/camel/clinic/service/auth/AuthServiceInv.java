@@ -1,11 +1,9 @@
 package com.camel.clinic.service.auth;
 
-import com.camel.clinic.dto.DoctorDTO;
 import com.camel.clinic.dto.auth.UserProfileDTO;
-import com.camel.clinic.entity.Patient;
-import com.camel.clinic.entity.Role;
-import com.camel.clinic.entity.User;
+import com.camel.clinic.entity.*;
 import com.camel.clinic.repository.DoctorRepository;
+import com.camel.clinic.repository.DoctorScheduleRepository;
 import com.camel.clinic.repository.PatientRepository;
 import com.camel.clinic.repository.UserRepository;
 import com.camel.clinic.service.BaseService;
@@ -22,11 +20,14 @@ import java.util.UUID;
 public class AuthServiceInv extends BaseService<User, UserRepository> {
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
+    private final DoctorScheduleRepository doctorScheduleRepository;
 
-    public AuthServiceInv(UserRepository repository, DoctorRepository doctorRepository, PatientRepository patientRepository) {
+    public AuthServiceInv(UserRepository repository, DoctorRepository doctorRepository,
+                          PatientRepository patientRepository, DoctorScheduleRepository doctorScheduleRepository) {
         super(User::new, repository);
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
+        this.doctorScheduleRepository = doctorScheduleRepository;
     }
 
     public Optional<User> findByEmail(String email) {
@@ -68,10 +69,20 @@ public class AuthServiceInv extends BaseService<User, UserRepository> {
 
         // Load doctor info if user is a doctor
         if (Role.RoleName.DOCTOR.equals(user.getRole())) {
-            Optional<DoctorDTO> doctor = doctorRepository.findByUserId(user.getId());
+            Optional<Doctor> doctor = doctorRepository.findByUserId(user.getId());
 
             if (doctor.isPresent()) {
-                DoctorDTO doc = doctor.get();
+                List<DoctorSchedule> schedules = doctorScheduleRepository.findByDoctorId(doctor.get().getId());
+                List<UserProfileDTO.DoctorProfileDTO.ScheduleDTO> scheduleDTOs = schedules.stream().map(s -> {
+                    UserProfileDTO.DoctorProfileDTO.ScheduleDTO dto = new UserProfileDTO.DoctorProfileDTO.ScheduleDTO();
+                    dto.setId(s.getId());
+                    dto.setDayOfWeek(s.getDayOfWeek());
+                    dto.setStartTime(s.getStartTime().toString());
+                    dto.setEndTime(s.getEndTime().toString());
+                    return dto;
+                }).toList();
+
+                Doctor doc = doctor.get();
                 UserProfileDTO.DoctorProfileDTO doctorDTO = new UserProfileDTO.DoctorProfileDTO();
                 doctorDTO.setId(doc.getId());
                 doctorDTO.setExperienceYears(doc.getExperienceYears());
@@ -81,6 +92,7 @@ public class AuthServiceInv extends BaseService<User, UserRepository> {
                 doctorDTO.setConsultationFee(doc.getConsultationFee().doubleValue());
                 doctorDTO.setAverageRating(doc.getAverageRating().doubleValue());
                 doctorDTO.setTotalReviews(doc.getTotalReviews());
+                doctorDTO.setSchedules(scheduleDTOs);
 
                 // Specialty
                 if (doc.getSpecialty() != null) {
