@@ -334,3 +334,183 @@
             ref: approveDoctorLeaveProcessor
         - marshal:
             json: { }
+
+- route:
+    id: appointment-create-route
+    from:
+      uri: direct:appointment-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.appointment.AppointmentCreateRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: appointmentCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: appointment-list-route
+    from:
+      uri: direct:appointment-list
+      steps:
+        - process:
+            ref: appointmentListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: appointment-get-route
+    from:
+      uri: direct:appointment-get
+      steps:
+        - process:
+            ref: appointmentGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: appointment-cancel-route
+    from:
+      uri: direct:appointment-cancel
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.appointment.AppointmentCancelRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: appointmentCancelProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: appointment-confirm-route
+    from:
+      uri: direct:appointment-confirm
+      steps:
+        - process:
+            ref: appointmentConfirmProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: appointment-checkin-route
+    from:
+      uri: direct:appointment-checkin
+      steps:
+        - process:
+            ref: appointmentCheckinProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: appointment-start-route
+    from:
+      uri: direct:appointment-start
+      steps:
+        - process:
+            ref: appointmentStartProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: appointment-complete-route
+    from:
+      uri: direct:appointment-complete
+      steps:
+        - process:
+            ref: appointmentCompleteProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: appointment-today-route
+    from:
+      uri: direct:appointment-today
+      steps:
+        - process:
+            ref: appointmentTodayProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: appointment-queue-route
+    from:
+      uri: direct:appointment-queue
+      steps:
+        - process:
+            ref: appointmentQueueProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-profile-get-route
+    from:
+      uri: direct:patient-profile-get
+      steps:
+        - process:
+            ref: getPatientProfileProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-profile-update-route
+    from:
+      uri: direct:patient-profile-update
+      steps:
+        - process:
+            ref: updatePatientProfileProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-appointments-route
+    from:
+      uri: direct:patient-appointments
+      steps:
+        - process:
+            ref: getPatientAppointmentsProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-history-route
+    from:
+      uri: direct:patient-history
+      steps:
+        - process:
+            ref: getPatientHistoryProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: admin-doctor-get-leaves-route
+    from:
+      uri: direct:admin-doctor-get-leaves
+      steps:
+        - process:
+            ref: getDoctorLeavesProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: admin-doctor-approve-leave-route
+    from:
+      uri: direct:admin-doctor-approve-leave
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.doctor.DoctorLeaveApproveRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: approveDoctorLeaveProcessor
+        - marshal:
+            json: { }
+

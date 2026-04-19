@@ -1,0 +1,429 @@
+package com.camel.clinic.service.appointment;
+
+import com.camel.clinic.dto.appointment.AppointmentCancelRequestDTO;
+import com.camel.clinic.dto.appointment.AppointmentCreateRequestDTO;
+import com.camel.clinic.dto.appointment.AppointmentResponseDTO;
+import com.camel.clinic.entity.*;
+import com.camel.clinic.exception.BadRequestException;
+import com.camel.clinic.exception.NotFoundException;
+import com.camel.clinic.exception.UnauthorizedException;
+import com.camel.clinic.repository.*;
+import com.camel.clinic.util.DateTimeUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Service
+@Slf4j
+@RequiredArgsConstructor
+@Transactional
+public class AppointmentServiceImp {
+    private final AppointmentRepository appointmentRepository;
+    private final PatientRepository patientRepository;
+    private final DoctorRepository doctorRepository;
+    private final DoctorScheduleRepository doctorScheduleRepository;
+    private final DoctorLeaveRepository doctorLeaveRepository;
+    private final ServiceRepository serviceRepository;
+    private final UserRepository userRepository;
+    private final ObjectMapper objectMapper;
+    private final SlotLockService slotLockService;
+
+    public ResponseEntity<?> createAppointment(AppointmentCreateRequestDTO dto) {
+        try {
+            User currentUser = getCurrentUser();
+            requireRole(currentUser, Role.RoleName.PATIENT.name());
+
+            Doctor doctor = doctorRepository.findById(dto.getDoctorId())
+                    .orElseThrow(() -> new NotFoundException("Doctor not found"));
+            if (doctor.getStatus() != Doctor.DoctorStatus.active) {
+                throw new BadRequestException("Doctor is not active");
+            }
+
+            Patient patient = patientRepository.findByUserId(currentUser.getId())
+                    .orElseThrow(() -> new NotFoundException("Patient profile not found"));
+
+            com.camel.clinic.entity.Service service = serviceRepository.findById(dto.getServiceId())
+                    .orElseThrow(() -> new NotFoundException("Service not found"));
+
+            LocalDate apptDate = DateTimeUtils.toVnLocalDate(dto.getDate());
+            LocalTime apptTime = DateTimeUtils.toVnLocalTime(dto.getTime());
+            LocalDateTime appointmentDateTime = LocalDateTime.of(apptDate, apptTime);
+            if (appointmentDateTime.isBefore(LocalDateTime.now(DateTimeUtils.VN_ZONE).plusMinutes(1))) {
+                throw new BadRequestException("Appointment time must be in the future");
+            }
+
+            if (!hasValidScheduleSlot(doctor.getId(), apptDate, apptTime)) {
+                throw new BadRequestException("Doctor does not have a valid schedule for this slot");
+            }
+
+            if (doctorLeaveRepository.existsApprovedLeaveOnDate(doctor.getId(), dto.getDate())) {
+                throw new BadRequestException("Doctor is on approved leave on this date");
+            }
+
+            if (Boolean.FALSE.equals(service.getIsActive())) {
+                throw new BadRequestException("Service is not active");
+            }
+
+            Date startTime = DateTimeUtils.toDate(apptDate, apptTime);
+
+            boolean occupied = appointmentRepository.existsByDoctorIdAndAppointmentDateAndStartTimeAndStatusInAndDeletedAtIsNull(
+                    doctor.getId(),
+                    dto.getDate(),
+                    startTime,
+                    List.of(
+                            Appointment.AppointmentStatus.pending,
+                            Appointment.AppointmentStatus.confirmed,
+                            Appointment.AppointmentStatus.checked_in,
+                            Appointment.AppointmentStatus.in_progress
+                    )
+            );
+            if (occupied) {
+                throw new BadRequestException("Slot already booked");
+            }
+
+            UUID lockRef = UUID.randomUUID();
+            if (!slotLockService.tryLock(doctor.getId(), apptDate, apptTime, lockRef)) {
+                throw new BadRequestException("Slot is being booked by another request");
+            }
+
+            try {
+                Appointment appointment = new Appointment();
+                appointment.setAppointmentCode("APT" + System.currentTimeMillis());
+                appointment.setDoctor(doctor);
+                appointment.setPatient(patient);
+                appointment.setService(service);
+                appointment.setAppointmentDate(dto.getDate());
+                appointment.setStartTime(startTime);
+                appointment.setEndTime(DateTimeUtils.toDate(apptDate, apptTime.plusMinutes(service.getDuration())));
+                appointment.setReason(dto.getReason());
+                appointment.setSymptoms(dto.getSymptoms());
+                appointment.setStatus(Appointment.AppointmentStatus.pending);
+                appointment.setBookingType(parseBookingType(dto.getServiceType()));
+
+                Appointment saved = appointmentRepository.save(appointment);
+                AppointmentResponseDTO responseDTO = toDto(saved);
+                List<String> instructions = List.of(
+                        "Vui long den truoc gio hen 15 phut de lam thu tuc.",
+                        "Mang theo CCCD/BHYT va cac ket qua kham gan nhat (neu co).",
+                        "Neu can huy, vui long huy truoc it nhat 2 gio."
+                );
+                return ResponseEntity.status(HttpStatus.CREATED)
+                        .body(Map.of("appointment", responseDTO, "instructions", instructions));
+            } finally {
+                slotLockService.releaseLock(doctor.getId(), apptDate, apptTime);
+            }
+        } catch (NotFoundException | BadRequestException | UnauthorizedException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            log.error("Create appointment error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Failed to create appointment"));
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> listAppointments() {
+        try {
+            User currentUser = getCurrentUser();
+            List<Appointment> appointments;
+            String role = currentUser.getRole().name();
+
+            if (Role.RoleName.PATIENT.name().equals(role)) {
+                Patient patient = patientRepository.findByUserId(currentUser.getId())
+                        .orElseThrow(() -> new NotFoundException("Patient profile not found"));
+                appointments = appointmentRepository.findByPatientId(patient.getId());
+            } else if (Role.RoleName.DOCTOR.name().equals(role)) {
+                Doctor doctor = doctorRepository.findByUserId(currentUser.getId())
+                        .orElseThrow(() -> new NotFoundException("Doctor profile not found"));
+                appointments = appointmentRepository.findByDoctorId(doctor.getId());
+            } else {
+                appointments = appointmentRepository.findAll();
+            }
+
+            return ResponseEntity.ok(appointments.stream().map(this::toDto).collect(Collectors.toList()));
+        } catch (Exception e) {
+            log.error("List appointments error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Failed to list appointments"));
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> getAppointmentDetail(String id) {
+        try {
+            User currentUser = getCurrentUser();
+            Appointment appointment = appointmentRepository.findById(UUID.fromString(id))
+                    .orElseThrow(() -> new NotFoundException("Appointment not found"));
+            ensureCanAccessAppointment(currentUser, appointment);
+            return ResponseEntity.ok(toDto(appointment));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid appointment id"));
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<?> cancelAppointment(String id, Map<String, Object> requestBody) {
+        try {
+            Appointment appointment = appointmentRepository.findById(UUID.fromString(id))
+                    .orElseThrow(() -> new NotFoundException("Appointment not found"));
+            AppointmentCancelRequestDTO dto = objectMapper.convertValue(requestBody, AppointmentCancelRequestDTO.class);
+            User currentUser = getCurrentUser();
+
+            boolean patientRole = Role.RoleName.PATIENT.name().equals(currentUser.getRole().name());
+            boolean staffRole = Role.RoleName.STAFF.name().equals(currentUser.getRole().name());
+            if (!patientRole && !staffRole) {
+                throw new UnauthorizedException("Only patient/staff can cancel appointment");
+            }
+
+            if (patientRole) {
+                if (!(appointment.getStatus() == Appointment.AppointmentStatus.pending
+                        || appointment.getStatus() == Appointment.AppointmentStatus.confirmed)) {
+                    throw new BadRequestException("Patient can only cancel pending/confirmed appointments");
+                }
+                Patient patient = patientRepository.findByUserId(currentUser.getId())
+                        .orElseThrow(() -> new NotFoundException("Patient profile not found"));
+                if (!appointment.getPatient().getId().equals(patient.getId())) {
+                    throw new UnauthorizedException("Cannot cancel another patient's appointment");
+                }
+
+                LocalDateTime appt = LocalDateTime.of(DateTimeUtils.toVnLocalDate(appointment.getAppointmentDate()),
+                        DateTimeUtils.toVnLocalTime(appointment.getStartTime()));
+                long hours = java.time.Duration.between(LocalDateTime.now(DateTimeUtils.VN_ZONE), appt).toHours();
+                if (hours < 2) {
+                    String note = appointment.getNotes() == null ? "" : appointment.getNotes() + " | ";
+                    appointment.setNotes(note + "CANCEL_FEE_POSSIBLE");
+                }
+            }
+
+            if (staffRole && (dto.getReason() == null || dto.getReason().isBlank())) {
+                throw new BadRequestException("Staff must provide cancel reason");
+            }
+
+            appointment.setStatus(Appointment.AppointmentStatus.cancelled);
+            String reason = dto != null ? dto.getReason() : null;
+            String reasonNote = (reason == null || reason.isBlank()) ? "CANCELLED_BY_PATIENT" : "CANCEL_REASON:" + reason;
+            String note = appointment.getNotes() == null ? "" : appointment.getNotes() + " | ";
+            appointment.setNotes(note + reasonNote);
+            return ResponseEntity.ok(toDto(appointmentRepository.save(appointment)));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid appointment id"));
+        } catch (NotFoundException | BadRequestException | UnauthorizedException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<?> confirmAppointment(String id) {
+        return transitionStatus(id, Appointment.AppointmentStatus.pending, Appointment.AppointmentStatus.confirmed,
+                Role.RoleName.STAFF.name());
+    }
+
+    public ResponseEntity<?> checkinAppointment(String id) {
+        try {
+            User currentUser = getCurrentUser();
+            requireRole(currentUser, Role.RoleName.STAFF.name());
+            Appointment appointment = appointmentRepository.findById(UUID.fromString(id))
+                    .orElseThrow(() -> new NotFoundException("Appointment not found"));
+
+            if (appointment.getStatus() != Appointment.AppointmentStatus.confirmed) {
+                throw new BadRequestException("Only confirmed appointment can be checked in");
+            }
+            appointment.setStatus(Appointment.AppointmentStatus.checked_in);
+            return ResponseEntity.ok(toDto(appointmentRepository.save(appointment)));
+        } catch (Exception e) {
+            return handleTransitionException(e);
+        }
+    }
+
+    public ResponseEntity<?> startAppointment(String id) {
+        return transitionStatus(id, Appointment.AppointmentStatus.checked_in, Appointment.AppointmentStatus.in_progress,
+                Role.RoleName.DOCTOR.name());
+    }
+
+    public ResponseEntity<?> completeAppointment(String id) {
+        return transitionStatus(id, Appointment.AppointmentStatus.in_progress, Appointment.AppointmentStatus.completed,
+                Role.RoleName.DOCTOR.name());
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> getTodayAppointments() {
+        try {
+            User currentUser = getCurrentUser();
+            LocalDate today = DateTimeUtils.todayVn();
+            Date from = DateTimeUtils.toDate(today, LocalTime.MIN);
+            Date to = DateTimeUtils.toDate(today.plusDays(1), LocalTime.MIN);
+
+            List<Appointment> appointments;
+            if (Role.RoleName.DOCTOR.name().equals(currentUser.getRole().name())) {
+                Doctor doctor = doctorRepository.findByUserId(currentUser.getId())
+                        .orElseThrow(() -> new NotFoundException("Doctor profile not found"));
+                appointments = appointmentRepository.findTodayAppointmentsByDoctor(doctor.getId(), from, to);
+            } else if (Role.RoleName.STAFF.name().equals(currentUser.getRole().name())) {
+                appointments = appointmentRepository.findTodayAppointments(from, to);
+            } else {
+                throw new UnauthorizedException("Only doctor/staff can view today appointments");
+            }
+            return ResponseEntity.ok(appointments.stream().map(this::toDto).collect(Collectors.toList()));
+        } catch (Exception e) {
+            if (e instanceof NotFoundException || e instanceof UnauthorizedException) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+            }
+            log.error("Today appointments error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Failed to load today's appointments"));
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> getQueueAppointments() {
+        try {
+            User currentUser = getCurrentUser();
+            requireRole(currentUser, Role.RoleName.STAFF.name());
+            List<AppointmentResponseDTO> queue = appointmentRepository.findQueueAppointments()
+                    .stream().map(this::toDto).collect(Collectors.toList());
+            return ResponseEntity.ok(queue);
+        } catch (Exception e) {
+            if (e instanceof UnauthorizedException) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+            }
+            log.error("Queue appointments error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Failed to load queue"));
+        }
+    }
+
+    private ResponseEntity<?> transitionStatus(String id,
+                                               Appointment.AppointmentStatus from,
+                                               Appointment.AppointmentStatus to,
+                                               String requiredRole) {
+        try {
+            User currentUser = getCurrentUser();
+            requireRole(currentUser, requiredRole);
+            Appointment appointment = appointmentRepository.findById(UUID.fromString(id))
+                    .orElseThrow(() -> new NotFoundException("Appointment not found"));
+            if (Role.RoleName.DOCTOR.name().equals(requiredRole)
+                    && !appointment.getDoctor().getUser().getId().equals(currentUser.getId())) {
+                throw new UnauthorizedException("Cannot update another doctor's appointment");
+            }
+            if (appointment.getStatus() != from) {
+                throw new BadRequestException("Invalid status transition: " + appointment.getStatus() + " -> " + to);
+            }
+            appointment.setStatus(to);
+            return ResponseEntity.ok(toDto(appointmentRepository.save(appointment)));
+        } catch (Exception e) {
+            return handleTransitionException(e);
+        }
+    }
+
+    private ResponseEntity<?> handleTransitionException(Exception e) {
+        if (e instanceof IllegalArgumentException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid appointment id"));
+        }
+        if (e instanceof NotFoundException || e instanceof BadRequestException || e instanceof UnauthorizedException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
+        log.error("Appointment transition error", e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Failed to update appointment status"));
+    }
+
+    private Appointment.BookingType parseBookingType(String serviceType) {
+        if (serviceType == null) return Appointment.BookingType.online;
+        String normalized = serviceType.trim().toLowerCase();
+        return switch (normalized) {
+            case "phone" -> Appointment.BookingType.phone;
+            case "walk_in", "walkin" -> Appointment.BookingType.walk_in;
+            default -> Appointment.BookingType.online;
+        };
+    }
+
+    private boolean hasValidScheduleSlot(UUID doctorId, LocalDate date, LocalTime time) {
+        int dayOfWeek = date.getDayOfWeek().getValue() % 7;
+        return doctorScheduleRepository.findActiveByDoctorIdAndDayOfWeek(doctorId, dayOfWeek)
+                .stream()
+                .anyMatch(s -> {
+                    LocalTime start = DateTimeUtils.toVnLocalTime(s.getStartTime()).truncatedTo(ChronoUnit.MINUTES);
+                    LocalTime end = DateTimeUtils.toVnLocalTime(s.getEndTime()).truncatedTo(ChronoUnit.MINUTES);
+                    LocalTime requestTime = time.truncatedTo(ChronoUnit.MINUTES);
+                    if (requestTime.isBefore(start) || !requestTime.isBefore(end)) {
+                        return false;
+                    }
+                    int minutesFromStart = (int) ChronoUnit.MINUTES.between(start, requestTime);
+                    return minutesFromStart % Math.max(1, s.getSlotDuration()) == 0;
+                });
+    }
+
+    private void ensureCanAccessAppointment(User currentUser, Appointment appointment) {
+        String role = currentUser.getRole().name();
+        if (Role.RoleName.ADMIN.name().equals(role) || Role.RoleName.STAFF.name().equals(role)) {
+            return;
+        }
+        if (Role.RoleName.PATIENT.name().equals(role)) {
+            Patient patient = patientRepository.findByUserId(currentUser.getId())
+                    .orElseThrow(() -> new NotFoundException("Patient profile not found"));
+            if (!appointment.getPatient().getId().equals(patient.getId())) {
+                throw new UnauthorizedException("Cannot access another patient's appointment");
+            }
+            return;
+        }
+        if (Role.RoleName.DOCTOR.name().equals(role)) {
+            Doctor doctor = doctorRepository.findByUserId(currentUser.getId())
+                    .orElseThrow(() -> new NotFoundException("Doctor profile not found"));
+            if (!appointment.getDoctor().getId().equals(doctor.getId())) {
+                throw new UnauthorizedException("Cannot access another doctor's appointment");
+            }
+            return;
+        }
+        throw new UnauthorizedException("Role not allowed to access appointment detail");
+    }
+
+    private AppointmentResponseDTO toDto(Appointment a) {
+        return AppointmentResponseDTO.builder()
+                .id(a.getId())
+                .appointmentCode(a.getAppointmentCode())
+                .appointmentDate(a.getAppointmentDate())
+                .startTime(a.getStartTime())
+                .endTime(a.getEndTime())
+                .status(a.getStatus().name())
+                .bookingType(a.getBookingType().name())
+                .reason(a.getReason())
+                .symptoms(a.getSymptoms())
+                .notes(a.getNotes())
+                .queueNumber(a.getQueueNumber())
+                .doctorId(a.getDoctor() != null ? a.getDoctor().getId() : null)
+                .doctorName(a.getDoctor() != null && a.getDoctor().getUser() != null ? a.getDoctor().getUser().getFullName() : null)
+                .patientId(a.getPatient() != null ? a.getPatient().getId() : null)
+                .patientName(a.getPatient() != null && a.getPatient().getUser() != null ? a.getPatient().getUser().getFullName() : null)
+                .serviceId(a.getService() != null ? a.getService().getId() : null)
+                .serviceName(a.getService() != null ? a.getService().getName() : null)
+                .build();
+    }
+
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new UnauthorizedException("User not authenticated");
+        }
+        return userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+    }
+
+    private void requireRole(User user, String role) {
+        if (!role.equals(user.getRole().name())) {
+            throw new UnauthorizedException("Required role: " + role);
+        }
+    }
+}
+
+

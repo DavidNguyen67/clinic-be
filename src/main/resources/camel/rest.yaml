@@ -101,6 +101,64 @@
     get:
       - path: /
         to: direct:doctor-get-leaves
+
+- rest:
+    path: /v1/appointments
+    post:
+      - path: /
+        to: direct:appointment-create
+    get:
+      - path: /
+        to: direct:appointment-list
+      - path: /today
+        to: direct:appointment-today
+      - path: /queue
+        to: direct:appointment-queue
+
+- rest:
+    path: /v1/appointments
+    get:
+      - path: /{id}
+        to: direct:appointment-get
+    patch:
+      - path: /{id}/cancel
+        to: direct:appointment-cancel
+      - path: /{id}/confirm
+        to: direct:appointment-confirm
+      - path: /{id}/checkin
+        to: direct:appointment-checkin
+      - path: /{id}/start
+        to: direct:appointment-start
+      - path: /{id}/complete
+        to: direct:appointment-complete
+
+- rest:
+    path: /v1/patient/profile
+    get:
+      - path: /
+        to: direct:patient-profile-get
+    put:
+      - path: /
+        to: direct:patient-profile-update
+
+- rest:
+    path: /v1/patient/appointments
+    get:
+      - path: /
+        to: direct:patient-appointments
+
+- rest:
+    path: /v1/patient/history
+    get:
+      - path: /
+        to: direct:patient-history
+
+- rest:
+    path: /v1/admin/doctor/leaves
+    get:
+      - path: /
+        to: direct:admin-doctor-get-leaves
     patch:
       - path: /{id}/approve
-        to: direct:doctor-approve-leave
+        to: direct:admin-doctor-approve-leave
+

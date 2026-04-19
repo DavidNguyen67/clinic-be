@@ -57,14 +57,17 @@ public class SecurityConfig {
                                 "/api/v1/settings/clinic",
                                 "/api/v1/clinic-figures",
                                 "/api/v1/doctor-count",
-                                "/api/v1/doctors",
+                                "/api/v1/doctors/**",
                                 "/api/v1/top-doctors",
                                 "/api/v1/patient-count",
                                 "/api/v1/specialty/**",
                                 "/api/v1/slot-availability",
                                 "/api/v1/specialty-count"
                         ).permitAll()
+                        .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/v1/doctor/**").hasAuthority("DOCTOR")
+                        .requestMatchers("/api/v1/patient/**").hasAuthority("PATIENT")
+                        .requestMatchers("/api/v1/appointments/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

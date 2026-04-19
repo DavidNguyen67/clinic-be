@@ -50,12 +50,12 @@ public class DoctorServiceImp implements DoctorService {
     }
 
     @Override
-    public ResponseEntity<?> getDoctorLeaves(String doctorId, String role) {
-        return doctorServiceInv.getDoctorLeaves(doctorId, role);
+    public ResponseEntity<?> getDoctorLeaves(String doctorId) {
+        return doctorServiceInv.getDoctorLeaves(doctorId);
     }
 
     @Override
-    public ResponseEntity<?> approveDoctorLeave(String leaveId, Map<String, Object> requestBody, String role) {
-        return doctorServiceInv.approveDoctorLeave(leaveId, requestBody, role);
+    public ResponseEntity<?> approveDoctorLeave(String leaveId, Map<String, Object> requestBody) {
+        return doctorServiceInv.approveDoctorLeave(leaveId, requestBody);
     }
 }

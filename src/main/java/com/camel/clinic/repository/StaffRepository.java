@@ -1,6 +1,6 @@
 package com.camel.clinic.repository;
 
-import com.camel.clinic.entity.Patient;
+import com.camel.clinic.entity.Staff;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -10,9 +10,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface PatientRepository extends JpaRepository<Patient, UUID>, JpaSpecificationExecutor<Patient> {
-    @Query("SELECT p FROM Patient p WHERE p.user.id = :userId")
-    Optional<Patient> findByUserId(UUID userId);
+public interface StaffRepository extends JpaRepository<Staff, UUID>, JpaSpecificationExecutor<Staff> {
+    @Query("SELECT s FROM Staff s WHERE s.user.id = :userId")
+    Optional<Staff> findByUserId(UUID userId);
 
-    boolean existsByPatientCode(String patientCode);
+    boolean existsByStaffCode(String staffCode);
 }
+

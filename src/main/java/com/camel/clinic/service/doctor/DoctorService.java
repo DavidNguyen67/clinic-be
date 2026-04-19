@@ -21,7 +21,7 @@ public interface DoctorService {
     // Doctor Leave Management
     ResponseEntity<?> requestDoctorLeave(Map<String, Object> requestBody);
 
-    ResponseEntity<?> getDoctorLeaves(String doctorId, String role);
+    ResponseEntity<?> getDoctorLeaves(String doctorId);
 
-    ResponseEntity<?> approveDoctorLeave(String leaveId, Map<String, Object> requestBody, String role);
+    ResponseEntity<?> approveDoctorLeave(String leaveId, Map<String, Object> requestBody);
 }

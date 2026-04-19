@@ -5,6 +5,7 @@ import com.camel.clinic.dto.doctor.*;
 import com.camel.clinic.entity.Doctor;
 import com.camel.clinic.entity.DoctorLeave;
 import com.camel.clinic.entity.DoctorSchedule;
+import com.camel.clinic.entity.Role;
 import com.camel.clinic.entity.User;
 import com.camel.clinic.exception.BadRequestException;
 import com.camel.clinic.exception.NotFoundException;
@@ -125,9 +126,7 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             }
 
             User currentUser = getCurrentUser();
-            Doctor doctor = repository.findAll().stream()
-                    .filter(d -> d.getUser().getId().equals(currentUser.getId()))
-                    .findFirst()
+            Doctor doctor = doctorRepository.findByUserId(currentUser.getId())
                     .orElseThrow(() -> new NotFoundException("Doctor not found"));
 
             DoctorSchedule schedule = new DoctorSchedule();
@@ -181,9 +180,7 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             DoctorLeaveRequestDTO requestDTO = objectMapper.convertValue(requestBody, DoctorLeaveRequestDTO.class);
 
             User currentUser = getCurrentUser();
-            Doctor doctor = repository.findAll().stream()
-                    .filter(d -> d.getUser().getId().equals(currentUser.getId()))
-                    .findFirst()
+            Doctor doctor = doctorRepository.findByUserId(currentUser.getId())
                     .orElseThrow(() -> new NotFoundException("Doctor not found"));
 
             DoctorLeave leave = new DoctorLeave();
@@ -205,25 +202,23 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
         }
     }
 
-    public ResponseEntity<?> getDoctorLeaves(String doctorId, String role) {
+    public ResponseEntity<?> getDoctorLeaves(String doctorId) {
         try {
             User currentUser = getCurrentUser();
 
             UUID targetDoctorId;
-            if ("doctor".equalsIgnoreCase(role)) {
+            if (currentUser.getRole() == Role.RoleName.DOCTOR) {
                 // Doctors can only view their own leaves
-                Doctor doctor = repository.findAll().stream()
-                        .filter(d -> d.getUser().getId().equals(currentUser.getId()))
-                        .findFirst()
+                Doctor doctor = doctorRepository.findByUserId(currentUser.getId())
                         .orElseThrow(() -> new NotFoundException("Doctor not found"));
                 targetDoctorId = doctor.getId();
-            } else if ("admin".equalsIgnoreCase(role)) {
+            } else if (currentUser.getRole() == Role.RoleName.ADMIN) {
                 // Admins can view specific doctor's leaves or all pending leaves
                 if (doctorId != null && !doctorId.isEmpty()) {
                     targetDoctorId = UUID.fromString(doctorId);
                 } else {
                     // Return all pending leaves for admin review
-                    List<DoctorLeave> leaves = doctorLeaveRepository.findByStatus("pending");
+                    List<DoctorLeave> leaves = doctorLeaveRepository.findByStatus(DoctorLeave.LeaveStatus.pending);
                     List<DoctorLeaveResponseDTO> response = leaves.stream()
                             .map(this::convertToLeaveDTO)
                             .collect(Collectors.toList());
@@ -250,9 +245,10 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
         }
     }
 
-    public ResponseEntity<?> approveDoctorLeave(String leaveId, Map<String, Object> requestBody, String role) {
+    public ResponseEntity<?> approveDoctorLeave(String leaveId, Map<String, Object> requestBody) {
         try {
-            if (!"admin".equalsIgnoreCase(role)) {
+            User currentUser = getCurrentUser();
+            if (currentUser.getRole() != Role.RoleName.ADMIN) {
                 throw new UnauthorizedException("Only admins can approve leaves");
             }
 

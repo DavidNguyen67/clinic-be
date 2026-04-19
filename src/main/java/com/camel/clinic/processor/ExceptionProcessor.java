@@ -1,12 +1,13 @@
 package com.camel.clinic.processor;
 
 import com.camel.clinic.dto.api.ApiResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.camel.clinic.exception.BadRequestException;
+import com.camel.clinic.exception.NotFoundException;
+import com.camel.clinic.exception.UnauthorizedException;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePropertyKey;
 import org.apache.camel.Processor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +15,6 @@ import org.springframework.stereotype.Component;
 public class ExceptionProcessor implements Processor {
 
 
-    public ExceptionProcessor(ObjectMapper objectMapper) {
-    }
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -24,13 +23,16 @@ public class ExceptionProcessor implements Processor {
         int status;
         String code;
 
-        if (cause instanceof BadRequestException) {
+        if (cause instanceof BadRequestException || cause instanceof org.apache.coyote.BadRequestException) {
             status = 400;
             code = "BAD_REQUEST";
+        } else if (cause instanceof UnauthorizedException) {
+            status = 401;
+            code = "UNAUTHORIZED";
         } else if (cause instanceof AccessDeniedException) {
             status = 403;
             code = "FORBIDDEN";
-        } else if (cause instanceof EntityNotFoundException) {
+        } else if (cause instanceof EntityNotFoundException || cause instanceof NotFoundException) {
             status = 404;
             code = "NOT_FOUND";
         } else {

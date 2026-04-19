@@ -54,4 +54,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, UUID>, JpaSpecif
             WHERE d.user.id = :userId
             AND d.deletedAt IS NULL""")
     Optional<Doctor> findByUserId(UUID userId);
+
+    boolean existsByDoctorCode(String doctorCode);
 }

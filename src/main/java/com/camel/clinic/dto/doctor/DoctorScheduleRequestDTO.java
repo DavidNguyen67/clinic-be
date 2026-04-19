@@ -1,6 +1,8 @@
 package com.camel.clinic.dto.doctor;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -15,7 +17,8 @@ import java.util.Date;
 public class DoctorScheduleRequestDTO {
 
     @NotNull(message = "Day of week is required")
-    @Positive(message = "Day of week must be between 0-6")
+    @Min(value = 0, message = "Day of week must be between 0-6")
+    @Max(value = 6, message = "Day of week must be between 0-6")
     private Integer dayOfWeek; // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
 
     @NotNull(message = "Start time is required")

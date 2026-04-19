@@ -1,7 +1,16 @@
 package com.camel.clinic.service.auth;
 
 import com.camel.clinic.dto.auth.*;
+import com.camel.clinic.entity.Doctor;
+import com.camel.clinic.entity.Patient;
+import com.camel.clinic.entity.Role;
+import com.camel.clinic.entity.Specialty;
+import com.camel.clinic.entity.Staff;
 import com.camel.clinic.entity.User;
+import com.camel.clinic.repository.DoctorRepository;
+import com.camel.clinic.repository.PatientRepository;
+import com.camel.clinic.repository.SpecialtyRepository;
+import com.camel.clinic.repository.StaffRepository;
 import com.camel.clinic.service.EmailUniqueService;
 import com.camel.clinic.util.JwtUtil;
 import lombok.AllArgsConstructor;
@@ -17,10 +26,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Predicate;
 
 @Service
 @Slf4j
@@ -35,6 +47,10 @@ public class AuthServiceImp implements AuthService {
     private final OtpService otpService;
     private final EmailService emailService;
     private final EmailUniqueService emailUniqueService;
+    private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
+    private final StaffRepository staffRepository;
+    private final SpecialtyRepository specialtyRepository;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -82,6 +98,7 @@ public class AuthServiceImp implements AuthService {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> register(RegisterRequestDTO req) throws BadRequestException {
         String email = req.getEmail().trim().toLowerCase();
+        Role.RoleName role = Optional.ofNullable(req.getRole()).orElse(Role.RoleName.PATIENT);
 
         if (emailUniqueService.existsInCache(email)) {
             throw new BadRequestException("Email already exists");
@@ -102,9 +119,11 @@ public class AuthServiceImp implements AuthService {
         user.setPhone(req.getPhone());
         user.setDateOfBirth(req.getDateOfBirth());
         user.setGender(req.getGender());
+        user.setRole(role);
         user.setPasswordHash(passwordEncoder.encode(req.getPassword()));
 
         user = authServiceInv.save(user);
+        createRoleProfile(user, req, role);
 
         emailUniqueService.addToCache(email);
 
@@ -117,6 +136,65 @@ public class AuthServiceImp implements AuthService {
         response.put("accessToken", accessToken);
         response.put("refreshToken", refreshToken);
         return ResponseEntity.ok(response);
+    }
+
+    private void createRoleProfile(User user, RegisterRequestDTO req, Role.RoleName role) throws BadRequestException {
+        switch (role) {
+            case PATIENT -> createPatientProfile(user, req);
+            case STAFF -> createStaffProfile(user);
+            case DOCTOR -> createDoctorProfile(user, req);
+            default -> throw new BadRequestException("Unsupported role for self-registration");
+        }
+    }
+
+    private void createPatientProfile(User user, RegisterRequestDTO req) {
+        Patient patient = new Patient();
+        patient.setUser(user);
+        patient.setPatientCode(generateUniqueCode("PT", patientRepository::existsByPatientCode));
+        patient.setDateOfBirth(java.sql.Date.valueOf(LocalDate.parse(req.getDateOfBirth())));
+        patient.setGender(mapPatientGender(req.getGender()));
+        patientRepository.save(patient);
+    }
+
+    private void createStaffProfile(User user) {
+        Staff staff = new Staff();
+        staff.setUser(user);
+        staff.setStaffCode(generateUniqueCode("ST", staffRepository::existsByStaffCode));
+        staff.setHireDate(new Date());
+        staffRepository.save(staff);
+    }
+
+    private void createDoctorProfile(User user, RegisterRequestDTO req) throws BadRequestException {
+        UUID specialtyId = req.getSpecialtyId();
+        if (specialtyId == null) {
+            throw new BadRequestException("specialtyId is required for doctor registration");
+        }
+
+        Specialty specialty = specialtyRepository.findById(specialtyId)
+                .filter(Specialty::getIsActive)
+                .orElseThrow(() -> new BadRequestException("Specialty not found or inactive"));
+
+        Doctor doctor = new Doctor();
+        doctor.setUser(user);
+        doctor.setDoctorCode(generateUniqueCode("DR", doctorRepository::existsByDoctorCode));
+        doctor.setSpecialty(specialty);
+        doctorRepository.save(doctor);
+    }
+
+    private Patient.Gender mapPatientGender(User.Gender gender) {
+        return switch (gender) {
+            case MALE -> Patient.Gender.male;
+            case FEMALE -> Patient.Gender.female;
+            default -> Patient.Gender.other;
+        };
+    }
+
+    private String generateUniqueCode(String prefix, Predicate<String> existsCheck) {
+        String code;
+        do {
+            code = prefix + "-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        } while (existsCheck.test(code));
+        return code;
     }
 
     @Override

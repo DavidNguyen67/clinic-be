@@ -1,6 +1,7 @@
 package com.camel.clinic.dto.auth;
 
 import com.camel.clinic.entity.User;
+import com.camel.clinic.entity.Role;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,4 +44,10 @@ public class RegisterRequestDTO {
 
     @NotNull(message = "Gender is required")
     private User.Gender gender;
+
+    @NotNull(message = "Role is required")
+    private Role.RoleName role;
+
+    // Required when role = DOCTOR
+    private java.util.UUID specialtyId;
 }

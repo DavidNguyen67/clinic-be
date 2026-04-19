@@ -19,9 +19,8 @@ public class ApproveDoctorLeaveProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         String leaveId = exchange.getIn().getHeader("id", String.class);
-        String role = exchange.getIn().getHeader("role", String.class);
         Map<String, Object> requestBody = exchange.getIn().getBody(Map.class);
-        ResponseEntity<?> response = doctorServiceImp.approveDoctorLeave(leaveId, requestBody, role);
+        ResponseEntity<?> response = doctorServiceImp.approveDoctorLeave(leaveId, requestBody);
         exchange.getMessage().setBody(response);
     }
 }

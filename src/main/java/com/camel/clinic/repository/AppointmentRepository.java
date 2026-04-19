@@ -24,12 +24,81 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID>,
             WHERE a.doctor.id = :doctorId
               AND a.startTime >= :startOfDay
               AND a.startTime <  :endOfDay
-              AND a.status NOT IN ('cancelled', 'rejected')
+              AND a.status NOT IN ('cancelled', 'no_show')
               AND a.deletedAt IS NULL
             """)
     List<Date> findBookedStartTimesOnDate(
             @Param("doctorId") UUID doctorId,
             @Param("startOfDay") Date startOfDay,
             @Param("endOfDay") Date endOfDay
+    );
+
+    @Query("""
+            SELECT a FROM Appointment a
+            WHERE a.patient.id = :patientId
+              AND a.deletedAt IS NULL
+            ORDER BY a.appointmentDate DESC, a.startTime DESC
+            """)
+    List<Appointment> findByPatientId(@Param("patientId") UUID patientId);
+
+    @Query("""
+            SELECT a FROM Appointment a
+            WHERE a.doctor.id = :doctorId
+              AND a.deletedAt IS NULL
+            ORDER BY a.appointmentDate DESC, a.startTime DESC
+            """)
+    List<Appointment> findByDoctorId(@Param("doctorId") UUID doctorId);
+
+    @Query("""
+            SELECT a FROM Appointment a
+            WHERE a.doctor.id = :doctorId
+              AND a.status = :status
+              AND a.deletedAt IS NULL
+            ORDER BY a.appointmentDate DESC, a.startTime DESC
+            """)
+    List<Appointment> findByDoctorIdAndStatus(
+            @Param("doctorId") UUID doctorId,
+            @Param("status") Appointment.AppointmentStatus status
+    );
+
+    @Query("""
+            SELECT a FROM Appointment a
+            WHERE a.appointmentDate >= :fromDate
+              AND a.appointmentDate < :toDate
+              AND a.deletedAt IS NULL
+            ORDER BY a.startTime ASC
+            """)
+    List<Appointment> findTodayAppointments(
+            @Param("fromDate") Date fromDate,
+            @Param("toDate") Date toDate
+    );
+
+    @Query("""
+            SELECT a FROM Appointment a
+            WHERE a.doctor.id = :doctorId
+              AND a.appointmentDate >= :fromDate
+              AND a.appointmentDate < :toDate
+              AND a.deletedAt IS NULL
+            ORDER BY a.startTime ASC
+            """)
+    List<Appointment> findTodayAppointmentsByDoctor(
+            @Param("doctorId") UUID doctorId,
+            @Param("fromDate") Date fromDate,
+            @Param("toDate") Date toDate
+    );
+
+    @Query("""
+            SELECT a FROM Appointment a
+            WHERE a.status = com.camel.clinic.entity.Appointment.AppointmentStatus.checked_in
+              AND a.deletedAt IS NULL
+            ORDER BY a.appointmentDate ASC, a.startTime ASC
+            """)
+    List<Appointment> findQueueAppointments();
+
+    boolean existsByDoctorIdAndAppointmentDateAndStartTimeAndStatusInAndDeletedAtIsNull(
+            UUID doctorId,
+            Date appointmentDate,
+            Date startTime,
+            List<Appointment.AppointmentStatus> statuses
     );
 }

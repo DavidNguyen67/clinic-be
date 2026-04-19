@@ -8,7 +8,6 @@ import org.apache.camel.Processor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 
 @Component("getDoctorLeavesProcessor")
 @AllArgsConstructor
@@ -19,8 +18,7 @@ public class GetDoctorLeavesProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         String doctorId = exchange.getIn().getHeader("doctorId", String.class);
-        String role = exchange.getIn().getHeader("role", String.class);
-        ResponseEntity<?> response = doctorServiceImp.getDoctorLeaves(doctorId, role);
+        ResponseEntity<?> response = doctorServiceImp.getDoctorLeaves(doctorId);
         exchange.getMessage().setBody(response);
     }
 }

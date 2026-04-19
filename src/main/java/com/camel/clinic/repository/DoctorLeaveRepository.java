@@ -28,7 +28,7 @@ public interface DoctorLeaveRepository extends JpaRepository<DoctorLeave, UUID>,
               AND dl.deletedAt IS NULL
             ORDER BY dl.leaveDate DESC
             """)
-    List<DoctorLeave> findByStatus(@Param("status") String status);
+    List<DoctorLeave> findByStatus(@Param("status") DoctorLeave.LeaveStatus status);
 
     @Query("""
             SELECT dl FROM DoctorLeave dl
@@ -57,6 +57,18 @@ public interface DoctorLeaveRepository extends JpaRepository<DoctorLeave, UUID>,
               AND l.deletedAt IS NULL
             """)
     boolean existsLeaveOnDate(
+            @Param("doctorId") UUID doctorId,
+            @Param("date") Date date
+    );
+
+    @Query("""
+            SELECT COUNT(l) > 0 FROM DoctorLeave l
+            WHERE l.doctor.id  = :doctorId
+              AND l.leaveDate = :date
+              AND l.status = com.camel.clinic.entity.DoctorLeave.LeaveStatus.approved
+              AND l.deletedAt IS NULL
+            """)
+    boolean existsApprovedLeaveOnDate(
             @Param("doctorId") UUID doctorId,
             @Param("date") Date date
     );
