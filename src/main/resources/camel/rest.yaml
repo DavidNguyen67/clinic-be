@@ -82,6 +82,12 @@
         to: direct:slot-availability
 
 - rest:
+    path: /v1/search
+    get:
+      - path: /
+        to: direct:search
+
+- rest:
     path: /v1/doctor/schedule
     get:
       - path: /

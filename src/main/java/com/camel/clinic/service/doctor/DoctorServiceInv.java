@@ -62,9 +62,9 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
         try {
             int page = parseIntParam(queryParams, "page", 0);
             int size = parseIntParam(queryParams, "size", 20);
-            String doctorName = (String) queryParams.getOrDefault("doctorName", null);
-            String specialtyName = (String) queryParams.getOrDefault("specialtyName", null);
-            String specialtyIdStr = (String) queryParams.getOrDefault("specialtyId", null);
+            String doctorName = getStringParam(queryParams, "doctorName", "name", "q");
+            String specialtyName = getStringParam(queryParams, "specialtyName", "specialty");
+            String specialtyIdStr = getStringParam(queryParams, "specialtyId");
             UUID specialtyId = null;
             if (specialtyIdStr != null) {
                 try {
@@ -314,5 +314,15 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
                 leave.getDoctor().getUser().getFullName(),
                 leave.getDoctor().getId()
         );
+    }
+
+    private String getStringParam(Map<String, Object> queryParams, String... keys) {
+        for (String key : keys) {
+            Object value = queryParams.get(key);
+            if (value instanceof String str && !str.isBlank()) {
+                return str.trim();
+            }
+        }
+        return null;
     }
 }

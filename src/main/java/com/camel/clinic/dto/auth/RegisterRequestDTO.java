@@ -1,12 +1,14 @@
 package com.camel.clinic.dto.auth;
 
-import com.camel.clinic.entity.User;
 import com.camel.clinic.entity.Role;
+import com.camel.clinic.entity.User;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Data
 @Builder
@@ -49,5 +51,5 @@ public class RegisterRequestDTO {
     private Role.RoleName role;
 
     // Required when role = DOCTOR
-    private java.util.UUID specialtyId;
+    private UUID specialtyId;
 }

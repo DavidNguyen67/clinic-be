@@ -255,6 +255,16 @@
             json: { }
 
 - route:
+    id: search-route
+    from:
+      uri: direct:search
+      steps:
+        - process:
+            ref: getSearchProcessor
+        - marshal:
+            json: { }
+
+- route:
     id: doctor-get-schedule-route
     from:
       uri: direct:doctor-get-schedule

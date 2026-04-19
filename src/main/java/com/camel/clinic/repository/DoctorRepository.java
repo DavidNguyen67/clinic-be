@@ -56,4 +56,20 @@ public interface DoctorRepository extends JpaRepository<Doctor, UUID>, JpaSpecif
     Optional<Doctor> findByUserId(UUID userId);
 
     boolean existsByDoctorCode(String doctorCode);
+
+    @Query(value = """
+            SELECT d.*
+            FROM doctors d
+            JOIN users u ON u.id = d.user_id
+            LEFT JOIN specialties s ON s.id = d.specialty_id
+            WHERE d.deleted_at IS NULL
+              AND to_tsvector('simple', COALESCE(u.full_name, '') || ' ' || COALESCE(s.name, ''))
+                  @@ plainto_tsquery('simple', :keyword)
+            ORDER BY ts_rank(
+                to_tsvector('simple', COALESCE(u.full_name, '') || ' ' || COALESCE(s.name, '')),
+                plainto_tsquery('simple', :keyword)
+            ) DESC, d.id
+            LIMIT 20
+            """, nativeQuery = true)
+    List<Doctor> searchDoctors(@Param("keyword") String keyword);
 }

@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface SpecialtyRepository extends JpaRepository<Specialty, UUID>, JpaSpecificationExecutor<Specialty> {
@@ -23,5 +25,19 @@ public interface SpecialtyRepository extends JpaRepository<Specialty, UUID>, Jpa
             countQuery = "SELECT COUNT(DISTINCT s) FROM Specialty s WHERE s.isActive = true"
     )
     Page<SpecialtyWithDoctorCountDTO> getAllSpecialtiesWithDoctorCount(Pageable pageable);
+
+    @Query(value = """
+            SELECT s.*
+            FROM specialties s
+            WHERE s.deleted_at IS NULL
+              AND to_tsvector('simple', COALESCE(s.name, ''))
+                  @@ plainto_tsquery('simple', :keyword)
+            ORDER BY ts_rank(
+                to_tsvector('simple', COALESCE(s.name, '')),
+                plainto_tsquery('simple', :keyword)
+            ) DESC, s.id
+            LIMIT 20
+            """, nativeQuery = true)
+    List<Specialty> searchSpecialties(@Param("keyword") String keyword);
 
 }

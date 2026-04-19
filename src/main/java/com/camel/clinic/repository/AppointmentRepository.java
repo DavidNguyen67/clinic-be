@@ -95,6 +95,19 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID>,
             """)
     List<Appointment> findQueueAppointments();
 
+    @Query("""
+            SELECT a FROM Appointment a
+            WHERE a.status = com.camel.clinic.entity.Appointment.AppointmentStatus.confirmed
+              AND a.startTime >= :fromTime
+              AND a.startTime < :toTime
+              AND a.deletedAt IS NULL
+            ORDER BY a.startTime ASC
+            """)
+    List<Appointment> findConfirmedByStartTimeBetween(
+            @Param("fromTime") Date fromTime,
+            @Param("toTime") Date toTime
+    );
+
     boolean existsByDoctorIdAndAppointmentDateAndStartTimeAndStatusInAndDeletedAtIsNull(
             UUID doctorId,
             Date appointmentDate,

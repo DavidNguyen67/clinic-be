@@ -58,6 +58,7 @@ public class SecurityConfig {
                                 "/api/v1/clinic-figures",
                                 "/api/v1/doctor-count",
                                 "/api/v1/doctors/**",
+                                "/api/v1/search",
                                 "/api/v1/top-doctors",
                                 "/api/v1/patient-count",
                                 "/api/v1/specialty/**",

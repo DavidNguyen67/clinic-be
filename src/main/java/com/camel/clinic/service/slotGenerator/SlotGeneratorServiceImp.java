@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,13 +32,12 @@ public class SlotGeneratorServiceImp implements SlotGeneratorService {
         // 1. Parse params
         UUID doctorId;
         Date dateParam;
+        LocalDate localDate;
         try {
             doctorId = UUID.fromString((String) queryParams.get("doctorId"));
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-M-yyyy");
-
-            LocalDate date = LocalDate.parse((String) queryParams.get("date"), formatter);
+            localDate = parseDate((String) queryParams.get("date"));
             dateParam = Date.from(
-                    date.atStartOfDay(ZoneId.systemDefault()).toInstant()
+                    localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
             );
         } catch (Exception e) {
             log.error("Invalid query params: {}", queryParams, e);
@@ -45,7 +45,7 @@ public class SlotGeneratorServiceImp implements SlotGeneratorService {
         }
 
         // 1. Bác sĩ nghỉ phép → trả về rỗng ngay
-        if (leaveRepo.existsLeaveOnDate(doctorId, dateParam)) {
+        if (leaveRepo.existsApprovedLeaveOnDate(doctorId, dateParam)) {
             log.info("Doctor {} is on leave on {}", doctorId, dateParam);
             return ResponseEntity.ok(List.of());
         }
@@ -53,7 +53,7 @@ public class SlotGeneratorServiceImp implements SlotGeneratorService {
         // 2. Lấy schedule theo thứ trong tuần (1=Mon … 7=Sun, khớp DayOfWeek.getValue())
 //        int dayOfWeekValue = dateParam.getDayOfWeek().getValue();
 
-        int dayOfWeekValue = DateTimeUtils.toVnLocalDate(dateParam).getDayOfWeek().getValue();
+        int dayOfWeekValue = localDate.getDayOfWeek().getValue() % 7;
 
         List<DoctorSchedule> schedules =
                 scheduleRepo.findActiveByDoctorIdAndDayOfWeek(doctorId, dayOfWeekValue);
@@ -127,5 +127,26 @@ public class SlotGeneratorServiceImp implements SlotGeneratorService {
                 .stream()
                 .map(DateTimeUtils::toVnLocalTime) // convert về VN time để so sánh
                 .collect(Collectors.toCollection(HashSet::new));
+    }
+
+    private LocalDate parseDate(String rawDate) {
+        if (rawDate == null || rawDate.isBlank()) {
+            throw new IllegalArgumentException("date is required");
+        }
+
+        List<DateTimeFormatter> formatters = List.of(
+                DateTimeFormatter.ISO_LOCAL_DATE,
+                DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+                DateTimeFormatter.ofPattern("d-M-yyyy")
+        );
+
+        for (DateTimeFormatter formatter : formatters) {
+            try {
+                return LocalDate.parse(rawDate, formatter);
+            } catch (DateTimeParseException ignored) {
+                // Try next formatter.
+            }
+        }
+        throw new IllegalArgumentException("Unsupported date format");
     }
 }

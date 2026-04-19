@@ -1,12 +1,7 @@
 package com.camel.clinic.service.auth;
 
 import com.camel.clinic.dto.auth.*;
-import com.camel.clinic.entity.Doctor;
-import com.camel.clinic.entity.Patient;
-import com.camel.clinic.entity.Role;
-import com.camel.clinic.entity.Specialty;
-import com.camel.clinic.entity.Staff;
-import com.camel.clinic.entity.User;
+import com.camel.clinic.entity.*;
 import com.camel.clinic.repository.DoctorRepository;
 import com.camel.clinic.repository.PatientRepository;
 import com.camel.clinic.repository.SpecialtyRepository;
@@ -27,11 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 
 @Service
@@ -131,6 +122,7 @@ public class AuthServiceImp implements AuthService {
         String refreshToken = jwtUtil.generateRefreshToken(user.getId());
         tokenStoreService.storeRefreshTokenHash(user.getId().toString(), refreshToken);
 
+//        TODO: Send welcome email asynchronously bằng rabitMQ
         Map<String, Object> response = new HashMap<>();
         response.put("user", UserResponseDTO.from(user));
         response.put("accessToken", accessToken);

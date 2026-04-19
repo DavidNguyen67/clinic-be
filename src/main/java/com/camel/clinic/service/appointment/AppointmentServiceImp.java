@@ -103,6 +103,21 @@ public class AppointmentServiceImp {
             }
 
             try {
+                boolean occupiedAfterLock = appointmentRepository.existsByDoctorIdAndAppointmentDateAndStartTimeAndStatusInAndDeletedAtIsNull(
+                        doctor.getId(),
+                        dto.getDate(),
+                        startTime,
+                        List.of(
+                                Appointment.AppointmentStatus.pending,
+                                Appointment.AppointmentStatus.confirmed,
+                                Appointment.AppointmentStatus.checked_in,
+                                Appointment.AppointmentStatus.in_progress
+                        )
+                );
+                if (occupiedAfterLock) {
+                    throw new BadRequestException("Slot already booked");
+                }
+
                 Appointment appointment = new Appointment();
                 appointment.setAppointmentCode("APT" + System.currentTimeMillis());
                 appointment.setDoctor(doctor);
@@ -117,6 +132,7 @@ public class AppointmentServiceImp {
                 appointment.setBookingType(parseBookingType(dto.getServiceType()));
 
                 Appointment saved = appointmentRepository.save(appointment);
+                // TODO: Send appointment confirmation email to patient after booking succeeds.
                 AppointmentResponseDTO responseDTO = toDto(saved);
                 List<String> instructions = List.of(
                         "Vui long den truoc gio hen 15 phut de lam thu tuc.",
