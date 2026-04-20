@@ -25,5 +25,9 @@ public interface ServiceRepository extends JpaRepository<ClinicService, UUID>, J
             LIMIT 20
             """, nativeQuery = true)
     List<ClinicService> searchServices(@Param("keyword") String keyword);
+
+    boolean existsBySlugIgnoreCase(String slug);
+
+    boolean existsBySlugIgnoreCaseAndIdNot(String slug, UUID id);
 }
 

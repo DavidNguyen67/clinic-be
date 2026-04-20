@@ -116,16 +116,12 @@
     get:
       - path: /
         to: direct:appointment-list
+      - path: /{id}
+        to: direct:appointment-get
       - path: /today
         to: direct:appointment-today
       - path: /queue
         to: direct:appointment-queue
-
-- rest:
-    path: /v1/appointments
-    get:
-      - path: /{id}
-        to: direct:appointment-get
     patch:
       - path: /{id}/cancel
         to: direct:appointment-cancel
@@ -167,4 +163,21 @@
     patch:
       - path: /{id}/approve
         to: direct:admin-doctor-approve-leave
+
+- rest:
+    path: /v1/admin/clinic-services
+    get:
+      - path: /
+        to: direct:admin-clinic-services-list
+      - path: /{id}
+        to: direct:admin-clinic-services-get
+    post:
+      - path: /
+        to: direct:admin-clinic-services-create
+    put:
+      - path: /{id}
+        to: direct:admin-clinic-services-update
+    delete:
+      - path: /{id}
+        to: direct:admin-clinic-services-delete
 

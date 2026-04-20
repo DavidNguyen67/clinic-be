@@ -6,6 +6,8 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Component("appointmentListProcessor")
 @RequiredArgsConstructor
 public class AppointmentListProcessor implements Processor {
@@ -14,7 +16,9 @@ public class AppointmentListProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) {
-        exchange.getMessage().setBody(appointmentServiceImp.listAppointments());
+        Map<String, Object> queryParams = exchange.getIn().getHeaders();
+
+        exchange.getMessage().setBody(appointmentServiceImp.listAppointments(queryParams));
     }
 }
 

@@ -133,6 +133,8 @@ public class AuthServiceImp implements AuthService {
             case PATIENT -> createPatientProfile(user, req);
             case STAFF -> createStaffProfile(user);
             case DOCTOR -> createDoctorProfile(user, req);
+            case ADMIN -> {
+            }
             default -> throw new BadRequestException("Unsupported role for self-registration");
         }
     }

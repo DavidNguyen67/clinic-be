@@ -63,12 +63,14 @@ public class SecurityConfig {
                                 "/api/v1/patient-count",
                                 "/api/v1/specialties/**",
                                 "/api/v1/slot-availability",
-                                "/api/v1/specialties"
+                                "/api/v1/specialties",
+                                "/api/v1/patient/profile"
                         ).permitAll()
                         .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/v1/doctor/**").hasAuthority("DOCTOR")
                         .requestMatchers("/api/v1/patient/**").hasAuthority("PATIENT")
                         .requestMatchers("/api/v1/appointments/**").authenticated()
+                        .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

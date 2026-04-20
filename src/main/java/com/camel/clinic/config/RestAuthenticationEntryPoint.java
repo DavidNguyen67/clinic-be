@@ -4,6 +4,7 @@ import com.camel.clinic.dto.RestErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+@Slf4j
 @Component
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
@@ -53,20 +55,22 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         String message = ex.getMessage() != null ? ex.getMessage().toLowerCase() : "";
 
-        if (message.contains("expired")) {
-            return "TOKEN_EXPIRED";
-        }
-        if (message.contains("signature")) {
-            return "INVALID_SIGNATURE";
-        }
-        if (message.contains("malformed") || message.contains("illegal")) {
-            return "MALFORMED_TOKEN";
-        }
-        if (message.contains("unsupported")) {
-            return "UNSUPPORTED_TOKEN";
-        }
+//        if (message.contains("expired")) {
+//            return "TOKEN_EXPIRED";
+//        }
+//        if (message.contains("signature")) {
+//            return "INVALID_SIGNATURE";
+//        }
+//        if (message.contains("malformed") || message.contains("illegal")) {
+//            return "MALFORMED_TOKEN";
+//        }
+//        if (message.contains("unsupported")) {
+//            return "UNSUPPORTED_TOKEN";
+//        }
+//
+//        log.error("Authentication failed: {}", ex.getMessage(), ex);
 
-        return "INVALID_TOKEN";
+        return message;
     }
 }
 

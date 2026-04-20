@@ -1,6 +1,9 @@
 package com.camel.clinic.repository;
 
 import com.camel.clinic.entity.Appointment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -114,4 +117,29 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID>,
             Date startTime,
             List<Appointment.AppointmentStatus> statuses
     );
+
+    @EntityGraph(attributePaths = {
+            "patient", "patient.user",
+            "doctor", "doctor.user",
+            "doctor.specialty",
+            "clinicService", "clinicService.specialty"
+    })
+    Page<Appointment> findByPatientId(UUID patientId, Pageable pageable);
+
+    @EntityGraph(attributePaths = {
+            "patient", "patient.user",
+            "doctor", "doctor.user",
+            "doctor.specialty",
+            "clinicService", "clinicService.specialty"
+    })
+    Page<Appointment> findByDoctorId(UUID doctorId, Pageable pageable);
+
+    @Override
+    @EntityGraph(attributePaths = {
+            "patient", "patient.user",
+            "doctor", "doctor.user",
+            "doctor.specialty",
+            "clinicService", "clinicService.specialty"
+    })
+    Page<Appointment> findAll(Pageable pageable);
 }

@@ -508,3 +508,67 @@
         - marshal:
             json: { }
 
+- route:
+    id: admin-clinic-services-list-route
+    from:
+      uri: direct:admin-clinic-services-list
+      steps:
+        - process:
+            ref: adminListClinicServicesProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: admin-clinic-services-get-route
+    from:
+      uri: direct:admin-clinic-services-get
+      steps:
+        - process:
+            ref: adminGetClinicServiceProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: admin-clinic-services-create-route
+    from:
+      uri: direct:admin-clinic-services-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.clinicservice.ClinicServiceUpsertRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: adminCreateClinicServiceProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: admin-clinic-services-update-route
+    from:
+      uri: direct:admin-clinic-services-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.clinicservice.ClinicServiceUpsertRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: adminUpdateClinicServiceProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: admin-clinic-services-delete-route
+    from:
+      uri: direct:admin-clinic-services-delete
+      steps:
+        - process:
+            ref: adminDeleteClinicServiceProcessor
+        - marshal:
+            json: { }
+

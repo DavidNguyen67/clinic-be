@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
-public class AppointmentServiceImp {
+public class AppointmentServiceImp implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
@@ -44,6 +44,7 @@ public class AppointmentServiceImp {
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
     private final SlotLockService slotLockService;
+    private final AppointmentServiceInv appointmentServiceInv;
 
     public ResponseEntity<?> createAppointment(AppointmentCreateRequestDTO dto) {
         try {
@@ -160,29 +161,8 @@ public class AppointmentServiceImp {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<?> listAppointments() {
-        try {
-            User currentUser = getCurrentUser();
-            List<Appointment> appointments;
-            String role = currentUser.getRole().name();
-
-            if (Role.RoleName.PATIENT.name().equals(role)) {
-                Patient patient = patientRepository.findByUserId(currentUser.getId())
-                        .orElseThrow(() -> new NotFoundException("Patient profile not found"));
-                appointments = appointmentRepository.findByPatientId(patient.getId());
-            } else if (Role.RoleName.DOCTOR.name().equals(role)) {
-                Doctor doctor = doctorRepository.findByUserId(currentUser.getId())
-                        .orElseThrow(() -> new NotFoundException("Doctor profile not found"));
-                appointments = appointmentRepository.findByDoctorId(doctor.getId());
-            } else {
-                appointments = appointmentRepository.findAll();
-            }
-
-            return ResponseEntity.ok(appointments.stream().map(this::toDto).collect(Collectors.toList()));
-        } catch (Exception e) {
-            log.error("List appointments error", e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to list appointments"));
-        }
+    public ResponseEntity<?> listAppointments(Map<String, Object> queryParams) {
+        return appointmentServiceInv.listAppointments(queryParams);
     }
 
     @Transactional(readOnly = true)
@@ -448,6 +428,7 @@ public class AppointmentServiceImp {
             throw new UnauthorizedException("Required role: " + role);
         }
     }
+
 }
 
 

@@ -1,5 +1,6 @@
 package com.camel.clinic.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -34,6 +35,7 @@ public class Doctor extends SoftDeletableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "specialty_id", nullable = false, foreignKey = @ForeignKey(name = "fk_doctor_specialty"))
     @NotNull()
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Specialty specialty;
 
     @Column(length = 100)

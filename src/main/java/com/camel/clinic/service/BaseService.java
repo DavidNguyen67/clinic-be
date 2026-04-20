@@ -1,7 +1,7 @@
 package com.camel.clinic.service;
 
 import com.camel.clinic.dto.api.ApiPaged;
-import com.camel.clinic.entity.BaseEntity;
+import com.camel.clinic.entity.SoftDeletableEntity;
 import com.camel.clinic.util.MapperUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Slf4j
-public abstract class BaseService<T extends BaseEntity, R extends JpaRepository<T, UUID> & JpaSpecificationExecutor<T>> {
+public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRepository<T, UUID> & JpaSpecificationExecutor<T>> {
 
     protected final Supplier<T> entityFactory;
     protected final ObjectMapper objectMapper;
@@ -149,7 +149,7 @@ public abstract class BaseService<T extends BaseEntity, R extends JpaRepository<
     /**
      * Cập nhật bản ghi theo id (partial update — chỉ ghi đè field không null)
      */
-    public ResponseEntity<?> update(String id, T data, String fields, Map<String, Object> params) {
+    public ResponseEntity<?> update(String id, T data, String fields) {
         try {
             T existing = repository.findById(UUID.fromString(id))
                     .orElseThrow(() -> new EntityNotFoundException("Entity not found with id: " + id));
@@ -181,7 +181,10 @@ public abstract class BaseService<T extends BaseEntity, R extends JpaRepository<
                 log.warn("Entity not found for delete: id={}", id);
                 return ResponseEntity.notFound().build();
             }
-            repository.deleteById(UUID.fromString(id));
+            T entityToDelete = repository.findById(UUID.fromString(id)).orElseThrow();
+            entityToDelete.setDeletedAt(new Date());
+            repository.save(entityToDelete);
+            //            repository.deleteById(UUID.fromString(id));
             log.info("Deleted entity id={}", id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {

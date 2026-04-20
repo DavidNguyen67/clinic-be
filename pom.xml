@@ -179,6 +179,16 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>11.14.1</version>
+                <configuration>
+                    <url>jdbc:postgresql://47.129.48.184:5432/clinic_postgres</url>
+                    <user>davidnguyen67dev</user>
+                    <password>ThZLSkGbHn7koUctpL26ARzGK-maNiKDC-_xs9i-6J0</password>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
