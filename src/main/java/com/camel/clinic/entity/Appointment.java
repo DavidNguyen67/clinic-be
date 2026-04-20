@@ -4,11 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -48,7 +44,7 @@ public class Appointment extends SoftDeletableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id", foreignKey = @ForeignKey(name = "fk_appointment_service"))
-    private Service service;
+    private ClinicService clinicService;
 
     @NotNull()
     @Column(name = "appointment_date", nullable = false)

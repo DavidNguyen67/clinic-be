@@ -1,4 +1,4 @@
-package com.camel.clinic.dto;
+package com.camel.clinic.dto.appointment;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

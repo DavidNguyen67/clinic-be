@@ -1,6 +1,6 @@
 package com.camel.clinic.service.slotGenerator;
 
-import com.camel.clinic.dto.TimeSlotDto;
+import com.camel.clinic.dto.appointment.TimeSlotDto;
 import com.camel.clinic.entity.DoctorSchedule;
 import com.camel.clinic.repository.AppointmentRepository;
 import com.camel.clinic.repository.DoctorLeaveRepository;

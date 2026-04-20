@@ -124,7 +124,7 @@ Camel Route Processing
    │         Check business rules
    │
    ├─ Step 4: AddDoctorScheduleProcessor
-   │         Call service layer
+   │         Call clinicService layer
    │
    └─ Step 5: Response Marshaling
             Convert to JSON
@@ -449,16 +449,16 @@ HTTP Response
 
 ## 🎯 Implementation Summary
 
-| Component | Layer | Responsibility |
-|-----------|-------|-----------------|
-| REST Endpoints | API | Route requests to Camel |
-| Camel Routes | Integration | Orchestrate processing pipeline |
-| Processors | API | Call service methods |
-| Services | Business Logic | Core functionality & validation |
-| Repositories | Data Access | Database operations |
-| Entities | Domain | Data models |
-| DTOs | Transfer | Request/response objects |
-| Security | Framework | Authentication & authorization |
+| Component      | Layer          | Responsibility                  |
+|----------------|----------------|---------------------------------|
+| REST Endpoints | API            | Route requests to Camel         |
+| Camel Routes   | Integration    | Orchestrate processing pipeline |
+| Processors     | API            | Call clinicService methods      |
+| Services       | Business Logic | Core functionality & validation |
+| Repositories   | Data Access    | Database operations             |
+| Entities       | Domain         | Data models                     |
+| DTOs           | Transfer       | Request/response objects        |
+| Security       | Framework      | Authentication & authorization  |
 
 ---
 

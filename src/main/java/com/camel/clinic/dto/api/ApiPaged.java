@@ -7,8 +7,8 @@ import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiPaged<T> {
-    @JsonProperty("items")
-    private List<T> items;
+    @JsonProperty("data")
+    private List<T> data;
 
     @JsonProperty("total")
     private long total;
@@ -25,8 +25,8 @@ public class ApiPaged<T> {
     public ApiPaged() {
     }
 
-    public ApiPaged(List<T> items, long total, int page, int size, int totalPages) {
-        this.items = items;
+    public ApiPaged(List<T> data, long total, int page, int size, int totalPages) {
+        this.data = data;
         this.total = total;
         this.page = page;
         this.size = size;
@@ -37,12 +37,12 @@ public class ApiPaged<T> {
         return new ApiPaged<>(items, total, page, size, totalPages);
     }
 
-    public List<T> getItems() {
-        return items;
+    public List<T> getData() {
+        return data;
     }
 
-    public void setItems(List<T> items) {
-        this.items = items;
+    public void setData(List<T> data) {
+        this.data = data;
     }
 
     public long getTotal() {

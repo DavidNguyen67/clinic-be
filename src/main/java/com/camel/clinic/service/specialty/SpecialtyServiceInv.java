@@ -2,7 +2,6 @@ package com.camel.clinic.service.specialty;
 
 import com.camel.clinic.dto.SpecialtyWithDoctorCountDTO;
 import com.camel.clinic.dto.api.ApiPaged;
-import com.camel.clinic.dto.api.ApiResponse;
 import com.camel.clinic.entity.Specialty;
 import com.camel.clinic.repository.SpecialtyRepository;
 import com.camel.clinic.service.BaseService;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -49,11 +47,10 @@ public class SpecialtyServiceInv extends BaseService<Specialty, SpecialtyReposit
             );
 
             log.info("Listed {} entities (page={}, size={})", resultPage.getNumberOfElements(), page, size);
-            return ResponseEntity.ok(ApiResponse.ok(paged));
+            return ResponseEntity.ok(paged);
         } catch (Exception e) {
             log.error("Error listing entities: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("ERR500", "Failed to list entities"));
+            return ResponseEntity.internalServerError().body("Failed to list entities");
         }
     }
 

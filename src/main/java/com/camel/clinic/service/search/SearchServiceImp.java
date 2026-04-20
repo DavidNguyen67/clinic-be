@@ -1,5 +1,6 @@
 package com.camel.clinic.service.search;
 
+import com.camel.clinic.entity.ClinicService;
 import com.camel.clinic.entity.Doctor;
 import com.camel.clinic.entity.Specialty;
 import com.camel.clinic.repository.DoctorRepository;
@@ -51,8 +52,8 @@ public class SearchServiceImp {
         }
 
         if (normalizedType.isBlank() || "service".equals(normalizedType)) {
-            List<com.camel.clinic.entity.Service> services = serviceRepository.searchServices(keyword);
-            result.put("services", services);
+            List<ClinicService> clinicServices = serviceRepository.searchServices(keyword);
+            result.put("services", clinicServices);
         }
 
         return ResponseEntity.ok(result);

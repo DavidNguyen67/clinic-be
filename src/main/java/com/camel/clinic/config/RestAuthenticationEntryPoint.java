@@ -1,6 +1,6 @@
 package com.camel.clinic.config;
 
-import com.camel.clinic.dto.api.ApiResponse;
+import com.camel.clinic.dto.RestErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,8 +31,42 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        ApiResponse<Void> body = ApiResponse.error("UNAUTHORIZED", "Unauthorized");
-        response.getWriter().write(objectMapper.writeValueAsString(body));
+        RestErrorResponse errorResponse = new RestErrorResponse();
+        errorResponse.setStatusCode("FORBIDDEN");
+        errorResponse.setStatusCodeValue(HttpServletResponse.SC_FORBIDDEN);
+
+        String reason = detectReason(request, authException);
+        errorResponse.setBody(reason);
+
+        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+    }
+
+    private String detectReason(HttpServletRequest request, AuthenticationException ex) {
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader == null || authHeader.isBlank()) {
+            return "MISSING_TOKEN";
+        }
+        if (!authHeader.startsWith("Bearer ")) {
+            return "INVALID_TOKEN_FORMAT";
+        }
+
+        String message = ex.getMessage() != null ? ex.getMessage().toLowerCase() : "";
+
+        if (message.contains("expired")) {
+            return "TOKEN_EXPIRED";
+        }
+        if (message.contains("signature")) {
+            return "INVALID_SIGNATURE";
+        }
+        if (message.contains("malformed") || message.contains("illegal")) {
+            return "MALFORMED_TOKEN";
+        }
+        if (message.contains("unsupported")) {
+            return "UNSUPPORTED_TOKEN";
+        }
+
+        return "INVALID_TOKEN";
     }
 }
 

@@ -1,7 +1,6 @@
 package com.camel.clinic.service;
 
 import com.camel.clinic.dto.api.ApiPaged;
-import com.camel.clinic.dto.api.ApiResponse;
 import com.camel.clinic.entity.BaseEntity;
 import com.camel.clinic.util.MapperUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,9 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -48,11 +48,18 @@ public abstract class BaseService<T extends BaseEntity, R extends JpaRepository<
             T saved = repository.save(initObject);
             log.info("Created entity: {}", saved);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok(saved, "Created"));
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(saved.getId())
+                    .toUri();
+
+            return ResponseEntity.created(location)
+                    .body(saved);
         } catch (Exception e) {
             log.error("Error creating entity: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("ERR500", "Failed to create entity"));
+            return ResponseEntity.internalServerError()
+                    .body("Failed to create entity");
         }
     }
 
@@ -90,11 +97,11 @@ public abstract class BaseService<T extends BaseEntity, R extends JpaRepository<
             );
 
             log.info("Listed {} entities (page={}, size={})", resultPage.getNumberOfElements(), page, size);
-            return ResponseEntity.ok(ApiResponse.ok(paged));
+            return ResponseEntity.ok(paged);
         } catch (Exception e) {
             log.error("Error listing entities: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("ERR500", "Failed to list entities"));
+
+            return ResponseEntity.internalServerError().body("Failed to list entities");
         }
     }
 
@@ -107,11 +114,10 @@ public abstract class BaseService<T extends BaseEntity, R extends JpaRepository<
         try {
             long total = repository.count();
             log.info("Counted {} entities", total);
-            return ResponseEntity.ok(ApiResponse.ok(Map.of("total", total)));
+            return ResponseEntity.ok(total);
         } catch (Exception e) {
             log.error("Error counting entities: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("ERR500", "Failed to count entities"));
+            return ResponseEntity.internalServerError().body("Failed to count entities");
         }
     }
 
@@ -128,15 +134,13 @@ public abstract class BaseService<T extends BaseEntity, R extends JpaRepository<
                     .orElseThrow(() -> new EntityNotFoundException("Entity not found with id: " + id));
 
             Object result = filterFields(entity, fields);
-            return ResponseEntity.ok(ApiResponse.ok(result));
+            return ResponseEntity.ok(result);
         } catch (EntityNotFoundException e) {
             log.warn("Entity not found: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(ApiResponse.error("ERR404", e.getMessage()));
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
             log.error("Error retrieving entity id={}: {}", id, e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("ERR500", "Failed to retrieve entity"));
+            return ResponseEntity.internalServerError().body("Failed to retrieve entity");
         }
     }
 
@@ -156,15 +160,13 @@ public abstract class BaseService<T extends BaseEntity, R extends JpaRepository<
             log.info("Updated entity id={}", id);
 
             Object result = filterFields(saved, fields);
-            return ResponseEntity.ok(ApiResponse.ok(result, "Updated"));
+            return ResponseEntity.ok(result);
         } catch (EntityNotFoundException e) {
             log.warn("Entity not found for update: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(ApiResponse.error("ERR404", e.getMessage()));
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
             log.error("Error updating entity id={}: {}", id, e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("ERR500", "Failed to update entity"));
+            return ResponseEntity.internalServerError().body("Failed to update entity");
         }
     }
 
@@ -176,16 +178,15 @@ public abstract class BaseService<T extends BaseEntity, R extends JpaRepository<
     public ResponseEntity<?> delete(String id) {
         try {
             if (!repository.existsById(UUID.fromString(id))) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ApiResponse.error("ERR404", "Entity not found with id: " + id));
+                log.warn("Entity not found for delete: id={}", id);
+                return ResponseEntity.notFound().build();
             }
             repository.deleteById(UUID.fromString(id));
             log.info("Deleted entity id={}", id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             log.error("Error deleting entity id={}: {}", id, e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("ERR500", "Failed to delete entity"));
+            return ResponseEntity.internalServerError().body("Failed to delete entity");
         }
     }
 
@@ -204,11 +205,10 @@ public abstract class BaseService<T extends BaseEntity, R extends JpaRepository<
             }
 
             log.info("Retrieved {} entities by ids", result.size());
-            return ResponseEntity.ok(ApiResponse.ok(result));
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             log.error("Error fetching entities by ids: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("ERR500", "Failed to get entities by ids"));
+            return ResponseEntity.internalServerError().body("Failed to get entities by ids");
         }
     }
 

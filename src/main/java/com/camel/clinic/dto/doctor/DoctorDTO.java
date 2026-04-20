@@ -1,4 +1,4 @@
-package com.camel.clinic.dto;
+package com.camel.clinic.dto.doctor;
 
 import com.camel.clinic.entity.Specialty;
 import lombok.AllArgsConstructor;

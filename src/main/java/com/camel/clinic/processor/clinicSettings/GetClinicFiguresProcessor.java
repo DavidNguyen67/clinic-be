@@ -6,6 +6,7 @@ import com.camel.clinic.service.specialty.SpecialtyServiceImp;
 import lombok.AllArgsConstructor;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -26,8 +27,8 @@ public class GetClinicFiguresProcessor implements Processor {
                 "doctors", Objects.requireNonNull(doctorServiceImp.countAllDoctors().getBody()),
                 "specialties", Objects.requireNonNull(specialtyServiceImp.countAllSpecialties().getBody())
         );
-
-        exchange.getIn().setBody(result);
+        ResponseEntity<?> response = ResponseEntity.ok(result);
+        exchange.getIn().setBody(response);
 
     }
 }

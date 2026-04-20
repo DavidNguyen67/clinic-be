@@ -2,7 +2,7 @@
 
 > Roadmap triển khai backend cho hệ thống đặt lịch khám bệnh **MedCare**  
 > Database: PostgreSQL (schema `medcare_v1_init.sql` đã có)  
-> Frontend: React + TypeScript, 33 routes, 5 roles, SWR global state  
+> Frontend: React + TypeScript, 33 routes, 5 roles, SWR global state
 
 ---
 
@@ -27,24 +27,24 @@
 
 ## 1. Tech Stack
 
-| Lớp | Công nghệ | Ghi chú |
-|---|---|---|
-| **Framework** | Spring Boot 3.3.x | Java 21 (LTS) |
-| **Security** | Spring Security 6 + JWT | Access token 15p, Refresh token 30 ngày |
-| **Database** | PostgreSQL 15+ | Schema đã có sẵn `medcare_v1_init.sql` |
-| **ORM** | Spring Data JPA + Hibernate | Enum mapping khớp 13 enums SQL |
-| **Migration** | Flyway | Quản lý version DB, import SQL có sẵn |
-| **Cache** | Redis (Spring Data Redis) | OTP, slot locking, session blacklist |
-| **Realtime** | Spring WebSocket (STOMP) | Chat bác sĩ-bệnh nhân, notifications |
-| **Storage** | MinIO / AWS S3 (Spring Cloud AWS) | Avatar, PDF bệnh án, kết quả xét nghiệm |
-| **Email** | Spring Mail + Thymeleaf | Template email xác nhận lịch hẹn |
-| **SMS** | Twilio SDK | OTP, nhắc lịch |
-| **Payment** | VNPay SDK + MoMo API | Tích hợp cổng thanh toán |
-| **Docs** | Springdoc OpenAPI (Swagger UI) | `/api/docs` |
-| **Build** | Maven / Gradle | |
-| **Container** | Docker + Docker Compose | Local dev |
-| **Deploy** | Railway / Render + Supabase | Hoặc VPS + Nginx |
-| **Monitoring** | Spring Actuator + Micrometer | Health check, metrics |
+| Lớp            | Công nghệ                         | Ghi chú                                 |
+|----------------|-----------------------------------|-----------------------------------------|
+| **Framework**  | Spring Boot 3.3.x                 | Java 21 (LTS)                           |
+| **Security**   | Spring Security 6 + JWT           | Access token 15p, Refresh token 30 ngày |
+| **Database**   | PostgreSQL 15+                    | Schema đã có sẵn `medcare_v1_init.sql`  |
+| **ORM**        | Spring Data JPA + Hibernate       | Enum mapping khớp 13 enums SQL          |
+| **Migration**  | Flyway                            | Quản lý version DB, import SQL có sẵn   |
+| **Cache**      | Redis (Spring Data Redis)         | OTP, slot locking, session blacklist    |
+| **Realtime**   | Spring WebSocket (STOMP)          | Chat bác sĩ-bệnh nhân, notifications    |
+| **Storage**    | MinIO / AWS S3 (Spring Cloud AWS) | Avatar, PDF bệnh án, kết quả xét nghiệm |
+| **Email**      | Spring Mail + Thymeleaf           | Template email xác nhận lịch hẹn        |
+| **SMS**        | Twilio SDK                        | OTP, nhắc lịch                          |
+| **Payment**    | VNPay SDK + MoMo API              | Tích hợp cổng thanh toán                |
+| **Docs**       | Springdoc OpenAPI (Swagger UI)    | `/api/docs`                             |
+| **Build**      | Maven / Gradle                    |                                         |
+| **Container**  | Docker + Docker Compose           | Local dev                               |
+| **Deploy**     | Railway / Render + Supabase       | Hoặc VPS + Nginx                        |
+| **Monitoring** | Spring Actuator + Micrometer      | Health check, metrics                   |
 
 ### Dependencies chính (pom.xml)
 
@@ -152,7 +152,7 @@ medcare-backend/
 │   │   ├── notification/
 │   │   ├── message/
 │   │   ├── review/
-│   │   ├── service/
+│   │   ├── clinicService/
 │   │   ├── medicine/
 │   │   ├── specialty/
 │   │   └── report/
@@ -192,7 +192,7 @@ module/appointment/
 │       └── AppointmentDetailResponse.java
 ├── mapper/
 │   └── AppointmentMapper.java    # MapStruct: Entity ↔ DTO
-├── service/
+├── clinicService/
 │   ├── AppointmentService.java   # Interface
 │   └── AppointmentServiceImpl.java
 └── controller/
@@ -262,7 +262,7 @@ app:
 
 ```yaml
 version: '3.8'
-services:
+clinicServices:
   postgres:
     image: postgres:15-alpine
     environment:
@@ -412,17 +412,17 @@ public class User {
 
 ### 4.2 Auth Endpoints
 
-| Method | Endpoint | Body | Response | Mô tả |
-|---|---|---|---|---|
-| POST | `/api/auth/register` | `{ name, email, phone, password }` | `{ user, accessToken, refreshToken }` | Đăng ký bệnh nhân |
-| POST | `/api/auth/login` | `{ email, password }` | `{ user, accessToken, refreshToken }` | Đăng nhập |
-| POST | `/api/auth/refresh` | `{ refreshToken }` | `{ accessToken }` | Làm mới access token |
-| POST | `/api/auth/logout` | `{ refreshToken }` | `204` | Blacklist refresh token |
-| POST | `/api/auth/forgot-password` | `{ email }` | `{ message }` | Gửi OTP 6 số qua email |
-| POST | `/api/auth/verify-otp` | `{ email, otp }` | `{ resetToken }` | Xác minh OTP |
-| POST | `/api/auth/reset-password` | `{ resetToken, newPassword }` | `204` | Đặt lại mật khẩu |
-| GET | `/api/auth/me` | — | `{ user, profile }` | Thông tin user hiện tại |
-| POST | `/api/auth/change-password` | `{ currentPassword, newPassword }` | `204` | Đổi mật khẩu |
+| Method | Endpoint                    | Body                               | Response                              | Mô tả                   |
+|--------|-----------------------------|------------------------------------|---------------------------------------|-------------------------|
+| POST   | `/api/auth/register`        | `{ name, email, phone, password }` | `{ user, accessToken, refreshToken }` | Đăng ký bệnh nhân       |
+| POST   | `/api/auth/login`           | `{ email, password }`              | `{ user, accessToken, refreshToken }` | Đăng nhập               |
+| POST   | `/api/auth/refresh`         | `{ refreshToken }`                 | `{ accessToken }`                     | Làm mới access token    |
+| POST   | `/api/auth/logout`          | `{ refreshToken }`                 | `204`                                 | Blacklist refresh token |
+| POST   | `/api/auth/forgot-password` | `{ email }`                        | `{ message }`                         | Gửi OTP 6 số qua email  |
+| POST   | `/api/auth/verify-otp`      | `{ email, otp }`                   | `{ resetToken }`                      | Xác minh OTP            |
+| POST   | `/api/auth/reset-password`  | `{ resetToken, newPassword }`      | `204`                                 | Đặt lại mật khẩu        |
+| GET    | `/api/auth/me`              | —                                  | `{ user, profile }`                   | Thông tin user hiện tại |
+| POST   | `/api/auth/change-password` | `{ currentPassword, newPassword }` | `204`                                 | Đổi mật khẩu            |
 
 ### 4.3 JWT Flow
 
@@ -477,17 +477,17 @@ POST /reset-password
 // Annotation-based
 @PreAuthorize("hasRole('DOCTOR')")
 @GetMapping("/doctor/appointments")
-public ResponseEntity<?> getMyAppointments() { ... }
+public ResponseEntity<?> getMyAppointments() { ...}
 
 // Method-level multi-role
 @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
 @PatchMapping("/{id}/confirm")
-public ResponseEntity<?> confirmAppointment(...) { ... }
+public ResponseEntity<?> confirmAppointment(...) { ...}
 
 // Ownership check (bệnh nhân chỉ xem của mình)
 @PreAuthorize("hasRole('PATIENT') and @appointmentService.isOwner(#id, principal.userId)")
 @GetMapping("/{id}")
-public ResponseEntity<?> getAppointment(@PathVariable UUID id) { ... }
+public ResponseEntity<?> getAppointment(@PathVariable UUID id) { ...}
 ```
 
 ### 4.6 Deliverables Phase 2
@@ -533,36 +533,37 @@ GET  /api/doctors/{id}/reviews          # Public: đánh giá
 Logic tính slot trống từ `doctor_schedules` + `appointments`:
 
 ```java
+
 @Service
 public class SlotGeneratorService {
 
-  public List<TimeSlotDto> getAvailableSlots(UUID doctorId, LocalDate date) {
-    DayOfWeek dow = date.getDayOfWeek(); // Map sang enum SQL
+    public List<TimeSlotDto> getAvailableSlots(UUID doctorId, LocalDate date) {
+        DayOfWeek dow = date.getDayOfWeek(); // Map sang enum SQL
 
-    // 1. Lấy schedule của bác sĩ ngày đó
-    List<DoctorSchedule> schedules = scheduleRepo
-        .findByDoctorIdAndDayOfWeek(doctorId, dow);
+        // 1. Lấy schedule của bác sĩ ngày đó
+        List<DoctorSchedule> schedules = scheduleRepo
+                .findByDoctorIdAndDayOfWeek(doctorId, dow);
 
-    // 2. Lấy các slot đã bị đặt (status != cancelled)
-    List<LocalTime> bookedTimes = appointmentRepo
-        .findBookedTimesOnDate(doctorId, date);
+        // 2. Lấy các slot đã bị đặt (status != cancelled)
+        List<LocalTime> bookedTimes = appointmentRepo
+                .findBookedTimesOnDate(doctorId, date);
 
-    // 3. Lấy doctor_leaves — bác sĩ nghỉ phép hôm đó không?
-    if (leaveRepo.existsLeaveOnDate(doctorId, date)) return List.of();
+        // 3. Lấy doctor_leaves — bác sĩ nghỉ phép hôm đó không?
+        if (leaveRepo.existsLeaveOnDate(doctorId, date)) return List.of();
 
-    // 4. Tạo slots theo slotDurationMinutes
-    List<TimeSlotDto> slots = new ArrayList<>();
-    for (DoctorSchedule s : schedules) {
-      LocalTime cursor = s.getStartTime();
-      while (cursor.plusMinutes(s.getSlotDurationMinutes())
-                   .compareTo(s.getEndTime()) <= 0) {
-        boolean available = !bookedTimes.contains(cursor);
-        slots.add(new TimeSlotDto(cursor, available));
-        cursor = cursor.plusMinutes(s.getSlotDurationMinutes());
-      }
+        // 4. Tạo slots theo slotDurationMinutes
+        List<TimeSlotDto> slots = new ArrayList<>();
+        for (DoctorSchedule s : schedules) {
+            LocalTime cursor = s.getStartTime();
+            while (cursor.plusMinutes(s.getSlotDurationMinutes())
+                    .compareTo(s.getEndTime()) <= 0) {
+                boolean available = !bookedTimes.contains(cursor);
+                slots.add(new TimeSlotDto(cursor, available));
+                cursor = cursor.plusMinutes(s.getSlotDurationMinutes());
+            }
+        }
+        return slots;
     }
-    return slots;
-  }
 }
 ```
 
@@ -589,39 +590,39 @@ Body: { doctorId, date, time, reason, serviceType }
 // Redis Slot Locking (Lua script — atomic)
 @Service
 public class SlotLockService {
-  private static final String LOCK_PREFIX = "SLOT:";
-  private static final long LOCK_TTL_SECONDS = 300; // 5 phút
+    private static final String LOCK_PREFIX = "SLOT:";
+    private static final long LOCK_TTL_SECONDS = 300; // 5 phút
 
-  public boolean tryLock(UUID doctorId, LocalDate date, LocalTime time, UUID appointmentId) {
-    String key = LOCK_PREFIX + doctorId + ":" + date + ":" + time;
-    String value = appointmentId.toString();
-    // SET key value NX EX 300
-    return Boolean.TRUE.equals(
-      redisTemplate.opsForValue().setIfAbsent(key, value, Duration.ofSeconds(LOCK_TTL_SECONDS))
-    );
-  }
+    public boolean tryLock(UUID doctorId, LocalDate date, LocalTime time, UUID appointmentId) {
+        String key = LOCK_PREFIX + doctorId + ":" + date + ":" + time;
+        String value = appointmentId.toString();
+        // SET key value NX EX 300
+        return Boolean.TRUE.equals(
+                redisTemplate.opsForValue().setIfAbsent(key, value, Duration.ofSeconds(LOCK_TTL_SECONDS))
+        );
+    }
 
-  public void releaseLock(UUID doctorId, LocalDate date, LocalTime time) {
-    String key = LOCK_PREFIX + doctorId + ":" + date + ":" + time;
-    redisTemplate.delete(key);
-  }
+    public void releaseLock(UUID doctorId, LocalDate date, LocalTime time) {
+        String key = LOCK_PREFIX + doctorId + ":" + date + ":" + time;
+        redisTemplate.delete(key);
+    }
 }
 ```
 
 ### 5.4 Appointment Endpoints
 
-| Method | Endpoint | Role | Mô tả |
-|---|---|---|---|
-| POST | `/api/appointments` | Patient | Đặt lịch mới |
-| GET | `/api/appointments` | Patient/Doctor/Staff | List (filter theo role) |
-| GET | `/api/appointments/{id}` | Auth | Chi tiết |
-| PATCH | `/api/appointments/{id}/cancel` | Patient/Staff | Hủy lịch |
-| PATCH | `/api/appointments/{id}/confirm` | Staff | Lễ tân xác nhận |
-| PATCH | `/api/appointments/{id}/checkin` | Staff | Check-in bệnh nhân |
-| PATCH | `/api/appointments/{id}/start` | Doctor | Bắt đầu khám |
-| PATCH | `/api/appointments/{id}/complete` | Doctor | Hoàn thành khám |
-| GET | `/api/appointments/today` | Doctor/Staff | Lịch hẹn hôm nay |
-| GET | `/api/appointments/queue` | Staff | Hàng chờ hiện tại |
+| Method | Endpoint                          | Role                 | Mô tả                   |
+|--------|-----------------------------------|----------------------|-------------------------|
+| POST   | `/api/appointments`               | Patient              | Đặt lịch mới            |
+| GET    | `/api/appointments`               | Patient/Doctor/Staff | List (filter theo role) |
+| GET    | `/api/appointments/{id}`          | Auth                 | Chi tiết                |
+| PATCH  | `/api/appointments/{id}/cancel`   | Patient/Staff        | Hủy lịch                |
+| PATCH  | `/api/appointments/{id}/confirm`  | Staff                | Lễ tân xác nhận         |
+| PATCH  | `/api/appointments/{id}/checkin`  | Staff                | Check-in bệnh nhân      |
+| PATCH  | `/api/appointments/{id}/start`    | Doctor               | Bắt đầu khám            |
+| PATCH  | `/api/appointments/{id}/complete` | Doctor               | Hoàn thành khám         |
+| GET    | `/api/appointments/today`         | Doctor/Staff         | Lịch hẹn hôm nay        |
+| GET    | `/api/appointments/queue`         | Staff                | Hàng chờ hiện tại       |
 
 **Business Rules cần enforce:**
 
@@ -647,31 +648,31 @@ Trạng thái chuyển đổi hợp lệ:
 
 ### 5.5 Doctor Schedule Management
 
-| Method | Endpoint | Role | Mô tả |
-|---|---|---|---|
-| GET | `/api/doctor/schedule` | Doctor | Lịch làm việc của mình |
-| POST | `/api/doctor/schedule` | Doctor | Thêm ca làm việc |
-| DELETE | `/api/doctor/schedule/{id}` | Doctor | Xóa ca |
-| POST | `/api/doctor/leaves` | Doctor | Đăng ký nghỉ phép |
-| GET | `/api/doctor/leaves` | Doctor/Admin | Danh sách nghỉ phép |
-| PATCH | `/api/doctor/leaves/{id}/approve` | Admin | Duyệt nghỉ phép |
+| Method | Endpoint                          | Role         | Mô tả                  |
+|--------|-----------------------------------|--------------|------------------------|
+| GET    | `/api/doctor/schedule`            | Doctor       | Lịch làm việc của mình |
+| POST   | `/api/doctor/schedule`            | Doctor       | Thêm ca làm việc       |
+| DELETE | `/api/doctor/schedule/{id}`       | Doctor       | Xóa ca                 |
+| POST   | `/api/doctor/leaves`              | Doctor       | Đăng ký nghỉ phép      |
+| GET    | `/api/doctor/leaves`              | Doctor/Admin | Danh sách nghỉ phép    |
+| PATCH  | `/api/doctor/leaves/{id}/approve` | Admin        | Duyệt nghỉ phép        |
 
 ### 5.6 Patient Profile
 
-| Method | Endpoint | Role | Mô tả |
-|---|---|---|---|
-| GET | `/api/patient/profile` | Patient | Thông tin hồ sơ |
-| PUT | `/api/patient/profile` | Patient | Cập nhật hồ sơ |
-| GET | `/api/patient/appointments` | Patient | Lịch hẹn của tôi |
-| GET | `/api/patient/history` | Patient | Lịch sử khám |
+| Method | Endpoint                    | Role    | Mô tả            |
+|--------|-----------------------------|---------|------------------|
+| GET    | `/api/patient/profile`      | Patient | Thông tin hồ sơ  |
+| PUT    | `/api/patient/profile`      | Patient | Cập nhật hồ sơ   |
+| GET    | `/api/patient/appointments` | Patient | Lịch hẹn của tôi |
+| GET    | `/api/patient/history`      | Patient | Lịch sử khám     |
 
 ### 5.7 Search
 
 ```
-GET /api/search?q=keyword&type=doctor|specialty|service
+GET /api/search?q=keyword&type=doctor|specialty|clinicService
 ```
 
-Tìm kiếm full-text trên: `doctors.name`, `specialties.name`, `services.name`
+Tìm kiếm full-text trên: `doctors.name`, `specialties.name`, `clinicServices.name`
 
 ```sql
 -- PostgreSQL full-text search
@@ -700,48 +701,49 @@ ORDER BY ts_rank(...) DESC;
 
 ### 6.1 Medical Record Endpoints
 
-| Method | Endpoint | Role | Mô tả |
-|---|---|---|---|
-| POST | `/api/medical-records` | Doctor | Tạo bệnh án |
-| GET | `/api/medical-records/{id}` | Doctor/Patient | Chi tiết |
-| PUT | `/api/medical-records/{id}` | Doctor | Cập nhật (chỉ trong 24h) |
-| GET | `/api/patient/medical-records` | Patient | Lịch sử bệnh án |
-| GET | `/api/doctor/records` | Doctor | Bệnh án của bác sĩ |
-| GET | `/api/medical-records/{id}/pdf` | Doctor/Patient | Export PDF |
+| Method | Endpoint                        | Role           | Mô tả                    |
+|--------|---------------------------------|----------------|--------------------------|
+| POST   | `/api/medical-records`          | Doctor         | Tạo bệnh án              |
+| GET    | `/api/medical-records/{id}`     | Doctor/Patient | Chi tiết                 |
+| PUT    | `/api/medical-records/{id}`     | Doctor         | Cập nhật (chỉ trong 24h) |
+| GET    | `/api/patient/medical-records`  | Patient        | Lịch sử bệnh án          |
+| GET    | `/api/doctor/records`           | Doctor         | Bệnh án của bác sĩ       |
+| GET    | `/api/medical-records/{id}/pdf` | Doctor/Patient | Export PDF               |
 
 ### 6.2 Prescription Endpoints
 
-| Method | Endpoint | Role | Mô tả |
-|---|---|---|---|
-| POST | `/api/prescriptions` | Doctor | Kê đơn (kèm medical record) |
-| GET | `/api/prescriptions/{id}` | Doctor/Patient | Chi tiết đơn thuốc |
-| GET | `/api/patient/prescriptions` | Patient | Tất cả đơn thuốc |
-| GET | `/api/prescriptions/{id}/pdf` | Doctor/Patient | In đơn PDF |
+| Method | Endpoint                      | Role           | Mô tả                       |
+|--------|-------------------------------|----------------|-----------------------------|
+| POST   | `/api/prescriptions`          | Doctor         | Kê đơn (kèm medical record) |
+| GET    | `/api/prescriptions/{id}`     | Doctor/Patient | Chi tiết đơn thuốc          |
+| GET    | `/api/patient/prescriptions`  | Patient        | Tất cả đơn thuốc            |
+| GET    | `/api/prescriptions/{id}/pdf` | Doctor/Patient | In đơn PDF                  |
 
 ### 6.3 Lab Test Endpoints
 
-| Method | Endpoint | Role | Mô tả |
-|---|---|---|---|
-| POST | `/api/lab-tests` | Doctor | Yêu cầu xét nghiệm |
-| GET | `/api/lab-tests/{id}` | Doctor/Patient/Staff | Chi tiết |
-| PATCH | `/api/lab-tests/{id}/result` | Staff | Nhập kết quả + upload file |
-| GET | `/api/patient/lab-results` | Patient | Kết quả xét nghiệm |
+| Method | Endpoint                     | Role                 | Mô tả                      |
+|--------|------------------------------|----------------------|----------------------------|
+| POST   | `/api/lab-tests`             | Doctor               | Yêu cầu xét nghiệm         |
+| GET    | `/api/lab-tests/{id}`        | Doctor/Patient/Staff | Chi tiết                   |
+| PATCH  | `/api/lab-tests/{id}/result` | Staff                | Nhập kết quả + upload file |
+| GET    | `/api/patient/lab-results`   | Patient              | Kết quả xét nghiệm         |
 
 ### 6.4 PDF Generation
 
 Dùng **iText 7** hoặc **OpenPDF** để tạo PDF bệnh án/đơn thuốc:
 
 ```java
+
 @Service
 public class PdfGeneratorService {
-  public byte[] generateMedicalRecordPdf(MedicalRecord record) {
-    // Tạo PDF với thông tin bệnh viện, bệnh nhân, chẩn đoán, thuốc
-    // Upload lên MinIO → trả về URL download
-  }
+    public byte[] generateMedicalRecordPdf(MedicalRecord record) {
+        // Tạo PDF với thông tin bệnh viện, bệnh nhân, chẩn đoán, thuốc
+        // Upload lên MinIO → trả về URL download
+    }
 
-  public byte[] generatePrescriptionPdf(Prescription prescription) {
-    // Tạo đơn thuốc theo format chuẩn
-  }
+    public byte[] generatePrescriptionPdf(Prescription prescription) {
+        // Tạo đơn thuốc theo format chuẩn
+    }
 }
 ```
 
@@ -775,57 +777,58 @@ APPOINTMENT COMPLETED
 
 ### 7.2 Invoice Endpoints
 
-| Method | Endpoint | Role | Mô tả |
-|---|---|---|---|
-| POST | `/api/invoices` | Staff | Tạo hóa đơn |
-| GET | `/api/invoices/{id}` | Staff/Patient | Chi tiết |
-| GET | `/api/patient/invoices` | Patient | Lịch sử thanh toán |
-| GET | `/api/staff/invoices` | Staff | Hóa đơn cần xử lý |
-| GET | `/api/invoices/{id}/pdf` | Staff/Patient | Xuất hóa đơn PDF |
+| Method | Endpoint                 | Role          | Mô tả              |
+|--------|--------------------------|---------------|--------------------|
+| POST   | `/api/invoices`          | Staff         | Tạo hóa đơn        |
+| GET    | `/api/invoices/{id}`     | Staff/Patient | Chi tiết           |
+| GET    | `/api/patient/invoices`  | Patient       | Lịch sử thanh toán |
+| GET    | `/api/staff/invoices`    | Staff         | Hóa đơn cần xử lý  |
+| GET    | `/api/invoices/{id}/pdf` | Staff/Patient | Xuất hóa đơn PDF   |
 
 ### 7.3 Payment Endpoints
 
-| Method | Endpoint | Role | Mô tả |
-|---|---|---|---|
-| POST | `/api/payments/vnpay/create` | Patient/Staff | Tạo link thanh toán VNPay |
-| GET | `/api/payments/vnpay/callback` | Public | VNPay redirect callback |
-| POST | `/api/payments/vnpay/ipn` | Public | VNPay IPN webhook |
-| POST | `/api/payments/momo/create` | Patient/Staff | Tạo link MoMo |
-| POST | `/api/payments/momo/callback` | Public | MoMo webhook |
-| POST | `/api/payments/cash` | Staff | Ghi nhận thanh toán tiền mặt |
-| POST | `/api/payments/{invoiceId}/refund` | Admin | Hoàn tiền |
+| Method | Endpoint                           | Role          | Mô tả                        |
+|--------|------------------------------------|---------------|------------------------------|
+| POST   | `/api/payments/vnpay/create`       | Patient/Staff | Tạo link thanh toán VNPay    |
+| GET    | `/api/payments/vnpay/callback`     | Public        | VNPay redirect callback      |
+| POST   | `/api/payments/vnpay/ipn`          | Public        | VNPay IPN webhook            |
+| POST   | `/api/payments/momo/create`        | Patient/Staff | Tạo link MoMo                |
+| POST   | `/api/payments/momo/callback`      | Public        | MoMo webhook                 |
+| POST   | `/api/payments/cash`               | Staff         | Ghi nhận thanh toán tiền mặt |
+| POST   | `/api/payments/{invoiceId}/refund` | Admin         | Hoàn tiền                    |
 
 ### 7.4 VNPay Integration
 
 ```java
+
 @Service
 public class VNPayService {
 
-  public String createPaymentUrl(Invoice invoice, String clientIp) {
-    Map<String, String> params = new TreeMap<>();
-    params.put("vnp_Version", "2.1.0");
-    params.put("vnp_Command", "pay");
-    params.put("vnp_TmnCode", vnpayConfig.getTmnCode());
-    params.put("vnp_Amount", String.valueOf(invoice.getTotal() * 100)); // VNPay * 100
-    params.put("vnp_CurrCode", "VND");
-    params.put("vnp_TxnRef", invoice.getId().toString());
-    params.put("vnp_OrderInfo", "Thanh toan " + invoice.getId());
-    params.put("vnp_ReturnUrl", vnpayConfig.getReturnUrl());
-    params.put("vnp_IpAddr", clientIp);
-    params.put("vnp_CreateDate", LocalDateTime.now().format(dtf));
+    public String createPaymentUrl(Invoice invoice, String clientIp) {
+        Map<String, String> params = new TreeMap<>();
+        params.put("vnp_Version", "2.1.0");
+        params.put("vnp_Command", "pay");
+        params.put("vnp_TmnCode", vnpayConfig.getTmnCode());
+        params.put("vnp_Amount", String.valueOf(invoice.getTotal() * 100)); // VNPay * 100
+        params.put("vnp_CurrCode", "VND");
+        params.put("vnp_TxnRef", invoice.getId().toString());
+        params.put("vnp_OrderInfo", "Thanh toan " + invoice.getId());
+        params.put("vnp_ReturnUrl", vnpayConfig.getReturnUrl());
+        params.put("vnp_IpAddr", clientIp);
+        params.put("vnp_CreateDate", LocalDateTime.now().format(dtf));
 
-    String hashData = buildHashData(params);
-    String secureHash = hmacSHA512(vnpayConfig.getHashSecret(), hashData);
-    params.put("vnp_SecureHash", secureHash);
+        String hashData = buildHashData(params);
+        String secureHash = hmacSHA512(vnpayConfig.getHashSecret(), hashData);
+        params.put("vnp_SecureHash", secureHash);
 
-    return vnpayConfig.getPayUrl() + "?" + toQueryString(params);
-  }
+        return vnpayConfig.getPayUrl() + "?" + toQueryString(params);
+    }
 
-  public boolean verifyCallback(Map<String, String> params) {
-    String receivedHash = params.remove("vnp_SecureHash");
-    String computedHash = hmacSHA512(vnpayConfig.getHashSecret(), buildHashData(params));
-    return MessageDigest.isEqual(receivedHash.getBytes(), computedHash.getBytes());
-  }
+    public boolean verifyCallback(Map<String, String> params) {
+        String receivedHash = params.remove("vnp_SecureHash");
+        String computedHash = hmacSHA512(vnpayConfig.getHashSecret(), buildHashData(params));
+        return MessageDigest.isEqual(receivedHash.getBytes(), computedHash.getBytes());
+    }
 }
 ```
 
@@ -894,23 +897,24 @@ PATCH /api/messages/{id}/read
 ### 8.3 Notification System
 
 ```java
+
 @Service
 public class NotificationService {
 
-  // Gửi realtime qua WebSocket
-  public void pushNotification(UUID userId, NotificationDto notification) {
-    messagingTemplate.convertAndSendToUser(
-        userId.toString(),
-        "/queue/notifications",
-        notification
-    );
-  }
+    // Gửi realtime qua WebSocket
+    public void pushNotification(UUID userId, NotificationDto notification) {
+        messagingTemplate.convertAndSendToUser(
+                userId.toString(),
+                "/queue/notifications",
+                notification
+        );
+    }
 
-  // Lưu vào DB cho lịch sử
-  public void saveAndPush(UUID userId, NotificationType type, String title, String body) {
-    Notification saved = notificationRepo.save(new Notification(...));
-    pushNotification(userId, NotificationDto.from(saved));
-  }
+    // Lưu vào DB cho lịch sử
+    public void saveAndPush(UUID userId, NotificationType type, String title, String body) {
+        Notification saved = notificationRepo.save(new Notification(...));
+        pushNotification(userId, NotificationDto.from(saved));
+    }
 }
 
 // Tự động trigger notification
@@ -922,12 +926,12 @@ public class NotificationService {
 
 ### 8.4 Notification Endpoints
 
-| Method | Endpoint | Role | Mô tả |
-|---|---|---|---|
-| GET | `/api/notifications` | Auth | Danh sách (có unread count) |
-| PATCH | `/api/notifications/{id}/read` | Auth | Đánh dấu đã đọc |
-| PATCH | `/api/notifications/read-all` | Auth | Đọc tất cả |
-| DELETE | `/api/notifications/{id}` | Auth | Xóa |
+| Method | Endpoint                       | Role | Mô tả                       |
+|--------|--------------------------------|------|-----------------------------|
+| GET    | `/api/notifications`           | Auth | Danh sách (có unread count) |
+| PATCH  | `/api/notifications/{id}/read` | Auth | Đánh dấu đã đọc             |
+| PATCH  | `/api/notifications/read-all`  | Auth | Đọc tất cả                  |
+| DELETE | `/api/notifications/{id}`      | Auth | Xóa                         |
 
 ### 8.5 Scheduled Jobs
 
@@ -977,30 +981,30 @@ public class ScheduledJobs {
 
 ### 9.1 User Management
 
-| Method | Endpoint | Role | Mô tả |
-|---|---|---|---|
-| GET | `/api/admin/users` | Admin | Danh sách users (filter, paginate) |
-| GET | `/api/admin/users/{id}` | Admin | Chi tiết user |
-| POST | `/api/admin/users` | Admin | Tạo user (doctor/staff) |
-| PUT | `/api/admin/users/{id}` | Admin | Cập nhật |
-| PATCH | `/api/admin/users/{id}/block` | Admin | Khóa tài khoản |
-| PATCH | `/api/admin/users/{id}/unblock` | Admin | Mở khóa |
-| DELETE | `/api/admin/users/{id}` | Admin | Xóa (soft delete) |
-| PATCH | `/api/admin/doctors/{id}/approve` | Admin | Duyệt bác sĩ mới |
+| Method | Endpoint                          | Role  | Mô tả                              |
+|--------|-----------------------------------|-------|------------------------------------|
+| GET    | `/api/admin/users`                | Admin | Danh sách users (filter, paginate) |
+| GET    | `/api/admin/users/{id}`           | Admin | Chi tiết user                      |
+| POST   | `/api/admin/users`                | Admin | Tạo user (doctor/staff)            |
+| PUT    | `/api/admin/users/{id}`           | Admin | Cập nhật                           |
+| PATCH  | `/api/admin/users/{id}/block`     | Admin | Khóa tài khoản                     |
+| PATCH  | `/api/admin/users/{id}/unblock`   | Admin | Mở khóa                            |
+| DELETE | `/api/admin/users/{id}`           | Admin | Xóa (soft delete)                  |
+| PATCH  | `/api/admin/doctors/{id}/approve` | Admin | Duyệt bác sĩ mới                   |
 
 ### 9.2 Review Management
 
-| Method | Endpoint | Role | Mô tả |
-|---|---|---|---|
-| GET | `/api/admin/reviews?status=pending` | Admin | Đánh giá chờ duyệt |
-| PATCH | `/api/admin/reviews/{id}/approve` | Admin | Phê duyệt |
-| PATCH | `/api/admin/reviews/{id}/reject` | Admin | Từ chối + lý do |
-| POST | `/api/patient/reviews` | Patient | Bệnh nhân gửi đánh giá |
+| Method | Endpoint                            | Role    | Mô tả                  |
+|--------|-------------------------------------|---------|------------------------|
+| GET    | `/api/admin/reviews?status=pending` | Admin   | Đánh giá chờ duyệt     |
+| PATCH  | `/api/admin/reviews/{id}/approve`   | Admin   | Phê duyệt              |
+| PATCH  | `/api/admin/reviews/{id}/reject`    | Admin   | Từ chối + lý do        |
+| POST   | `/api/patient/reviews`              | Patient | Bệnh nhân gửi đánh giá |
 
 ### 9.3 Service & Medicine Management
 
 ```
-Services:  GET|POST|PUT|DELETE /api/admin/services
+Services:  GET|POST|PUT|DELETE /api/admin/clinicServices
 Medicines: GET|POST|PUT|DELETE /api/admin/medicines
            PATCH /api/admin/medicines/{id}/restock
 ```
@@ -1035,14 +1039,15 @@ ORDER BY month;
 Mọi thao tác quan trọng đều ghi `audit_logs`:
 
 ```java
+
 @Aspect
 @Component
 public class AuditLogAspect {
-  @AfterReturning("@annotation(Auditable)")
-  public void log(JoinPoint jp, Object result) {
-    // Ghi: actor, action, entityType, entityId, oldValue, newValue, ipAddress
-    auditLogRepo.save(new AuditLog(...));
-  }
+    @AfterReturning("@annotation(Auditable)")
+    public void log(JoinPoint jp, Object result) {
+        // Ghi: actor, action, entityType, entityId, oldValue, newValue, ipAddress
+        auditLogRepo.save(new AuditLog(...));
+    }
 }
 ```
 
@@ -1092,7 +1097,7 @@ E2E Key Flows:
   - JWT refresh và logout
   - VNPay callback flow (mock)
 
-Coverage Target: ≥ 70% service layer
+Coverage Target: ≥ 70% clinicService layer
 ```
 
 ```java
@@ -1141,7 +1146,7 @@ jobs:
 
 ### 10.4 Deliverables Phase 8
 
-- [ ] Unit tests cho toàn bộ service layer
+- [ ] Unit tests cho toàn bộ clinicService layer
 - [ ] Integration tests cho booking flow
 - [ ] Security audit passed (OWASP Top 10 check)
 - [ ] Docker image build thành công
@@ -1155,71 +1160,71 @@ jobs:
 
 Map đầy đủ từ 33 Frontend routes → Backend API:
 
-| Frontend Route | Component | Backend Endpoints cần thiết |
-|---|---|---|
-| `/` | LandingPage | `GET /api/doctors`, `GET /api/specialties` |
-| `/booking` | BookingPage | `GET /api/doctors/{id}/slots`, `POST /api/appointments` |
-| `/doctors` | DoctorsPage | `GET /api/doctors?{filters}`, `GET /api/specialties` |
-| `/search` | SearchResults | `GET /api/search?q=` |
-| `/login` | AuthPage | `POST /api/auth/login`, `POST /api/auth/register` |
-| `/patient` | PatientDashboard | `GET /api/patient/appointments`, `GET /api/patient/invoices` |
-| `/patient/profile` | PatientProfile | `GET/PUT /api/patient/profile` |
-| `/patient/history` | PatientHistory | `GET /api/patient/medical-records` |
-| `/patient/prescriptions` | PatientPrescriptions | `GET /api/patient/prescriptions` |
-| `/patient/payments` | PatientPayments | `GET /api/patient/invoices` |
-| `/patient/medical-records/:id` | MedicalRecordDetail | `GET /api/medical-records/{id}` |
-| `/patient/prescriptions/:id` | PrescriptionDetail | `GET /api/prescriptions/{id}` |
-| `/patient/lab-results/:id` | LabTestResults | `GET /api/lab-tests/{id}` |
-| `/patient/review/:appointmentId` | ReviewDoctor | `POST /api/reviews` |
-| `/patient/payment/:invoiceId` | Payment | `POST /api/payments/vnpay/create` |
-| `/doctor` | DoctorDashboard | `GET /api/appointments/today`, `GET /api/messages` |
-| `/doctor/schedule` | DoctorSchedule | `GET/POST /api/doctor/schedule` |
-| `/doctor/profile` | DoctorProfile | `GET/PUT /api/doctor/profile` |
-| `/doctor/patients` | DoctorPatients | `GET /api/doctor/patients` |
-| `/doctor/records` | DoctorRecords | `GET /api/doctor/records` |
-| `/doctor/medical-record/:id` | MedicalRecordForm | `POST /api/medical-records` |
-| `/admin` | AdminDashboard | `GET /api/admin/stats`, `GET /api/admin/reports/*` |
-| `/admin/users` | UserManagement | `GET/POST/PUT/DELETE /api/admin/users` |
-| `/admin/services` | ServiceManagement | `GET/POST/PUT/DELETE /api/admin/services` |
-| `/admin/medicine` | MedicineInventory | `GET/POST/PUT/DELETE /api/admin/medicines` |
-| `/admin/reports` | ReportsAnalytics | `GET /api/admin/reports/*` |
-| `/admin/reviews` | ReviewApproval | `GET /api/admin/reviews`, `PATCH .../approve` |
-| `/staff` | StaffDashboard | `GET /api/appointments/today`, `GET /api/appointments/queue` |
-| `/staff/checkin` | CheckInQueue | `PATCH /api/appointments/{id}/checkin` |
-| `/staff/invoices` | StaffInvoices | `GET /api/staff/invoices` |
-| `/staff/invoice/:id` | InvoiceCreation | `POST /api/invoices`, `POST /api/payments/cash` |
-| `/settings` | Settings | `PUT /api/auth/change-password`, `PUT /api/user/settings` |
+| Frontend Route                   | Component            | Backend Endpoints cần thiết                                  |
+|----------------------------------|----------------------|--------------------------------------------------------------|
+| `/`                              | LandingPage          | `GET /api/doctors`, `GET /api/specialties`                   |
+| `/booking`                       | BookingPage          | `GET /api/doctors/{id}/slots`, `POST /api/appointments`      |
+| `/doctors`                       | DoctorsPage          | `GET /api/doctors?{filters}`, `GET /api/specialties`         |
+| `/search`                        | SearchResults        | `GET /api/search?q=`                                         |
+| `/login`                         | AuthPage             | `POST /api/auth/login`, `POST /api/auth/register`            |
+| `/patient`                       | PatientDashboard     | `GET /api/patient/appointments`, `GET /api/patient/invoices` |
+| `/patient/profile`               | PatientProfile       | `GET/PUT /api/patient/profile`                               |
+| `/patient/history`               | PatientHistory       | `GET /api/patient/medical-records`                           |
+| `/patient/prescriptions`         | PatientPrescriptions | `GET /api/patient/prescriptions`                             |
+| `/patient/payments`              | PatientPayments      | `GET /api/patient/invoices`                                  |
+| `/patient/medical-records/:id`   | MedicalRecordDetail  | `GET /api/medical-records/{id}`                              |
+| `/patient/prescriptions/:id`     | PrescriptionDetail   | `GET /api/prescriptions/{id}`                                |
+| `/patient/lab-results/:id`       | LabTestResults       | `GET /api/lab-tests/{id}`                                    |
+| `/patient/review/:appointmentId` | ReviewDoctor         | `POST /api/reviews`                                          |
+| `/patient/payment/:invoiceId`    | Payment              | `POST /api/payments/vnpay/create`                            |
+| `/doctor`                        | DoctorDashboard      | `GET /api/appointments/today`, `GET /api/messages`           |
+| `/doctor/schedule`               | DoctorSchedule       | `GET/POST /api/doctor/schedule`                              |
+| `/doctor/profile`                | DoctorProfile        | `GET/PUT /api/doctor/profile`                                |
+| `/doctor/patients`               | DoctorPatients       | `GET /api/doctor/patients`                                   |
+| `/doctor/records`                | DoctorRecords        | `GET /api/doctor/records`                                    |
+| `/doctor/medical-record/:id`     | MedicalRecordForm    | `POST /api/medical-records`                                  |
+| `/admin`                         | AdminDashboard       | `GET /api/admin/stats`, `GET /api/admin/reports/*`           |
+| `/admin/users`                   | UserManagement       | `GET/POST/PUT/DELETE /api/admin/users`                       |
+| `/admin/clinicServices`          | ServiceManagement    | `GET/POST/PUT/DELETE /api/admin/clinicServices`              |
+| `/admin/medicine`                | MedicineInventory    | `GET/POST/PUT/DELETE /api/admin/medicines`                   |
+| `/admin/reports`                 | ReportsAnalytics     | `GET /api/admin/reports/*`                                   |
+| `/admin/reviews`                 | ReviewApproval       | `GET /api/admin/reviews`, `PATCH .../approve`                |
+| `/staff`                         | StaffDashboard       | `GET /api/appointments/today`, `GET /api/appointments/queue` |
+| `/staff/checkin`                 | CheckInQueue         | `PATCH /api/appointments/{id}/checkin`                       |
+| `/staff/invoices`                | StaffInvoices        | `GET /api/staff/invoices`                                    |
+| `/staff/invoice/:id`             | InvoiceCreation      | `POST /api/invoices`, `POST /api/payments/cash`              |
+| `/settings`                      | Settings             | `PUT /api/auth/change-password`, `PUT /api/user/settings`    |
 
 ---
 
 ## 12. Entity Map — 24 Tables → JPA
 
-| SQL Table | JPA Entity | Quan hệ chính |
-|---|---|---|
-| `users` | `User` | OneToOne → Patient, Doctor |
-| `patients` | `Patient` | ManyToOne → User; OneToMany → Appointment |
-| `doctors` | `Doctor` | ManyToOne → User, Specialty; OneToMany → DoctorSchedule |
-| `specialties` | `Specialty` | OneToMany → Doctor |
-| `doctor_schedules` | `DoctorSchedule` | ManyToOne → Doctor |
-| `doctor_leaves` | `DoctorLeave` | ManyToOne → Doctor |
-| `doctor_certifications` | `DoctorCertification` | ManyToOne → Doctor |
-| `appointments` | `Appointment` | ManyToOne → Patient, Doctor, Service |
-| `appointment_reminders` | `AppointmentReminder` | ManyToOne → Appointment |
-| `medical_records` | `MedicalRecord` | OneToOne → Appointment |
-| `prescriptions` | `Prescription` | ManyToOne → MedicalRecord |
-| `prescription_items` | `PrescriptionItem` | ManyToOne → Prescription, Medicine |
-| `lab_tests` | `LabTest` | ManyToOne → MedicalRecord |
-| `lab_test_items` | `LabTestItem` | ManyToOne → LabTest |
-| `invoices` | `Invoice` | ManyToOne → Appointment |
-| `invoice_items` | `InvoiceItem` | ManyToOne → Invoice |
-| `services` | `Service` | ManyToOne → Specialty |
-| `medicines` | `Medicine` | OneToMany → PrescriptionItem |
-| `reviews` | `Review` | ManyToOne → Appointment, Doctor, Patient |
-| `review_reports` | `ReviewReport` | ManyToOne → Review, User |
-| `notifications` | `Notification` | ManyToOne → User |
-| `messages` | `Message` | ManyToOne → Patient, Doctor |
-| `audit_logs` | `AuditLog` | ManyToOne → User |
-| `password_reset_tokens` | — | Quản lý bằng Redis (không cần entity) |
+| SQL Table               | JPA Entity            | Quan hệ chính                                           |
+|-------------------------|-----------------------|---------------------------------------------------------|
+| `users`                 | `User`                | OneToOne → Patient, Doctor                              |
+| `patients`              | `Patient`             | ManyToOne → User; OneToMany → Appointment               |
+| `doctors`               | `Doctor`              | ManyToOne → User, Specialty; OneToMany → DoctorSchedule |
+| `specialties`           | `Specialty`           | OneToMany → Doctor                                      |
+| `doctor_schedules`      | `DoctorSchedule`      | ManyToOne → Doctor                                      |
+| `doctor_leaves`         | `DoctorLeave`         | ManyToOne → Doctor                                      |
+| `doctor_certifications` | `DoctorCertification` | ManyToOne → Doctor                                      |
+| `appointments`          | `Appointment`         | ManyToOne → Patient, Doctor, Service                    |
+| `appointment_reminders` | `AppointmentReminder` | ManyToOne → Appointment                                 |
+| `medical_records`       | `MedicalRecord`       | OneToOne → Appointment                                  |
+| `prescriptions`         | `Prescription`        | ManyToOne → MedicalRecord                               |
+| `prescription_items`    | `PrescriptionItem`    | ManyToOne → Prescription, Medicine                      |
+| `lab_tests`             | `LabTest`             | ManyToOne → MedicalRecord                               |
+| `lab_test_items`        | `LabTestItem`         | ManyToOne → LabTest                                     |
+| `invoices`              | `Invoice`             | ManyToOne → Appointment                                 |
+| `invoice_items`         | `InvoiceItem`         | ManyToOne → Invoice                                     |
+| `clinicServices`        | `Service`             | ManyToOne → Specialty                                   |
+| `medicines`             | `Medicine`            | OneToMany → PrescriptionItem                            |
+| `reviews`               | `Review`              | ManyToOne → Appointment, Doctor, Patient                |
+| `review_reports`        | `ReviewReport`        | ManyToOne → Review, User                                |
+| `notifications`         | `Notification`        | ManyToOne → User                                        |
+| `messages`              | `Message`             | ManyToOne → Patient, Doctor                             |
+| `audit_logs`            | `AuditLog`            | ManyToOne → User                                        |
+| `password_reset_tokens` | —                     | Quản lý bằng Redis (không cần entity)                   |
 
 ---
 
@@ -1280,24 +1285,24 @@ export function useCancelAppointment() {
 ```typescript
 // src/app/hooks/useAuth.ts
 export function useAuth() {
-  const { data: user, mutate } = useSWR('/auth/me', api.get, {
-    revalidateOnFocus: false,
-    shouldRetryOnError: false,
-  });
+    const {data: user, mutate} = useSWR('/auth/me', api.get, {
+        revalidateOnFocus: false,
+        shouldRetryOnError: false,
+    });
 
-  const login = async (email: string, password: string) => {
-    const res = await api.post('/auth/login', { email, password });
-    setTokens(res.data.accessToken, res.data.refreshToken);
-    mutate(); // Revalidate user
-  };
+    const login = async (email: string, password: string) => {
+        const res = await api.post('/auth/login', {email, password});
+        setTokens(res.data.accessToken, res.data.refreshToken);
+        mutate(); // Revalidate user
+    };
 
-  const logout = async () => {
-    await api.post('/auth/logout', { refreshToken: getRefreshToken() });
-    clearTokens();
-    mutate(null, false);
-  };
+    const logout = async () => {
+        await api.post('/auth/logout', {refreshToken: getRefreshToken()});
+        clearTokens();
+        mutate(null, false);
+    };
 
-  return { user, login, logout, isLoading: !user };
+    return {user, login, logout, isLoading: !user};
 }
 ```
 
@@ -1316,19 +1321,20 @@ Tuần 14-15: Admin hooks → Reports & Management
 
 ## 14. Timeline Tổng
 
-| Phase | Nội dung | Thời gian | Deliverable chính |
-|---|---|---|---|
-| **Phase 1** | Foundation, DB, Docker | Tuần 1–2 | Health check, Flyway migration |
-| **Phase 2** | Auth, JWT, 5 roles | Tuần 3–4 | Login/Register hoạt động |
-| **Phase 3** | Booking Flow cốt lõi | Tuần 5–7 | Đặt lịch end-to-end |
-| **Phase 4** | Medical Records, Prescriptions | Tuần 8–9 | Bệnh án + đơn thuốc PDF |
-| **Phase 5** | Payment (VNPay + MoMo) | Tuần 10–11 | Thanh toán thật |
-| **Phase 6** | Realtime (WebSocket) | Tuần 12–13 | Chat + push notification |
-| **Phase 7** | Admin + Reports | Tuần 14–15 | Dashboard analytics |
-| **Phase 8** | Security, Testing, Deploy | Tuần 16–17 | Production live |
-| **Tổng** | | **~17 tuần** | Full stack hoàn chỉnh |
+| Phase       | Nội dung                       | Thời gian    | Deliverable chính              |
+|-------------|--------------------------------|--------------|--------------------------------|
+| **Phase 1** | Foundation, DB, Docker         | Tuần 1–2     | Health check, Flyway migration |
+| **Phase 2** | Auth, JWT, 5 roles             | Tuần 3–4     | Login/Register hoạt động       |
+| **Phase 3** | Booking Flow cốt lõi           | Tuần 5–7     | Đặt lịch end-to-end            |
+| **Phase 4** | Medical Records, Prescriptions | Tuần 8–9     | Bệnh án + đơn thuốc PDF        |
+| **Phase 5** | Payment (VNPay + MoMo)         | Tuần 10–11   | Thanh toán thật                |
+| **Phase 6** | Realtime (WebSocket)           | Tuần 12–13   | Chat + push notification       |
+| **Phase 7** | Admin + Reports                | Tuần 14–15   | Dashboard analytics            |
+| **Phase 8** | Security, Testing, Deploy      | Tuần 16–17   | Production live                |
+| **Tổng**    |                                | **~17 tuần** | Full stack hoàn chỉnh          |
 
-> **Tip:** Chạy song song Frontend mock và Backend API bằng cách dùng biến môi trường `VITE_USE_MOCK=true` để FE vẫn dùng mock trong khi test. Khi Backend sẵn sàng từng module, flip flag về `false`.
+> **Tip:** Chạy song song Frontend mock và Backend API bằng cách dùng biến môi trường `VITE_USE_MOCK=true` để FE vẫn
+> dùng mock trong khi test. Khi Backend sẵn sàng từng module, flip flag về `false`.
 
 ---
 

@@ -12,13 +12,14 @@ import com.camel.clinic.util.DateTimeUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -58,7 +59,7 @@ public class AppointmentServiceImp {
             Patient patient = patientRepository.findByUserId(currentUser.getId())
                     .orElseThrow(() -> new NotFoundException("Patient profile not found"));
 
-            com.camel.clinic.entity.Service service = serviceRepository.findById(dto.getServiceId())
+            ClinicService clinicService = serviceRepository.findById(dto.getServiceId())
                     .orElseThrow(() -> new NotFoundException("Service not found"));
 
             LocalDate apptDate = DateTimeUtils.toVnLocalDate(dto.getDate());
@@ -76,7 +77,7 @@ public class AppointmentServiceImp {
                 throw new BadRequestException("Doctor is on approved leave on this date");
             }
 
-            if (Boolean.FALSE.equals(service.getIsActive())) {
+            if (Boolean.FALSE.equals(clinicService.getIsActive())) {
                 throw new BadRequestException("Service is not active");
             }
 
@@ -122,10 +123,10 @@ public class AppointmentServiceImp {
                 appointment.setAppointmentCode("APT" + System.currentTimeMillis());
                 appointment.setDoctor(doctor);
                 appointment.setPatient(patient);
-                appointment.setService(service);
+                appointment.setClinicService(clinicService);
                 appointment.setAppointmentDate(dto.getDate());
                 appointment.setStartTime(startTime);
-                appointment.setEndTime(DateTimeUtils.toDate(apptDate, apptTime.plusMinutes(service.getDuration())));
+                appointment.setEndTime(DateTimeUtils.toDate(apptDate, apptTime.plusMinutes(clinicService.getDuration())));
                 appointment.setReason(dto.getReason());
                 appointment.setSymptoms(dto.getSymptoms());
                 appointment.setStatus(Appointment.AppointmentStatus.pending);
@@ -139,16 +140,22 @@ public class AppointmentServiceImp {
                         "Mang theo CCCD/BHYT va cac ket qua kham gan nhat (neu co).",
                         "Neu can huy, vui long huy truoc it nhat 2 gio."
                 );
-                return ResponseEntity.status(HttpStatus.CREATED)
-                        .body(Map.of("appointment", responseDTO, "instructions", instructions));
+                URI location = ServletUriComponentsBuilder
+                        .fromCurrentRequest()
+                        .path("/{id}")
+                        .buildAndExpand(saved.getId())
+                        .toUri();
+
+
+                return ResponseEntity.created(location).body(Map.of("appointment", responseDTO, "instructions", instructions));
             } finally {
                 slotLockService.releaseLock(doctor.getId(), apptDate, apptTime);
             }
         } catch (NotFoundException | BadRequestException | UnauthorizedException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             log.error("Create appointment error", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Failed to create appointment"));
+            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to create appointment"));
         }
     }
 
@@ -174,7 +181,7 @@ public class AppointmentServiceImp {
             return ResponseEntity.ok(appointments.stream().map(this::toDto).collect(Collectors.toList()));
         } catch (Exception e) {
             log.error("List appointments error", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Failed to list appointments"));
+            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to list appointments"));
         }
     }
 
@@ -187,9 +194,9 @@ public class AppointmentServiceImp {
             ensureCanAccessAppointment(currentUser, appointment);
             return ResponseEntity.ok(toDto(appointment));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid appointment id"));
+            return ResponseEntity.badRequest().body(Map.of("error", "Invalid appointment id"));
         } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -237,9 +244,9 @@ public class AppointmentServiceImp {
             appointment.setNotes(note + reasonNote);
             return ResponseEntity.ok(toDto(appointmentRepository.save(appointment)));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid appointment id"));
+            return ResponseEntity.badRequest().body(Map.of("error", "Invalid appointment id"));
         } catch (NotFoundException | BadRequestException | UnauthorizedException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 
@@ -296,10 +303,10 @@ public class AppointmentServiceImp {
             return ResponseEntity.ok(appointments.stream().map(this::toDto).collect(Collectors.toList()));
         } catch (Exception e) {
             if (e instanceof NotFoundException || e instanceof UnauthorizedException) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+                return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
             }
             log.error("Today appointments error", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Failed to load today's appointments"));
+            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to load today's appointments"));
         }
     }
 
@@ -313,10 +320,10 @@ public class AppointmentServiceImp {
             return ResponseEntity.ok(queue);
         } catch (Exception e) {
             if (e instanceof UnauthorizedException) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+                return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
             }
             log.error("Queue appointments error", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Failed to load queue"));
+            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to load queue"));
         }
     }
 
@@ -345,13 +352,14 @@ public class AppointmentServiceImp {
 
     private ResponseEntity<?> handleTransitionException(Exception e) {
         if (e instanceof IllegalArgumentException) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid appointment id"));
+            return ResponseEntity.badRequest().body(Map.of("error", "Invalid appointment id"));
         }
+
         if (e instanceof NotFoundException || e instanceof BadRequestException || e instanceof UnauthorizedException) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
         log.error("Appointment transition error", e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Failed to update appointment status"));
+        return ResponseEntity.internalServerError().body(Map.of("error", "Failed to update appointment status"));
     }
 
     private Appointment.BookingType parseBookingType(String serviceType) {
@@ -421,8 +429,8 @@ public class AppointmentServiceImp {
                 .doctorName(a.getDoctor() != null && a.getDoctor().getUser() != null ? a.getDoctor().getUser().getFullName() : null)
                 .patientId(a.getPatient() != null ? a.getPatient().getId() : null)
                 .patientName(a.getPatient() != null && a.getPatient().getUser() != null ? a.getPatient().getUser().getFullName() : null)
-                .serviceId(a.getService() != null ? a.getService().getId() : null)
-                .serviceName(a.getService() != null ? a.getService().getName() : null)
+                .serviceId(a.getClinicService() != null ? a.getClinicService().getId() : null)
+                .serviceName(a.getClinicService() != null ? a.getClinicService().getName() : null)
                 .build();
     }
 

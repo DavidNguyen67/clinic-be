@@ -2,98 +2,109 @@
 
 ## 📚 Complete Documentation Suite
 
-### 1. **DOCTOR_SCHEDULE_API.md** 
-   - **Purpose**: Comprehensive API documentation
-   - **Contents**:
-     - Overview of all endpoints
-     - Detailed request/response schemas
-     - Field descriptions and validation rules
-     - Error handling guide
-     - Database table descriptions
-     - Authentication requirements
-     - Business logic explanations
-     - Example curl commands
-   - **Use When**: You need complete API reference information
+### 1. **DOCTOR_SCHEDULE_API.md**
+
+- **Purpose**: Comprehensive API documentation
+- **Contents**:
+    - Overview of all endpoints
+    - Detailed request/response schemas
+    - Field descriptions and validation rules
+    - Error handling guide
+    - Database table descriptions
+    - Authentication requirements
+    - Business logic explanations
+    - Example curl commands
+- **Use When**: You need complete API reference information
 
 ### 2. **API_QUICK_REFERENCE.md**
-   - **Purpose**: Quick lookup reference
-   - **Contents**:
-     - API endpoints summary table
-     - Request/response schemas
-     - Detailed endpoint documentation
-     - HTTP status codes
-     - Field validation rules
-     - Date/time format specifications
-     - CORS configuration
-   - **Use When**: You need quick lookup of endpoint details
+
+- **Purpose**: Quick lookup reference
+- **Contents**:
+    - API endpoints summary table
+    - Request/response schemas
+    - Detailed endpoint documentation
+    - HTTP status codes
+    - Field validation rules
+    - Date/time format specifications
+    - CORS configuration
+- **Use When**: You need quick lookup of endpoint details
 
 ### 3. **IMPLEMENTATION_SUMMARY.md**
-   - **Purpose**: Implementation overview
-   - **Contents**:
-     - Files created and modified
-     - DTOs overview
-     - Repository enhancements
-     - Service layer details
-     - Processor descriptions
-     - Configuration changes
-     - Request/response examples
-   - **Use When**: You want to understand how the feature was built
+
+- **Purpose**: Implementation overview
+- **Contents**:
+    - Files created and modified
+    - DTOs overview
+    - Repository enhancements
+    - Service layer details
+    - Processor descriptions
+    - Configuration changes
+    - Request/response examples
+- **Use When**: You want to understand how the feature was built
 
 ### 4. **TESTING_WITH_CURL.md**
-   - **Purpose**: Testing guide with curl examples
-   - **Contents**:
-     - Prerequisites setup
-     - Individual endpoint testing commands
-     - Multiple scenario testing
-     - Advanced bash scripts
-     - Performance testing examples
-     - Error handling test cases
-     - Debugging techniques
-   - **Use When**: You need to test the API manually
+
+- **Purpose**: Testing guide with curl examples
+- **Contents**:
+    - Prerequisites setup
+    - Individual endpoint testing commands
+    - Multiple scenario testing
+    - Advanced bash scripts
+    - Performance testing examples
+    - Error handling test cases
+    - Debugging techniques
+- **Use When**: You need to test the API manually
 
 ### 5. **IMPLEMENTATION_CHECKLIST.md**
-   - **Purpose**: Feature checklist and deployment guide
-   - **Contents**:
-     - Feature implementation checklist
-     - Component breakdown
-     - Code quality metrics
-     - Deployment checklist
-     - Future enhancements
-     - Success criteria
-   - **Use When**: You're preparing for deployment or verification
+
+- **Purpose**: Feature checklist and deployment guide
+- **Contents**:
+    - Feature implementation checklist
+    - Component breakdown
+    - Code quality metrics
+    - Deployment checklist
+    - Future enhancements
+    - Success criteria
+- **Use When**: You're preparing for deployment or verification
 
 ### 6. **COMPLETION_SUMMARY.md**
-   - **Purpose**: High-level completion overview
-   - **Contents**:
-     - Endpoints summary
-     - Files created/modified
-     - Key features implemented
-     - Technical stack
-     - Code statistics
-     - Quality assurance details
-   - **Use When**: You need executive summary
+
+- **Purpose**: High-level completion overview
+- **Contents**:
+    - Endpoints summary
+    - Files created/modified
+    - Key features implemented
+    - Technical stack
+    - Code statistics
+    - Quality assurance details
+- **Use When**: You need executive summary
 
 ---
 
 ## 🎯 Quick Navigation Guide
 
 ### For API Users / Frontend Developers
+
 Start with: **API_QUICK_REFERENCE.md**
 Then read: **DOCTOR_SCHEDULE_API.md** (for examples)
 
 ### For Backend Developers / Integration
+
 Start with: **IMPLEMENTATION_SUMMARY.md**
 Then read: **DOCTOR_SCHEDULE_API.md** (for details)
 
 ### For Testing / QA Engineers
+
 Start with: **TESTING_WITH_CURL.md**
 Reference: **API_QUICK_REFERENCE.md** (for specs)
 
 ### For DevOps / Deployment
+
 Start with: **IMPLEMENTATION_CHECKLIST.md**
 Reference: **DOCTOR_SCHEDULE_API.md** (for API endpoints)
 
 ### For Project Managers / Stakeholders
+
 Read: **COMPLETION_SUMMARY.md**
 Reference: **API_QUICK_REFERENCE.md** (for endpoints table)
 
@@ -122,7 +133,7 @@ clinic/
 │   │   ├── DoctorScheduleRepository.java (enhanced)
 │   │   └── DoctorLeaveRepository.java (new)
 │   │
-│   ├── service/doctor/
+│   ├── clinicService/doctor/
 │   │   ├── DoctorService.java (updated)
 │   │   ├── DoctorServiceImp.java (updated)
 │   │   └── DoctorServiceInv.java (updated)
@@ -155,11 +166,13 @@ clinic/
 ### Core Endpoints (6 total)
 
 **Schedule Management**
+
 - `GET /api/v1/doctor/schedule` - List schedules
 - `POST /api/v1/doctor/schedule` - Create schedule
 - `DELETE /api/v1/doctor/schedule/{id}` - Delete schedule
 
 **Leave Management**
+
 - `POST /api/v1/doctor/leaves` - Request leave
 - `GET /api/v1/doctor/leaves` - List leaves
 - `PATCH /api/v1/doctor/leaves/{id}/approve` - Approve leave
@@ -202,6 +215,7 @@ clinic/
 ## 🚀 Quick Start
 
 ### For Testing
+
 ```bash
 # Get your token first
 TOKEN=$(curl -s -X POST http://localhost:8080/api/v1/auth/login \
@@ -213,8 +227,9 @@ TOKEN=$(curl -s -X POST http://localhost:8080/api/v1/auth/login \
 ```
 
 ### For Integration
+
 ```java
-// Inject the service
+// Inject the clinicService
 @Autowired
 private DoctorServiceImp doctorServiceImp;
 
@@ -224,6 +239,7 @@ ResponseEntity<?> leave = doctorServiceImp.requestDoctorLeave(requestBody);
 ```
 
 ### For Configuration
+
 See `src/main/resources/camel/rest.yaml` and `routes.yaml`
 
 ---
@@ -251,14 +267,14 @@ Before going live, verify:
 
 ## 📊 Statistics
 
-| Metric | Value |
-|--------|-------|
-| Total Endpoints | 6 |
-| Total Java Files | 13 new + 7 updated |
-| Configuration Files | 2 updated |
-| Documentation Files | 6 |
-| Total Code Lines | ~1500+ |
-| Test Cases Documented | 15+ |
+| Metric                | Value              |
+|-----------------------|--------------------|
+| Total Endpoints       | 6                  |
+| Total Java Files      | 13 new + 7 updated |
+| Configuration Files   | 2 updated          |
+| Documentation Files   | 6                  |
+| Total Code Lines      | ~1500+             |
+| Test Cases Documented | 15+                |
 
 ---
 

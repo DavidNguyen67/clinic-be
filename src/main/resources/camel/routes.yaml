@@ -9,12 +9,6 @@
       - marshal:
           json: { }
 
-- onCompletion:
-    onCompleteOnly: true
-    steps:
-      - process:
-          ref: apiResponseWrapperProcessor
-
 - route:
     id: auth-register-route
     from:
@@ -138,16 +132,6 @@
             json: { }
 
 - route:
-    id: auth-get-profile-route
-    from:
-      uri: direct:auth-get-profile
-      steps:
-        - process:
-            ref: getUserProfileProcessor
-        - marshal:
-            json: { }
-
-- route:
     id: auth-change-password-route
     from:
       uri: direct:auth-change-password
@@ -225,9 +209,9 @@
             json: { }
 
 - route:
-    id: specialty-count-route
+    id: specialties-count-route
     from:
-      uri: direct:specialty-count
+      uri: direct:specialties-count
       steps:
         - process:
             ref: countAllSpecialtiesProcessor
@@ -235,9 +219,9 @@
             json: { }
 
 - route:
-    id: specialty-route
+    id: specialties-route
     from:
-      uri: direct:specialty
+      uri: direct:specialties
       steps:
         - process:
             ref: getAllSpecialtiesProcessor

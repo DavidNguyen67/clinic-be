@@ -72,5 +72,13 @@ public interface DoctorLeaveRepository extends JpaRepository<DoctorLeave, UUID>,
             @Param("doctorId") UUID doctorId,
             @Param("date") Date date
     );
+
+    boolean existsByDoctorIdAndLeaveDateAndStartTimeAndEndTimeAndStatusNot(
+            UUID doctorId,
+            Date leaveDate,
+            Date startTime,
+            Date endTime,
+            DoctorLeave.LeaveStatus status
+    );
 }
 

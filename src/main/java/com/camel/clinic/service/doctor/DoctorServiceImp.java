@@ -1,5 +1,7 @@
 package com.camel.clinic.service.doctor;
 
+import com.camel.clinic.dto.doctor.DoctorLeaveRequestDTO;
+import com.camel.clinic.dto.doctor.DoctorScheduleRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +37,7 @@ public class DoctorServiceImp implements DoctorService {
     }
 
     @Override
-    public ResponseEntity<?> addDoctorSchedule(Map<String, Object> requestBody) {
+    public ResponseEntity<?> addDoctorSchedule(DoctorScheduleRequestDTO requestBody) {
         return doctorServiceInv.addDoctorSchedule(requestBody);
     }
 
@@ -45,7 +47,7 @@ public class DoctorServiceImp implements DoctorService {
     }
 
     @Override
-    public ResponseEntity<?> requestDoctorLeave(Map<String, Object> requestBody) {
+    public ResponseEntity<?> requestDoctorLeave(DoctorLeaveRequestDTO requestBody) {
         return doctorServiceInv.requestDoctorLeave(requestBody);
     }
 

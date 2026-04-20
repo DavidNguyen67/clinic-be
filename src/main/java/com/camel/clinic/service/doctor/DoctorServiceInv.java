@@ -1,12 +1,7 @@
 package com.camel.clinic.service.doctor;
 
-import com.camel.clinic.dto.DoctorDTO;
 import com.camel.clinic.dto.doctor.*;
-import com.camel.clinic.entity.Doctor;
-import com.camel.clinic.entity.DoctorLeave;
-import com.camel.clinic.entity.DoctorSchedule;
-import com.camel.clinic.entity.Role;
-import com.camel.clinic.entity.User;
+import com.camel.clinic.entity.*;
 import com.camel.clinic.exception.BadRequestException;
 import com.camel.clinic.exception.NotFoundException;
 import com.camel.clinic.exception.UnauthorizedException;
@@ -20,12 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,9 +67,8 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
                     specialtyId = UUID.fromString(specialtyIdStr);
                 } catch (IllegalArgumentException e) {
                     log.warn("Invalid specialtyId format: {}", specialtyIdStr, e);
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(Map.of("error", "Invalid specialtyId format",
-                                    "message", "specialtyId must be a valid UUID"));
+                    return ResponseEntity.badRequest().body(Map.of("error", "Invalid specialtyId format",
+                            "message", "specialtyId must be a valid UUID"));
                 }
             }
 
@@ -90,8 +85,7 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error("Error filtering doctors: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Failed to filter doctors", "message", e.getMessage()));
+            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to filter doctors", "message", e.getMessage()));
         }
     }
 
@@ -109,18 +103,15 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
 
             return ResponseEntity.ok(response);
         } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
             log.error("Error getting doctor schedules: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Failed to get schedules", "message", e.getMessage()));
+            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to get schedules", "message", e.getMessage()));
         }
     }
 
-    public ResponseEntity<?> addDoctorSchedule(Map<String, Object> requestBody) {
+    public ResponseEntity<?> addDoctorSchedule(DoctorScheduleRequestDTO requestDTO) {
         try {
-            DoctorScheduleRequestDTO requestDTO = objectMapper.convertValue(requestBody, DoctorScheduleRequestDTO.class);
-
             if (requestDTO.getDayOfWeek() < 0 || requestDTO.getDayOfWeek() > 6) {
                 throw new BadRequestException("Day of week must be between 0-6");
             }
@@ -140,13 +131,18 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             schedule.setIsActive(requestDTO.getIsActive() != null ? requestDTO.getIsActive() : true);
 
             DoctorSchedule savedSchedule = doctorScheduleRepository.save(schedule);
-            return ResponseEntity.status(HttpStatus.CREATED).body(convertToScheduleDTO(savedSchedule));
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(savedSchedule.getId())
+                    .toUri();
+
+            return ResponseEntity.created(location).body(convertToScheduleDTO(savedSchedule));
         } catch (NotFoundException | BadRequestException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             log.error("Error adding doctor schedule: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Failed to add schedule", "message", e.getMessage()));
+            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to add schedule", "message", e.getMessage()));
         }
     }
 
@@ -164,24 +160,35 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             doctorScheduleRepository.delete(schedule);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid schedule ID format"));
+            return ResponseEntity.badRequest().body(Map.of("error", "Invalid schedule ID format", "message", "scheduleId must be a valid UUID"));
         } catch (NotFoundException | UnauthorizedException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             log.error("Error deleting doctor schedule: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Failed to delete schedule", "message", e.getMessage()));
+            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to delete schedule", "message", e.getMessage()));
         }
     }
 
     // Doctor Leave Management
-    public ResponseEntity<?> requestDoctorLeave(Map<String, Object> requestBody) {
+    public ResponseEntity<?> requestDoctorLeave(DoctorLeaveRequestDTO requestDTO) {
         try {
-            DoctorLeaveRequestDTO requestDTO = objectMapper.convertValue(requestBody, DoctorLeaveRequestDTO.class);
-
             User currentUser = getCurrentUser();
             Doctor doctor = doctorRepository.findByUserId(currentUser.getId())
                     .orElseThrow(() -> new NotFoundException("Doctor not found"));
+
+            boolean isDuplicate = doctorLeaveRepository
+                    .existsByDoctorIdAndLeaveDateAndStartTimeAndEndTimeAndStatusNot(
+                            doctor.getId(),
+                            requestDTO.getLeaveDate(),
+                            requestDTO.getStartTime(),
+                            requestDTO.getEndTime(),
+                            DoctorLeave.LeaveStatus.rejected
+                    );
+
+            if (isDuplicate) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Duplicate leave request", "message", "You already have a leave request for this time period"));
+            }
 
             DoctorLeave leave = new DoctorLeave();
             leave.setDoctor(doctor);
@@ -192,12 +199,21 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             leave.setStatus(DoctorLeave.LeaveStatus.pending);
 
             DoctorLeave savedLeave = doctorLeaveRepository.save(leave);
-            return ResponseEntity.status(HttpStatus.CREATED).body(convertToLeaveDTO(savedLeave));
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(savedLeave.getId())
+                    .toUri();
+
+            return ResponseEntity.created(location)
+                    .body(convertToLeaveDTO(savedLeave));
+
         } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
             log.error("Error requesting doctor leave: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.internalServerError()
                     .body(Map.of("error", "Failed to request leave", "message", e.getMessage()));
         }
     }
@@ -235,13 +251,12 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
 
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid doctor ID format"));
+            return ResponseEntity.badRequest().body(Map.of("error", "Invalid doctor ID format", "message", "doctorId must be a valid UUID"));
         } catch (NotFoundException | UnauthorizedException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             log.error("Error getting doctor leaves: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Failed to get leaves", "message", e.getMessage()));
+            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to get leaves", "message", e.getMessage()));
         }
     }
 
@@ -269,13 +284,12 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             DoctorLeave updatedLeave = doctorLeaveRepository.save(leave);
             return ResponseEntity.ok(convertToLeaveDTO(updatedLeave));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid leave ID format"));
+            return ResponseEntity.badRequest().body(Map.of("error", "Invalid leave ID format", "message", "leaveId must be a valid UUID"));
         } catch (NotFoundException | UnauthorizedException | BadRequestException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             log.error("Error approving doctor leave: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Failed to approve leave", "message", e.getMessage()));
+            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to approve leave", "message", e.getMessage()));
         }
     }
 

@@ -2,10 +2,7 @@ package com.camel.clinic.service.auth;
 
 import com.camel.clinic.dto.auth.*;
 import com.camel.clinic.entity.*;
-import com.camel.clinic.repository.DoctorRepository;
-import com.camel.clinic.repository.PatientRepository;
-import com.camel.clinic.repository.SpecialtyRepository;
-import com.camel.clinic.repository.StaffRepository;
+import com.camel.clinic.repository.*;
 import com.camel.clinic.service.EmailUniqueService;
 import com.camel.clinic.util.JwtUtil;
 import lombok.AllArgsConstructor;
@@ -42,6 +39,7 @@ public class AuthServiceImp implements AuthService {
     private final PatientRepository patientRepository;
     private final StaffRepository staffRepository;
     private final SpecialtyRepository specialtyRepository;
+    private final DoctorScheduleRepository doctorScheduleRepository;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -282,10 +280,8 @@ public class AuthServiceImp implements AuthService {
     public ResponseEntity<?> me(String email) throws BadRequestException {
         User user = authServiceInv.findByEmail(email)
                 .orElseThrow(() -> new BadRequestException("User not found"));
-        Map<String, Object> response = new HashMap<>();
-        response.put("user", UserResponseDTO.from(user));
-        response.put("profile", null);
-        return ResponseEntity.ok(response);
+        UserProfileDTO profile = authServiceInv.buildUserProfileDTO(user);
+        return ResponseEntity.ok(profile);
     }
 
     @Override

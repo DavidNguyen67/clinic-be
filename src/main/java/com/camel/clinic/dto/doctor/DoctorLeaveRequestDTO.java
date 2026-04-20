@@ -1,6 +1,8 @@
 package com.camel.clinic.dto.doctor;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -38,5 +40,12 @@ public class DoctorLeaveRequestDTO {
 
     @NotBlank(message = "Reason is required")
     private String reason;
+
+    @JsonIgnore
+    @AssertTrue(message = "End time must be after start time")
+    public boolean isValidTimeRange() {
+        if (startTime == null || endTime == null) return true;
+        return endTime.after(startTime);
+    }
 }
 

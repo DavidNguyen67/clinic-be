@@ -1,6 +1,6 @@
 package com.camel.clinic.repository;
 
-import com.camel.clinic.dto.DoctorDTO;
+import com.camel.clinic.dto.doctor.DoctorDTO;
 import com.camel.clinic.entity.Doctor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -72,4 +72,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, UUID>, JpaSpecif
             LIMIT 20
             """, nativeQuery = true)
     List<Doctor> searchDoctors(@Param("keyword") String keyword);
+
+
 }

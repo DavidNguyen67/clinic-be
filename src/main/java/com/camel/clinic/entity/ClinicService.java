@@ -3,11 +3,7 @@ package com.camel.clinic.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -23,7 +19,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Setter
 @Getter
-public class Service extends SoftDeletableEntity {
+public class ClinicService extends SoftDeletableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "specialty_id", foreignKey = @ForeignKey(name = "fk_service_specialty"))

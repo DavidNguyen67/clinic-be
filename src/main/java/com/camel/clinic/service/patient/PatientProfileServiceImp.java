@@ -12,7 +12,6 @@ import com.camel.clinic.repository.PatientRepository;
 import com.camel.clinic.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,9 +51,11 @@ public class PatientProfileServiceImp {
             if (requestBody.containsKey("fullName")) user.setFullName((String) requestBody.get("fullName"));
             if (requestBody.containsKey("phone")) user.setPhone((String) requestBody.get("phone"));
             if (requestBody.containsKey("address")) patient.setAddress((String) requestBody.get("address"));
-            if (requestBody.containsKey("insuranceNumber")) patient.setInsuranceNumber((String) requestBody.get("insuranceNumber"));
+            if (requestBody.containsKey("insuranceNumber"))
+                patient.setInsuranceNumber((String) requestBody.get("insuranceNumber"));
             if (requestBody.containsKey("allergies")) patient.setAllergies((String) requestBody.get("allergies"));
-            if (requestBody.containsKey("chronicDiseases")) patient.setChronicDiseases((String) requestBody.get("chronicDiseases"));
+            if (requestBody.containsKey("chronicDiseases"))
+                patient.setChronicDiseases((String) requestBody.get("chronicDiseases"));
 
             userRepository.save(user);
             Patient saved = patientRepository.save(patient);
@@ -108,13 +109,15 @@ public class PatientProfileServiceImp {
 
     private ResponseEntity<?> handleError(Exception e, String fallbackMessage) {
         if (e instanceof UnauthorizedException) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
+            log.error(fallbackMessage + ": {}", e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
         if (e instanceof NotFoundException) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+            log.error(fallbackMessage + ": {}", e.getMessage());
+            return ResponseEntity.notFound().build();
         }
         log.error(fallbackMessage, e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", fallbackMessage));
+        return ResponseEntity.internalServerError().body(Map.of("error", fallbackMessage));
     }
 
     private PatientProfileDTO toDto(Patient p) {
@@ -145,7 +148,7 @@ public class PatientProfileServiceImp {
         summary.put("endTime", a.getEndTime());
         summary.put("status", a.getStatus().name());
         summary.put("doctorName", a.getDoctor() != null && a.getDoctor().getUser() != null ? a.getDoctor().getUser().getFullName() : null);
-        summary.put("serviceName", a.getService() != null ? a.getService().getName() : null);
+        summary.put("serviceName", a.getClinicService() != null ? a.getClinicService().getName() : null);
         return summary;
     }
 }

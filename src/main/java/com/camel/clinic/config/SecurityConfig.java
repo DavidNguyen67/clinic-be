@@ -61,9 +61,9 @@ public class SecurityConfig {
                                 "/api/v1/search",
                                 "/api/v1/top-doctors",
                                 "/api/v1/patient-count",
-                                "/api/v1/specialty/**",
+                                "/api/v1/specialties/**",
                                 "/api/v1/slot-availability",
-                                "/api/v1/specialty-count"
+                                "/api/v1/specialties"
                         ).permitAll()
                         .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/v1/doctor/**").hasAuthority("DOCTOR")
