@@ -456,6 +456,13 @@
     from:
       uri: direct:patient-profile-update
       steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.patient.UpdatePatientProfileDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
         - process:
             ref: updatePatientProfileProcessor
         - marshal:

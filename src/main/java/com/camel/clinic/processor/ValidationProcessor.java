@@ -25,7 +25,7 @@ public class ValidationProcessor implements Processor {
         Set<ConstraintViolation<Object>> violations = validator.validate(body);
         if (!violations.isEmpty()) {
             ConstraintViolation<Object> first = violations.iterator().next();
-            throw new BadRequestException(first.getPropertyPath() + ": " + first.getMessage());
+            throw new BadRequestException(first.getMessage());
         }
     }
 }

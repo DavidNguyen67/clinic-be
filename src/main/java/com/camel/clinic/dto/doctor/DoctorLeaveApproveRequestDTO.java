@@ -1,12 +1,11 @@
 package com.camel.clinic.dto.doctor;
 
+import com.camel.clinic.entity.DoctorLeave;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -14,9 +13,15 @@ import java.util.UUID;
 public class DoctorLeaveApproveRequestDTO {
 
     @NotNull(message = "Status is required")
-    @NotBlank(message = "Status cannot be blank")
-    private String status; // "approved" or "rejected"
+    private DoctorLeave.LeaveStatus status;
 
     private String rejectionReason;
-}
 
+    @AssertTrue(message = "Rejection reason is required when status is rejected")
+    public boolean isValidReason() {
+        if (status == DoctorLeave.LeaveStatus.rejected) {
+            return rejectionReason != null && !rejectionReason.trim().isEmpty();
+        }
+        return true;
+    }
+}

@@ -271,9 +271,9 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             DoctorLeave leave = doctorLeaveRepository.findById(leaveUUID)
                     .orElseThrow(() -> new NotFoundException("Leave request not found"));
 
-            if ("approved".equalsIgnoreCase(requestDTO.getStatus())) {
+            if (requestDTO.getStatus() == DoctorLeave.LeaveStatus.approved) {
                 leave.setStatus(DoctorLeave.LeaveStatus.approved);
-            } else if ("rejected".equalsIgnoreCase(requestDTO.getStatus())) {
+            } else if (requestDTO.getStatus() == DoctorLeave.LeaveStatus.rejected) {
                 leave.setStatus(DoctorLeave.LeaveStatus.rejected);
             } else {
                 throw new BadRequestException("Invalid status. Must be 'approved' or 'rejected'");

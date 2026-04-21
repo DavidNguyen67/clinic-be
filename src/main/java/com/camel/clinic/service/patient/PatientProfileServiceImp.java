@@ -1,6 +1,7 @@
 package com.camel.clinic.service.patient;
 
 import com.camel.clinic.dto.patient.PatientProfileDTO;
+import com.camel.clinic.dto.patient.UpdatePatientProfileDto;
 import com.camel.clinic.entity.Appointment;
 import com.camel.clinic.entity.Patient;
 import com.camel.clinic.entity.Role;
@@ -43,19 +44,17 @@ public class PatientProfileServiceImp {
         }
     }
 
-    public ResponseEntity<?> updateProfile(Map<String, Object> requestBody) {
+    public ResponseEntity<?> updateProfile(UpdatePatientProfileDto requestBody) {
         try {
             Patient patient = getCurrentPatient();
             User user = patient.getUser();
-
-            if (requestBody.containsKey("fullName")) user.setFullName((String) requestBody.get("fullName"));
-            if (requestBody.containsKey("phone")) user.setPhone((String) requestBody.get("phone"));
-            if (requestBody.containsKey("address")) patient.setAddress((String) requestBody.get("address"));
-            if (requestBody.containsKey("insuranceNumber"))
-                patient.setInsuranceNumber((String) requestBody.get("insuranceNumber"));
-            if (requestBody.containsKey("allergies")) patient.setAllergies((String) requestBody.get("allergies"));
-            if (requestBody.containsKey("chronicDiseases"))
-                patient.setChronicDiseases((String) requestBody.get("chronicDiseases"));
+            if (requestBody.getFullName() != null) user.setFullName(requestBody.getFullName());
+            if (requestBody.getPhone() != null) user.setPhone(requestBody.getPhone());
+            if (requestBody.getAddress() != null) patient.setAddress(requestBody.getAddress());
+            if (requestBody.getInsuranceNumber() != null)
+                patient.setInsuranceNumber(requestBody.getInsuranceNumber());
+            if (requestBody.getAllergies() != null) patient.setAllergies(requestBody.getAllergies());
+            if (requestBody.getChronicDiseases() != null) patient.setChronicDiseases(requestBody.getChronicDiseases());
 
             userRepository.save(user);
             Patient saved = patientRepository.save(patient);
@@ -83,7 +82,7 @@ public class PatientProfileServiceImp {
             List<Appointment> history = appointmentRepository.findByPatientId(patient.getId())
                     .stream()
                     .filter(a -> a.getStatus() == Appointment.AppointmentStatus.completed)
-                    .collect(Collectors.toList());
+                    .toList();
             return ResponseEntity.ok(history.stream().map(this::toAppointmentSummary).collect(Collectors.toList()));
         } catch (Exception e) {
             return handleError(e, "Failed to get patient history");

@@ -150,7 +150,7 @@
         to: direct:patient-appointments
 
 - rest:
-    path: /v1/patient/history
+    path: /v1/patient/history-appointments
     get:
       - path: /
         to: direct:patient-history
