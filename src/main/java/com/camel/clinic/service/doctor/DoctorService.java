@@ -1,5 +1,6 @@
 package com.camel.clinic.service.doctor;
 
+import com.camel.clinic.dto.doctor.DoctorLeaveApproveRequestDTO;
 import com.camel.clinic.dto.doctor.DoctorLeaveRequestDTO;
 import com.camel.clinic.dto.doctor.DoctorScheduleRequestDTO;
 import org.springframework.http.ResponseEntity;
@@ -25,5 +26,5 @@ public interface DoctorService {
 
     ResponseEntity<?> getDoctorLeaves(String doctorId);
 
-    ResponseEntity<?> approveDoctorLeave(String leaveId, Map<String, Object> requestBody);
+    ResponseEntity<?> approveDoctorLeave(String leaveId, DoctorLeaveApproveRequestDTO requestBody);
 }

@@ -1,5 +1,6 @@
 package com.camel.clinic.service.doctor;
 
+import com.camel.clinic.dto.doctor.DoctorLeaveApproveRequestDTO;
 import com.camel.clinic.dto.doctor.DoctorLeaveRequestDTO;
 import com.camel.clinic.dto.doctor.DoctorScheduleRequestDTO;
 import lombok.AllArgsConstructor;
@@ -57,7 +58,7 @@ public class DoctorServiceImp implements DoctorService {
     }
 
     @Override
-    public ResponseEntity<?> approveDoctorLeave(String leaveId, Map<String, Object> requestBody) {
+    public ResponseEntity<?> approveDoctorLeave(String leaveId, DoctorLeaveApproveRequestDTO requestBody) {
         return doctorServiceInv.approveDoctorLeave(leaveId, requestBody);
     }
 }

@@ -260,14 +260,12 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
         }
     }
 
-    public ResponseEntity<?> approveDoctorLeave(String leaveId, Map<String, Object> requestBody) {
+    public ResponseEntity<?> approveDoctorLeave(String leaveId, DoctorLeaveApproveRequestDTO requestDTO) {
         try {
             User currentUser = getCurrentUser();
             if (currentUser.getRole() != Role.RoleName.ADMIN) {
                 throw new UnauthorizedException("Only admins can approve leaves");
             }
-
-            DoctorLeaveApproveRequestDTO requestDTO = objectMapper.convertValue(requestBody, DoctorLeaveApproveRequestDTO.class);
 
             UUID leaveUUID = UUID.fromString(leaveId);
             DoctorLeave leave = doctorLeaveRepository.findById(leaveUUID)

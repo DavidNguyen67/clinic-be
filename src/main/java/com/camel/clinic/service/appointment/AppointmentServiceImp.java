@@ -180,11 +180,10 @@ public class AppointmentServiceImp implements AppointmentService {
         }
     }
 
-    public ResponseEntity<?> cancelAppointment(String id, Map<String, Object> requestBody) {
+    public ResponseEntity<?> cancelAppointment(String id, AppointmentCancelRequestDTO dto) {
         try {
             Appointment appointment = appointmentRepository.findById(UUID.fromString(id))
                     .orElseThrow(() -> new NotFoundException("Appointment not found"));
-            AppointmentCancelRequestDTO dto = objectMapper.convertValue(requestBody, AppointmentCancelRequestDTO.class);
             User currentUser = getCurrentUser();
 
             boolean patientRole = Role.RoleName.PATIENT.name().equals(currentUser.getRole().name());
