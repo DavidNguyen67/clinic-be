@@ -259,6 +259,17 @@
             json: { }
 
 - route:
+    id: doctor-get-schedule-today-route
+    from:
+      uri: direct:doctor-get-schedule-today
+      steps:
+        - process:
+            ref: getDoctorScheduleTodayProcessor
+        - marshal:
+            json: { }
+
+
+- route:
     id: doctor-add-schedule-route
     from:
       uri: direct:doctor-add-schedule

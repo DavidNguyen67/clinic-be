@@ -78,6 +78,13 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID>,
 
     @Query("""
             SELECT a FROM Appointment a
+                JOIN FETCH a.patient p
+                JOIN FETCH p.user pu
+                JOIN FETCH a.doctor d
+                JOIN FETCH d.user du
+                JOIN FETCH d.specialty ds
+                JOIN FETCH a.clinicService cs
+                JOIN FETCH cs.specialty css
             WHERE a.doctor.id = :doctorId
               AND a.appointmentDate >= :fromDate
               AND a.appointmentDate < :toDate

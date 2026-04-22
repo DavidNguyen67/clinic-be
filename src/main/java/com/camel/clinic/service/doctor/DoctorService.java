@@ -17,6 +17,8 @@ public interface DoctorService {
     // Doctor Schedule Management
     ResponseEntity<?> getDoctorSchedules();
 
+    ResponseEntity<?> getDoctorInfoSchedules();
+
     ResponseEntity<?> addDoctorSchedule(DoctorScheduleRequestDTO requestBody);
 
     ResponseEntity<?> deleteDoctorSchedule(String scheduleId);

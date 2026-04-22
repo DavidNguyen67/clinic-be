@@ -62,4 +62,16 @@ public interface DoctorScheduleRepository extends JpaRepository<DoctorSchedule, 
     List<DoctorSchedule> findOverlappingSchedules(
             @Param("doctorId") UUID doctorId,
             @Param("dayOfWeek") int dayOfWeek);
+
+    @Query("""
+            SELECT s FROM DoctorSchedule s
+            WHERE s.doctor.id = :doctorId
+              AND s.dayOfWeek = :dayOfWeek
+              AND s.isActive = true
+              AND s.deletedAt IS NULL
+            ORDER BY s.startTime ASC
+            """)
+    DoctorSchedule findTodaySchedulesByDoctorId(
+            @Param("doctorId") UUID doctorId,
+            @Param("dayOfWeek") int dayOfWeek);
 }

@@ -38,6 +38,11 @@ public class DoctorServiceImp implements DoctorService {
     }
 
     @Override
+    public ResponseEntity<?> getDoctorInfoSchedules() {
+        return doctorServiceInv.getDoctorInfoSchedules();
+    }
+
+    @Override
     public ResponseEntity<?> addDoctorSchedule(DoctorScheduleRequestDTO requestBody) {
         return doctorServiceInv.addDoctorSchedule(requestBody);
     }

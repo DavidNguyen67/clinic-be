@@ -35,5 +35,9 @@ public class AppointmentResponseDTO {
     private String patientName;
     private UUID serviceId;
     private String serviceName;
+    private String patientPhone;
+    private String patientEmail;
+    private String doctorPhone;
+    private String doctorEmail;
 }
 

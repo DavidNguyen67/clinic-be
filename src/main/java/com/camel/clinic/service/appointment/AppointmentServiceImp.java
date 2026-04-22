@@ -410,6 +410,10 @@ public class AppointmentServiceImp implements AppointmentService {
                 .patientName(a.getPatient() != null && a.getPatient().getUser() != null ? a.getPatient().getUser().getFullName() : null)
                 .serviceId(a.getClinicService() != null ? a.getClinicService().getId() : null)
                 .serviceName(a.getClinicService() != null ? a.getClinicService().getName() : null)
+                .patientPhone(a.getPatient() != null && a.getPatient().getUser() != null ? a.getPatient().getUser().getPhone() : null)
+                .patientEmail(a.getPatient() != null && a.getPatient().getUser() != null ? a.getPatient().getUser().getEmail() : null)
+                .doctorPhone(a.getDoctor() != null && a.getDoctor().getUser() != null ? a.getDoctor().getUser().getPhone() : null)
+                .doctorEmail(a.getDoctor() != null && a.getDoctor().getUser() != null ? a.getDoctor().getUser().getEmail() : null)
                 .build();
     }
 

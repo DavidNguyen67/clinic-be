@@ -5,10 +5,7 @@ import com.camel.clinic.entity.*;
 import com.camel.clinic.exception.BadRequestException;
 import com.camel.clinic.exception.NotFoundException;
 import com.camel.clinic.exception.UnauthorizedException;
-import com.camel.clinic.repository.DoctorLeaveRepository;
-import com.camel.clinic.repository.DoctorRepository;
-import com.camel.clinic.repository.DoctorScheduleRepository;
-import com.camel.clinic.repository.UserRepository;
+import com.camel.clinic.repository.*;
 import com.camel.clinic.service.BaseService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,18 +32,20 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
     private final DoctorScheduleRepository doctorScheduleRepository;
     private final DoctorLeaveRepository doctorLeaveRepository;
     private final UserRepository userRepository;
+    private final AppointmentRepository appointmentRepository;
     private final DoctorRepository doctorRepository;
     private final ObjectMapper objectMapper;
 
     public DoctorServiceInv(DoctorRepository repository, DoctorScheduleRepository doctorScheduleRepository,
                             DoctorLeaveRepository doctorLeaveRepository, UserRepository userRepository, DoctorRepository doctorRepository,
-                            ObjectMapper objectMapper) {
+                            ObjectMapper objectMapper, AppointmentRepository appointmentRepository) {
         super(Doctor::new, repository);
         this.doctorScheduleRepository = doctorScheduleRepository;
         this.doctorLeaveRepository = doctorLeaveRepository;
         this.userRepository = userRepository;
         this.doctorRepository = doctorRepository;
         this.objectMapper = objectMapper;
+        this.appointmentRepository = appointmentRepository;
     }
 
     public ResponseEntity<?> getTopDoctors() {
@@ -288,6 +288,26 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
         } catch (Exception e) {
             log.error("Error approving doctor leave: {}", e.getMessage(), e);
             return ResponseEntity.internalServerError().body(Map.of("error", "Failed to approve leave", "message", e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<?> getDoctorInfoSchedules() {
+        try {
+            User currentUser = getCurrentUser();
+            Doctor doctor = doctorRepository.findByUserId(currentUser.getId())
+                    .orElseThrow(() -> new NotFoundException("Doctor not found"));
+
+            int today = LocalDate.now().getDayOfWeek().getValue();
+
+            DoctorSchedule schedules = doctorScheduleRepository.findTodaySchedulesByDoctorId(doctor.getId(), today);
+            DoctorScheduleResponseDTO response = convertToScheduleDTO(schedules);
+
+            return ResponseEntity.ok(response);
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            log.error("Error getting doctor info schedules: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to get schedules", "message", e.getMessage()));
         }
     }
 
