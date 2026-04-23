@@ -5,6 +5,7 @@ import com.camel.clinic.dto.doctor.DoctorLeaveRequestDTO;
 import com.camel.clinic.dto.doctor.DoctorScheduleRequestDTO;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Map;
 
 public interface DoctorService {
@@ -19,7 +20,7 @@ public interface DoctorService {
 
     ResponseEntity<?> getDoctorInfoSchedules();
 
-    ResponseEntity<?> addDoctorSchedule(DoctorScheduleRequestDTO requestBody);
+    ResponseEntity<?> addDoctorSchedules(List<DoctorScheduleRequestDTO> requestBody);
 
     ResponseEntity<?> deleteDoctorSchedule(String scheduleId);
 
@@ -29,4 +30,7 @@ public interface DoctorService {
     ResponseEntity<?> getDoctorLeaves(String doctorId);
 
     ResponseEntity<?> approveDoctorLeave(String leaveId, DoctorLeaveApproveRequestDTO requestBody);
+
+    ResponseEntity<?> getDoctorInfo(String doctorId);
 }
+

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -21,7 +22,6 @@ public class DoctorServiceImp implements DoctorService {
     public ResponseEntity<?> filterDoctors(Map<String, Object> queryParams) {
         return doctorServiceInv.filterDoctors(queryParams);
     }
-
 
     public ResponseEntity<?> countAllDoctors() {
         return doctorServiceInv.count();
@@ -43,8 +43,8 @@ public class DoctorServiceImp implements DoctorService {
     }
 
     @Override
-    public ResponseEntity<?> addDoctorSchedule(DoctorScheduleRequestDTO requestBody) {
-        return doctorServiceInv.addDoctorSchedule(requestBody);
+    public ResponseEntity<?> addDoctorSchedules(List<DoctorScheduleRequestDTO> requestBody) {
+        return doctorServiceInv.addDoctorSchedules(requestBody);
     }
 
     @Override
@@ -65,5 +65,10 @@ public class DoctorServiceImp implements DoctorService {
     @Override
     public ResponseEntity<?> approveDoctorLeave(String leaveId, DoctorLeaveApproveRequestDTO requestBody) {
         return doctorServiceInv.approveDoctorLeave(leaveId, requestBody);
+    }
+
+    @Override
+    public ResponseEntity<?> getDoctorInfo(String doctorId) {
+        return doctorServiceInv.getDoctorInfo(doctorId);
     }
 }

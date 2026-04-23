@@ -1,0 +1,5 @@
+$kind: http-request
+name: New Request
+url: "{{baseUrl}}/api/v1/auth/me"
+method: GET
+order: 4495553139964263

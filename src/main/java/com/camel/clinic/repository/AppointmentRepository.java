@@ -149,4 +149,21 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID>,
             "clinicService", "clinicService.specialty"
     })
     Page<Appointment> findAll(Pageable pageable);
+
+    //    findNextAvailableSlot
+    @Query("""
+            SELECT a.startTime
+            FROM Appointment a
+            WHERE a.doctor.id = :doctorId
+            AND a.appointmentDate >= :fromDate
+            AND a.appointmentDate < :toDate
+            AND a.status NOT IN ('cancelled', 'no_show')
+            AND a.deletedAt IS NULL
+            ORDER BY a.appointmentDate ASC, a.startTime ASC
+            """)
+    List<Date> findBookedStartTimesBetween(
+            @Param("doctorId") UUID doctorId,
+            @Param("fromDate") Date fromDate,
+            @Param("toDate") Date toDate
+    );
 }

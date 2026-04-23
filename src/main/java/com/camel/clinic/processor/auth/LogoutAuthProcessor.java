@@ -1,5 +1,6 @@
 package com.camel.clinic.processor.auth;
 
+import com.camel.clinic.dto.auth.LogoutRequestDTO;
 import com.camel.clinic.service.auth.AuthServiceImp;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,8 +24,10 @@ public class LogoutAuthProcessor implements Processor {
         HttpServletRequest httpRequest = exchange.getIn()
                 .getHeader(Exchange.HTTP_SERVLET_REQUEST, HttpServletRequest.class);
 
-        String refreshToken = extractRefreshTokenFromCookie(httpRequest);
+//        String refreshToken = extractRefreshTokenFromCookie(httpRequest);
+        LogoutRequestDTO request = exchange.getIn().getBody(LogoutRequestDTO.class);
 
+        String refreshToken = request.getRefreshToken();
         String authHeader = exchange.getIn().getHeader("Authorization", String.class);
         String accessToken = null;
         if (authHeader != null && authHeader.startsWith("Bearer ")) {

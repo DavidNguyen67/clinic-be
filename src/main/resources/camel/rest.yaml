@@ -15,7 +15,6 @@
         to: direct:auth-change-password
       - path: /refresh
         to: direct:auth-refresh
-    get:
       - path: /logout
         to: direct:auth-logout
 
@@ -46,16 +45,22 @@
         to: direct:doctor-count
 
 - rest:
-    path: /v1/top-doctors
+    path: /v1/top-doctor
     get:
       - path: /
-        to: direct:top-doctors
+        to: direct:top-doctor
 
 - rest:
-    path: /v1/doctors
+    path: /v1/doctor-info
+    get:
+      - path: /{doctorId}
+        to: direct:doctor-info
+
+- rest:
+    path: /v1/doctor
     get:
       - path: /
-        to: direct:doctors
+        to: direct:doctor
 
 - rest:
     path: /v1/patient-count

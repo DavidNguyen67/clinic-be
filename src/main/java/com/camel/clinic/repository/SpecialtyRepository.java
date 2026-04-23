@@ -40,4 +40,7 @@ public interface SpecialtyRepository extends JpaRepository<Specialty, UUID>, Jpa
             """, nativeQuery = true)
     List<Specialty> searchSpecialties(@Param("keyword") String keyword);
 
+    @Query("SELECT s FROM Specialty s JOIN s.doctors d WHERE d.id = :doctorId AND s.deletedAt IS NULL")
+    Specialty findByDoctorId(@Param("doctorId") UUID doctorId);
+
 }

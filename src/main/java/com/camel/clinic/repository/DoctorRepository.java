@@ -74,4 +74,5 @@ public interface DoctorRepository extends JpaRepository<Doctor, UUID>, JpaSpecif
     List<Doctor> searchDoctors(@Param("keyword") String keyword);
 
 
+    Optional<Object> getDistinctById(UUID id);
 }

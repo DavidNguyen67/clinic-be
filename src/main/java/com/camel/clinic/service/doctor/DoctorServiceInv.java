@@ -7,7 +7,6 @@ import com.camel.clinic.exception.NotFoundException;
 import com.camel.clinic.exception.UnauthorizedException;
 import com.camel.clinic.repository.*;
 import com.camel.clinic.service.BaseService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,10 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,18 +30,40 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
     private final UserRepository userRepository;
     private final AppointmentRepository appointmentRepository;
     private final DoctorRepository doctorRepository;
-    private final ObjectMapper objectMapper;
+    private final SpecialtyRepository specialtyRepository;
 
     public DoctorServiceInv(DoctorRepository repository, DoctorScheduleRepository doctorScheduleRepository,
                             DoctorLeaveRepository doctorLeaveRepository, UserRepository userRepository, DoctorRepository doctorRepository,
-                            ObjectMapper objectMapper, AppointmentRepository appointmentRepository) {
+                            AppointmentRepository appointmentRepository, SpecialtyRepository specialtyRepository) {
         super(Doctor::new, repository);
         this.doctorScheduleRepository = doctorScheduleRepository;
         this.doctorLeaveRepository = doctorLeaveRepository;
         this.userRepository = userRepository;
         this.doctorRepository = doctorRepository;
-        this.objectMapper = objectMapper;
         this.appointmentRepository = appointmentRepository;
+        this.specialtyRepository = specialtyRepository;
+    }
+
+    private static DoctorInfoDto getDoctorInfoDto(DoctorSchedule todaySchedule, Doctor doctorInfo, Specialty specialty, Date nextSlot, String workplace) {
+        Boolean availableToday = todaySchedule != null && todaySchedule.getIsActive();
+
+        DoctorInfoDto doctorInfoDto = new DoctorInfoDto(
+                doctorInfo.getId().toString(),
+                doctorInfo.getDegree(),
+                doctorInfo.getExperienceYears(),
+                doctorInfo.getTotalReviews(),
+                doctorInfo.getEducation(),
+                doctorInfo.getAverageRating(),
+                doctorInfo.getUser().getFullName(),
+                doctorInfo.getUser().getPathAvatar(),
+                doctorInfo.getConsultationFee(),
+                doctorInfo.getBio(),
+                availableToday, // Placeholder for availableToday
+                nextSlot,  // Placeholder for nextSlot
+                workplace,  // Placeholder for workplace
+                specialty
+        );
+        return doctorInfoDto;
     }
 
     public ResponseEntity<?> getTopDoctors() {
@@ -110,39 +128,65 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
         }
     }
 
-    public ResponseEntity<?> addDoctorSchedule(DoctorScheduleRequestDTO requestDTO) {
+    public ResponseEntity<?> addDoctorSchedules(List<DoctorScheduleRequestDTO> requestDTOs) {
         try {
-            if (requestDTO.getDayOfWeek() < 0 || requestDTO.getDayOfWeek() > 6) {
-                throw new BadRequestException("Day of week must be between 0-6");
-            }
-
             User currentUser = getCurrentUser();
             Doctor doctor = doctorRepository.findByUserId(currentUser.getId())
                     .orElseThrow(() -> new NotFoundException("Doctor not found"));
 
-            DoctorSchedule schedule = new DoctorSchedule();
-            schedule.setDoctor(doctor);
-            schedule.setDayOfWeek(requestDTO.getDayOfWeek());
-            schedule.setStartTime(requestDTO.getStartTime());
-            schedule.setEndTime(requestDTO.getEndTime());
-            schedule.setSlotDuration(requestDTO.getSlotDuration());
-            schedule.setMaxPatientsPerSlot(requestDTO.getMaxPatientsPerSlot());
-            schedule.setLocation(requestDTO.getLocation());
-            schedule.setIsActive(requestDTO.getIsActive() != null ? requestDTO.getIsActive() : true);
+            // Check duplicate trong chính request
+            List<Integer> incomingDays = requestDTOs.stream()
+                    .map(DoctorScheduleRequestDTO::getDayOfWeek)
+                    .toList();
 
-            DoctorSchedule savedSchedule = doctorScheduleRepository.save(schedule);
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(savedSchedule.getId())
-                    .toUri();
+            Set<Integer> seen = new HashSet<>();
+            for (Integer day : incomingDays) {
+                if (!seen.add(day)) {
+                    throw new BadRequestException("Trùng ngày trong request: " + day);
+                }
+            }
 
-            return ResponseEntity.created(location).body(convertToScheduleDTO(savedSchedule));
+            // Check đã tồn tại trong DB
+            List<Integer> existingDays = doctorScheduleRepository
+                    .findByDoctorIdAndDayOfWeekIn(doctor.getId(), incomingDays)
+                    .stream()
+                    .map(DoctorSchedule::getDayOfWeek)
+                    .toList();
+
+            if (!existingDays.isEmpty()) {
+                String days = existingDays.stream()
+                        .map(String::valueOf)
+                        .collect(Collectors.joining(", "));
+                throw new BadRequestException("Đã có lịch làm việc cho ngày: " + days);
+            }
+
+            // Map DTO -> Entity
+            List<DoctorSchedule> schedules = requestDTOs.stream().map(dto -> {
+                DoctorSchedule s = new DoctorSchedule();
+                s.setDoctor(doctor);
+                s.setDayOfWeek(dto.getDayOfWeek());
+                s.setStartTime(dto.getStartTime());
+                s.setEndTime(dto.getEndTime());
+                s.setSlotDuration(dto.getSlotDuration());
+                s.setMaxPatientsPerSlot(dto.getMaxPatientsPerSlot());
+                s.setLocation(dto.getLocation());
+                s.setIsActive(dto.getIsActive() != null ? dto.getIsActive() : true);
+                return s;
+            }).toList();
+
+            // Bulk insert
+            List<?> result = doctorScheduleRepository.saveAll(schedules)
+                    .stream()
+                    .map(this::convertToScheduleDTO)
+                    .toList();
+
+            return ResponseEntity.ok(result);
+
         } catch (NotFoundException | BadRequestException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
-            log.error("Error adding doctor schedule: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to add schedule", "message", e.getMessage()));
+            log.error("Error adding doctor schedules: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to add schedules"));
         }
     }
 
@@ -299,7 +343,8 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
 
             int today = LocalDate.now().getDayOfWeek().getValue();
 
-            DoctorSchedule schedules = doctorScheduleRepository.findTodaySchedulesByDoctorId(doctor.getId(), today);
+            DoctorSchedule schedules = doctorScheduleRepository.findTodaySchedulesByDoctorId(doctor.getId(), today)
+                    .orElseThrow(() -> new NotFoundException("Doctor schedule not found for today"));
             DoctorScheduleResponseDTO response = convertToScheduleDTO(schedules);
 
             return ResponseEntity.ok(response);
@@ -308,6 +353,38 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
         } catch (Exception e) {
             log.error("Error getting doctor info schedules: {}", e.getMessage(), e);
             return ResponseEntity.internalServerError().body(Map.of("error", "Failed to get schedules", "message", e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<?> getDoctorInfo(String doctorId) {
+        try {
+            Doctor doctorInfo = doctorRepository.getReferenceById(UUID.fromString(doctorId));
+            Specialty specialties = specialtyRepository.findByDoctorId(doctorInfo.getId());
+            DoctorSchedule todaySchedule = doctorScheduleRepository.findTodaySchedulesByDoctorId(doctorInfo.getId(), LocalDate.now().getDayOfWeek().getValue())
+                    .orElse(null);
+
+            Date fromDate = java.sql.Date.valueOf(LocalDate.now());
+            Date toDate = java.sql.Date.valueOf(LocalDate.now().plusDays(1));
+
+            List<Date> nextSlots = appointmentRepository.findBookedStartTimesBetween(doctorInfo.getId(), fromDate, toDate);
+            Date nextSlot = nextSlots.stream()
+                    .filter(slot -> slot.after(new Date()))
+                    .min(Date::compareTo)
+                    .orElse(null);
+
+            String workplace = todaySchedule != null ? todaySchedule.getLocation() : null;
+
+            DoctorInfoDto doctorInfoDto = getDoctorInfoDto(todaySchedule, doctorInfo, specialties, nextSlot, workplace);
+
+            return ResponseEntity.ok(doctorInfoDto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+//            throw new BadRequestException("Invalid doctor ID format. Must be a valid UUID");
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            log.error("Error getting doctor info: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to get doctor info", "message", e.getMessage()));
         }
     }
 

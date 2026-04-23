@@ -65,6 +65,13 @@
     from:
       uri: direct:auth-logout
       steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.LogoutRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
         - process:
             ref: logoutAuthProcessor
         - marshal:
@@ -179,12 +186,22 @@
             json: { }
 
 - route:
-    id: top-doctors-route
+    id: top-doctor-route
     from:
-      uri: direct:top-doctors
+      uri: direct:top-doctor
       steps:
         - process:
             ref: getTopDoctorsProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-info-route
+    from:
+      uri: direct:doctor-info
+      steps:
+        - process:
+            ref: getDoctorInfoProcessor
         - marshal:
             json: { }
 
@@ -277,6 +294,9 @@
         - setHeader:
             name: X-DTO-Class
             constant: com.camel.clinic.dto.doctor.DoctorScheduleRequestDTO
+        - setHeader:
+            name: X-DTO-List
+            constant: "true"
         - process:
             ref: requestDeserializerProcessor
         - process:

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -71,7 +72,9 @@ public interface DoctorScheduleRepository extends JpaRepository<DoctorSchedule, 
               AND s.deletedAt IS NULL
             ORDER BY s.startTime ASC
             """)
-    DoctorSchedule findTodaySchedulesByDoctorId(
+    Optional<DoctorSchedule> findTodaySchedulesByDoctorId(
             @Param("doctorId") UUID doctorId,
             @Param("dayOfWeek") int dayOfWeek);
+
+    List<DoctorSchedule> findByDoctorIdAndDayOfWeekIn(UUID doctorId, List<Integer> dayOfWeeks);
 }
