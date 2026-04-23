@@ -81,6 +81,12 @@
         to: direct:specialties
 
 - rest:
+    path: /v1/doctors
+    get:
+      - path: /
+        to: direct:doctors
+
+- rest:
     path: /v1/slot-availability
     get:
       - path: /

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
@@ -35,6 +36,9 @@ public class AppointmentResponseDTO {
     private String patientName;
     private UUID serviceId;
     private String serviceName;
+
+    private BigDecimal price;
+
     private String patientPhone;
     private String patientEmail;
     private String doctorPhone;

@@ -14,7 +14,7 @@ public class GetPatientAppointmentsProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) {
-        exchange.getMessage().setBody(patientProfileServiceImp.getMyAppointments());
+        exchange.getMessage().setBody(patientProfileServiceImp.getAllAppointmentByPatientId());
     }
 }
 

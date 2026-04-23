@@ -16,6 +16,8 @@ public class GetDoctorScheduleProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+        String doctorId = exchange.getIn().getHeader("doctorId", String.class);
+
         ResponseEntity<?> response = doctorServiceImp.getDoctorSchedules();
         exchange.getMessage().setBody(response);
     }

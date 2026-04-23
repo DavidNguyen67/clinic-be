@@ -38,6 +38,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID>,
 
     @Query("""
             SELECT a FROM Appointment a
+            LEFT JOIN FETCH a.doctor d
+            LEFT JOIN FETCH a.patient p
+            LEFT JOIN FETCH a.clinicService s
             WHERE a.patient.id = :patientId
               AND a.deletedAt IS NULL
             ORDER BY a.appointmentDate DESC, a.startTime DESC

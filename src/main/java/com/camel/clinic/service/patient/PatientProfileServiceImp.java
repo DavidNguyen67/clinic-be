@@ -1,5 +1,6 @@
 package com.camel.clinic.service.patient;
 
+import com.camel.clinic.dto.appointment.AppointmentResponseDTO;
 import com.camel.clinic.dto.patient.PatientProfileDTO;
 import com.camel.clinic.dto.patient.UpdatePatientProfileDto;
 import com.camel.clinic.entity.Appointment;
@@ -22,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -65,11 +65,14 @@ public class PatientProfileServiceImp {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<?> getMyAppointments() {
+    public ResponseEntity<?> getAllAppointmentByPatientId() {
         try {
             Patient patient = getCurrentPatient();
             List<Appointment> appointments = appointmentRepository.findByPatientId(patient.getId());
-            return ResponseEntity.ok(appointments.stream().map(this::toAppointmentSummary).collect(Collectors.toList()));
+
+            List<AppointmentResponseDTO> appointmentDTOs = toResponseDTOList(appointments);
+
+            return ResponseEntity.ok(appointmentDTOs);
         } catch (Exception e) {
             return handleError(e, "Failed to get patient appointments");
         }
@@ -79,11 +82,12 @@ public class PatientProfileServiceImp {
     public ResponseEntity<?> getMyHistory() {
         try {
             Patient patient = getCurrentPatient();
-            List<Appointment> history = appointmentRepository.findByPatientId(patient.getId())
-                    .stream()
-                    .filter(a -> a.getStatus() == Appointment.AppointmentStatus.completed)
-                    .toList();
-            return ResponseEntity.ok(history.stream().map(this::toAppointmentSummary).collect(Collectors.toList()));
+//            List<Appointment> history = appointmentRepository.findByPatientId(patient.getId())
+//                    .stream()
+//                    .filter(a -> a.getStatus() == Appointment.AppointmentStatus.completed)
+//                    .toList();
+//            return ResponseEntity.ok(history.stream().map(this::toAppointmentSummary).collect(Collectors.toList()));
+            return ResponseEntity.ok(patient);
         } catch (Exception e) {
             return handleError(e, "Failed to get patient history");
         }
@@ -149,6 +153,45 @@ public class PatientProfileServiceImp {
         summary.put("doctorName", a.getDoctor() != null && a.getDoctor().getUser() != null ? a.getDoctor().getUser().getFullName() : null);
         summary.put("serviceName", a.getClinicService() != null ? a.getClinicService().getName() : null);
         return summary;
+    }
+
+    public AppointmentResponseDTO toAppointmentResponseDTO(Appointment appointment) {
+        if (appointment == null) return null;
+
+        return AppointmentResponseDTO.builder()
+                .id(appointment.getId())
+                .appointmentCode(appointment.getAppointmentCode())
+                .appointmentDate(appointment.getAppointmentDate())
+                .startTime(appointment.getStartTime())
+                .endTime(appointment.getEndTime())
+                .status(appointment.getStatus() != null ? appointment.getStatus().name() : null)
+                .bookingType(appointment.getBookingType() != null ? appointment.getBookingType().name() : null)
+                .reason(appointment.getReason())
+                .symptoms(appointment.getSymptoms())
+                .notes(appointment.getNotes())
+                .queueNumber(appointment.getQueueNumber())
+                // Doctor fields
+                .doctorId(appointment.getDoctor() != null ? appointment.getDoctor().getId() : null)
+                .doctorName(appointment.getDoctor() != null ? appointment.getDoctor().getUser().getFullName() : null)
+                .doctorPhone(appointment.getDoctor() != null ? appointment.getDoctor().getUser().getPhone() : null)
+                .doctorEmail(appointment.getDoctor() != null ? appointment.getDoctor().getUser().getEmail() : null)
+                // Patient fields
+                .patientId(appointment.getPatient() != null ? appointment.getPatient().getId() : null)
+                .patientName(appointment.getPatient() != null ? appointment.getPatient().getUser().getFullName() : null)
+                .patientPhone(appointment.getPatient() != null ? appointment.getPatient().getUser().getPhone() : null)
+                .patientEmail(appointment.getPatient() != null ? appointment.getPatient().getUser().getEmail() : null)
+                // Service fields
+                .serviceId(appointment.getClinicService() != null ? appointment.getClinicService().getId() : null)
+                .serviceName(appointment.getClinicService() != null ? appointment.getClinicService().getName() : null)
+                .price(appointment.getClinicService() != null ? appointment.getClinicService().getPrice() : null)
+                .build();
+    }
+
+    public List<AppointmentResponseDTO> toResponseDTOList(List<Appointment> appointments) {
+        if (appointments == null) return List.of();
+        return appointments.stream()
+                .map(this::toAppointmentResponseDTO)
+                .toList();
     }
 }
 
