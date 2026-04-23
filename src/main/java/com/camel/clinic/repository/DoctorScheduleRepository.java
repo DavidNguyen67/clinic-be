@@ -83,7 +83,7 @@ public interface DoctorScheduleRepository extends JpaRepository<DoctorSchedule, 
     //    filterSchedules by page, size, doctorID
     @Query("""
             SELECT s FROM DoctorSchedule s
-            WHERE s.doctor.id = :doctorId
+            WHERE (:doctorId IS NULL OR s.doctor.id = :doctorId)
               AND s.deletedAt IS NULL
             ORDER BY s.dayOfWeek ASC, s.startTime ASC
             """)

@@ -265,15 +265,15 @@
         - marshal:
             json: { }
 
-- route:
-    id: doctor-get-schedule-route
-    from:
-      uri: direct:doctor-get-schedule
-      steps:
-        - process:
-            ref: getScheduleByDoctorIdProcessor
-        - marshal:
-            json: { }
+#- route:
+#    id: doctor-get-schedule-route
+#    from:
+#      uri: direct:doctor-get-schedule
+#      steps:
+#        - process:
+#            ref: getScheduleByDoctorIdProcessor
+#        - marshal:
+#            json: { }
 
 - route:
     id: doctor-get-schedule-today-route

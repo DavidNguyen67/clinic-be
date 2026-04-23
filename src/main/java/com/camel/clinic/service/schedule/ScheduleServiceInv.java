@@ -1,5 +1,6 @@
 package com.camel.clinic.service.schedule;
 
+import com.camel.clinic.dto.schedule.ScheduleResponse;
 import com.camel.clinic.entity.DoctorSchedule;
 import com.camel.clinic.repository.DoctorScheduleRepository;
 import com.camel.clinic.service.BaseService;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -23,6 +25,7 @@ public class ScheduleServiceInv extends BaseService<DoctorSchedule, DoctorSchedu
         super(DoctorSchedule::new, repository);
     }
 
+    @Transactional(readOnly = true)
     public ResponseEntity<?> filterSchedules(Map<String, Object> queryParams) {
         try {
             int page = parseIntParam(queryParams, "page", 0);
@@ -40,7 +43,7 @@ public class ScheduleServiceInv extends BaseService<DoctorSchedule, DoctorSchedu
             }
 
             Pageable pageable = PageRequest.of(page, size);
-            Page<DoctorSchedule> resultPage = repository.filterSchedules(doctorId, pageable);
+            Page<ScheduleResponse> resultPage = repository.filterSchedules(doctorId, pageable).map(this::toScheduleResponse);
 
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("data", resultPage.getContent());
@@ -65,5 +68,18 @@ public class ScheduleServiceInv extends BaseService<DoctorSchedule, DoctorSchedu
             }
         }
         return null;
+    }
+
+    public ScheduleResponse toScheduleResponse(DoctorSchedule schedule) {
+        return ScheduleResponse.builder()
+                .id(schedule.getId())
+                .dayOfWeek(schedule.getDayOfWeek())
+                .startTime(schedule.getStartTime())
+                .endTime(schedule.getEndTime())
+                .slotDuration(schedule.getSlotDuration())
+                .maxPatientsPerSlot(schedule.getMaxPatientsPerSlot())
+                .location(schedule.getLocation())
+                .isActive(schedule.getIsActive())
+                .build();
     }
 }

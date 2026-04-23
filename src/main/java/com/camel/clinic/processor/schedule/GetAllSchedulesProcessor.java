@@ -1,4 +1,4 @@
-package com.camel.clinic.processor.doctor;
+package com.camel.clinic.processor.schedule;
 
 import com.camel.clinic.service.schedule.ScheduleServiceImp;
 import lombok.AllArgsConstructor;
