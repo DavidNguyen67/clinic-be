@@ -144,7 +144,7 @@ public class AuthServiceImp implements AuthService {
         patient.setUser(user);
         patient.setPatientCode(generateUniqueCode("PT", patientRepository::existsByPatientCode));
         patient.setDateOfBirth(java.sql.Date.valueOf(LocalDate.parse(req.getDateOfBirth())));
-        patient.setGender(mapPatientGender(req.getGender()));
+        patient.setGender(req.getGender());
         patientRepository.save(patient);
     }
 
@@ -173,11 +173,11 @@ public class AuthServiceImp implements AuthService {
         doctorRepository.save(doctor);
     }
 
-    private Patient.Gender mapPatientGender(User.Gender gender) {
+    private User.Gender mapPatientGender(User.Gender gender) {
         return switch (gender) {
-            case MALE -> Patient.Gender.male;
-            case FEMALE -> Patient.Gender.female;
-            default -> Patient.Gender.other;
+            case MALE -> User.Gender.MALE;
+            case FEMALE -> User.Gender.FEMALE;
+            default -> User.Gender.OTHER;
         };
     }
 

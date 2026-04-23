@@ -1,15 +1,13 @@
 package com.camel.clinic.entity;
 
 
+import com.camel.clinic.converter.BloodTypeConverter;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -44,7 +42,7 @@ public class Patient extends SoftDeletableEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
-    private Gender gender;
+    private User.Gender gender;
 
     @Column(columnDefinition = "TEXT")
     private String address;
@@ -52,7 +50,7 @@ public class Patient extends SoftDeletableEntity {
     @Column(name = "insurance_number", length = 100)
     private String insuranceNumber;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = BloodTypeConverter.class)
     @Column(name = "blood_type", length = 5)
     private BloodType bloodType;
 
@@ -68,10 +66,7 @@ public class Patient extends SoftDeletableEntity {
     @Column(name = "total_visits", nullable = false)
     private Integer totalVisits = 0;
 
-    public enum Gender {
-        male, female, other
-    }
-
+    @Getter
     public enum BloodType {
         A_POSITIVE("A+"),
         A_NEGATIVE("A-"),
@@ -88,8 +83,14 @@ public class Patient extends SoftDeletableEntity {
             this.displayName = displayName;
         }
 
-        public String getDisplayName() {
-            return displayName;
+        @JsonCreator
+        public static BloodType fromValue(String value) {
+            for (BloodType bt : values()) {
+                if (bt.displayName.equalsIgnoreCase(value) || bt.name().equalsIgnoreCase(value)) {
+                    return bt;
+                }
+            }
+            throw new IllegalArgumentException("Unknown blood type: " + value);
         }
     }
 }
