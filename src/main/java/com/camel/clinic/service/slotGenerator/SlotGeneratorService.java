@@ -1,6 +1,7 @@
 package com.camel.clinic.service.slotGenerator;
 
 import com.camel.clinic.dto.appointment.TimeSlotDto;
+import com.camel.clinic.entity.DoctorLeave;
 import com.camel.clinic.entity.DoctorSchedule;
 import org.springframework.http.ResponseEntity;
 
@@ -13,7 +14,8 @@ public interface SlotGeneratorService {
     List<TimeSlotDto> generateSlots(
             DoctorSchedule schedule,
             Set<LocalTime> bookedTimes,
-            Date date);
+            Date date,
+            List<DoctorLeave> approvedLeaves);
 
     Set<LocalTime> buildBookedTimeSet(UUID doctorId, Date date);
 }

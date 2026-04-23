@@ -1,6 +1,7 @@
 package com.camel.clinic.service.slotGenerator;
 
 import com.camel.clinic.dto.appointment.TimeSlotDto;
+import com.camel.clinic.entity.DoctorLeave;
 import com.camel.clinic.entity.DoctorSchedule;
 import com.camel.clinic.repository.AppointmentRepository;
 import com.camel.clinic.repository.DoctorLeaveRepository;
@@ -44,9 +45,9 @@ public class SlotGeneratorServiceImp implements SlotGeneratorService {
             return ResponseEntity.badRequest().body("Invalid doctorId or date format");
         }
 
-        // 1. Bác sĩ nghỉ phép → trả về rỗng ngay
-        if (leaveRepo.existsApprovedLeaveOnDate(doctorId, dateParam)) {
-            log.info("Doctor {} is on leave on {}", doctorId, dateParam);
+        List<DoctorLeave> approvedLeaves = leaveRepo.findApprovedByDoctorIdAndLeaveDate(doctorId, dateParam);
+        if (approvedLeaves.stream().anyMatch(this::isFullDayLeave)) {
+            log.info("Doctor {} is on full-day leave on {}", doctorId, localDate);
             return ResponseEntity.ok(List.of());
         }
 
@@ -66,14 +67,17 @@ public class SlotGeneratorServiceImp implements SlotGeneratorService {
         // 4. Sinh slot
         List<TimeSlotDto> result = new ArrayList<>();
         for (DoctorSchedule schedule : schedules) {
-            result.addAll(generateSlots(schedule, bookedTimes, dateParam));
+            result.addAll(generateSlots(schedule, bookedTimes, dateParam, approvedLeaves));
         }
         return ResponseEntity.ok(result);
     }
 
     // ------------------------------------------------------------------ //
 
-    public List<TimeSlotDto> generateSlots(DoctorSchedule schedule, Set<LocalTime> bookedTimes, Date date) {
+    public List<TimeSlotDto> generateSlots(DoctorSchedule schedule,
+                                           Set<LocalTime> bookedTimes,
+                                           Date date,
+                                           List<DoctorLeave> approvedLeaves) {
 
         // Convert java.util.Date → LocalTime (VN timezone)
         LocalTime scheduleStart = DateTimeUtils.toVnLocalTime(schedule.getStartTime());
@@ -81,7 +85,7 @@ public class SlotGeneratorServiceImp implements SlotGeneratorService {
         int duration = schedule.getSlotDuration(); // slot_duration INTEGER
 
         // Chỉ bỏ slot đã qua nếu là hôm nay (theo giờ VN)
-        boolean isToday = date.equals(DateTimeUtils.todayVn());
+        boolean isToday = DateTimeUtils.toVnLocalDate(date).equals(DateTimeUtils.todayVn());
         LocalTime nowVn = DateTimeUtils.nowVn();
 
         List<TimeSlotDto> slots = new ArrayList<>();
@@ -97,7 +101,9 @@ public class SlotGeneratorServiceImp implements SlotGeneratorService {
             boolean isPast = isToday && cursor.isBefore(nowVn);
 
             if (!isPast) {
-                boolean available = !bookedTimes.contains(cursor);
+                boolean booked = bookedTimes.contains(cursor);
+                boolean onLeave = isOverlappingAnyLeave(cursor, slotEnd, approvedLeaves);
+                boolean available = !booked && !onLeave;
                 slots.add(TimeSlotDto.builder()
                         .id(schedule.getId())
                         .startTime(cursor)
@@ -127,6 +133,24 @@ public class SlotGeneratorServiceImp implements SlotGeneratorService {
                 .stream()
                 .map(DateTimeUtils::toVnLocalTime) // convert về VN time để so sánh
                 .collect(Collectors.toCollection(HashSet::new));
+    }
+
+    private boolean isFullDayLeave(DoctorLeave leave) {
+        return leave.getStartTime() == null || leave.getEndTime() == null;
+    }
+
+    private boolean isOverlappingAnyLeave(LocalTime slotStart, LocalTime slotEnd, List<DoctorLeave> approvedLeaves) {
+        return approvedLeaves.stream().anyMatch(leave -> isOverlappingLeave(slotStart, slotEnd, leave));
+    }
+
+    private boolean isOverlappingLeave(LocalTime slotStart, LocalTime slotEnd, DoctorLeave leave) {
+        if (isFullDayLeave(leave)) {
+            return true;
+        }
+
+        LocalTime leaveStart = DateTimeUtils.toVnLocalTime(leave.getStartTime());
+        LocalTime leaveEnd = DateTimeUtils.toVnLocalTime(leave.getEndTime());
+        return slotStart.isBefore(leaveEnd) && slotEnd.isAfter(leaveStart);
     }
 
     private LocalDate parseDate(String rawDate) {

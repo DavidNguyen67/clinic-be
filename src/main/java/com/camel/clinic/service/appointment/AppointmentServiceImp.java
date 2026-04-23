@@ -74,8 +74,9 @@ public class AppointmentServiceImp implements AppointmentService {
                 throw new BadRequestException("Doctor does not have a valid schedule for this slot");
             }
 
-            if (doctorLeaveRepository.existsApprovedLeaveOnDate(doctor.getId(), dto.getDate())) {
-                throw new BadRequestException("Doctor is on approved leave on this date");
+            LocalTime slotEndTime = apptTime.plusMinutes(clinicService.getDuration());
+            if (isOnApprovedLeave(doctor.getId(), dto.getDate(), apptTime, slotEndTime)) {
+                throw new BadRequestException("Doctor is on approved leave for this time slot");
             }
 
             if (Boolean.FALSE.equals(clinicService.getIsActive())) {
@@ -349,6 +350,21 @@ public class AppointmentServiceImp implements AppointmentService {
             case "walk_in", "walkin" -> Appointment.BookingType.walk_in;
             default -> Appointment.BookingType.online;
         };
+    }
+
+    private boolean isOnApprovedLeave(UUID doctorId, Date leaveDate, LocalTime slotStart, LocalTime slotEnd) {
+        List<DoctorLeave> approvedLeaves = doctorLeaveRepository.findApprovedByDoctorIdAndLeaveDate(doctorId, leaveDate);
+        return approvedLeaves.stream().anyMatch(leave -> {
+            if (leave.getStartTime() == null || leave.getEndTime() == null) {
+                return true;
+            }
+
+            LocalTime leaveStart = DateTimeUtils.toVnLocalTime(leave.getStartTime()).truncatedTo(ChronoUnit.MINUTES);
+            LocalTime leaveEnd = DateTimeUtils.toVnLocalTime(leave.getEndTime()).truncatedTo(ChronoUnit.MINUTES);
+            LocalTime reqStart = slotStart.truncatedTo(ChronoUnit.MINUTES);
+            LocalTime reqEnd = slotEnd.truncatedTo(ChronoUnit.MINUTES);
+            return reqStart.isBefore(leaveEnd) && reqEnd.isAfter(leaveStart);
+        });
     }
 
     private boolean hasValidScheduleSlot(UUID doctorId, LocalDate date, LocalTime time) {

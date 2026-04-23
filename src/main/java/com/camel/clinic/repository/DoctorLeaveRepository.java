@@ -73,6 +73,18 @@ public interface DoctorLeaveRepository extends JpaRepository<DoctorLeave, UUID>,
             @Param("date") Date date
     );
 
+    @Query("""
+            SELECT l FROM DoctorLeave l
+            WHERE l.doctor.id = :doctorId
+              AND l.leaveDate = :date
+              AND l.status = com.camel.clinic.entity.DoctorLeave.LeaveStatus.approved
+              AND l.deletedAt IS NULL
+            """)
+    List<DoctorLeave> findApprovedByDoctorIdAndLeaveDate(
+            @Param("doctorId") UUID doctorId,
+            @Param("date") Date date
+    );
+
     boolean existsByDoctorIdAndLeaveDateAndStartTimeAndEndTimeAndStatusNot(
             UUID doctorId,
             Date leaveDate,
