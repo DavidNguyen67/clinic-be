@@ -271,7 +271,7 @@
       uri: direct:doctor-get-schedule
       steps:
         - process:
-            ref: getDoctorScheduleProcessor
+            ref: getScheduleByDoctorIdProcessor
         - marshal:
             json: { }
 
@@ -610,3 +610,12 @@
         - marshal:
             json: { }
 
+- route:
+    id: schedules-route
+    from:
+      uri: direct:schedules
+      steps:
+        - process:
+            ref: getAllSchedulesProcessor
+        - marshal:
+            json: { }

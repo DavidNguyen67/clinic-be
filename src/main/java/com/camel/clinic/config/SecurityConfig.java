@@ -64,7 +64,8 @@ public class SecurityConfig {
                                 "/api/v1/specialties/**",
                                 "/api/v1/slot-availability",
                                 "/api/v1/specialties",
-                                "/api/v1/doctors"
+                                "/api/v1/doctors",
+                                "/api/v1/doctor/schedule/**"
                         ).permitAll()
                         .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/v1/doctor/**").hasAuthority("DOCTOR")

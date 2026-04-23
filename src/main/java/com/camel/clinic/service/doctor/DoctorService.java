@@ -16,7 +16,7 @@ public interface DoctorService {
     ResponseEntity<?> filterDoctors(Map<String, Object> queryParams);
 
     // Doctor Schedule Management
-    ResponseEntity<?> getDoctorSchedules();
+//    ResponseEntity<?> getDoctorSchedules(String doctorId);
 
     ResponseEntity<?> getDoctorInfoSchedules();
 

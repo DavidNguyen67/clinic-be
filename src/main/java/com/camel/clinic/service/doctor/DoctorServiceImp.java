@@ -32,10 +32,6 @@ public class DoctorServiceImp implements DoctorService {
         return doctorServiceInv.getTopDoctors();
     }
 
-    @Override
-    public ResponseEntity<?> getDoctorSchedules() {
-        return doctorServiceInv.getDoctorSchedules();
-    }
 
     @Override
     public ResponseEntity<?> getDoctorInfoSchedules() {

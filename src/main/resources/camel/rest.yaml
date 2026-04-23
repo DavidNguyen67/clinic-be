@@ -111,6 +111,12 @@
         to: direct:doctor-delete-schedule
 
 - rest:
+    path: /v1/schedules
+    get:
+      - path: /
+        to: direct:schedules
+
+- rest:
     path: /v1/doctor/schedule/today
     get:
       - path: /

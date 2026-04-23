@@ -1,6 +1,8 @@
 package com.camel.clinic.repository;
 
 import com.camel.clinic.entity.DoctorSchedule;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -77,4 +79,16 @@ public interface DoctorScheduleRepository extends JpaRepository<DoctorSchedule, 
             @Param("dayOfWeek") int dayOfWeek);
 
     List<DoctorSchedule> findByDoctorIdAndDayOfWeekIn(UUID doctorId, List<Integer> dayOfWeeks);
+
+    //    filterSchedules by page, size, doctorID
+    @Query("""
+            SELECT s FROM DoctorSchedule s
+            WHERE s.doctor.id = :doctorId
+              AND s.deletedAt IS NULL
+            ORDER BY s.dayOfWeek ASC, s.startTime ASC
+            """)
+    Page<DoctorSchedule> filterSchedules(
+            @Param("doctorId") UUID doctorId,
+            Pageable pageable
+    );
 }

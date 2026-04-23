@@ -1,6 +1,6 @@
 package com.camel.clinic.processor.doctor;
 
-import com.camel.clinic.service.doctor.DoctorServiceImp;
+import com.camel.clinic.service.schedule.ScheduleServiceImp;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
@@ -8,17 +8,18 @@ import org.apache.camel.Processor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-@Component("getDoctorScheduleProcessor")
+import java.util.Map;
+
+@Component("getAllSchedulesProcessor")
 @AllArgsConstructor
 @Slf4j
-public class GetDoctorScheduleProcessor implements Processor {
-    private final DoctorServiceImp doctorServiceImp;
+public class GetAllSchedulesProcessor implements Processor {
+    private final ScheduleServiceImp scheduleServiceImp;
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        String doctorId = exchange.getIn().getHeader("doctorId", String.class);
-
-        ResponseEntity<?> response = doctorServiceImp.getDoctorSchedules();
+        Map<String, Object> queryParams = exchange.getIn().getHeaders();
+        ResponseEntity<?> response = scheduleServiceImp.filterSchedules(queryParams);
         exchange.getMessage().setBody(response);
     }
 }
