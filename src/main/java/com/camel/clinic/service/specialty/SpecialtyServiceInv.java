@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -30,13 +31,20 @@ public class SpecialtyServiceInv extends BaseService<Specialty, SpecialtyReposit
             int size = parseIntParam(queryParams, "size", 20);
             String sortBy = (String) queryParams.getOrDefault("sortBy", "id");
             String sortDir = (String) queryParams.getOrDefault("sortDir", "asc");
+            UUID serviceId = null;
+
+            try {
+                serviceId = UUID.fromString((String) queryParams.get("serviceId"));
+            } catch (Exception e) {
+                log.warn("Invalid serviceId provided: {}", queryParams.get("serviceId"));
+            }
 
             Sort sort = sortDir.equalsIgnoreCase("desc")
                     ? Sort.by(sortBy).descending()
                     : Sort.by(sortBy).ascending();
 
             Pageable pageable = PageRequest.of(page, size, sort);
-            Page<SpecialtyWithDoctorCountDTO> resultPage = repository.getAllSpecialtiesWithDoctorCount(pageable);
+            Page<SpecialtyWithDoctorCountDTO> resultPage = repository.getAllSpecialties(pageable, serviceId);
 
             ApiPaged<SpecialtyWithDoctorCountDTO> paged = ApiPaged.of(
                     resultPage.getContent(),

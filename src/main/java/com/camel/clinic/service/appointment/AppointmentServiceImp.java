@@ -45,6 +45,7 @@ public class AppointmentServiceImp implements AppointmentService {
     private final ObjectMapper objectMapper;
     private final SlotLockService slotLockService;
     private final AppointmentServiceInv appointmentServiceInv;
+    private final SpecialtyRepository specialtyRepository;
 
     public ResponseEntity<?> createAppointment(AppointmentCreateRequestDTO dto) {
         try {
@@ -62,6 +63,9 @@ public class AppointmentServiceImp implements AppointmentService {
 
             ClinicService clinicService = serviceRepository.findById(dto.getServiceId())
                     .orElseThrow(() -> new NotFoundException("Service not found"));
+
+            Specialty specialty = specialtyRepository.findById(dto.getSpecialtyId())
+                    .orElseThrow(() -> new NotFoundException("Specialty not found"));
 
             LocalDate apptDate = DateTimeUtils.toVnLocalDate(dto.getDate());
             LocalTime apptTime = DateTimeUtils.toVnLocalTime(dto.getTime());
@@ -126,6 +130,7 @@ public class AppointmentServiceImp implements AppointmentService {
                 appointment.setDoctor(doctor);
                 appointment.setPatient(patient);
                 appointment.setClinicService(clinicService);
+                appointment.setSpecialty(specialty);
                 appointment.setAppointmentDate(dto.getDate());
                 appointment.setStartTime(startTime);
                 appointment.setEndTime(DateTimeUtils.toDate(apptDate, apptTime.plusMinutes(clinicService.getDuration())));

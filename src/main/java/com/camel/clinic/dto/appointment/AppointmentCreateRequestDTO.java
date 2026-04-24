@@ -16,6 +16,9 @@ public class AppointmentCreateRequestDTO {
     @NotNull(message = "serviceId is required")
     private UUID serviceId;
 
+    @NotNull(message = "specialtyId is required")
+    private UUID specialtyId;
+
     @NotNull(message = "date is required")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Date date;

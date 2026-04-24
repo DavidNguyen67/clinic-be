@@ -16,15 +16,25 @@ public interface SpecialtyRepository extends JpaRepository<Specialty, UUID>, Jpa
     @Query(
             value = "SELECT new com.camel.clinic.dto.SpecialtyWithDoctorCountDTO(" +
                     "s.id, s.name, s.slug, s.description, s.image, " +
-                    "s.displayOrder, s.isActive, s.specialtyType, COUNT(d))" +
-                    " FROM Specialty s LEFT JOIN s.doctors d" +
+                    "s.displayOrder, s.isActive, s.specialtyType, COUNT(DISTINCT d))" +
+                    " FROM Specialty s" +
+                    " LEFT JOIN s.doctors d" +
+                    " LEFT JOIN s.services sv" +          // join services
                     " WHERE s.isActive = true" +
+                    " AND (:serviceId IS NULL OR sv.id = :serviceId)" +  // filter nếu có
                     " GROUP BY s.id, s.name, s.slug, s.description, s.image," +
                     "          s.displayOrder, s.isActive, s.specialtyType" +
                     " ORDER BY s.displayOrder ASC",
-            countQuery = "SELECT COUNT(DISTINCT s) FROM Specialty s WHERE s.isActive = true"
+            countQuery =
+                    "SELECT COUNT(DISTINCT s) FROM Specialty s" +
+                            " LEFT JOIN s.services sv" +
+                            " WHERE s.isActive = true" +
+                            " AND (:serviceId IS NULL OR sv.id = :serviceId)"
     )
-    Page<SpecialtyWithDoctorCountDTO> getAllSpecialtiesWithDoctorCount(Pageable pageable);
+    Page<SpecialtyWithDoctorCountDTO> getAllSpecialties(
+            Pageable pageable,
+            @Param("serviceId") UUID serviceId   // truyền null nếu không filter
+    );
 
     @Query(value = """
             SELECT s.*

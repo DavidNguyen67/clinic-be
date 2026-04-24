@@ -33,6 +33,10 @@ public class Specialty extends SoftDeletableEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @OneToMany(mappedBy = "specialty", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<ClinicService> services = new ArrayList<>();
+
     @Column(length = 500)
     private String image;
 

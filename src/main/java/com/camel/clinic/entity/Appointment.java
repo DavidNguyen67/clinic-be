@@ -43,6 +43,10 @@ public class Appointment extends SoftDeletableEntity {
     private Doctor doctor;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "specialty_id", foreignKey = @ForeignKey(name = "fk_appointment_specialty"))
+    private Specialty specialty;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id", foreignKey = @ForeignKey(name = "fk_appointment_service"))
     private ClinicService clinicService;
 

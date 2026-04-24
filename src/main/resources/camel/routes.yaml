@@ -629,3 +629,13 @@
             ref: deleteDoctorScheduleProcessor
         - marshal:
             json: { }
+
+- route:
+    id: services-route
+    from:
+      uri: direct:services
+      steps:
+        - process:
+            ref: getAllServiceProcessor
+        - marshal:
+            json: { }

@@ -1,5 +1,6 @@
 package com.camel.clinic.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,8 +24,9 @@ public class ClinicService extends SoftDeletableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "specialty_id", foreignKey = @ForeignKey(name = "fk_service_specialty"))
+    @JsonBackReference("specialty-services")
     private Specialty specialty;
-
+    
     @NotBlank()
     @Column(nullable = false, length = 255)
     private String name;
