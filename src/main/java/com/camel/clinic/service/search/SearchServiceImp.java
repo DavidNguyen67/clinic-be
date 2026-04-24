@@ -3,6 +3,7 @@ package com.camel.clinic.service.search;
 import com.camel.clinic.entity.ClinicService;
 import com.camel.clinic.entity.Doctor;
 import com.camel.clinic.entity.Specialty;
+import com.camel.clinic.exception.BadRequestException;
 import com.camel.clinic.repository.DoctorRepository;
 import com.camel.clinic.repository.ServiceRepository;
 import com.camel.clinic.repository.SpecialtyRepository;
@@ -28,7 +29,7 @@ public class SearchServiceImp {
     public ResponseEntity<?> search(String query, String type) {
         String keyword = query == null ? "" : query.trim().toLowerCase(Locale.ROOT);
         if (keyword.isBlank()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "q is required"));
+            throw new BadRequestException("q is required");
         }
 
         String normalizedType = type == null ? "" : type.trim().toLowerCase(Locale.ROOT);
@@ -36,7 +37,7 @@ public class SearchServiceImp {
                 && !"doctor".equals(normalizedType)
                 && !"specialty".equals(normalizedType)
                 && !"service".equals(normalizedType)) {
-            return ResponseEntity.badRequest().body(Map.of("error", "type must be doctor|specialty|service"));
+            throw new BadRequestException("type must be doctor|specialty|service");
         }
 
         Map<String, Object> result = new LinkedHashMap<>();

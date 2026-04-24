@@ -2,6 +2,7 @@ package com.camel.clinic.service.schedule;
 
 import com.camel.clinic.dto.schedule.ScheduleResponse;
 import com.camel.clinic.entity.DoctorSchedule;
+import com.camel.clinic.exception.BadRequestException;
 import com.camel.clinic.repository.DoctorScheduleRepository;
 import com.camel.clinic.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +38,7 @@ public class ScheduleServiceInv extends BaseService<DoctorSchedule, DoctorSchedu
                     doctorId = UUID.fromString(doctorIdStr);
                 } catch (IllegalArgumentException e) {
                     log.warn("Invalid doctorId format: {}", doctorIdStr, e);
-                    return ResponseEntity.badRequest().body(Map.of("error", "Invalid doctorId format",
-                            "message", "doctorId must be a valid UUID"));
+                    throw new BadRequestException("doctorId must be a valid UUID");
                 }
             }
 
@@ -55,7 +55,7 @@ public class ScheduleServiceInv extends BaseService<DoctorSchedule, DoctorSchedu
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error("Error filtering doctors: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to filter doctors", "message", e.getMessage()));
+            throw new RuntimeException("Failed to filter doctors", e);
         }
     }
 

@@ -2,11 +2,11 @@ package com.camel.clinic.service;
 
 import com.camel.clinic.dto.api.ApiPaged;
 import com.camel.clinic.entity.SoftDeletableEntity;
+import com.camel.clinic.exception.NotFoundException;
 import com.camel.clinic.util.MapperUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -58,8 +58,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
                     .body(saved);
         } catch (Exception e) {
             log.error("Error creating entity: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError()
-                    .body("Failed to create entity");
+            throw new RuntimeException("Failed to create entity", e);
         }
     }
 
@@ -100,8 +99,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
             return ResponseEntity.ok(paged);
         } catch (Exception e) {
             log.error("Error listing entities: {}", e.getMessage(), e);
-
-            return ResponseEntity.internalServerError().body("Failed to list entities");
+            throw new RuntimeException("Failed to list entities", e);
         }
     }
 
@@ -117,7 +115,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
             return ResponseEntity.ok(total);
         } catch (Exception e) {
             log.error("Error counting entities: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body("Failed to count entities");
+            throw new RuntimeException("Failed to count entities", e);
         }
     }
 
@@ -131,16 +129,16 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
     public ResponseEntity<?> retrieve(String id, String fields) {
         try {
             T entity = repository.findById(UUID.fromString(id))
-                    .orElseThrow(() -> new EntityNotFoundException("Entity not found with id: " + id));
+                    .orElseThrow(() -> new NotFoundException("Entity not found with id: " + id));
 
             Object result = filterFields(entity, fields);
             return ResponseEntity.ok(result);
-        } catch (EntityNotFoundException e) {
+        } catch (NotFoundException e) {
             log.warn("Entity not found: {}", e.getMessage());
-            return ResponseEntity.notFound().build();
+            throw e;
         } catch (Exception e) {
             log.error("Error retrieving entity id={}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().body("Failed to retrieve entity");
+            throw new RuntimeException("Failed to retrieve entity", e);
         }
     }
 
@@ -152,7 +150,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
     public ResponseEntity<?> update(String id, T data, String fields) {
         try {
             T existing = repository.findById(UUID.fromString(id))
-                    .orElseThrow(() -> new EntityNotFoundException("Entity not found with id: " + id));
+                    .orElseThrow(() -> new NotFoundException("Entity not found with id: " + id));
 
             MapperUtils.convertModelToEntity(data, existing);
 
@@ -161,12 +159,12 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
 
             Object result = filterFields(saved, fields);
             return ResponseEntity.ok(result);
-        } catch (EntityNotFoundException e) {
+        } catch (NotFoundException e) {
             log.warn("Entity not found for update: {}", e.getMessage());
-            return ResponseEntity.notFound().build();
+            throw e;
         } catch (Exception e) {
             log.error("Error updating entity id={}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().body("Failed to update entity");
+            throw new RuntimeException("Failed to update entity", e);
         }
     }
 
@@ -179,7 +177,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
         try {
             if (!repository.existsById(UUID.fromString(id))) {
                 log.warn("Entity not found for delete: id={}", id);
-                return ResponseEntity.notFound().build();
+                throw new NotFoundException("Entity not found with id: " + id);
             }
             T entityToDelete = repository.findById(UUID.fromString(id)).orElseThrow();
             entityToDelete.setDeletedAt(new Date());
@@ -189,7 +187,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             log.error("Error deleting entity id={}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().body("Failed to delete entity");
+            throw new RuntimeException("Failed to delete entity", e);
         }
     }
 
@@ -211,7 +209,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             log.error("Error fetching entities by ids: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body("Failed to get entities by ids");
+            throw new RuntimeException("Failed to get entities by ids", e);
         }
     }
 

@@ -71,10 +71,10 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
             return ResponseEntity.ok(paged);
 
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            throw e;
         } catch (Exception e) {
             log.error("List appointments error", e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to list appointments"));
+            throw new RuntimeException("Failed to list appointments", e);
         }
     }
 

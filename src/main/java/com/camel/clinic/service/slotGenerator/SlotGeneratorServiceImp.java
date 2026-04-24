@@ -42,7 +42,7 @@ public class SlotGeneratorServiceImp implements SlotGeneratorService {
             );
         } catch (Exception e) {
             log.error("Invalid query params: {}", queryParams, e);
-            return ResponseEntity.badRequest().body("Invalid doctorId or date format");
+            throw new IllegalArgumentException("Invalid doctorId or date format");
         }
 
         List<DoctorLeave> approvedLeaves = leaveRepo.findApprovedByDoctorIdAndLeaveDate(doctorId, dateParam);

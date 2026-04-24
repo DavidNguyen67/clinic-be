@@ -85,8 +85,7 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
                     specialtyId = UUID.fromString(specialtyIdStr);
                 } catch (IllegalArgumentException e) {
                     log.warn("Invalid specialtyId format: {}", specialtyIdStr, e);
-                    return ResponseEntity.badRequest().body(Map.of("error", "Invalid specialtyId format",
-                            "message", "specialtyId must be a valid UUID"));
+                    throw new BadRequestException("specialtyId must be a valid UUID");
                 }
             }
 
@@ -103,7 +102,7 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error("Error filtering doctors: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to filter doctors", "message", e.getMessage()));
+            throw new RuntimeException("Failed to filter doctors", e);
         }
     }
 
@@ -121,10 +120,10 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
 
             return ResponseEntity.ok(response);
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            throw e;
         } catch (Exception e) {
             log.error("Error getting doctor schedules: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to get schedules", "message", e.getMessage()));
+            throw new RuntimeException("Failed to get schedules", e);
         }
     }
 
@@ -183,10 +182,10 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             return ResponseEntity.ok(result);
 
         } catch (NotFoundException | BadRequestException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            throw e;
         } catch (Exception e) {
             log.error("Error adding doctor schedules: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to add schedules"));
+            throw new RuntimeException("Failed to add schedules", e);
         }
     }
 
@@ -204,12 +203,12 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             doctorScheduleRepository.delete(schedule);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid schedule ID format", "message", "scheduleId must be a valid UUID"));
+            throw new BadRequestException("scheduleId must be a valid UUID");
         } catch (NotFoundException | UnauthorizedException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            throw e;
         } catch (Exception e) {
             log.error("Error deleting doctor schedule: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to delete schedule", "message", e.getMessage()));
+            throw new RuntimeException("Failed to delete schedule", e);
         }
     }
 
@@ -230,8 +229,7 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
                     );
 
             if (isDuplicate) {
-                return ResponseEntity.badRequest()
-                        .body(Map.of("error", "Duplicate leave request", "message", "You already have a leave request for this time period"));
+                throw new BadRequestException("You already have a leave request for this time period");
             }
 
             DoctorLeave leave = new DoctorLeave();
@@ -254,11 +252,10 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
                     .body(convertToLeaveDTO(savedLeave));
 
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            throw e;
         } catch (Exception e) {
             log.error("Error requesting doctor leave: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError()
-                    .body(Map.of("error", "Failed to request leave", "message", e.getMessage()));
+            throw new RuntimeException("Failed to request leave", e);
         }
     }
 
@@ -295,12 +292,12 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
 
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid doctor ID format", "message", "doctorId must be a valid UUID"));
+            throw new BadRequestException("doctorId must be a valid UUID");
         } catch (NotFoundException | UnauthorizedException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            throw e;
         } catch (Exception e) {
             log.error("Error getting doctor leaves: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to get leaves", "message", e.getMessage()));
+            throw new RuntimeException("Failed to get leaves", e);
         }
     }
 
@@ -326,12 +323,12 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             DoctorLeave updatedLeave = doctorLeaveRepository.save(leave);
             return ResponseEntity.ok(convertToLeaveDTO(updatedLeave));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid leave ID format", "message", "leaveId must be a valid UUID"));
+            throw new BadRequestException("leaveId must be a valid UUID");
         } catch (NotFoundException | UnauthorizedException | BadRequestException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            throw e;
         } catch (Exception e) {
             log.error("Error approving doctor leave: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to approve leave", "message", e.getMessage()));
+            throw new RuntimeException("Failed to approve leave", e);
         }
     }
 
@@ -349,10 +346,10 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
 
             return ResponseEntity.ok(response);
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            throw e;
         } catch (Exception e) {
             log.error("Error getting doctor info schedules: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to get schedules", "message", e.getMessage()));
+            throw new RuntimeException("Failed to get schedules", e);
         }
     }
 
@@ -378,13 +375,12 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
 
             return ResponseEntity.ok(doctorInfoDto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-//            throw new BadRequestException("Invalid doctor ID format. Must be a valid UUID");
+            throw new BadRequestException("doctorId must be a valid UUID");
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            throw e;
         } catch (Exception e) {
             log.error("Error getting doctor info: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to get doctor info", "message", e.getMessage()));
+            throw new RuntimeException("Failed to get doctor info", e);
         }
     }
 

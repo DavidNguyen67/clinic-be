@@ -48,7 +48,7 @@ public class ClinicServiceInv extends BaseService<ClinicService, ClinicServiceRe
             return ResponseEntity.ok(paged);
         } catch (Exception e) {
             log.error("Error listing entities: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().body("Failed to list entities");
+            throw new RuntimeException("Failed to list entities", e);
         }
     }
 }

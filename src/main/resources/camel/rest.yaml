@@ -115,6 +115,9 @@
     get:
       - path: /
         to: direct:schedules
+    delete:
+      - path: /{id}
+        to: direct:schedule-delete
 
 - rest:
     path: /v1/doctor/schedule/today

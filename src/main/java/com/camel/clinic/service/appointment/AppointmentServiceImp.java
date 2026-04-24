@@ -154,10 +154,10 @@ public class AppointmentServiceImp implements AppointmentService {
                 slotLockService.releaseLock(doctor.getId(), apptDate, apptTime);
             }
         } catch (NotFoundException | BadRequestException | UnauthorizedException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            throw e;
         } catch (Exception e) {
             log.error("Create appointment error", e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to create appointment"));
+            throw new RuntimeException("Failed to create appointment", e);
         }
     }
 
@@ -175,9 +175,9 @@ public class AppointmentServiceImp implements AppointmentService {
             ensureCanAccessAppointment(currentUser, appointment);
             return ResponseEntity.ok(toDto(appointment));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid appointment id"));
+            throw new BadRequestException("Invalid appointment id");
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            throw e;
         }
     }
 
@@ -224,9 +224,9 @@ public class AppointmentServiceImp implements AppointmentService {
             appointment.setNotes(note + reasonNote);
             return ResponseEntity.ok(toDto(appointmentRepository.save(appointment)));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid appointment id"));
+            throw new BadRequestException("Invalid appointment id");
         } catch (NotFoundException | BadRequestException | UnauthorizedException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            throw e;
         }
     }
 
@@ -247,8 +247,14 @@ public class AppointmentServiceImp implements AppointmentService {
             }
             appointment.setStatus(Appointment.AppointmentStatus.checked_in);
             return ResponseEntity.ok(toDto(appointmentRepository.save(appointment)));
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid appointment id");
         } catch (Exception e) {
-            return handleTransitionException(e);
+            if (e instanceof NotFoundException || e instanceof BadRequestException || e instanceof UnauthorizedException) {
+                throw (RuntimeException) e;
+            }
+            log.error("Appointment transition error", e);
+            throw new RuntimeException("Failed to update appointment status", e);
         }
     }
 
@@ -281,12 +287,11 @@ public class AppointmentServiceImp implements AppointmentService {
                 throw new UnauthorizedException("Only doctor/staff can view today appointments");
             }
             return ResponseEntity.ok(appointments.stream().map(this::toDto).collect(Collectors.toList()));
+        } catch (NotFoundException | UnauthorizedException e) {
+            throw e;
         } catch (Exception e) {
-            if (e instanceof NotFoundException || e instanceof UnauthorizedException) {
-                return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-            }
             log.error("Today appointments error", e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to load today's appointments"));
+            throw new RuntimeException("Failed to load today's appointments", e);
         }
     }
 
@@ -298,12 +303,11 @@ public class AppointmentServiceImp implements AppointmentService {
             List<AppointmentResponseDTO> queue = appointmentRepository.findQueueAppointments()
                     .stream().map(this::toDto).collect(Collectors.toList());
             return ResponseEntity.ok(queue);
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (Exception e) {
-            if (e instanceof UnauthorizedException) {
-                return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-            }
             log.error("Queue appointments error", e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Failed to load queue"));
+            throw new RuntimeException("Failed to load queue", e);
         }
     }
 
@@ -325,21 +329,15 @@ public class AppointmentServiceImp implements AppointmentService {
             }
             appointment.setStatus(to);
             return ResponseEntity.ok(toDto(appointmentRepository.save(appointment)));
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid appointment id");
         } catch (Exception e) {
-            return handleTransitionException(e);
+            if (e instanceof NotFoundException || e instanceof BadRequestException || e instanceof UnauthorizedException) {
+                throw (RuntimeException) e;
+            }
+            log.error("Appointment transition error", e);
+            throw new RuntimeException("Failed to update appointment status", e);
         }
-    }
-
-    private ResponseEntity<?> handleTransitionException(Exception e) {
-        if (e instanceof IllegalArgumentException) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid appointment id"));
-        }
-
-        if (e instanceof NotFoundException || e instanceof BadRequestException || e instanceof UnauthorizedException) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        }
-        log.error("Appointment transition error", e);
-        return ResponseEntity.internalServerError().body(Map.of("error", "Failed to update appointment status"));
     }
 
     private Appointment.BookingType parseBookingType(String serviceType) {

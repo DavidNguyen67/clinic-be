@@ -40,7 +40,7 @@ public class PatientProfileServiceImp {
             Patient patient = getCurrentPatient();
             return ResponseEntity.ok(toDto(patient));
         } catch (Exception e) {
-            return handleError(e, "Failed to get patient profile");
+            throw handleError(e, "Failed to get patient profile");
         }
     }
 
@@ -60,7 +60,7 @@ public class PatientProfileServiceImp {
             Patient saved = patientRepository.save(patient);
             return ResponseEntity.ok(toDto(saved));
         } catch (Exception e) {
-            return handleError(e, "Failed to update patient profile");
+            throw handleError(e, "Failed to update patient profile");
         }
     }
 
@@ -74,7 +74,7 @@ public class PatientProfileServiceImp {
 
             return ResponseEntity.ok(appointmentDTOs);
         } catch (Exception e) {
-            return handleError(e, "Failed to get patient appointments");
+            throw handleError(e, "Failed to get patient appointments");
         }
     }
 
@@ -89,7 +89,7 @@ public class PatientProfileServiceImp {
 //            return ResponseEntity.ok(history.stream().map(this::toAppointmentSummary).collect(Collectors.toList()));
             return ResponseEntity.ok(patient);
         } catch (Exception e) {
-            return handleError(e, "Failed to get patient history");
+            throw handleError(e, "Failed to get patient history");
         }
     }
 
@@ -110,17 +110,17 @@ public class PatientProfileServiceImp {
                 .orElseThrow(() -> new NotFoundException("Patient profile not found"));
     }
 
-    private ResponseEntity<?> handleError(Exception e, String fallbackMessage) {
+    private RuntimeException handleError(Exception e, String fallbackMessage) {
         if (e instanceof UnauthorizedException) {
             log.error(fallbackMessage + ": {}", e.getMessage());
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return (UnauthorizedException) e;
         }
         if (e instanceof NotFoundException) {
             log.error(fallbackMessage + ": {}", e.getMessage());
-            return ResponseEntity.notFound().build();
+            return (NotFoundException) e;
         }
         log.error(fallbackMessage, e);
-        return ResponseEntity.internalServerError().body(Map.of("error", fallbackMessage));
+        return new RuntimeException(fallbackMessage, e);
     }
 
     private PatientProfileDTO toDto(Patient p) {
