@@ -41,7 +41,7 @@ CREATE TABLE specialties
     specialty_type VARCHAR(50)  NOT NULL DEFAULT 'GENERAL'
 );
 
-CREATE TABLE clinicServices
+CREATE TABLE services
 (
     id                UUID PRIMARY KEY,
     created_at        TIMESTAMP      NOT NULL,
@@ -139,7 +139,7 @@ CREATE TABLE appointments
     queue_number     INTEGER,
     CONSTRAINT fk_appointment_patient FOREIGN KEY (patient_id) REFERENCES patients (id),
     CONSTRAINT fk_appointment_doctor FOREIGN KEY (doctor_id) REFERENCES doctors (id),
-    CONSTRAINT fk_appointment_service FOREIGN KEY (service_id) REFERENCES clinicServices (id)
+    CONSTRAINT fk_appointment_service FOREIGN KEY (service_id) REFERENCES services (id)
 );
 
 CREATE TABLE doctor_schedules
@@ -531,10 +531,10 @@ CREATE INDEX idx_staff_status ON staff (status);
 CREATE INDEX idx_specialties_slug ON specialties (slug);
 CREATE INDEX idx_specialties_is_active ON specialties (is_active);
 
-CREATE INDEX idx_services_slug ON clinicServices (slug);
-CREATE INDEX idx_services_specialty_id ON clinicServices (specialty_id);
-CREATE INDEX idx_services_is_featured ON clinicServices (is_featured);
-CREATE INDEX idx_services_is_active ON clinicServices (is_active);
+CREATE INDEX idx_services_slug ON services (slug);
+CREATE INDEX idx_services_specialty_id ON services (specialty_id);
+CREATE INDEX idx_services_is_featured ON services (is_featured);
+CREATE INDEX idx_services_is_active ON services (is_active);
 
 CREATE INDEX idx_appointments_appointment_code ON appointments (appointment_code);
 CREATE INDEX idx_appointments_patient_id ON appointments (patient_id);
