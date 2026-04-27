@@ -63,7 +63,7 @@ public class Appointment extends SoftDeletableEntity {
     @Column(name = "start_time", nullable = false)
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,
-            pattern = "dd/MM/yyyy",
+            pattern = "HH:mm",
             timezone = "Asia/Ho_Chi_Minh"
     )
     private Date startTime;
@@ -72,7 +72,7 @@ public class Appointment extends SoftDeletableEntity {
     @Column(name = "end_time", nullable = false)
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,
-            pattern = "dd/MM/yyyy",
+            pattern = "HH:mm",
             timezone = "Asia/Ho_Chi_Minh"
     )
     private Date endTime;
