@@ -639,3 +639,23 @@
             ref: getAllServiceProcessor
         - marshal:
             json: { }
+
+- route:
+    id: staff-appointments-route
+    from:
+      uri: direct:staff-appointments
+      steps:
+        - process:
+            ref: staffAppointmentListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: staff-appointments-stats-route
+    from:
+      uri: direct:staff-appointments-stats
+      steps:
+        - process:
+            ref: staffAppointmentStatsProcessor
+        - marshal:
+            json: { }

@@ -6,6 +6,7 @@ import com.camel.clinic.entity.DoctorSchedule;
 import com.camel.clinic.repository.AppointmentRepository;
 import com.camel.clinic.repository.DoctorLeaveRepository;
 import com.camel.clinic.repository.DoctorScheduleRepository;
+import com.camel.clinic.service.CommonService;
 import com.camel.clinic.util.DateTimeUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +16,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,6 +27,7 @@ public class SlotGeneratorServiceImp implements SlotGeneratorService {
     private final DoctorScheduleRepository scheduleRepo;
     private final AppointmentRepository appointmentRepo;
     private final DoctorLeaveRepository leaveRepo;
+    private final CommonService commonService;
 
     public ResponseEntity<?> getAvailableSlots(Map<String, Object> queryParams) {
         // 1. Parse params
@@ -36,7 +36,7 @@ public class SlotGeneratorServiceImp implements SlotGeneratorService {
         LocalDate localDate;
         try {
             doctorId = UUID.fromString((String) queryParams.get("doctorId"));
-            localDate = parseDate((String) queryParams.get("date"));
+            localDate = commonService.parseDate((String) queryParams.get("date"));
             dateParam = Date.from(
                     localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
             );
@@ -151,26 +151,5 @@ public class SlotGeneratorServiceImp implements SlotGeneratorService {
         LocalTime leaveStart = DateTimeUtils.toVnLocalTime(leave.getStartTime());
         LocalTime leaveEnd = DateTimeUtils.toVnLocalTime(leave.getEndTime());
         return slotStart.isBefore(leaveEnd) && slotEnd.isAfter(leaveStart);
-    }
-
-    private LocalDate parseDate(String rawDate) {
-        if (rawDate == null || rawDate.isBlank()) {
-            throw new IllegalArgumentException("date is required");
-        }
-
-        List<DateTimeFormatter> formatters = List.of(
-                DateTimeFormatter.ISO_LOCAL_DATE,
-                DateTimeFormatter.ofPattern("dd/MM/yyyy"),
-                DateTimeFormatter.ofPattern("d-M-yyyy")
-        );
-
-        for (DateTimeFormatter formatter : formatters) {
-            try {
-                return LocalDate.parse(rawDate, formatter);
-            } catch (DateTimeParseException ignored) {
-                // Try next formatter.
-            }
-        }
-        throw new IllegalArgumentException("Unsupported date format");
     }
 }

@@ -7,6 +7,7 @@ import com.camel.clinic.exception.NotFoundException;
 import com.camel.clinic.exception.UnauthorizedException;
 import com.camel.clinic.repository.*;
 import com.camel.clinic.service.BaseService;
+import com.camel.clinic.service.CommonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,10 +32,12 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
     private final AppointmentRepository appointmentRepository;
     private final DoctorRepository doctorRepository;
     private final SpecialtyRepository specialtyRepository;
+    private final CommonService commonService;
 
     public DoctorServiceInv(DoctorRepository repository, DoctorScheduleRepository doctorScheduleRepository,
                             DoctorLeaveRepository doctorLeaveRepository, UserRepository userRepository, DoctorRepository doctorRepository,
-                            AppointmentRepository appointmentRepository, SpecialtyRepository specialtyRepository) {
+                            AppointmentRepository appointmentRepository, SpecialtyRepository specialtyRepository,
+                            CommonService commonService) {
         super(Doctor::new, repository);
         this.doctorScheduleRepository = doctorScheduleRepository;
         this.doctorLeaveRepository = doctorLeaveRepository;
@@ -42,6 +45,7 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
         this.doctorRepository = doctorRepository;
         this.appointmentRepository = appointmentRepository;
         this.specialtyRepository = specialtyRepository;
+        this.commonService = commonService;
     }
 
     private static DoctorInfoDto getDoctorInfoDto(DoctorSchedule todaySchedule, Doctor doctorInfo, Specialty specialty, Date nextSlot, String workplace) {
@@ -76,9 +80,9 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
         try {
             int page = parseIntParam(queryParams, "page", 0);
             int size = parseIntParam(queryParams, "size", 20);
-            String doctorName = getStringParam(queryParams, "doctorName", "name", "q");
-            String specialtyName = getStringParam(queryParams, "specialtyName", "specialty");
-            String specialtyIdStr = getStringParam(queryParams, "specialtyId");
+            String doctorName = commonService.getStringParam(queryParams, "doctorName", "name", "q");
+            String specialtyName = commonService.getStringParam(queryParams, "specialtyName", "specialty");
+            String specialtyIdStr = commonService.getStringParam(queryParams, "specialtyId");
             UUID specialtyId = null;
             if (specialtyIdStr != null) {
                 try {
@@ -92,14 +96,7 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             Pageable pageable = PageRequest.of(page, size);
             Page<DoctorDTO> resultPage = repository.filterDoctors(doctorName, specialtyName, specialtyId, pageable);
 
-            Map<String, Object> response = new LinkedHashMap<>();
-            response.put("data", resultPage.getContent());
-            response.put("page", resultPage.getNumber());
-            response.put("size", resultPage.getSize());
-            response.put("totalItems", resultPage.getTotalElements());
-            response.put("totalPages", resultPage.getTotalPages());
-
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(commonService.buildPageResponse(resultPage));
         } catch (Exception e) {
             log.error("Error filtering doctors: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to filter doctors", e);
@@ -421,13 +418,4 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
         );
     }
 
-    private String getStringParam(Map<String, Object> queryParams, String... keys) {
-        for (String key : keys) {
-            Object value = queryParams.get(key);
-            if (value instanceof String str && !str.isBlank()) {
-                return str.trim();
-            }
-        }
-        return null;
-    }
 }

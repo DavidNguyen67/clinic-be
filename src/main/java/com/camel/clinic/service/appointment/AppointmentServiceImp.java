@@ -8,13 +8,14 @@ import com.camel.clinic.exception.BadRequestException;
 import com.camel.clinic.exception.NotFoundException;
 import com.camel.clinic.exception.UnauthorizedException;
 import com.camel.clinic.repository.*;
+import com.camel.clinic.service.CommonService;
 import com.camel.clinic.util.DateTimeUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -23,6 +24,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
@@ -41,16 +43,15 @@ public class AppointmentServiceImp implements AppointmentService {
     private final DoctorScheduleRepository doctorScheduleRepository;
     private final DoctorLeaveRepository doctorLeaveRepository;
     private final ServiceRepository serviceRepository;
-    private final UserRepository userRepository;
-    private final ObjectMapper objectMapper;
     private final SlotLockService slotLockService;
     private final AppointmentServiceInv appointmentServiceInv;
     private final SpecialtyRepository specialtyRepository;
+    private final CommonService commonService;
 
     public ResponseEntity<?> createAppointment(AppointmentCreateRequestDTO dto) {
         try {
-            User currentUser = getCurrentUser();
-            requireRole(currentUser, Role.RoleName.PATIENT.name());
+            User currentUser = commonService.getCurrentUser();
+            commonService.requireRole(currentUser, Role.RoleName.PATIENT.name());
 
             Doctor doctor = doctorRepository.findById(dto.getDoctorId())
                     .orElseThrow(() -> new NotFoundException("Doctor not found"));
@@ -174,7 +175,7 @@ public class AppointmentServiceImp implements AppointmentService {
     @Transactional(readOnly = true)
     public ResponseEntity<?> getAppointmentDetail(String id) {
         try {
-            User currentUser = getCurrentUser();
+            User currentUser = commonService.getCurrentUser();
             Appointment appointment = appointmentRepository.findById(UUID.fromString(id))
                     .orElseThrow(() -> new NotFoundException("Appointment not found"));
             ensureCanAccessAppointment(currentUser, appointment);
@@ -190,7 +191,7 @@ public class AppointmentServiceImp implements AppointmentService {
         try {
             Appointment appointment = appointmentRepository.findById(UUID.fromString(id))
                     .orElseThrow(() -> new NotFoundException("Appointment not found"));
-            User currentUser = getCurrentUser();
+            User currentUser = commonService.getCurrentUser();
 
             boolean patientRole = Role.RoleName.PATIENT.name().equals(currentUser.getRole().name());
             boolean staffRole = Role.RoleName.STAFF.name().equals(currentUser.getRole().name());
@@ -242,8 +243,8 @@ public class AppointmentServiceImp implements AppointmentService {
 
     public ResponseEntity<?> checkinAppointment(String id) {
         try {
-            User currentUser = getCurrentUser();
-            requireRole(currentUser, Role.RoleName.STAFF.name());
+            User currentUser = commonService.getCurrentUser();
+            commonService.requireRole(currentUser, Role.RoleName.STAFF.name());
             Appointment appointment = appointmentRepository.findById(UUID.fromString(id))
                     .orElseThrow(() -> new NotFoundException("Appointment not found"));
 
@@ -276,7 +277,7 @@ public class AppointmentServiceImp implements AppointmentService {
     @Transactional(readOnly = true)
     public ResponseEntity<?> getTodayAppointments() {
         try {
-            User currentUser = getCurrentUser();
+            User currentUser = commonService.getCurrentUser();
             LocalDate today = DateTimeUtils.todayVn();
             Date from = DateTimeUtils.toDate(today, LocalTime.MIN);
             Date to = DateTimeUtils.toDate(today.plusDays(1), LocalTime.MIN);
@@ -303,8 +304,8 @@ public class AppointmentServiceImp implements AppointmentService {
     @Transactional(readOnly = true)
     public ResponseEntity<?> getQueueAppointments() {
         try {
-            User currentUser = getCurrentUser();
-            requireRole(currentUser, Role.RoleName.STAFF.name());
+            User currentUser = commonService.getCurrentUser();
+            commonService.requireRole(currentUser, Role.RoleName.STAFF.name());
             List<AppointmentResponseDTO> queue = appointmentRepository.findQueueAppointments()
                     .stream().map(this::toDto).collect(Collectors.toList());
             return ResponseEntity.ok(queue);
@@ -316,13 +317,94 @@ public class AppointmentServiceImp implements AppointmentService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> getStaffAppointments(Map<String, Object> queryParams) {
+        try {
+            User currentUser = commonService.getCurrentUser();
+            commonService.requireRole(currentUser, Role.RoleName.STAFF.name());
+
+            int page = commonService.parseIntParam(queryParams, "page", 0);
+            int size = commonService.parseIntParam(queryParams, "size", 20);
+            String patientName = commonService.getStringParam(queryParams, "patientName");
+            Date dateParam;
+            LocalDate localDate;
+            try {
+                localDate = commonService.parseDate((String) queryParams.get("date"));
+                dateParam = Date.from(
+                        localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
+                );
+            } catch (Exception e) {
+                log.error("Invalid query params: {}", queryParams, e);
+                throw new IllegalArgumentException("Invalid doctorId or date format");
+            }
+
+            Pageable pageable = PageRequest.of(page, size);
+
+            Page<Appointment> resultPage = appointmentRepository.findStaffAppointments(patientName, dateParam, pageable);
+            return ResponseEntity.ok(commonService.buildPageResponse(resultPage));
+        } catch (UnauthorizedException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Staff appointments error", e);
+            throw new RuntimeException("Failed to load staff appointments", e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> getStaffAppointmentStats(Map<String, Object> queryParams) {
+        try {
+            User currentUser = commonService.getCurrentUser();
+            commonService.requireRole(currentUser, Role.RoleName.STAFF.name());
+
+            Date dateParam;
+            LocalDate localDate;
+            try {
+                localDate = commonService.parseDate((String) queryParams.get("date"));
+                dateParam = Date.from(
+                        localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
+                );
+            } catch (Exception e) {
+                log.error("Invalid query params: {}", queryParams, e);
+                throw new IllegalArgumentException("Invalid doctorId or date format");
+            }
+
+            long totalAppointments = appointmentRepository.countByAppointmentDateAndDeletedAtIsNull(dateParam);
+            long pendingAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.pending, dateParam);
+            long confirmedAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.confirmed, dateParam);
+            long checkedInAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.checked_in, dateParam);
+            long inProgressAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.in_progress, dateParam);
+            long completedAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.completed, dateParam);
+            long cancelledAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.cancelled, dateParam);
+            long otherAppointments = totalAppointments - pendingAppointments - confirmedAppointments - checkedInAppointments
+                    - inProgressAppointments - completedAppointments - cancelledAppointments;
+
+            Map<String, Long> stats = Map.of(
+                    "total", totalAppointments,
+                    "pending", pendingAppointments,
+                    "confirmed", confirmedAppointments,
+                    "checked_in", checkedInAppointments,
+                    "in_progress", inProgressAppointments,
+                    "completed", completedAppointments,
+                    "cancelled", cancelledAppointments,
+                    "other", otherAppointments
+            );
+
+            return ResponseEntity.ok(stats);
+        } catch (UnauthorizedException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Staff appointment stats error", e);
+            throw new RuntimeException("Failed to load staff appointment stats", e);
+        }
+    }
+
     private ResponseEntity<?> transitionStatus(String id,
                                                Appointment.AppointmentStatus from,
                                                Appointment.AppointmentStatus to,
                                                String requiredRole) {
         try {
-            User currentUser = getCurrentUser();
-            requireRole(currentUser, requiredRole);
+            User currentUser = commonService.getCurrentUser();
+            commonService.requireRole(currentUser, requiredRole);
             Appointment appointment = appointmentRepository.findById(UUID.fromString(id))
                     .orElseThrow(() -> new NotFoundException("Appointment not found"));
             if (Role.RoleName.DOCTOR.name().equals(requiredRole)
@@ -434,21 +516,6 @@ public class AppointmentServiceImp implements AppointmentService {
                 .doctorPhone(a.getDoctor() != null && a.getDoctor().getUser() != null ? a.getDoctor().getUser().getPhone() : null)
                 .doctorEmail(a.getDoctor() != null && a.getDoctor().getUser() != null ? a.getDoctor().getUser().getEmail() : null)
                 .build();
-    }
-
-    private User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new UnauthorizedException("User not authenticated");
-        }
-        return userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new NotFoundException("User not found"));
-    }
-
-    private void requireRole(User user, String role) {
-        if (!role.equals(user.getRole().name())) {
-            throw new UnauthorizedException("Required role: " + role);
-        }
     }
 
 }

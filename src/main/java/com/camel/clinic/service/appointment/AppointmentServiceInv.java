@@ -9,6 +9,7 @@ import com.camel.clinic.repository.DoctorRepository;
 import com.camel.clinic.repository.PatientRepository;
 import com.camel.clinic.repository.UserRepository;
 import com.camel.clinic.service.BaseService;
+import com.camel.clinic.service.CommonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,14 +29,16 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
     private final PatientRepository patientRepository;
     private final AppointmentRepository appointmentRepository;
     private final DoctorRepository doctorRepository;
+    private final CommonService commonService;
 
     public AppointmentServiceInv(AppointmentRepository repository, UserRepository userRepository,
-                                 PatientRepository patientRepository, DoctorRepository doctorRepository) {
+                                 PatientRepository patientRepository, DoctorRepository doctorRepository, CommonService commonService) {
         super(Appointment::new, repository);
         this.userRepository = userRepository;
         this.patientRepository = patientRepository;
         this.doctorRepository = doctorRepository;
         this.appointmentRepository = repository;
+        this.commonService = commonService;
     }
 
     public ResponseEntity<?> listAppointments(Map<String, Object> queryParams) {
@@ -88,8 +91,8 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
     }
 
     private Pageable buildPageable(Map<String, Object> queryParams) {
-        int page = parseIntParam(queryParams, "page", 0);
-        int size = parseIntParam(queryParams, "size", 20);
+        int page = commonService.parseIntParam(queryParams, "page", 0);
+        int size = commonService.parseIntParam(queryParams, "size", 20);
         String sortBy = (String) queryParams.getOrDefault("sortBy", "id");
         String sortDir = (String) queryParams.getOrDefault("sortDir", "asc");
         Sort sort = sortDir.equalsIgnoreCase("desc")
@@ -97,4 +100,6 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
                 : Sort.by(sortBy).ascending();
         return PageRequest.of(page, size, sort);
     }
+
+
 }

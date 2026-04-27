@@ -4,6 +4,7 @@ import com.camel.clinic.dto.api.ApiPaged;
 import com.camel.clinic.entity.ClinicService;
 import com.camel.clinic.repository.ClinicServiceRepository;
 import com.camel.clinic.service.BaseService;
+import com.camel.clinic.service.CommonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,15 +18,18 @@ import java.util.Map;
 @Service
 @Slf4j
 public class ClinicServiceInv extends BaseService<ClinicService, ClinicServiceRepository> {
-    public ClinicServiceInv(ClinicServiceRepository repository) {
+    private final CommonService commonService;
+
+    public ClinicServiceInv(ClinicServiceRepository repository, CommonService commonService) {
         super(ClinicService::new, repository);
+        this.commonService = commonService;
     }
 
     @Override
     public ResponseEntity<?> list(Map<String, Object> queryParams) {
         try {
-            int page = parseIntParam(queryParams, "page", 0);
-            int size = parseIntParam(queryParams, "size", 20);
+            int page = commonService.parseIntParam(queryParams, "page", 0);
+            int size = commonService.parseIntParam(queryParams, "size", 20);
             String sortBy = (String) queryParams.getOrDefault("sortBy", "id");
             String sortDir = (String) queryParams.getOrDefault("sortDir", "asc");
 

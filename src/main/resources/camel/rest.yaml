@@ -213,3 +213,10 @@
       - path: /{id}
         to: direct:admin-clinic-services-delete
 
+- rest:
+    path: /v1/staff/appointments
+    get:
+      - path: /
+        to: direct:staff-appointments
+      - path: /stats
+        to: direct:staff-appointments-stats

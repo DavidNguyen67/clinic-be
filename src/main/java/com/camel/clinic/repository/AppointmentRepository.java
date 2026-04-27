@@ -153,6 +153,27 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID>,
     })
     Page<Appointment> findAll(Pageable pageable);
 
+    @Query("""
+            SELECT COUNT(a)
+            FROM Appointment a
+            WHERE (CAST(:appointmentDate AS date) IS NULL OR a.appointmentDate = :appointmentDate)
+              AND a.deletedAt IS NULL
+            """)
+    long countByAppointmentDateAndDeletedAtIsNull(@Param("appointmentDate") Date appointmentDate);
+
+    long countByAppointmentDateGreaterThanEqualAndAppointmentDateLessThanAndDeletedAtIsNull(
+            Date fromDate,
+            Date toDate
+    );
+
+    @Query("""
+            SELECT a.status, COUNT(a)
+            FROM Appointment a
+            WHERE a.deletedAt IS NULL
+            GROUP BY a.status
+            """)
+    List<Object[]> countByStatusForActiveAppointments();
+
     //    findNextAvailableSlot
     @Query("""
             SELECT a.startTime
@@ -169,4 +190,52 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID>,
             @Param("fromDate") Date fromDate,
             @Param("toDate") Date toDate
     );
+
+    @Query(
+            value = """
+                    SELECT a FROM Appointment a
+                    JOIN FETCH a.patient p
+                    JOIN FETCH p.user pu
+                    JOIN FETCH a.doctor d
+                    JOIN FETCH d.user du
+                    JOIN FETCH d.specialty ds
+                    JOIN FETCH a.clinicService cs
+                    JOIN FETCH cs.specialty css
+                    WHERE (:patientName IS NULL OR pu.fullName LIKE %:patientName%)
+                      AND (CAST(:appointmentDate AS date) IS NULL OR a.appointmentDate = :appointmentDate)
+                      AND a.deletedAt IS NULL
+                    ORDER BY a.appointmentDate DESC, a.startTime DESC
+                    """,
+            countQuery = """
+                    SELECT COUNT(a) FROM Appointment a
+                    JOIN a.patient p
+                    JOIN p.user pu
+                    JOIN a.doctor d
+                    JOIN d.user du
+                    JOIN d.specialty ds
+                    JOIN a.clinicService cs
+                    JOIN cs.specialty css
+                    WHERE (:patientName IS NULL OR pu.fullName LIKE %:patientName%)
+                      AND (CAST(:appointmentDate AS date) IS NULL OR a.appointmentDate = :appointmentDate)
+                      AND a.deletedAt IS NULL
+                    """
+    )
+    Page<Appointment> findStaffAppointments(
+            @Param("patientName") String patientName,
+            @Param("appointmentDate") Date appointmentDate,
+            Pageable pageable
+    );
+
+    @Query("""
+            SELECT COUNT(a)
+            FROM Appointment a
+            WHERE a.status = :status
+              AND (CAST(:appointmentDate AS date) IS NULL OR a.appointmentDate = :appointmentDate)
+              AND a.deletedAt IS NULL
+            """)
+    long countStaffAppointmentsByStatus(
+            @Param("status") Appointment.AppointmentStatus status,
+            @Param("appointmentDate") Date appointmentDate
+    );
+
 }
