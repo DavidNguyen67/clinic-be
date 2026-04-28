@@ -20,17 +20,17 @@ public class ServicesServiceImp implements ServicesService {
     private final SpecialtyServiceInv specialtyServiceInv;
 
     @Override
-    public ResponseEntity<?> countAllServices() {
+    public ResponseEntity<?> count() {
         return servicesServiceInv.count();
     }
 
     @Override
-    public ResponseEntity<?> getServiceById(String id) {
+    public ResponseEntity<?> retrieve(String id) {
         return servicesServiceInv.retrieve(id, null);
     }
 
     @Override
-    public ResponseEntity<?> createService(CreateServiceDto requestBody) {
+    public ResponseEntity<?> create(CreateServiceDto requestBody) {
         ClinicService clinicService = new ClinicService();
         clinicService.setName(requestBody.getName());
         clinicService.setSlug(requestBody.getSlug());
@@ -52,7 +52,7 @@ public class ServicesServiceImp implements ServicesService {
     }
 
     @Override
-    public ResponseEntity<?> updateService(String id, UpdateServiceDto requestBody) {
+    public ResponseEntity<?> update(String id, UpdateServiceDto requestBody) {
         ClinicService clinicService = new ClinicService();
         clinicService.setName(requestBody.getName());
         clinicService.setSlug(requestBody.getSlug());
@@ -79,11 +79,16 @@ public class ServicesServiceImp implements ServicesService {
     }
 
     @Override
-    public ResponseEntity<?> deleteService(String id) {
+    public ResponseEntity<?> delete(String id) {
         return servicesServiceInv.delete(id);
     }
 
-    public ResponseEntity<?> getAllServices(Map<String, Object> queryParams) {
+    @Override
+    public ResponseEntity<?> restore(String id) {
+        return servicesServiceInv.restore(id);
+    }
+
+    public ResponseEntity<?> list(Map<String, Object> queryParams) {
         return servicesServiceInv.list(queryParams);
     }
 }

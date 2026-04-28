@@ -7,15 +7,17 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
 public interface SpecialtyService {
-    ResponseEntity<?> getAllSpecialties(Map<String, Object> queryParams);
+    ResponseEntity<?> list(Map<String, Object> queryParams);
 
-    ResponseEntity<?> countAllSpecialties();
+    ResponseEntity<?> count();
 
-    ResponseEntity<?> getSpecialtyById(String id);
+    ResponseEntity<?> retrieve(String id);
 
-    ResponseEntity<?> createSpecialty(CreateSpecialtyDto requestBody);
+    ResponseEntity<?> create(CreateSpecialtyDto requestBody);
 
-    ResponseEntity<?> updateSpecialty(String id, UpdateSpecialtyDto requestBody);
+    ResponseEntity<?> update(String id, UpdateSpecialtyDto requestBody);
 
-    ResponseEntity<?> deleteSpecialty(String id);
+    ResponseEntity<?> delete(String id);
+
+    ResponseEntity<?> restore(String id);
 }

@@ -115,7 +115,10 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
      */
     public ResponseEntity<?> count() {
         try {
-            long total = repository.count();
+            Specification<T> notDeleted = (root, query, cb) ->
+                    cb.isNull(root.get("deletedAt"));
+
+            long total = repository.count(notDeleted);
             log.info("Counted {} entities", total);
             return ResponseEntity.ok(total);
         } catch (Exception e) {
@@ -198,6 +201,35 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
         }
     }
 
+    // ==================== RESTORE ====================
+
+    /**
+     * Khôi phục bản ghi đã bị soft-delete
+     */
+    public ResponseEntity<?> restore(String id) {
+        try {
+            Specification<T> spec = (root, query, cb) -> cb.and(
+                    cb.equal(root.get("id"), UUID.fromString(id)),
+                    cb.isNotNull(root.get("deletedAt"))
+            );
+
+            T entity = repository.findOne(spec)
+                    .orElseThrow(() -> new NotFoundException("Deleted entity not found with id: " + id));
+
+            entity.setDeletedAt(null);
+            T saved = repository.save(entity);
+
+            log.info("Restored entity id={}", id);
+            return ResponseEntity.ok(saved);
+        } catch (NotFoundException e) {
+            log.warn("Entity not found for restore: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("Error restoring entity id={}: {}", id, e.getMessage(), e);
+            throw new RuntimeException("Failed to restore entity: " + e.getMessage(), e);
+        }
+    }
+
     // ==================== GET BY IDS ====================
 
     /**
@@ -205,7 +237,12 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
      */
     public ResponseEntity<?> getByIds(List<UUID> ids, String fields) {
         try {
-            List<T> entities = repository.findAllById(ids);
+            Specification<T> spec = (root, query, cb) -> cb.and(
+                    root.get("id").in(ids),
+                    cb.isNull(root.get("deletedAt"))
+            );
+
+            List<T> entities = repository.findAll(spec);
 
             List<Object> result = new ArrayList<>();
             for (T entity : entities) {

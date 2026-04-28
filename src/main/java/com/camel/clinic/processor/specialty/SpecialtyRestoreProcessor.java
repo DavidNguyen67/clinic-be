@@ -2,26 +2,20 @@ package com.camel.clinic.processor.specialty;
 
 import com.camel.clinic.service.specialty.SpecialtyServiceImp;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
-@Component("specialtyListProcessor")
+@Component("specialtyRestoreProcessor")
 @AllArgsConstructor
-@Slf4j
-public class SpecialtyListProcessor implements Processor {
+public class SpecialtyRestoreProcessor implements Processor {
     private final SpecialtyServiceImp specialtyServiceImp;
 
     @Override
-    public void process(Exchange exchange) {
-        Map<String, Object> queryParams = exchange.getIn().getHeaders();
-
-        ResponseEntity<?> response = specialtyServiceImp.list(queryParams);
-
+    public void process(Exchange exchange) throws Exception {
+        String id = exchange.getIn().getHeader("id", String.class);
+        ResponseEntity<?> response = specialtyServiceImp.restore(id);
         exchange.getMessage().setBody(response);
     }
 }

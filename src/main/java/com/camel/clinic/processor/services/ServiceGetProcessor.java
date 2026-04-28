@@ -17,7 +17,7 @@ public class ServiceGetProcessor implements Processor {
     @Override
     public void process(Exchange exchange) {
         String id = exchange.getIn().getHeader("id", String.class);
-        ResponseEntity<?> response = servicesServiceImp.getServiceById(id);
+        ResponseEntity<?> response = servicesServiceImp.retrieve(id);
         exchange.getIn().setBody(response);
     }
 }

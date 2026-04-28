@@ -17,17 +17,17 @@ public class SpecialtyServiceImp implements SpecialtyService {
     private final SpecialtyServiceInv specialtyServiceInv;
 
     @Override
-    public ResponseEntity<?> countAllSpecialties() {
+    public ResponseEntity<?> count() {
         return specialtyServiceInv.count();
     }
 
     @Override
-    public ResponseEntity<?> getSpecialtyById(String id) {
+    public ResponseEntity<?> retrieve(String id) {
         return specialtyServiceInv.retrieve(id, null);
     }
 
     @Override
-    public ResponseEntity<?> createSpecialty(CreateSpecialtyDto requestBody) {
+    public ResponseEntity<?> create(CreateSpecialtyDto requestBody) {
         Specialty specialty = new Specialty();
         specialty.setName(requestBody.getName());
         specialty.setSlug(requestBody.getSlug());
@@ -41,7 +41,7 @@ public class SpecialtyServiceImp implements SpecialtyService {
     }
 
     @Override
-    public ResponseEntity<?> updateSpecialty(String id, UpdateSpecialtyDto requestBody) {
+    public ResponseEntity<?> update(String id, UpdateSpecialtyDto requestBody) {
         Specialty specialty = new Specialty();
         specialty.setName(requestBody.getName());
         specialty.setSlug(requestBody.getSlug());
@@ -55,11 +55,16 @@ public class SpecialtyServiceImp implements SpecialtyService {
     }
 
     @Override
-    public ResponseEntity<?> deleteSpecialty(String id) {
+    public ResponseEntity<?> delete(String id) {
         return specialtyServiceInv.delete(id);
     }
 
-    public ResponseEntity<?> getAllSpecialties(Map<String, Object> queryParams) {
+    @Override
+    public ResponseEntity<?> restore(String id) {
+        return specialtyServiceInv.restore(id);
+    }
+
+    public ResponseEntity<?> list(Map<String, Object> queryParams) {
         return specialtyServiceInv.list(queryParams);
     }
 }

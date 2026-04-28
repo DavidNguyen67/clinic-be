@@ -60,8 +60,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/doctor/**").hasAuthority("DOCTOR")
                         .requestMatchers("/api/v1/patient/**").hasAuthority("PATIENT")
                         .requestMatchers("/api/v1/staff/**").hasAuthority("STAFF")
-                        .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

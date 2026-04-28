@@ -20,7 +20,7 @@ public class SpecialtyUpdateProcessor implements Processor {
         UpdateSpecialtyDto request = exchange.getIn().getBody(UpdateSpecialtyDto.class);
         String id = exchange.getIn().getHeader("id", String.class);
 
-        ResponseEntity<?> response = specialtyServiceImp.updateSpecialty(id, request);
+        ResponseEntity<?> response = specialtyServiceImp.update(id, request);
         exchange.getIn().setBody(response);
     }
 }

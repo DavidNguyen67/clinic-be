@@ -18,7 +18,7 @@ public class SpecialtyDeleteProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
         String id = exchange.getIn().getHeader("id", String.class);
 
-        ResponseEntity<?> response = specialtyServiceImp.deleteSpecialty(id);
+        ResponseEntity<?> response = specialtyServiceImp.delete(id);
         exchange.getIn().setBody(response);
     }
 }

@@ -18,7 +18,7 @@ public class SpecialtyCreateProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         CreateSpecialtyDto request = exchange.getIn().getBody(CreateSpecialtyDto.class);
-        ResponseEntity<?> response = specialtyServiceImp.createSpecialty(request);
+        ResponseEntity<?> response = specialtyServiceImp.create(request);
         exchange.getIn().setBody(response);
     }
 }

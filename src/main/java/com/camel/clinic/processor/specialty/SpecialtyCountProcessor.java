@@ -14,7 +14,7 @@ public class SpecialtyCountProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        ResponseEntity<?> response = specialtyServiceImp.countAllSpecialties();
+        ResponseEntity<?> response = specialtyServiceImp.count();
         exchange.getMessage().setBody(response);
     }
 }

@@ -14,7 +14,7 @@ public class ServiceCountProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        ResponseEntity<?> response = servicesServiceImp.countAllServices();
+        ResponseEntity<?> response = servicesServiceImp.count();
         exchange.getMessage().setBody(response);
     }
 }

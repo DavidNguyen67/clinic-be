@@ -7,15 +7,17 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
 public interface ServicesService {
-    ResponseEntity<?> getAllServices(Map<String, Object> queryParams);
+    ResponseEntity<?> list(Map<String, Object> queryParams);
 
-    ResponseEntity<?> countAllServices();
+    ResponseEntity<?> count();
 
-    ResponseEntity<?> getServiceById(String id);
+    ResponseEntity<?> retrieve(String id);
 
-    ResponseEntity<?> createService(CreateServiceDto requestBody);
+    ResponseEntity<?> create(CreateServiceDto requestBody);
 
-    ResponseEntity<?> updateService(String id, UpdateServiceDto requestBody);
+    ResponseEntity<?> update(String id, UpdateServiceDto requestBody);
 
-    ResponseEntity<?> deleteService(String id);
+    ResponseEntity<?> delete(String id);
+
+    ResponseEntity<?> restore(String id);
 }

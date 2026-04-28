@@ -18,7 +18,7 @@ public class ServiceCreateProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         CreateServiceDto request = exchange.getIn().getBody(CreateServiceDto.class);
-        ResponseEntity<?> response = servicesServiceImp.createService(request);
+        ResponseEntity<?> response = servicesServiceImp.create(request);
         exchange.getIn().setBody(response);
     }
 }

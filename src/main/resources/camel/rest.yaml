@@ -22,9 +22,6 @@
         to: direct:auth-get-profile
 
 - rest:
-    path: /v1/public
-
-- rest:
     path: /v1/admin/specialty
     post:
       - path: /

@@ -18,7 +18,7 @@ public class ServiceDeleteProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
         String id = exchange.getIn().getHeader("id", String.class);
 
-        ResponseEntity<?> response = servicesServiceImp.deleteService(id);
+        ResponseEntity<?> response = servicesServiceImp.delete(id);
         exchange.getIn().setBody(response);
     }
 }

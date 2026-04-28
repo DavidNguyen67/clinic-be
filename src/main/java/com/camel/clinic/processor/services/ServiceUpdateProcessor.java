@@ -20,7 +20,7 @@ public class ServiceUpdateProcessor implements Processor {
         UpdateServiceDto request = exchange.getIn().getBody(UpdateServiceDto.class);
         String id = exchange.getIn().getHeader("id", String.class);
 
-        ResponseEntity<?> response = servicesServiceImp.updateService(id, request);
+        ResponseEntity<?> response = servicesServiceImp.update(id, request);
         exchange.getIn().setBody(response);
     }
 }
