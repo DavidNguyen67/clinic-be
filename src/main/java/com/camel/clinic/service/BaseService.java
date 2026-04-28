@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.http.ResponseEntity;
@@ -85,7 +86,11 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
                     : Sort.by(sortBy).ascending();
 
             Pageable pageable = PageRequest.of(page, size, sort);
-            Page<T> resultPage = repository.findAll(pageable);
+
+            Specification<T> notDeleted = (root, query, cb) ->
+                    cb.isNull(root.get("deletedAt"));
+
+            Page<T> resultPage = repository.findAll(notDeleted, pageable);
 
             ApiPaged<T> paged = ApiPaged.of(
                     resultPage.getContent(),
@@ -152,7 +157,9 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
             T existing = repository.findById(UUID.fromString(id))
                     .orElseThrow(() -> new NotFoundException("Entity not found with id: " + id));
 
-            MapperUtils.convertModelToEntity(data, existing);
+            // convertModelToEntity  → reset rồi copy  → KHÔNG dùng cho partial update
+            // mergeDataSourceToTarget → chỉ copy non-null → ĐÚNG cho partial update
+            MapperUtils.mergeDataSourceToTarget(data, existing);
 
             T saved = repository.save(existing);
             log.info("Updated entity id={}", id);

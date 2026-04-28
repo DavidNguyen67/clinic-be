@@ -1,6 +1,5 @@
 package com.camel.clinic.service.specialty;
 
-import com.camel.clinic.dto.SpecialtyWithDoctorCountDTO;
 import com.camel.clinic.dto.api.ApiPaged;
 import com.camel.clinic.entity.Specialty;
 import com.camel.clinic.repository.SpecialtyRepository;
@@ -44,9 +43,9 @@ public class SpecialtyServiceInv extends BaseService<Specialty, SpecialtyReposit
                     : Sort.by(sortBy).ascending();
 
             Pageable pageable = PageRequest.of(page, size, sort);
-            Page<SpecialtyWithDoctorCountDTO> resultPage = repository.getAllSpecialties(pageable, serviceId);
+            Page<Specialty> resultPage = repository.getAllSpecialties(pageable, serviceId);
 
-            ApiPaged<SpecialtyWithDoctorCountDTO> paged = ApiPaged.of(
+            ApiPaged<Specialty> paged = ApiPaged.of(
                     resultPage.getContent(),
                     resultPage.getTotalElements(),
                     resultPage.getNumber(),

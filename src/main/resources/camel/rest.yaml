@@ -220,3 +220,23 @@
         to: direct:staff-appointments
       - path: /stats
         to: direct:staff-appointments-stats
+
+
+- rest:
+    path: /v1/admin/specialties
+    post:
+      - path: /
+        to: direct:specialty-create
+    get:
+      - path: /
+        to: direct:specialty-list
+      - path: /count
+        to: direct:specialty-count
+      - path: /{id}
+        to: direct:specialty-get
+    patch:
+      - path: /{id}
+        to: direct:specialty-update
+    delete:
+      - path: /{id}
+        to: direct:specialty-delete

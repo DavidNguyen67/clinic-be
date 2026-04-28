@@ -5,11 +5,13 @@ import com.camel.clinic.exception.BadRequestException;
 import com.camel.clinic.exception.NotFoundException;
 import com.camel.clinic.exception.UnauthorizedException;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class ExceptionProcessor implements Processor {
 
@@ -68,7 +70,10 @@ public class ExceptionProcessor implements Processor {
         if (ex == null) return "Unknown error";
 
         if (status == 500) {
-            return "An unexpected error occurred";
+            log.error("An unexpected error occurred: ", ex);
+            return ex.getMessage() != null
+                    ? ex.getMessage()
+                    : "An unexpected error occurred";
         }
 
         return ex.getMessage() != null

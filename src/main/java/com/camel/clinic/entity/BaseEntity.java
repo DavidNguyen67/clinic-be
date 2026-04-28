@@ -24,7 +24,7 @@ public abstract class BaseEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,
-            pattern = "dd/MM/yyyy",
+            pattern = "HH:mm:ss dd/MM/yyyy",
             timezone = "Asia/Ho_Chi_Minh"
     )
     private Date createdAt;
@@ -33,7 +33,7 @@ public abstract class BaseEntity {
     @Column(name = "updated_at")
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,
-            pattern = "dd/MM/yyyy",
+            pattern = "HH:mm:ss dd/MM/yyyy",
             timezone = "Asia/Ho_Chi_Minh"
     )
     private Date updatedAt;

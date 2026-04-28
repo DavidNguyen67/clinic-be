@@ -12,17 +12,14 @@ import com.camel.clinic.exception.UnauthorizedException;
 import com.camel.clinic.repository.AppointmentRepository;
 import com.camel.clinic.repository.PatientRepository;
 import com.camel.clinic.repository.UserRepository;
+import com.camel.clinic.service.CommonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -33,6 +30,7 @@ public class PatientProfileServiceImp {
     private final PatientRepository patientRepository;
     private final UserRepository userRepository;
     private final AppointmentRepository appointmentRepository;
+    private final CommonService commonService;
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> getProfile() {
@@ -94,13 +92,7 @@ public class PatientProfileServiceImp {
     }
 
     private Patient getCurrentPatient() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new UnauthorizedException("User not authenticated");
-        }
-
-        User user = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new NotFoundException("User not found"));
+        User user = commonService.getCurrentUser();
 
         if (user.getRole() != Role.RoleName.PATIENT) {
             throw new UnauthorizedException("Only patient can access this endpoint");
@@ -140,19 +132,6 @@ public class PatientProfileServiceImp {
                 p.getLoyaltyPoints(),
                 p.getTotalVisits()
         );
-    }
-
-    private Map<String, Object> toAppointmentSummary(Appointment a) {
-        Map<String, Object> summary = new LinkedHashMap<>();
-        summary.put("id", a.getId());
-        summary.put("appointmentCode", a.getAppointmentCode());
-        summary.put("appointmentDate", a.getAppointmentDate());
-        summary.put("startTime", a.getStartTime());
-        summary.put("endTime", a.getEndTime());
-        summary.put("status", a.getStatus().name());
-        summary.put("doctorName", a.getDoctor() != null && a.getDoctor().getUser() != null ? a.getDoctor().getUser().getFullName() : null);
-        summary.put("serviceName", a.getClinicService() != null ? a.getClinicService().getName() : null);
-        return summary;
     }
 
     public AppointmentResponseDTO toAppointmentResponseDTO(Appointment appointment) {

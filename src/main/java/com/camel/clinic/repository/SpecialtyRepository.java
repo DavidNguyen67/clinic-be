@@ -1,6 +1,5 @@
 package com.camel.clinic.repository;
 
-import com.camel.clinic.dto.SpecialtyWithDoctorCountDTO;
 import com.camel.clinic.entity.Specialty;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,13 +13,12 @@ import java.util.UUID;
 
 public interface SpecialtyRepository extends JpaRepository<Specialty, UUID>, JpaSpecificationExecutor<Specialty> {
     @Query(
-            value = "SELECT new com.camel.clinic.dto.SpecialtyWithDoctorCountDTO(" +
-                    "s.id, s.name, s.slug, s.description, s.image, " +
-                    "s.displayOrder, s.isActive, s.specialtyType, COUNT(DISTINCT d))" +
+            value = "SELECT s" +
                     " FROM Specialty s" +
                     " LEFT JOIN s.doctors d" +
                     " LEFT JOIN s.services sv" +          // join services
                     " WHERE s.isActive = true" +
+                    " AND s.deletedAt IS NULL" +
                     " AND (:serviceId IS NULL OR sv.id = :serviceId)" +  // filter nếu có
                     " GROUP BY s.id, s.name, s.slug, s.description, s.image," +
                     "          s.displayOrder, s.isActive, s.specialtyType" +
@@ -29,9 +27,10 @@ public interface SpecialtyRepository extends JpaRepository<Specialty, UUID>, Jpa
                     "SELECT COUNT(DISTINCT s) FROM Specialty s" +
                             " LEFT JOIN s.services sv" +
                             " WHERE s.isActive = true" +
+                            " AND s.deletedAt IS NULL" +
                             " AND (:serviceId IS NULL OR sv.id = :serviceId)"
     )
-    Page<SpecialtyWithDoctorCountDTO> getAllSpecialties(
+    Page<Specialty> getAllSpecialties(
             Pageable pageable,
             @Param("serviceId") UUID serviceId   // truyền null nếu không filter
     );

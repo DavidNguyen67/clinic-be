@@ -238,4 +238,39 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID>,
             @Param("appointmentDate") Date appointmentDate
     );
 
+    @EntityGraph(attributePaths = {
+            "patient", "patient.user",
+            "doctor", "doctor.user",
+            "doctor.specialty",
+            "clinicService", "clinicService.specialty"
+    })
+    @Query("""
+            SELECT a FROM Appointment a
+            WHERE a.patient.id = :patientId
+              AND (CAST(:appointmentDate AS date) IS NULL OR a.appointmentDate = :appointmentDate)
+              AND a.deletedAt IS NULL
+            """)
+    Page<Appointment> findByPatientIdAndDate(
+            @Param("patientId") UUID patientId,
+            @Param("appointmentDate") Date appointmentDate,
+            Pageable pageable
+    );
+
+    @EntityGraph(attributePaths = {
+            "patient", "patient.user",
+            "doctor", "doctor.user",
+            "doctor.specialty",
+            "clinicService", "clinicService.specialty"
+    })
+    @Query("""
+            SELECT a FROM Appointment a
+            WHERE a.doctor.id = :doctorId
+              AND (CAST(:appointmentDate AS date) IS NULL OR a.appointmentDate = :appointmentDate)
+              AND a.deletedAt IS NULL
+            """)
+    Page<Appointment> findByDoctorIdAndDate(
+            @Param("doctorId") UUID doctorId,
+            @Param("appointmentDate") Date appointmentDate,
+            Pageable pageable
+    );
 }

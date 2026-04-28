@@ -6,13 +6,19 @@ import com.camel.clinic.exception.UnauthorizedException;
 import com.camel.clinic.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -88,5 +94,27 @@ public class CommonService {
                 "size", size,
                 "totalPages", (int) Math.ceil((double) totalItems / size)
         );
+    }
+
+    public Date parseAppointmentDate(Object raw) {
+        if (raw == null || raw.toString().isBlank()) return null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            sdf.setLenient(false);
+            return sdf.parse(raw.toString());
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid appointmentDate format, expected dd/MM/yyyy");
+        }
+    }
+
+    public Pageable buildPageable(Map<String, Object> queryParams) {
+        int page = parseIntParam(queryParams, "page", 0);
+        int size = parseIntParam(queryParams, "size", 20);
+        String sortBy = (String) queryParams.getOrDefault("sortBy", "id");
+        String sortDir = (String) queryParams.getOrDefault("sortDir", "asc");
+        Sort sort = sortDir.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+        return PageRequest.of(page, size, sort);
     }
 }

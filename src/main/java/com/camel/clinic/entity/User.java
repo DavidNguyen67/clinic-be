@@ -1,6 +1,7 @@
 package com.camel.clinic.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -31,6 +32,7 @@ public class User extends SoftDeletableEntity {
 
     @NotBlank()
     @Column(name = "password_hash", nullable = false, length = 255)
+    @JsonIgnore()
     private String passwordHash;
 
     @NotBlank()

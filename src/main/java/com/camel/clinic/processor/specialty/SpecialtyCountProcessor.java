@@ -7,19 +7,14 @@ import org.apache.camel.Processor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
-@Component("countAllSpecialtiesProcessor")
+@Component("specialtyCountProcessor")
 @AllArgsConstructor
-public class CountAllSpecialtiesProcessor implements Processor {
+public class SpecialtyCountProcessor implements Processor {
     private final SpecialtyServiceImp specialtyServiceImp;
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        Map<String, Object> queryParams = exchange.getIn().getHeaders();
-
-        ResponseEntity<?> response = specialtyServiceImp.getAllSpecialties(queryParams);
-
+        ResponseEntity<?> response = specialtyServiceImp.countAllSpecialties();
         exchange.getMessage().setBody(response);
     }
 }
