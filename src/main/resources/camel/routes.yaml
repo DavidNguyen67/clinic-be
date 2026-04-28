@@ -129,12 +129,12 @@
             json: { }
 
 - route:
-    id: auth-me-route
+    id: auth-get-profile-route
     from:
-      uri: direct:auth-me
+      uri: direct:auth-get-profile
       steps:
         - process:
-            ref: meAuthProcessor
+            ref: getUserProfile
         - marshal:
             json: { }
 
@@ -152,16 +152,6 @@
             ref: validationProcessor
         - process:
             ref: changePasswordAuthProcessor
-        - marshal:
-            json: { }
-
-- route:
-    id: clinic-settings-route
-    from:
-      uri: direct:clinic-settings
-      steps:
-        - process:
-            ref: getClinicSettingsProcessor
         - marshal:
             json: { }
 

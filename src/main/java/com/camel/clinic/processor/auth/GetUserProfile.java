@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-@Component("meAuthProcessor")
+@Component("getUserProfile")
 @AllArgsConstructor
 @Slf4j
-public class MeAuthProcessor implements Processor {
+public class GetUserProfile implements Processor {
     private final AuthServiceImp authServiceImp;
     private final JwtUtil jwtUtil;
     private final CommonService commonService;
