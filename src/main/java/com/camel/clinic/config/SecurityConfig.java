@@ -54,25 +54,12 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                                 "/api/v1/auth/**",
-                                "/api/v1/settings/clinic",
-                                "/api/v1/clinic-figures",
-                                "/api/v1/doctor-count",
-                                "/api/v1/doctor-info/**",
-                                "/api/v1/search",
-                                "/api/v1/top-doctor",
-                                "/api/v1/patient-count",
-                                "/api/v1/specialties/**",
-                                "/api/v1/services",
-                                "/api/v1/slot-availability",
-                                "/api/v1/specialties",
-                                "/api/v1/doctors",
-                                "/api/v1/doctor/schedule/**"
+                                "/api/v1/public/**"
                         ).permitAll()
                         .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/v1/doctor/**").hasAuthority("DOCTOR")
                         .requestMatchers("/api/v1/patient/**").hasAuthority("PATIENT")
-                        .requestMatchers("/api/v1/staff/appointments/**").hasAuthority("STAFF")
-                        .requestMatchers("/api/v1/appointments/**").authenticated()
+                        .requestMatchers("/api/v1/staff/**").hasAuthority("STAFF")
                         .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )

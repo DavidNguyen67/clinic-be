@@ -15,10 +15,10 @@ public interface SpecialtyRepository extends JpaRepository<Specialty, UUID>, Jpa
             value = "SELECT s" +
                     " FROM Specialty s" +
                     " LEFT JOIN s.doctorProfiles d" +
-                    " LEFT JOIN s.services sv" +          // join services
+                    " LEFT JOIN s.services sv" +
                     " WHERE s.isActive = true" +
                     " AND s.deletedAt IS NULL" +
-                    " AND (:serviceId IS NULL OR sv.id = :serviceId)" +  // filter nếu có
+                    " AND (:serviceId IS NULL OR sv.id = :serviceId)" +
                     " GROUP BY s.id, s.name, s.slug, s.description, s.image," +
                     "          s.displayOrder, s.isActive, s.specialtyType" +
                     " ORDER BY s.displayOrder ASC",
@@ -31,6 +31,6 @@ public interface SpecialtyRepository extends JpaRepository<Specialty, UUID>, Jpa
     )
     Page<Specialty> getAllSpecialties(
             Pageable pageable,
-            @Param("serviceId") UUID serviceId   // truyền null nếu không filter
+            @Param("serviceId") UUID serviceId
     );
 }
