@@ -45,14 +45,4 @@ public class Staff extends SoftDeletableEntity {
             timezone = "Asia/Ho_Chi_Minh"
     )
     private Date hireDate;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private StaffStatus status = StaffStatus.ACTIVE;
-
-    public enum StaffStatus {
-        ACTIVE,
-        ON_LEAVE,
-        RESIGNED
-    }
 }

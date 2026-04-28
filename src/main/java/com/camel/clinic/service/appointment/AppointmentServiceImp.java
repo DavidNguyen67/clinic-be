@@ -55,7 +55,7 @@ public class AppointmentServiceImp implements AppointmentService {
 
             Doctor doctor = doctorRepository.findById(dto.getDoctorId())
                     .orElseThrow(() -> new NotFoundException("Doctor not found"));
-            if (doctor.getStatus() != Doctor.DoctorStatus.ACTIVE) {
+            if (currentUser.getStatus() != User.UserStatus.ACTIVE) {
                 throw new BadRequestException("Doctor is not active");
             }
 
