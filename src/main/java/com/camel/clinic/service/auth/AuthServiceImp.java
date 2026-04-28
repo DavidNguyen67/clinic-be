@@ -3,8 +3,10 @@ package com.camel.clinic.service.auth;
 import com.camel.clinic.dto.auth.*;
 import com.camel.clinic.entity.*;
 import com.camel.clinic.repository.*;
+import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.EmailUniqueService;
 import com.camel.clinic.util.JwtUtil;
+import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -15,10 +17,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -40,6 +42,7 @@ public class AuthServiceImp implements AuthService {
     private final StaffRepository staffRepository;
     private final SpecialtyRepository specialtyRepository;
     private final DoctorScheduleRepository doctorScheduleRepository;
+    private final CommonService commonService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -86,46 +89,59 @@ public class AuthServiceImp implements AuthService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> register(RegisterRequestDTO req) throws BadRequestException {
-        String email = req.getEmail().trim().toLowerCase();
-        Role.RoleName role = Optional.ofNullable(req.getRole()).orElse(Role.RoleName.PATIENT);
+        try {
+            String email = req.getEmail().trim().toLowerCase();
+            Role.RoleName role = Optional.ofNullable(req.getRole()).orElse(Role.RoleName.PATIENT);
 
-        if (emailUniqueService.existsInCache(email)) {
-            throw new BadRequestException("Email already exists");
-        }
+            if (emailUniqueService.existsInCache(email)) {
+                throw new BadRequestException("Email already exists");
+            }
 
-        if (authServiceInv.findByEmail(email).isPresent()) {
-            emailUniqueService.addToCache(email);
-            throw new BadRequestException("Email already exists");
-        }
+            if (authServiceInv.findByEmail(email).isPresent()) {
+                emailUniqueService.addToCache(email);
+                throw new BadRequestException("Email already exists");
+            }
 
-        if (authServiceInv.findByPhone(req.getPhone()).isPresent()) {
-            throw new BadRequestException("Phone number already exists");
-        }
+            if (authServiceInv.findByPhone(req.getPhone()).isPresent()) {
+                throw new BadRequestException("Phone number already exists");
+            }
 
-        User user = new User();
-        user.setEmail(email);
-        user.setFullName(req.getName());
-        user.setPhone(req.getPhone());
-        user.setDateOfBirth(req.getDateOfBirth());
-        user.setGender(req.getGender());
-        user.setRole(role);
-        user.setPasswordHash(passwordEncoder.encode(req.getPassword()));
+            User user = new User();
+            user.setEmail(email);
+            user.setFullName(req.getName());
+            user.setPhone(req.getPhone());
+            Date dob = commonService.parseToDate(req.getDateOfBirth());
+            user.setDateOfBirth(dob);
+            user.setGender(req.getGender());
+            user.setRole(role);
+            user.setPasswordHash(passwordEncoder.encode(req.getPassword()));
 
-        user = authServiceInv.save(user);
-        createRoleProfile(user, req, role);
+            user = authServiceInv.save(user);
+            createRoleProfile(user, req, role);
 
-        emailUniqueService.addToCache(email);
-
-        String accessToken = jwtUtil.generateToken(user);
-        String refreshToken = jwtUtil.generateRefreshToken(user.getId());
-        tokenStoreService.storeRefreshTokenHash(user.getId().toString(), refreshToken);
+            String accessToken = jwtUtil.generateToken(user);
+            String refreshToken = jwtUtil.generateRefreshToken(user.getId());
+            tokenStoreService.storeRefreshTokenHash(user.getId().toString(), refreshToken);
 
 //        TODO: Send welcome email asynchronously bằng rabitMQ
-        Map<String, Object> response = new HashMap<>();
-        response.put("user", UserResponseDTO.from(user));
-        response.put("accessToken", accessToken);
-        response.put("refreshToken", refreshToken);
-        return ResponseEntity.ok(response);
+            Map<String, Object> response = new HashMap<>();
+            response.put("user", UserResponseDTO.from(user));
+            response.put("accessToken", accessToken);
+            response.put("refreshToken", refreshToken);
+
+            emailUniqueService.addToCache(email);
+
+            return ResponseEntity.ok(response);
+        } catch (TransactionSystemException e) {
+            Throwable cause = e.getRootCause();
+            if (cause instanceof ConstraintViolationException cve) {
+                cve.getConstraintViolations().forEach(v ->
+                        log.error("Validation fail: {} = '{}' → {}",
+                                v.getPropertyPath(), v.getInvalidValue(), v.getMessage())
+                );
+            }
+            throw e;
+        }
     }
 
     private void createRoleProfile(User user, RegisterRequestDTO req, Role.RoleName role) throws BadRequestException {
@@ -143,7 +159,6 @@ public class AuthServiceImp implements AuthService {
         Patient patient = new Patient();
         patient.setUser(user);
         patient.setPatientCode(generateUniqueCode("PT", patientRepository::existsByPatientCode));
-        patient.setDateOfBirth(java.sql.Date.valueOf(LocalDate.parse(req.getDateOfBirth())));
         patient.setGender(req.getGender());
         patientRepository.save(patient);
     }

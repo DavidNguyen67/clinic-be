@@ -123,7 +123,7 @@ public class PatientProfileServiceImp {
                 p.getUser().getEmail(),
                 p.getUser().getPhone(),
                 p.getUser().getGender().name(),
-                p.getUser().getDateOfBirth(),
+//                p.getUser().getDateOfBirth(),
                 p.getAddress(),
                 p.getInsuranceNumber(),
                 p.getBloodType() != null ? p.getBloodType().name() : null,

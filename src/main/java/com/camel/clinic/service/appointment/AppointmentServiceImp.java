@@ -329,7 +329,7 @@ public class AppointmentServiceImp implements AppointmentService {
             Date dateParam;
             LocalDate localDate;
             try {
-                localDate = commonService.parseDate((String) queryParams.get("date"));
+                localDate = commonService.parseToLocalDate((String) queryParams.get("date"));
                 dateParam = Date.from(
                         localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
                 );
@@ -359,7 +359,7 @@ public class AppointmentServiceImp implements AppointmentService {
             Date dateParam;
             LocalDate localDate;
             try {
-                localDate = commonService.parseDate((String) queryParams.get("date"));
+                localDate = commonService.parseToLocalDate((String) queryParams.get("date"));
                 dateParam = Date.from(
                         localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
                 );

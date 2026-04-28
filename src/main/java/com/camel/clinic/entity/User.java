@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.Date;
@@ -26,9 +27,14 @@ public class User extends SoftDeletableEntity {
     @Column(unique = true, nullable = false, length = 255)
     private String email;
 
-    @NotBlank()
+    @NotNull()
     @Column(name = "date_of_birth", nullable = false)
-    private String dateOfBirth;
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "dd/MM/yyyy",
+            timezone = "Asia/Ho_Chi_Minh"
+    )
+    private Date dateOfBirth;
 
     @NotBlank()
     @Column(name = "password_hash", nullable = false, length = 255)

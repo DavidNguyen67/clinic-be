@@ -62,7 +62,20 @@ public class CommonService {
         return null;
     }
 
-    public LocalDate parseDate(String rawDate) {
+    public Date parseToDate(String rawDate) {
+        if (rawDate == null || rawDate.isBlank()) {
+            throw new IllegalArgumentException("date is required");
+        }
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            sdf.setLenient(false);
+            return sdf.parse(rawDate);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid date format, expected dd/MM/yyyy");
+        }
+    }
+
+    public LocalDate parseToLocalDate(String rawDate) {
         if (rawDate == null || rawDate.isBlank()) {
             throw new IllegalArgumentException("date is required");
         }
@@ -116,5 +129,21 @@ public class CommonService {
                 ? Sort.by(sortBy).descending()
                 : Sort.by(sortBy).ascending();
         return PageRequest.of(page, size, sort);
+    }
+
+    public String formatToDdMMyyyy(LocalDate date) {
+        if (date == null) {
+            return null; // hoặc throw tùy bạn
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return date.format(formatter);
+    }
+
+    public String formatToDdMMyyyy(Date date) {
+        if (date == null) {
+            return null;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(date);
     }
 }

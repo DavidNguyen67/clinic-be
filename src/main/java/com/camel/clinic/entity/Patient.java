@@ -3,13 +3,10 @@ package com.camel.clinic.entity;
 
 import com.camel.clinic.converter.BloodTypeConverter;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
-import java.util.Date;
 
 @Entity
 @Table(name = "patients", indexes = {
@@ -31,14 +28,6 @@ public class Patient extends SoftDeletableEntity {
     @NotBlank()
     @Column(name = "patient_code", unique = true, nullable = false, length = 20)
     private String patientCode;
-
-    @Column(name = "date_of_birth")
-    @JsonFormat(
-            shape = JsonFormat.Shape.STRING,
-            pattern = "dd/MM/yyyy",
-            timezone = "Asia/Ho_Chi_Minh"
-    )
-    private Date dateOfBirth;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10)

@@ -39,8 +39,8 @@ public class RegisterRequestDTO {
 
     @NotBlank(message = "Date of birth is required")
     @Pattern(
-            regexp = "^\\d{4}-\\d{2}-\\d{2}$",
-            message = "Date of birth must be in format YYYY-MM-DD"
+            regexp = "^\\d{2}/\\d{2}/\\d{4}$",
+            message = "Date of birth must be in format DD/MM/YYYY"
     )
     private String dateOfBirth;
 
@@ -50,6 +50,18 @@ public class RegisterRequestDTO {
     @NotNull(message = "Role is required")
     private Role.RoleName role;
 
-    // Required when role = DOCTOR
     private UUID specialtyId;
+
+    @AssertTrue(message = "Specialty ID must be a valid UUID and required for doctors")
+    public boolean isValidPromotion() {
+        if (role == Role.RoleName.DOCTOR) {
+            try {
+                UUID.fromString(specialtyId.toString());
+                return true;
+            } catch (IllegalArgumentException e) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

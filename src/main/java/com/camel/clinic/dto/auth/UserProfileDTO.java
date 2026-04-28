@@ -1,10 +1,12 @@
 package com.camel.clinic.dto.auth;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,7 +21,14 @@ public class UserProfileDTO {
     private String phone;
     private String role;
     private String gender;
-    private String dateOfBirth;
+    
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "dd/MM/yyyy",
+            timezone = "Asia/Ho_Chi_Minh"
+    )
+    private Date dateOfBirth;
+
     private String pathAvatar;
     private String status;
     private Boolean emailVerified;

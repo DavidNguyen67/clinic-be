@@ -27,7 +27,7 @@ public record UserResponseDTO(
                 .role(u.getRole())
                 .status(u.getStatus())
                 .pathAvatar(u.getPathAvatar())
-                .dob(u.getDateOfBirth())
+//                .dob(commonService.formatToDdMMyyyy(dob))
                 .gender(u.getGender())
                 .build();
     }

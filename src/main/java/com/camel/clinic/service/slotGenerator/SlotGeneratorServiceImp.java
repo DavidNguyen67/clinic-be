@@ -36,7 +36,7 @@ public class SlotGeneratorServiceImp implements SlotGeneratorService {
         LocalDate localDate;
         try {
             doctorId = UUID.fromString((String) queryParams.get("doctorId"));
-            localDate = commonService.parseDate((String) queryParams.get("date"));
+            localDate = commonService.parseToLocalDate((String) queryParams.get("date"));
             dateParam = Date.from(
                     localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
             );
