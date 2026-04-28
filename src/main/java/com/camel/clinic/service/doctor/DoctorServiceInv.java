@@ -222,7 +222,7 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
                             requestDTO.getLeaveDate(),
                             requestDTO.getStartTime(),
                             requestDTO.getEndTime(),
-                            DoctorLeave.LeaveStatus.rejected
+                            DoctorLeave.LeaveStatus.REJECTED
                     );
 
             if (isDuplicate) {
@@ -235,7 +235,7 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             leave.setStartTime(requestDTO.getStartTime());
             leave.setEndTime(requestDTO.getEndTime());
             leave.setReason(requestDTO.getReason());
-            leave.setStatus(DoctorLeave.LeaveStatus.pending);
+            leave.setStatus(DoctorLeave.LeaveStatus.PENDING);
 
             DoctorLeave savedLeave = doctorLeaveRepository.save(leave);
 
@@ -272,7 +272,7 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
                     targetDoctorId = UUID.fromString(doctorId);
                 } else {
                     // Return all pending leaves for admin review
-                    List<DoctorLeave> leaves = doctorLeaveRepository.findByStatus(DoctorLeave.LeaveStatus.pending);
+                    List<DoctorLeave> leaves = doctorLeaveRepository.findByStatus(DoctorLeave.LeaveStatus.PENDING);
                     List<DoctorLeaveResponseDTO> response = leaves.stream()
                             .map(this::convertToLeaveDTO)
                             .collect(Collectors.toList());
@@ -309,10 +309,10 @@ public class DoctorServiceInv extends BaseService<Doctor, DoctorRepository> {
             DoctorLeave leave = doctorLeaveRepository.findById(leaveUUID)
                     .orElseThrow(() -> new NotFoundException("Leave request not found"));
 
-            if (requestDTO.getStatus() == DoctorLeave.LeaveStatus.approved) {
-                leave.setStatus(DoctorLeave.LeaveStatus.approved);
-            } else if (requestDTO.getStatus() == DoctorLeave.LeaveStatus.rejected) {
-                leave.setStatus(DoctorLeave.LeaveStatus.rejected);
+            if (requestDTO.getStatus() == DoctorLeave.LeaveStatus.APPROVED) {
+                leave.setStatus(DoctorLeave.LeaveStatus.APPROVED);
+            } else if (requestDTO.getStatus() == DoctorLeave.LeaveStatus.REJECTED) {
+                leave.setStatus(DoctorLeave.LeaveStatus.REJECTED);
             } else {
                 throw new BadRequestException("Invalid status. Must be 'approved' or 'rejected'");
             }

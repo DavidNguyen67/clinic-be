@@ -3,11 +3,7 @@ package com.camel.clinic.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -50,25 +46,28 @@ public class Inventory extends SoftDeletableEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private InventoryStatus status = InventoryStatus.in_stock;
+    private InventoryStatus status = InventoryStatus.IN_STOCK;
 
     @Column(name = "alert_threshold", nullable = false)
     private Integer alertThreshold = 10;
 
-    public enum InventoryStatus {
-        in_stock, low_stock, out_of_stock, expired
-    }
-
     // Helper method to update status based on quantity and expiry
     public void updateStatus() {
         if (expiryDate != null && expiryDate.before(new Date())) {
-            this.status = InventoryStatus.expired;
+            this.status = InventoryStatus.EXPIRED;
         } else if (quantity == 0) {
-            this.status = InventoryStatus.out_of_stock;
+            this.status = InventoryStatus.OUT_OF_STOCK;
         } else if (quantity <= alertThreshold) {
-            this.status = InventoryStatus.low_stock;
+            this.status = InventoryStatus.LOW_STOCK;
         } else {
-            this.status = InventoryStatus.in_stock;
+            this.status = InventoryStatus.IN_STOCK;
         }
+    }
+
+    public enum InventoryStatus {
+        IN_STOCK,
+        LOW_STOCK,
+        OUT_OF_STOCK,
+        EXPIRED
     }
 }

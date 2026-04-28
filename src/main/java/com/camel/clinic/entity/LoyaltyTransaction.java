@@ -61,6 +61,9 @@ public class LoyaltyTransaction extends SoftDeletableEntity {
     private Date expiresAt;
 
     public enum TransactionType {
-        earn, redeem, expire, adjustment
+        EARN,
+        REDEEM,
+        EXPIRE,
+        ADJUSTMENT
     }
 }

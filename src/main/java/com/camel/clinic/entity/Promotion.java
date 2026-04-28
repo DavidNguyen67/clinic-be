@@ -90,7 +90,8 @@ public class Promotion extends SoftDeletableEntity {
     private Boolean isActive = true;
 
     public enum DiscountType {
-        percentage, fixed_amount
+        PERCENTAGE,
+        FIXED_AMOUNT
     }
 
     public boolean isValid() {

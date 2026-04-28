@@ -67,9 +67,11 @@ public class Doctor extends SoftDeletableEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private DoctorStatus status = DoctorStatus.active;
+    private DoctorStatus status = DoctorStatus.ACTIVE;
 
     public enum DoctorStatus {
-        active, on_leave, inactive
+        ACTIVE,
+        INACTIVE,
+        SUSPENDED
     }
 }

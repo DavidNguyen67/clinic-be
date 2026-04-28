@@ -4,11 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "reviews", indexes = {
@@ -52,9 +48,11 @@ public class Review extends SoftDeletableEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private ReviewStatus status = ReviewStatus.pending;
+    private ReviewStatus status = ReviewStatus.PENDING;
 
     public enum ReviewStatus {
-        pending, approved, rejected
+        PENDING,
+        APPROVED,
+        REJECTED
     }
 }

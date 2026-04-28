@@ -64,7 +64,7 @@ public class AuthServiceInv extends BaseService<User, UserRepository> {
         profile.setEmailVerified(user.getEmailVerified());
         profile.setPhoneVerified(user.getPhoneVerified());
         if (user.getLastLogin() != null) {
-            profile.setLastLogin(user.getLastLogin().getTime());
+            profile.setLastLogin(user.getLastLogin());
         }
 
         // Load doctor info if user is a doctor

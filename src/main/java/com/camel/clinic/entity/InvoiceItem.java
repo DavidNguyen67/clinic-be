@@ -51,7 +51,10 @@ public class InvoiceItem extends SoftDeletableEntity {
     private BigDecimal totalPrice;
 
     public enum ItemType {
-        service, medication, lab_test, other
+        SERVICE, 
+        MEDICATION,
+        LAB_TEST,
+        OTHER
     }
 
     // Helper method to calculate total price

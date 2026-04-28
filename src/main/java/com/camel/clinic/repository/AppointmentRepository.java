@@ -102,7 +102,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID>,
 
     @Query("""
             SELECT a FROM Appointment a
-            WHERE a.status = com.camel.clinic.entity.Appointment.AppointmentStatus.checked_in
+            WHERE a.status = com.camel.clinic.entity.Appointment.AppointmentStatus.CHECKED_IN
               AND a.deletedAt IS NULL
             ORDER BY a.appointmentDate ASC, a.startTime ASC
             """)
@@ -110,7 +110,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID>,
 
     @Query("""
             SELECT a FROM Appointment a
-            WHERE a.status = com.camel.clinic.entity.Appointment.AppointmentStatus.confirmed
+            WHERE a.status = com.camel.clinic.entity.Appointment.AppointmentStatus.CONFIRMED
               AND a.startTime >= :fromTime
               AND a.startTime < :toTime
               AND a.deletedAt IS NULL

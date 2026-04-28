@@ -55,7 +55,7 @@ public class AppointmentServiceImp implements AppointmentService {
 
             Doctor doctor = doctorRepository.findById(dto.getDoctorId())
                     .orElseThrow(() -> new NotFoundException("Doctor not found"));
-            if (doctor.getStatus() != Doctor.DoctorStatus.active) {
+            if (doctor.getStatus() != Doctor.DoctorStatus.ACTIVE) {
                 throw new BadRequestException("Doctor is not active");
             }
 
@@ -95,10 +95,10 @@ public class AppointmentServiceImp implements AppointmentService {
                     dto.getDate(),
                     startTime,
                     List.of(
-                            Appointment.AppointmentStatus.pending,
-                            Appointment.AppointmentStatus.confirmed,
-                            Appointment.AppointmentStatus.checked_in,
-                            Appointment.AppointmentStatus.in_progress
+                            Appointment.AppointmentStatus.PENDING,
+                            Appointment.AppointmentStatus.CONFIRMED,
+                            Appointment.AppointmentStatus.CHECKED_IN,
+                            Appointment.AppointmentStatus.IN_PROGRESS
                     )
             );
             if (occupied) {
@@ -116,10 +116,10 @@ public class AppointmentServiceImp implements AppointmentService {
                         dto.getDate(),
                         startTime,
                         List.of(
-                                Appointment.AppointmentStatus.pending,
-                                Appointment.AppointmentStatus.confirmed,
-                                Appointment.AppointmentStatus.checked_in,
-                                Appointment.AppointmentStatus.in_progress
+                                Appointment.AppointmentStatus.PENDING,
+                                Appointment.AppointmentStatus.CONFIRMED,
+                                Appointment.AppointmentStatus.CHECKED_IN,
+                                Appointment.AppointmentStatus.IN_PROGRESS
                         )
                 );
                 if (occupiedAfterLock) {
@@ -137,7 +137,7 @@ public class AppointmentServiceImp implements AppointmentService {
                 appointment.setEndTime(DateTimeUtils.toDate(apptDate, apptTime.plusMinutes(clinicService.getDuration())));
                 appointment.setReason(dto.getReason());
                 appointment.setSymptoms(dto.getSymptoms());
-                appointment.setStatus(Appointment.AppointmentStatus.pending);
+                appointment.setStatus(Appointment.AppointmentStatus.PENDING);
                 appointment.setBookingType(parseBookingType(dto.getServiceType()));
 
                 Appointment saved = appointmentRepository.save(appointment);
@@ -200,8 +200,8 @@ public class AppointmentServiceImp implements AppointmentService {
             }
 
             if (patientRole) {
-                if (!(appointment.getStatus() == Appointment.AppointmentStatus.pending
-                        || appointment.getStatus() == Appointment.AppointmentStatus.confirmed)) {
+                if (!(appointment.getStatus() == Appointment.AppointmentStatus.PENDING
+                        || appointment.getStatus() == Appointment.AppointmentStatus.CONFIRMED)) {
                     throw new BadRequestException("Patient can only cancel pending/confirmed appointments");
                 }
                 Patient patient = patientRepository.findByUserId(currentUser.getId())
@@ -223,7 +223,7 @@ public class AppointmentServiceImp implements AppointmentService {
                 throw new BadRequestException("Staff must provide cancel reason");
             }
 
-            appointment.setStatus(Appointment.AppointmentStatus.cancelled);
+            appointment.setStatus(Appointment.AppointmentStatus.CANCELLED);
             String reason = dto != null ? dto.getReason() : null;
             String reasonNote = (reason == null || reason.isBlank()) ? "CANCELLED_BY_PATIENT" : "CANCEL_REASON:" + reason;
             String note = appointment.getNotes() == null ? "" : appointment.getNotes() + " | ";
@@ -237,7 +237,7 @@ public class AppointmentServiceImp implements AppointmentService {
     }
 
     public ResponseEntity<?> confirmAppointment(String id) {
-        return transitionStatus(id, Appointment.AppointmentStatus.pending, Appointment.AppointmentStatus.confirmed,
+        return transitionStatus(id, Appointment.AppointmentStatus.PENDING, Appointment.AppointmentStatus.CONFIRMED,
                 Role.RoleName.STAFF.name());
     }
 
@@ -248,10 +248,10 @@ public class AppointmentServiceImp implements AppointmentService {
             Appointment appointment = appointmentRepository.findById(UUID.fromString(id))
                     .orElseThrow(() -> new NotFoundException("Appointment not found"));
 
-            if (appointment.getStatus() != Appointment.AppointmentStatus.confirmed) {
+            if (appointment.getStatus() != Appointment.AppointmentStatus.CONFIRMED) {
                 throw new BadRequestException("Only confirmed appointment can be checked in");
             }
-            appointment.setStatus(Appointment.AppointmentStatus.checked_in);
+            appointment.setStatus(Appointment.AppointmentStatus.CHECKED_IN);
             return ResponseEntity.ok(toDto(appointmentRepository.save(appointment)));
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("Invalid appointment id");
@@ -265,12 +265,12 @@ public class AppointmentServiceImp implements AppointmentService {
     }
 
     public ResponseEntity<?> startAppointment(String id) {
-        return transitionStatus(id, Appointment.AppointmentStatus.checked_in, Appointment.AppointmentStatus.in_progress,
+        return transitionStatus(id, Appointment.AppointmentStatus.CHECKED_IN, Appointment.AppointmentStatus.IN_PROGRESS,
                 Role.RoleName.DOCTOR.name());
     }
 
     public ResponseEntity<?> completeAppointment(String id) {
-        return transitionStatus(id, Appointment.AppointmentStatus.in_progress, Appointment.AppointmentStatus.completed,
+        return transitionStatus(id, Appointment.AppointmentStatus.IN_PROGRESS, Appointment.AppointmentStatus.COMPLETED,
                 Role.RoleName.DOCTOR.name());
     }
 
@@ -369,12 +369,12 @@ public class AppointmentServiceImp implements AppointmentService {
             }
 
             long totalAppointments = appointmentRepository.countByAppointmentDateAndDeletedAtIsNull(dateParam);
-            long pendingAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.pending, dateParam);
-            long confirmedAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.confirmed, dateParam);
-            long checkedInAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.checked_in, dateParam);
-            long inProgressAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.in_progress, dateParam);
-            long completedAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.completed, dateParam);
-            long cancelledAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.cancelled, dateParam);
+            long pendingAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.PENDING, dateParam);
+            long confirmedAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.CONFIRMED, dateParam);
+            long checkedInAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.CHECKED_IN, dateParam);
+            long inProgressAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.IN_PROGRESS, dateParam);
+            long completedAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.COMPLETED, dateParam);
+            long cancelledAppointments = appointmentRepository.countStaffAppointmentsByStatus(Appointment.AppointmentStatus.CANCELLED, dateParam);
             long otherAppointments = totalAppointments - pendingAppointments - confirmedAppointments - checkedInAppointments
                     - inProgressAppointments - completedAppointments - cancelledAppointments;
 
@@ -428,12 +428,12 @@ public class AppointmentServiceImp implements AppointmentService {
     }
 
     private Appointment.BookingType parseBookingType(String serviceType) {
-        if (serviceType == null) return Appointment.BookingType.online;
+        if (serviceType == null) return Appointment.BookingType.ONLINE;
         String normalized = serviceType.trim().toLowerCase();
         return switch (normalized) {
-            case "phone" -> Appointment.BookingType.phone;
-            case "walk_in", "walkin" -> Appointment.BookingType.walk_in;
-            default -> Appointment.BookingType.online;
+            case "phone" -> Appointment.BookingType.PHONE;
+            case "walk_in", "walkin" -> Appointment.BookingType.WALK_IN;
+            default -> Appointment.BookingType.ONLINE;
         };
     }
 

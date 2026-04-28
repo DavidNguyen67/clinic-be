@@ -5,11 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -79,15 +75,11 @@ public class Invoice extends SoftDeletableEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private InvoiceStatus status = InvoiceStatus.pending;
+    private InvoiceStatus status = InvoiceStatus.PENDING;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("invoice-items")
     private List<InvoiceItem> items = new ArrayList<>();
-
-    public enum InvoiceStatus {
-        draft, pending, paid, cancelled
-    }
 
     // Helper methods
     public void addItem(InvoiceItem item) {
@@ -106,5 +98,12 @@ public class Invoice extends SoftDeletableEntity {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         this.totalAmount = this.subtotal.subtract(this.discountAmount);
         this.balance = this.totalAmount.subtract(this.insuranceCovered).subtract(this.patientPaid);
+    }
+
+    public enum InvoiceStatus {
+        DRAFT,
+        PENDING,
+        PAID,
+        CANCELLED
     }
 }

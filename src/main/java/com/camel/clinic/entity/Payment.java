@@ -4,11 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -64,13 +60,21 @@ public class Payment extends SoftDeletableEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private PaymentStatus status = PaymentStatus.pending;
+    private PaymentStatus status = PaymentStatus.PENDING;
 
     public enum PaymentMethod {
-        cash, card, bank_transfer, momo, vnpay
+        CASH,
+        CARD,
+        BANK_TRANSFER,
+        MOMO,
+        VNPAY
     }
 
     public enum PaymentStatus {
-        pending, completed, failed
+        PENDING,
+        COMPLETED,
+        FAILED,
+        REFUNDED,
+        CANCELLED
     }
 }

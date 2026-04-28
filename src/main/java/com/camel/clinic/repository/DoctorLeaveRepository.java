@@ -65,7 +65,7 @@ public interface DoctorLeaveRepository extends JpaRepository<DoctorLeave, UUID>,
             SELECT COUNT(l) > 0 FROM DoctorLeave l
             WHERE l.doctor.id  = :doctorId
               AND l.leaveDate = :date
-              AND l.status = com.camel.clinic.entity.DoctorLeave.LeaveStatus.approved
+              AND l.status = com.camel.clinic.entity.DoctorLeave.LeaveStatus.APPROVED
               AND l.deletedAt IS NULL
             """)
     boolean existsApprovedLeaveOnDate(
@@ -77,7 +77,7 @@ public interface DoctorLeaveRepository extends JpaRepository<DoctorLeave, UUID>,
             SELECT l FROM DoctorLeave l
             WHERE l.doctor.id = :doctorId
               AND l.leaveDate = :date
-              AND l.status = com.camel.clinic.entity.DoctorLeave.LeaveStatus.approved
+              AND l.status = com.camel.clinic.entity.DoctorLeave.LeaveStatus.APPROVED
               AND l.deletedAt IS NULL
             """)
     List<DoctorLeave> findApprovedByDoctorIdAndLeaveDate(

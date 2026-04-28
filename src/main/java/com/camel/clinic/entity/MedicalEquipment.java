@@ -3,11 +3,7 @@ package com.camel.clinic.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -69,7 +65,7 @@ public class MedicalEquipment extends SoftDeletableEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private EquipmentStatus status = EquipmentStatus.operational;
+    private EquipmentStatus status = EquipmentStatus.OPERATIONAL;
 
     @Column(name = "last_maintenance_date")
     @JsonFormat(
@@ -93,15 +89,18 @@ public class MedicalEquipment extends SoftDeletableEntity {
     @Column(columnDefinition = "TEXT")
     private String notes;
 
-    public enum EquipmentStatus {
-        operational, under_maintenance, broken, retired
-    }
-
-
     public void updateNextMaintenance() {
         if (lastMaintenanceDate != null) {
             long nextMaintenanceTime = lastMaintenanceDate.getTime() + (long) maintenanceIntervalDays * 24 * 60 * 60 * 1000;
             this.nextMaintenanceDate = new Date(nextMaintenanceTime);
         }
+    }
+
+
+    public enum EquipmentStatus {
+        OPERATIONAL,
+        UNDER_MAINTENANCE,
+        BROKEN,
+        RETIRED
     }
 }

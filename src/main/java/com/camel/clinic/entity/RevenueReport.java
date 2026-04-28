@@ -74,6 +74,9 @@ public class RevenueReport extends SoftDeletableEntity {
     private Integer totalPatients = 0;
 
     public enum ReportType {
-        daily, weekly, monthly, yearly
+        DAILY, 
+        WEEKLY, 
+        MONTHLY, 
+        YEARLY
     }
 }

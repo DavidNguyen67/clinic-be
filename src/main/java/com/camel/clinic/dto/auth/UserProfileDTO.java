@@ -21,7 +21,7 @@ public class UserProfileDTO {
     private String phone;
     private String role;
     private String gender;
-    
+
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,
             pattern = "dd/MM/yyyy",
@@ -33,7 +33,12 @@ public class UserProfileDTO {
     private String status;
     private Boolean emailVerified;
     private Boolean phoneVerified;
-    private Long lastLogin;
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "dd/MM/yyyy",
+            timezone = "Asia/Ho_Chi_Minh"
+    )
+    private Date lastLogin;
 
     // Doctor specific fields
     private DoctorProfileDTO doctor;

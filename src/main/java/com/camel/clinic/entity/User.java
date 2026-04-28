@@ -73,7 +73,7 @@ public class User extends SoftDeletableEntity {
     @Column(name = "last_login")
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,
-            pattern = "dd/MM/yyyy",
+            pattern = "HH:mm:ss dd/MM/yyyy",
             timezone = "Asia/Ho_Chi_Minh"
     )
     private Date lastLogin;

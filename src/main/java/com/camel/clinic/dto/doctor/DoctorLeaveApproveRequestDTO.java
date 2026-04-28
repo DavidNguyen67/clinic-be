@@ -19,7 +19,7 @@ public class DoctorLeaveApproveRequestDTO {
 
     @AssertTrue(message = "Rejection reason is required when status is rejected")
     public boolean isValidReason() {
-        if (status == DoctorLeave.LeaveStatus.rejected) {
+        if (status == DoctorLeave.LeaveStatus.REJECTED) {
             return rejectionReason != null && !rejectionReason.trim().isEmpty();
         }
         return true;

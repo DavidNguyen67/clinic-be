@@ -3,11 +3,7 @@ package com.camel.clinic.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -37,17 +33,17 @@ public class EquipmentMaintenance extends SoftDeletableEntity {
 
     @Column(name = "scheduled_date")
     @JsonFormat(
-        shape = JsonFormat.Shape.STRING,
-        pattern = "dd/MM/yyyy",
-        timezone = "Asia/Ho_Chi_Minh"
+            shape = JsonFormat.Shape.STRING,
+            pattern = "dd/MM/yyyy",
+            timezone = "Asia/Ho_Chi_Minh"
     )
     private Date scheduledDate;
 
     @Column(name = "completed_date")
     @JsonFormat(
-        shape = JsonFormat.Shape.STRING,
-        pattern = "dd/MM/yyyy",
-        timezone = "Asia/Ho_Chi_Minh"
+            shape = JsonFormat.Shape.STRING,
+            pattern = "dd/MM/yyyy",
+            timezone = "Asia/Ho_Chi_Minh"
     )
     private Date completedDate;
 
@@ -68,13 +64,19 @@ public class EquipmentMaintenance extends SoftDeletableEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private MaintenanceStatus status = MaintenanceStatus.scheduled;
+    private MaintenanceStatus status = MaintenanceStatus.SCHEDULED;
 
     public enum MaintenanceType {
-        routine, repair, calibration, inspection
+        ROUTINE,
+        REPAIR,
+        CALIBRATION,
+        INSPECTION
     }
 
     public enum MaintenanceStatus {
-        scheduled, in_progress, completed, cancelled
+        SCHEDULED,
+        IN_PROGRESS,
+        COMPLETED,
+        CANCELLED
     }
 }

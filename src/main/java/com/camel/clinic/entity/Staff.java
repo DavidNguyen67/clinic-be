@@ -5,11 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -52,9 +48,11 @@ public class Staff extends SoftDeletableEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private StaffStatus status = StaffStatus.active;
+    private StaffStatus status = StaffStatus.ACTIVE;
 
     public enum StaffStatus {
-        active, on_leave, resigned
+        ACTIVE,
+        ON_LEAVE,
+        RESIGNED
     }
 }

@@ -17,7 +17,7 @@ public interface ReviewRepository extends JpaRepository<Review, UUID>, JpaSpecif
             SELECT r FROM Review r
             WHERE r.doctor.id = :doctorId
               AND r.deletedAt IS NULL
-              AND r.status = com.camel.clinic.entity.Review.ReviewStatus.approved
+              AND r.status = com.camel.clinic.entity.Review.ReviewStatus.APPROVED
             ORDER BY r.createdAt DESC
             """)
     List<Review> findApprovedByDoctorId(@Param("doctorId") UUID doctorId);

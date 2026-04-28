@@ -79,11 +79,11 @@ public class Appointment extends SoftDeletableEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private AppointmentStatus status = AppointmentStatus.pending;
+    private AppointmentStatus status = AppointmentStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "booking_type", nullable = false, length = 20)
-    private BookingType bookingType = BookingType.online;
+    private BookingType bookingType = BookingType.ONLINE;
 
     @Column(columnDefinition = "TEXT")
     private String reason;
@@ -98,10 +98,18 @@ public class Appointment extends SoftDeletableEntity {
     private Integer queueNumber;
 
     public enum AppointmentStatus {
-        pending, confirmed, checked_in, in_progress, completed, cancelled, no_show
+        PENDING,
+        CONFIRMED,
+        CHECKED_IN,
+        IN_PROGRESS,
+        COMPLETED,
+        CANCELLED,
+        NO_SHOW
     }
 
     public enum BookingType {
-        online, phone, walk_in
+        ONLINE,
+        PHONE,
+        WALK_IN
     }
 }

@@ -3,11 +3,7 @@ package com.camel.clinic.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -59,9 +55,11 @@ public class DoctorLeave extends SoftDeletableEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private LeaveStatus status = LeaveStatus.pending;
+    private LeaveStatus status = LeaveStatus.PENDING;
 
     public enum LeaveStatus {
-        pending, approved, rejected
+        PENDING,
+        APPROVED,
+        REJECTED
     }
 }
