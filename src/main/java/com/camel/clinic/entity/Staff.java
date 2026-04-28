@@ -10,7 +10,7 @@ import lombok.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "staff", indexes = {
+@Table(name = "staff_profile", indexes = {
         @Index(name = "idx_user_id", columnList = "user_id"),
         @Index(name = "idx_staff_code", columnList = "staff_code"),
         @Index(name = "idx_department", columnList = "department"),

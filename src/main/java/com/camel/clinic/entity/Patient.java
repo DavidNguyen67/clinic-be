@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
-@Table(name = "patients", indexes = {
+@Table(name = "patient_profile", indexes = {
         @Index(name = "idx_user_id", columnList = "user_id"),
         @Index(name = "idx_patient_code", columnList = "patient_code")
 })

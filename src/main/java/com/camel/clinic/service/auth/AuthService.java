@@ -4,6 +4,8 @@ import com.camel.clinic.dto.auth.*;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 
+import java.util.UUID;
+
 public interface AuthService {
     ResponseEntity<?> login(LoginRequestDTO req) throws BadRequestException;
 
@@ -19,11 +21,8 @@ public interface AuthService {
 
     ResponseEntity<?> resetPassword(ResetPasswordRequestDTO req) throws BadRequestException;
 
-    ResponseEntity<?> me(String email) throws BadRequestException;
+    ResponseEntity<?> getUserProfile(UUID userId) throws BadRequestException;
 
     ResponseEntity<?> changePassword(ChangePasswordRequestDTO req, String email) throws BadRequestException;
-
-    ResponseEntity<?> getUserProfile(String email) throws BadRequestException;
-
 }
 

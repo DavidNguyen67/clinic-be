@@ -5,6 +5,7 @@ import com.camel.clinic.exception.NotFoundException;
 import com.camel.clinic.exception.UnauthorizedException;
 import com.camel.clinic.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.apache.camel.Exchange;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -145,5 +146,13 @@ public class CommonService {
         }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(date);
+    }
+
+    public String getAuthHeader(Exchange exchange) {
+        String authHeader = exchange.getIn().getHeader("Authorization", String.class);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new UnauthorizedException("Missing or invalid Authorization header");
+        }
+        return authHeader.substring(7);
     }
 }

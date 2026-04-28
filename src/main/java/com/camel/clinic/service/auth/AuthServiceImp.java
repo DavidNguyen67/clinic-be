@@ -2,7 +2,10 @@ package com.camel.clinic.service.auth;
 
 import com.camel.clinic.dto.auth.*;
 import com.camel.clinic.entity.*;
-import com.camel.clinic.repository.*;
+import com.camel.clinic.repository.DoctorRepository;
+import com.camel.clinic.repository.PatientRepository;
+import com.camel.clinic.repository.SpecialtyRepository;
+import com.camel.clinic.repository.StaffRepository;
 import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.EmailUniqueService;
 import com.camel.clinic.util.JwtUtil;
@@ -41,7 +44,6 @@ public class AuthServiceImp implements AuthService {
     private final PatientRepository patientRepository;
     private final StaffRepository staffRepository;
     private final SpecialtyRepository specialtyRepository;
-    private final DoctorScheduleRepository doctorScheduleRepository;
     private final CommonService commonService;
 
     @Override
@@ -294,8 +296,8 @@ public class AuthServiceImp implements AuthService {
     }
 
     @Override
-    public ResponseEntity<?> me(String email) throws BadRequestException {
-        User user = authServiceInv.findByEmail(email)
+    public ResponseEntity<?> getUserProfile(UUID userId) throws BadRequestException {
+        User user = authServiceInv.findById(userId)
                 .orElseThrow(() -> new BadRequestException("User not found"));
         UserProfileDTO profile = authServiceInv.buildUserProfileDTO(user);
         return ResponseEntity.ok(profile);
@@ -314,12 +316,4 @@ public class AuthServiceImp implements AuthService {
         return ResponseEntity.noContent().build();
     }
 
-    @Override
-    public ResponseEntity<?> getUserProfile(String email) throws BadRequestException {
-        User user = authServiceInv.findByEmail(email)
-                .orElseThrow(() -> new BadRequestException("User not found"));
-
-        UserProfileDTO profile = authServiceInv.buildUserProfileDTO(user);
-        return ResponseEntity.ok(profile);
-    }
 }

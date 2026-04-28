@@ -19,12 +19,6 @@ public class RegisterAuthProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
         RegisterRequestDTO request = exchange.getIn().getBody(RegisterRequestDTO.class);
         ResponseEntity<?> response = authServiceImp.register(request);
-//        Map<String, Object> responseBody = (Map<String, Object>) response.getBody();
-//
-//        if (responseBody != null && responseBody.get("refreshToken") != null) {
-//            exchange.getIn().setHeader("Set-Cookie",
-//                    "refreshToken=" + responseBody.get("refreshToken") + "; HttpOnly; Path=/; Max-Age=604800");
-//        }
         exchange.getIn().setBody(response);
     }
 }

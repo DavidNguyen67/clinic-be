@@ -9,7 +9,7 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "doctors", indexes = {
+@Table(name = "doctor_profile", indexes = {
         @Index(name = "idx_user_id", columnList = "user_id"),
         @Index(name = "idx_doctor_code", columnList = "doctor_code"),
         @Index(name = "idx_specialty_id", columnList = "specialty_id"),

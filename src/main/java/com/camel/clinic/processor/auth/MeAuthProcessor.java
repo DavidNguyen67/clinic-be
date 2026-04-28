@@ -1,6 +1,6 @@
 package com.camel.clinic.processor.auth;
 
-import com.camel.clinic.exception.UnauthorizedException;
+import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.auth.AuthServiceImp;
 import com.camel.clinic.util.JwtUtil;
 import lombok.AllArgsConstructor;
@@ -10,22 +10,29 @@ import org.apache.camel.Processor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component("meAuthProcessor")
 @AllArgsConstructor
 @Slf4j
 public class MeAuthProcessor implements Processor {
     private final AuthServiceImp authServiceImp;
     private final JwtUtil jwtUtil;
+    private final CommonService commonService;
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        String authHeader = exchange.getIn().getHeader("Authorization", String.class);
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new UnauthorizedException("Missing token");
+        String accessToken = commonService.getAuthHeader(exchange);
+        String userIdStr = jwtUtil.getUserIdFromToken(accessToken);
+        UUID userId;
+        try {
+            userId = UUID.fromString(userIdStr);
+        } catch (Exception e) {
+            log.error("Invalid user ID in token: {}", userIdStr, e);
+            throw new RuntimeException("Invalid user ID in token: " + e.getMessage());
         }
-        String token = authHeader.substring(7);
-        String email = jwtUtil.getEmailFromToken(token);
-        ResponseEntity<?> response = authServiceImp.me(email);
+
+        ResponseEntity<?> response = authServiceImp.getUserProfile(userId);
         exchange.getIn().setBody(response);
     }
 }

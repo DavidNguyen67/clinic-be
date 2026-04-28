@@ -2,7 +2,7 @@ package com.camel.clinic.service.services;
 
 import com.camel.clinic.dto.api.ApiPaged;
 import com.camel.clinic.entity.ClinicService;
-import com.camel.clinic.repository.ClinicServiceRepository;
+import com.camel.clinic.repository.ServicesRepository;
 import com.camel.clinic.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,9 +16,9 @@ import java.util.Map;
 
 @Slf4j
 @Service
-public class ServicesServiceInv extends BaseService<ClinicService, ClinicServiceRepository> {
+public class ServicesServiceInv extends BaseService<ClinicService, ServicesRepository> {
 
-    public ServicesServiceInv(ClinicServiceRepository repository) {
+    public ServicesServiceInv(ServicesRepository repository) {
         super(ClinicService::new, repository);
     }
 
