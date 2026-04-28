@@ -1,6 +1,6 @@
 package com.camel.clinic.service.services;
 
-import com.camel.clinic.dto.api.ApiPaged;
+import com.camel.clinic.dto.ApiPaged;
 import com.camel.clinic.entity.ClinicService;
 import com.camel.clinic.repository.ServicesRepository;
 import com.camel.clinic.service.BaseService;
@@ -29,13 +29,6 @@ public class ServicesServiceInv extends BaseService<ClinicService, ServicesRepos
             int size = parseIntParam(queryParams, "size", 20);
             String sortBy = (String) queryParams.getOrDefault("sortBy", "id");
             String sortDir = (String) queryParams.getOrDefault("sortDir", "asc");
-//            UUID serviceId = null;
-//
-//            try {
-//                serviceId = UUID.fromString((String) queryParams.get("serviceId"));
-//            } catch (Exception e) {
-//                log.warn("Invalid serviceId provided: {}", queryParams.get("serviceId"));
-//            }
 
             Sort sort = sortDir.equalsIgnoreCase("desc")
                     ? Sort.by(sortBy).descending()

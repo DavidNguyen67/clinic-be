@@ -1,6 +1,6 @@
 package com.camel.clinic.service.specialty;
 
-import com.camel.clinic.dto.api.ApiPaged;
+import com.camel.clinic.dto.ApiPaged;
 import com.camel.clinic.entity.Specialty;
 import com.camel.clinic.repository.SpecialtyRepository;
 import com.camel.clinic.service.BaseService;

@@ -1,6 +1,6 @@
 package com.camel.clinic.service;
 
-import com.camel.clinic.dto.api.ApiPaged;
+import com.camel.clinic.dto.ApiPaged;
 import com.camel.clinic.entity.SoftDeletableEntity;
 import com.camel.clinic.exception.NotFoundException;
 import com.camel.clinic.util.MapperUtils;
