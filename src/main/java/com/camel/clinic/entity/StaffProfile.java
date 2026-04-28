@@ -21,8 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Setter
 @Getter
-public class Staff extends SoftDeletableEntity {
-
+public class StaffProfile extends SoftDeletableEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", unique = true, nullable = false, foreignKey = @ForeignKey(name = "fk_staff_user"))
     @NotNull()

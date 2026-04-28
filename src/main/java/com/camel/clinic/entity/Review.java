@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
-@Table(name = "reviews", indexes = {
+@Table(name = "review", indexes = {
         @Index(name = "idx_patient_id", columnList = "patient_id"),
         @Index(name = "idx_doctor_id", columnList = "doctor_id"),
         @Index(name = "idx_appointment_id", columnList = "appointment_id"),
@@ -24,11 +24,11 @@ public class Review extends SoftDeletableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false, foreignKey = @ForeignKey(name = "fk_review_patient"))
     @NotNull()
-    private Patient patient;
+    private PatientProfile patientProfile;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", foreignKey = @ForeignKey(name = "fk_review_doctor"))
-    private Doctor doctor;
+    private DoctorProfile doctorProfile;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "appointment_id", foreignKey = @ForeignKey(name = "fk_review_appointment"))

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "specialties", indexes = {
+@Table(name = "specialty", indexes = {
         @Index(name = "idx_slug", columnList = "slug"),
         @Index(name = "idx_is_active", columnList = "is_active")
 })
@@ -54,7 +54,7 @@ public class Specialty extends SoftDeletableEntity {
     @OneToMany(mappedBy = "specialty", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("specialty-items")
     @JsonIgnore
-    private List<Doctor> doctors = new ArrayList<>();
+    private List<DoctorProfile> doctorProfiles = new ArrayList<>();
 
     public enum SpecialtyType {
         GENERAL,

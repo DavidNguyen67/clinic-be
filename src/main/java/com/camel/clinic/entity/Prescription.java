@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "prescriptions", indexes = {
+@Table(name = "prescription", indexes = {
         @Index(name = "idx_prescription_code", columnList = "prescription_code"),
         @Index(name = "idx_medical_record_id", columnList = "medical_record_id"),
         @Index(name = "idx_patient_id", columnList = "patient_id"),
@@ -38,12 +38,12 @@ public class Prescription extends SoftDeletableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false, foreignKey = @ForeignKey(name = "fk_prescription_patient"))
     @NotNull()
-    private Patient patient;
+    private PatientProfile patientProfile;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", nullable = false, foreignKey = @ForeignKey(name = "fk_prescription_doctor"))
     @NotNull()
-    private Doctor doctor;
+    private DoctorProfile doctorProfile;
 
     @NotNull()
     @Column(name = "prescription_date", nullable = false)

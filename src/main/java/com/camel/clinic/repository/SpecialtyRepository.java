@@ -14,7 +14,7 @@ public interface SpecialtyRepository extends JpaRepository<Specialty, UUID>, Jpa
     @Query(
             value = "SELECT s" +
                     " FROM Specialty s" +
-                    " LEFT JOIN s.doctors d" +
+                    " LEFT JOIN s.doctorProfiles d" +
                     " LEFT JOIN s.services sv" +          // join services
                     " WHERE s.isActive = true" +
                     " AND s.deletedAt IS NULL" +

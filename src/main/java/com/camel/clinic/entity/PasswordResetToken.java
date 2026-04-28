@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "password_reset_tokens", indexes = {
+@Table(name = "password_reset_token", indexes = {
         @Index(name = "idx_token", columnList = "token"),
         @Index(name = "idx_user_id", columnList = "user_id")
 })

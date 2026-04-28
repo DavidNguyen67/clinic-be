@@ -4,11 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -17,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "promotions", indexes = {
+@Table(name = "promotion", indexes = {
         @Index(name = "idx_code", columnList = "code"),
         @Index(name = "idx_dates", columnList = "start_date, end_date"),
         @Index(name = "idx_active", columnList = "is_active")
@@ -89,11 +85,6 @@ public class Promotion extends SoftDeletableEntity {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
-    public enum DiscountType {
-        PERCENTAGE,
-        FIXED_AMOUNT
-    }
-
     public boolean isValid() {
         Date now = new Date();
         return this.isActive && now.after(this.startDate) && now.before(this.endDate) &&
@@ -102,5 +93,10 @@ public class Promotion extends SoftDeletableEntity {
 
     public void incrementUsage() {
         this.usageCount++;
+    }
+
+    public enum DiscountType {
+        PERCENTAGE,
+        FIXED_AMOUNT
     }
 }

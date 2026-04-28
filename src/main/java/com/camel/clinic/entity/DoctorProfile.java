@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Setter
 @Getter
-public class Doctor extends SoftDeletableEntity {
+public class DoctorProfile extends SoftDeletableEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", unique = true, nullable = false, foreignKey = @ForeignKey(name = "fk_doctor_user"))

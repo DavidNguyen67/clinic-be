@@ -4,11 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -16,7 +12,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Entity
-@Table(name = "medical_records", indexes = {
+@Table(name = "medical_record", indexes = {
         @Index(name = "idx_record_code", columnList = "record_code"),
         @Index(name = "idx_appointment_id", columnList = "appointment_id"),
         @Index(name = "idx_patient_id", columnList = "patient_id"),
@@ -44,12 +40,12 @@ public class MedicalRecord extends SoftDeletableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false, foreignKey = @ForeignKey(name = "fk_record_patient"))
     @NotNull()
-    private Patient patient;
+    private PatientProfile patientProfile;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", nullable = false, foreignKey = @ForeignKey(name = "fk_record_doctor"))
     @NotNull()
-    private Doctor doctor;
+    private DoctorProfile doctorProfile;
 
     @Column(name = "chief_complaint", columnDefinition = "TEXT")
     private String chiefComplaint;

@@ -10,7 +10,7 @@ import java.util.Date;
 
 
 @Entity
-@Table(name = "appointments", indexes = {
+@Table(name = "appointment", indexes = {
         @Index(name = "idx_appointment_code", columnList = "appointment_code"),
         @Index(name = "idx_patient_id", columnList = "patient_id"),
         @Index(name = "idx_doctor_id", columnList = "doctor_id"),
@@ -35,12 +35,12 @@ public class Appointment extends SoftDeletableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false, foreignKey = @ForeignKey(name = "fk_appointment_patient"))
     @NotNull
-    private Patient patient;
+    private PatientProfile patientProfile;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", nullable = false, foreignKey = @ForeignKey(name = "fk_appointment_doctor"))
     @NotNull
-    private Doctor doctor;
+    private DoctorProfile doctorProfile;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "specialty_id", foreignKey = @ForeignKey(name = "fk_appointment_specialty"))
@@ -54,28 +54,10 @@ public class Appointment extends SoftDeletableEntity {
     @Column(name = "appointment_date", nullable = false)
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,
-            pattern = "dd/MM/yyyy",
+            pattern = "HH:mm:ss dd/MM/yyyy",
             timezone = "Asia/Ho_Chi_Minh"
     )
     private Date appointmentDate;
-
-    @NotNull()
-    @Column(name = "start_time", nullable = false)
-    @JsonFormat(
-            shape = JsonFormat.Shape.STRING,
-            pattern = "HH:mm",
-            timezone = "Asia/Ho_Chi_Minh"
-    )
-    private Date startTime;
-
-    @NotNull()
-    @Column(name = "end_time", nullable = false)
-    @JsonFormat(
-            shape = JsonFormat.Shape.STRING,
-            pattern = "HH:mm",
-            timezone = "Asia/Ho_Chi_Minh"
-    )
-    private Date endTime;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)

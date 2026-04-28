@@ -4,16 +4,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "invoice_items", indexes = {
+@Table(name = "invoice_item", indexes = {
         @Index(name = "idx_invoice_id", columnList = "invoice_id"),
         @Index(name = "idx_item_type", columnList = "item_type")
 })
@@ -50,17 +46,17 @@ public class InvoiceItem extends SoftDeletableEntity {
     @Column(name = "total_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalPrice;
 
-    public enum ItemType {
-        SERVICE, 
-        MEDICATION,
-        LAB_TEST,
-        OTHER
-    }
-
     // Helper method to calculate total price
     public void calculateTotalPrice() {
         if (this.unitPrice != null && this.quantity != null) {
             this.totalPrice = this.unitPrice.multiply(BigDecimal.valueOf(this.quantity));
         }
+    }
+
+    public enum ItemType {
+        SERVICE,
+        MEDICATION,
+        LAB_TEST,
+        OTHER
     }
 }

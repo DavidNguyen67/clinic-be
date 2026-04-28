@@ -3,17 +3,13 @@ package com.camel.clinic.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "revenue_reports", indexes = {
+@Table(name = "revenue_report", indexes = {
         @Index(name = "idx_report_date", columnList = "report_date"),
         @Index(name = "idx_type", columnList = "report_type")
 })
@@ -74,9 +70,9 @@ public class RevenueReport extends SoftDeletableEntity {
     private Integer totalPatients = 0;
 
     public enum ReportType {
-        DAILY, 
-        WEEKLY, 
-        MONTHLY, 
+        DAILY,
+        WEEKLY,
+        MONTHLY,
         YEARLY
     }
 }

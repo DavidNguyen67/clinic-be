@@ -1,15 +1,14 @@
 package com.camel.clinic.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Table(name = "faqs", indexes = {
+@Table(name = "faq", indexes = {
         @Index(name = "idx_category", columnList = "category"),
         @Index(name = "idx_is_active", columnList = "is_active"),
         @Index(name = "idx_display_order", columnList = "display_order")

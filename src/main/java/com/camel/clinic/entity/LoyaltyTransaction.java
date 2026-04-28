@@ -4,16 +4,13 @@ package com.camel.clinic.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
-@Table(name = "loyalty_transactions", indexes = {
+@Table(name = "loyalty_transaction", indexes = {
         @Index(name = "idx_patient", columnList = "patient_id"),
         @Index(name = "idx_type", columnList = "transaction_type"),
         @Index(name = "idx_created", columnList = "created_at")
@@ -28,7 +25,7 @@ public class LoyaltyTransaction extends SoftDeletableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false, foreignKey = @ForeignKey(name = "fk_loyalty_patient"))
     @NotNull()
-    private Patient patient;
+    private PatientProfile patientProfile;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "transaction_type", nullable = false, length = 20)
@@ -43,7 +40,7 @@ public class LoyaltyTransaction extends SoftDeletableEntity {
     private String referenceType;
 
     @Column(name = "reference_id")
-    private Integer referenceId;
+    private UUID referenceId;
 
     @Column(columnDefinition = "TEXT")
     private String description;

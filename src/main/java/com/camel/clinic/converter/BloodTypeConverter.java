@@ -1,7 +1,7 @@
 // converter/BloodTypeConverter.java
 package com.camel.clinic.converter;
 
-import com.camel.clinic.entity.Patient.BloodType;
+import com.camel.clinic.entity.PatientProfile.BloodType;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

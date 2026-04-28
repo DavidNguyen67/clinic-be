@@ -158,19 +158,19 @@ public class AuthServiceImp implements AuthService {
     }
 
     private void createPatientProfile(User user, RegisterRequestDTO req) {
-        Patient patient = new Patient();
-        patient.setUser(user);
-        patient.setPatientCode(generateUniqueCode("PT", patientRepository::existsByPatientCode));
-        patient.setGender(req.getGender());
-        patientRepository.save(patient);
+        PatientProfile patientProfile = new PatientProfile();
+        patientProfile.setUser(user);
+        patientProfile.setPatientCode(generateUniqueCode("PT", patientRepository::existsByPatientCode));
+        patientProfile.setGender(req.getGender());
+        patientRepository.save(patientProfile);
     }
 
     private void createStaffProfile(User user) {
-        Staff staff = new Staff();
-        staff.setUser(user);
-        staff.setStaffCode(generateUniqueCode("ST", staffRepository::existsByStaffCode));
-        staff.setHireDate(new Date());
-        staffRepository.save(staff);
+        StaffProfile staffProfile = new StaffProfile();
+        staffProfile.setUser(user);
+        staffProfile.setStaffCode(generateUniqueCode("ST", staffRepository::existsByStaffCode));
+        staffProfile.setHireDate(new Date());
+        staffRepository.save(staffProfile);
     }
 
     private void createDoctorProfile(User user, RegisterRequestDTO req) throws BadRequestException {
@@ -183,11 +183,11 @@ public class AuthServiceImp implements AuthService {
                 .filter(Specialty::getIsActive)
                 .orElseThrow(() -> new BadRequestException("Specialty not found or inactive"));
 
-        Doctor doctor = new Doctor();
-        doctor.setUser(user);
-        doctor.setDoctorCode(generateUniqueCode("DR", doctorRepository::existsByDoctorCode));
-        doctor.setSpecialty(specialty);
-        doctorRepository.save(doctor);
+        DoctorProfile doctorProfile = new DoctorProfile();
+        doctorProfile.setUser(user);
+        doctorProfile.setDoctorCode(generateUniqueCode("DR", doctorRepository::existsByDoctorCode));
+        doctorProfile.setSpecialty(specialty);
+        doctorRepository.save(doctorProfile);
     }
 
     private User.Gender mapPatientGender(User.Gender gender) {

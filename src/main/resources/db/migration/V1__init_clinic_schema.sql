@@ -2,21 +2,20 @@
 -- V1__init_clinic_schema_merged.sql
 -- Schema tổng hợp từ V1 -> V7 (trạng thái cuối cùng)
 -- Các thay đổi đã được áp dụng trực tiếp:
---   V2: Thêm specialty_id vào appointments
+--   V2: Thêm specialty_id vào appointment
 --   V3: Bỏ date_of_birth khỏi patient_profile
---   V4: Chuyển date_of_birth trong users từ VARCHAR -> TIMESTAMP
---   V5: Bỏ cột status khỏi doctors và staff
---   V6: Thay doctor_schedules bằng doctor_schedule_exceptions
---   V7: Đổi tên doctors -> doctor_profile, staff -> staff_profile
+--   V4: Chuyển date_of_birth trong user từ VARCHAR -> TIMESTAMP
+--   V5: Bỏ cột status khỏi doctors và staffProfile
+--   V6: Thay doctor_schedules bằng doctor_schedule_exception
+--   V7: Đổi tên doctors -> doctor_profile, staffProfile -> staff_profile
 -- =============================================================================
 
-CREATE TABLE roles
+CREATE TABLE role
 (
     id   UUID PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE
 );
 
--- V4: date_of_birth đã được chuyển sang TIMESTAMP (bỏ VARCHAR)
 CREATE TABLE users
 (
     id             UUID PRIMARY KEY,
@@ -37,7 +36,7 @@ CREATE TABLE users
     last_login     TIMESTAMP
 );
 
-CREATE TABLE specialties
+CREATE TABLE specialty
 (
     id             UUID PRIMARY KEY,
     created_at     TIMESTAMP    NOT NULL,
@@ -68,10 +67,9 @@ CREATE TABLE services
     image             VARCHAR(500),
     is_featured       BOOLEAN        NOT NULL DEFAULT FALSE,
     is_active         BOOLEAN        NOT NULL DEFAULT TRUE,
-    CONSTRAINT fk_service_specialty FOREIGN KEY (specialty_id) REFERENCES specialties (id)
+    CONSTRAINT fk_service_specialty FOREIGN KEY (specialty_id) REFERENCES specialty (id)
 );
 
--- V3: Bỏ cột date_of_birth
 CREATE TABLE patient_profile
 (
     id               UUID PRIMARY KEY,
@@ -91,8 +89,6 @@ CREATE TABLE patient_profile
     CONSTRAINT fk_patient_user FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
--- V5: Bỏ cột status
--- V7: Đổi tên doctors -> doctor_profile, đổi tên constraints
 CREATE TABLE doctor_profile
 (
     id               UUID PRIMARY KEY,
@@ -112,11 +108,9 @@ CREATE TABLE doctor_profile
     total_patients   INTEGER        NOT NULL DEFAULT 0,
     is_featured      BOOLEAN        NOT NULL DEFAULT FALSE,
     CONSTRAINT fk_doctor_profile_user FOREIGN KEY (user_id) REFERENCES users (id),
-    CONSTRAINT fk_doctor_profile_specialty FOREIGN KEY (specialty_id) REFERENCES specialties (id)
+    CONSTRAINT fk_doctor_profile_specialty FOREIGN KEY (specialty_id) REFERENCES specialty (id)
 );
 
--- V5: Bỏ cột status
--- V7: Đổi tên staff -> staff_profile, đổi tên constraint
 CREATE TABLE staff_profile
 (
     id         UUID PRIMARY KEY,
@@ -131,8 +125,7 @@ CREATE TABLE staff_profile
     CONSTRAINT fk_staff_profile_user FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
--- V2: Thêm cột specialty_id
-CREATE TABLE appointments
+CREATE TABLE appointment
 (
     id               UUID PRIMARY KEY,
     created_at       TIMESTAMP   NOT NULL,
@@ -144,8 +137,6 @@ CREATE TABLE appointments
     service_id       UUID,
     specialty_id     UUID,
     appointment_date TIMESTAMP   NOT NULL,
-    start_time       TIMESTAMP   NOT NULL,
-    end_time         TIMESTAMP   NOT NULL,
     status           VARCHAR(20) NOT NULL DEFAULT 'PENDING',
     booking_type     VARCHAR(20) NOT NULL DEFAULT 'ONLINE',
     reason           TEXT,
@@ -155,11 +146,10 @@ CREATE TABLE appointments
     CONSTRAINT fk_appointment_patient  FOREIGN KEY (patient_id)   REFERENCES patient_profile (id),
     CONSTRAINT fk_appointment_doctor   FOREIGN KEY (doctor_id)    REFERENCES doctor_profile (id),
     CONSTRAINT fk_appointment_service  FOREIGN KEY (service_id)   REFERENCES services (id),
-    CONSTRAINT fk_appointment_specialty FOREIGN KEY (specialty_id) REFERENCES specialties (id)
+    CONSTRAINT fk_appointment_specialty FOREIGN KEY (specialty_id) REFERENCES specialty (id)
 );
 
--- V6: Thay thế doctor_schedules bằng doctor_schedule_exceptions
-CREATE TABLE doctor_schedule_exceptions
+CREATE TABLE doctor_schedule_exception
 (
     id             UUID         NOT NULL PRIMARY KEY,
     doctor_id      UUID         NOT NULL,
@@ -191,7 +181,7 @@ CREATE TABLE doctor_performance
     CONSTRAINT unique_doctor_month UNIQUE (doctor_id, month, year)
 );
 
-CREATE TABLE reviews
+CREATE TABLE review
 (
     id             UUID PRIMARY KEY,
     created_at     TIMESTAMP   NOT NULL,
@@ -206,10 +196,11 @@ CREATE TABLE reviews
     status         VARCHAR(20) NOT NULL DEFAULT 'PENDING',
     CONSTRAINT fk_review_patient     FOREIGN KEY (patient_id)     REFERENCES patient_profile (id),
     CONSTRAINT fk_review_doctor      FOREIGN KEY (doctor_id)      REFERENCES doctor_profile (id),
-    CONSTRAINT fk_review_appointment FOREIGN KEY (appointment_id) REFERENCES appointments (id)
+    CONSTRAINT fk_review_appointment FOREIGN KEY (appointment_id) REFERENCES appointment (id),
+    CONSTRAINT unique_appointment_id UNIQUE (appointment_id)
 );
 
-CREATE TABLE medical_records
+CREATE TABLE medical_record
 (
     id              UUID PRIMARY KEY,
     created_at      TIMESTAMP   NOT NULL,
@@ -225,12 +216,12 @@ CREATE TABLE medical_records
     treatment_plan  TEXT,
     follow_up_date  TIMESTAMP,
     doctor_notes    TEXT,
-    CONSTRAINT fk_record_appointment FOREIGN KEY (appointment_id) REFERENCES appointments (id),
+    CONSTRAINT fk_record_appointment FOREIGN KEY (appointment_id) REFERENCES appointment (id),
     CONSTRAINT fk_record_patient     FOREIGN KEY (patient_id)     REFERENCES patient_profile (id),
     CONSTRAINT fk_record_doctor      FOREIGN KEY (doctor_id)      REFERENCES doctor_profile (id)
 );
 
-CREATE TABLE medications
+CREATE TABLE medication
 (
     id           UUID PRIMARY KEY,
     created_at   TIMESTAMP    NOT NULL,
@@ -246,7 +237,7 @@ CREATE TABLE medications
     is_active    BOOLEAN      NOT NULL DEFAULT TRUE
 );
 
-CREATE TABLE prescriptions
+CREATE TABLE prescription
 (
     id                UUID PRIMARY KEY,
     created_at        TIMESTAMP   NOT NULL,
@@ -259,12 +250,12 @@ CREATE TABLE prescriptions
     prescription_date TIMESTAMP   NOT NULL,
     notes             TEXT,
     status            VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
-    CONSTRAINT fk_prescription_medical_record FOREIGN KEY (medical_record_id) REFERENCES medical_records (id),
+    CONSTRAINT fk_prescription_medical_record FOREIGN KEY (medical_record_id) REFERENCES medical_record (id),
     CONSTRAINT fk_prescription_patient        FOREIGN KEY (patient_id)        REFERENCES patient_profile (id),
     CONSTRAINT fk_prescription_doctor         FOREIGN KEY (doctor_id)         REFERENCES doctor_profile (id)
 );
 
-CREATE TABLE prescription_items
+CREATE TABLE prescription_item
 (
     id              UUID PRIMARY KEY,
     created_at      TIMESTAMP NOT NULL,
@@ -277,11 +268,11 @@ CREATE TABLE prescription_items
     duration        VARCHAR(100),
     quantity        INTEGER   NOT NULL,
     instructions    TEXT,
-    CONSTRAINT fk_item_prescription FOREIGN KEY (prescription_id) REFERENCES prescriptions (id),
-    CONSTRAINT fk_item_medication   FOREIGN KEY (medication_id)   REFERENCES medications (id)
+    CONSTRAINT fk_item_prescription FOREIGN KEY (prescription_id) REFERENCES prescription (id),
+    CONSTRAINT fk_item_medication   FOREIGN KEY (medication_id)   REFERENCES medication (id)
 );
 
-CREATE TABLE invoices
+CREATE TABLE invoice
 (
     id                UUID PRIMARY KEY,
     created_at        TIMESTAMP      NOT NULL,
@@ -298,11 +289,11 @@ CREATE TABLE invoices
     patient_paid      NUMERIC(10, 2) NOT NULL DEFAULT 0,
     balance           NUMERIC(10, 2) NOT NULL DEFAULT 0,
     status            VARCHAR(20)    NOT NULL DEFAULT 'PENDING',
-    CONSTRAINT fk_invoice_appointment FOREIGN KEY (appointment_id) REFERENCES appointments (id),
+    CONSTRAINT fk_invoice_appointment FOREIGN KEY (appointment_id) REFERENCES appointment (id),
     CONSTRAINT fk_invoice_patient     FOREIGN KEY (patient_id)     REFERENCES patient_profile (id)
 );
 
-CREATE TABLE invoice_items
+CREATE TABLE invoice_item
 (
     id          UUID PRIMARY KEY,
     created_at  TIMESTAMP      NOT NULL,
@@ -314,10 +305,10 @@ CREATE TABLE invoice_items
     quantity    INTEGER        NOT NULL DEFAULT 1,
     unit_price  NUMERIC(10, 2) NOT NULL,
     total_price NUMERIC(10, 2) NOT NULL,
-    CONSTRAINT fk_item_invoice FOREIGN KEY (invoice_id) REFERENCES invoices (id)
+    CONSTRAINT fk_item_invoice FOREIGN KEY (invoice_id) REFERENCES invoice (id)
 );
 
-CREATE TABLE payments
+CREATE TABLE payment
 (
     id             UUID PRIMARY KEY,
     created_at     TIMESTAMP      NOT NULL,
@@ -330,11 +321,11 @@ CREATE TABLE payments
     payment_method VARCHAR(20)    NOT NULL,
     payment_date   TIMESTAMP      NOT NULL,
     status         VARCHAR(20)    NOT NULL DEFAULT 'PENDING',
-    CONSTRAINT fk_payment_invoice FOREIGN KEY (invoice_id) REFERENCES invoices (id),
+    CONSTRAINT fk_payment_invoice FOREIGN KEY (invoice_id) REFERENCES invoice (id),
     CONSTRAINT fk_payment_patient FOREIGN KEY (patient_id) REFERENCES patient_profile (id)
 );
 
-CREATE TABLE loyalty_transactions
+CREATE TABLE loyalty_transaction
 (
     id               UUID PRIMARY KEY,
     created_at       TIMESTAMP   NOT NULL,
@@ -344,14 +335,14 @@ CREATE TABLE loyalty_transactions
     transaction_type VARCHAR(20) NOT NULL,
     points           INTEGER     NOT NULL,
     reference_type   VARCHAR(50),
-    reference_id     INTEGER,
+    reference_id     UUID,
     description      TEXT,
     balance_after    INTEGER     NOT NULL,
     expires_at       TIMESTAMP,
     CONSTRAINT fk_loyalty_patient FOREIGN KEY (patient_id) REFERENCES patient_profile (id)
 );
 
-CREATE TABLE promotions
+CREATE TABLE promotion
 (
     id                  UUID PRIMARY KEY,
     created_at          TIMESTAMP      NOT NULL,
@@ -384,9 +375,9 @@ CREATE TABLE promotion_usage
     invoice_id      UUID,
     discount_amount NUMERIC(10, 2) NOT NULL,
     used_at         TIMESTAMP      NOT NULL,
-    CONSTRAINT fk_usage_promotion FOREIGN KEY (promotion_id) REFERENCES promotions (id),
+    CONSTRAINT fk_usage_promotion FOREIGN KEY (promotion_id) REFERENCES promotion (id),
     CONSTRAINT fk_usage_user     FOREIGN KEY (user_id)      REFERENCES users (id),
-    CONSTRAINT fk_usage_invoice  FOREIGN KEY (invoice_id)   REFERENCES invoices (id)
+    CONSTRAINT fk_usage_invoice  FOREIGN KEY (invoice_id)   REFERENCES invoice (id)
 );
 
 CREATE TABLE medical_equipment
@@ -425,7 +416,7 @@ CREATE TABLE inventory
     supplier        VARCHAR(255),
     status          VARCHAR(20) NOT NULL DEFAULT 'IN_STOCK',
     alert_threshold INTEGER     NOT NULL DEFAULT 10,
-    CONSTRAINT fk_inventory_medication FOREIGN KEY (medication_id) REFERENCES medications (id)
+    CONSTRAINT fk_inventory_medication FOREIGN KEY (medication_id) REFERENCES medication (id)
 );
 
 CREATE TABLE equipment_maintenance
@@ -447,7 +438,7 @@ CREATE TABLE equipment_maintenance
     CONSTRAINT fk_maintenance_equipment FOREIGN KEY (equipment_id) REFERENCES medical_equipment (id)
 );
 
-CREATE TABLE revenue_reports
+CREATE TABLE revenue_report
 (
     id                 UUID PRIMARY KEY,
     created_at         TIMESTAMP      NOT NULL,
@@ -465,13 +456,13 @@ CREATE TABLE revenue_reports
     total_patients     INTEGER        NOT NULL DEFAULT 0
 );
 
-CREATE TABLE daily_reports
+CREATE TABLE daily_report
 (
     id                     UUID PRIMARY KEY,
     created_at             TIMESTAMP      NOT NULL,
     updated_at             TIMESTAMP,
     deleted_at             TIMESTAMP,
-    report_date            TIMESTAMP      NOT NULL UNIQUE,
+    report_date            TIMESTAMP      NOT NULL,
     total_appointments     INTEGER        NOT NULL DEFAULT 0,
     completed_appointments INTEGER        NOT NULL DEFAULT 0,
     cancelled_appointments INTEGER        NOT NULL DEFAULT 0,
@@ -485,7 +476,7 @@ CREATE TABLE daily_reports
     CONSTRAINT unique_report_date UNIQUE (report_date)
 );
 
-CREATE TABLE faqs
+CREATE TABLE faq
 (
     id            UUID PRIMARY KEY,
     created_at    TIMESTAMP NOT NULL,
@@ -498,7 +489,7 @@ CREATE TABLE faqs
     is_active     BOOLEAN   NOT NULL DEFAULT TRUE
 );
 
-CREATE TABLE password_reset_tokens
+CREATE TABLE password_reset_token
 (
     id          UUID PRIMARY KEY,
     user_id     UUID         NOT NULL,
@@ -509,105 +500,98 @@ CREATE TABLE password_reset_tokens
     CONSTRAINT fk_password_reset_token_user FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
--- =============================================================================
--- INDEXES
--- =============================================================================
-
 CREATE INDEX idx_users_email ON users (email);
 CREATE INDEX idx_users_phone ON users (phone);
 
 CREATE INDEX idx_patients_user_id ON patient_profile (user_id);
 CREATE INDEX idx_patients_patient_code ON patient_profile (patient_code);
 
--- V7: Đổi tên bảng doctors -> doctor_profile
 CREATE INDEX idx_doctor_profile_user_id ON doctor_profile (user_id);
 CREATE INDEX idx_doctor_profile_doctor_code ON doctor_profile (doctor_code);
 CREATE INDEX idx_doctor_profile_specialty_id ON doctor_profile (specialty_id);
 CREATE INDEX idx_doctor_profile_is_featured ON doctor_profile (is_featured);
 
--- V7: Đổi tên bảng staff -> staff_profile
 CREATE INDEX idx_staff_profile_user_id ON staff_profile (user_id);
 CREATE INDEX idx_staff_profile_staff_code ON staff_profile (staff_code);
 CREATE INDEX idx_staff_profile_department ON staff_profile (department);
 
-CREATE INDEX idx_specialties_slug ON specialties (slug);
-CREATE INDEX idx_specialties_is_active ON specialties (is_active);
+CREATE INDEX idx_specialties_slug ON specialty (slug);
+CREATE INDEX idx_specialties_is_active ON specialty (is_active);
 
 CREATE INDEX idx_services_slug ON services (slug);
 CREATE INDEX idx_services_specialty_id ON services (specialty_id);
 CREATE INDEX idx_services_is_featured ON services (is_featured);
 CREATE INDEX idx_services_is_active ON services (is_active);
 
-CREATE INDEX idx_appointments_appointment_code ON appointments (appointment_code);
-CREATE INDEX idx_appointments_patient_id ON appointments (patient_id);
-CREATE INDEX idx_appointments_doctor_id ON appointments (doctor_id);
-CREATE INDEX idx_appointments_date ON appointments (appointment_date);
-CREATE INDEX idx_appointments_status ON appointments (status);
-CREATE INDEX idx_appointments_doctor_date_status ON appointments (doctor_id, appointment_date, status);
-CREATE INDEX idx_appointments_patient_status_date ON appointments (patient_id, status, appointment_date);
-CREATE INDEX idx_appointments_date_status ON appointments (appointment_date, status);
+CREATE INDEX idx_appointments_appointment_code ON appointment (appointment_code);
+CREATE INDEX idx_appointments_patient_id ON appointment (patient_id);
+CREATE INDEX idx_appointments_doctor_id ON appointment (doctor_id);
+CREATE INDEX idx_appointments_date ON appointment (appointment_date);
+CREATE INDEX idx_appointments_status ON appointment (status);
+CREATE INDEX idx_appointments_doctor_date_status ON appointment (doctor_id, appointment_date, status);
+CREATE INDEX idx_appointments_patient_status_date ON appointment (patient_id, status, appointment_date);
+CREATE INDEX idx_appointments_date_status ON appointment (appointment_date, status);
 
--- V6: Index cho bảng mới doctor_schedule_exceptions
-CREATE INDEX idx_doctor_schedule_exceptions_doctor_id ON doctor_schedule_exceptions (doctor_id);
-CREATE INDEX idx_doctor_schedule_exceptions_date ON doctor_schedule_exceptions (exception_date);
-CREATE INDEX idx_doctor_schedule_exceptions_doctor_date ON doctor_schedule_exceptions (doctor_id, exception_date);
+CREATE INDEX idx_doctor_schedule_exceptions_doctor_id ON doctor_schedule_exception (doctor_id);
+CREATE INDEX idx_doctor_schedule_exceptions_date ON doctor_schedule_exception (exception_date);
+CREATE INDEX idx_doctor_schedule_exceptions_doctor_date ON doctor_schedule_exception (doctor_id, exception_date);
 
 CREATE INDEX idx_doctor_performance_doctor_id ON doctor_performance (doctor_id);
 CREATE INDEX idx_doctor_performance_period ON doctor_performance (year, month);
 
-CREATE INDEX idx_reviews_patient_id ON reviews (patient_id);
-CREATE INDEX idx_reviews_doctor_id ON reviews (doctor_id);
-CREATE INDEX idx_reviews_appointment_id ON reviews (appointment_id);
-CREATE INDEX idx_reviews_rating ON reviews (rating);
-CREATE INDEX idx_reviews_status ON reviews (status);
+CREATE INDEX idx_reviews_patient_id ON review (patient_id);
+CREATE INDEX idx_reviews_doctor_id ON review (doctor_id);
+CREATE INDEX idx_reviews_appointment_id ON review (appointment_id);
+CREATE INDEX idx_reviews_rating ON review (rating);
+CREATE INDEX idx_reviews_status ON review (status);
 
-CREATE INDEX idx_medical_records_record_code ON medical_records (record_code);
-CREATE INDEX idx_medical_records_appointment_id ON medical_records (appointment_id);
-CREATE INDEX idx_medical_records_patient_id ON medical_records (patient_id);
-CREATE INDEX idx_medical_records_doctor_id ON medical_records (doctor_id);
-CREATE INDEX idx_medical_records_patient_created ON medical_records (patient_id, created_at);
-CREATE INDEX idx_medical_records_doctor_created ON medical_records (doctor_id, created_at);
+CREATE INDEX idx_medical_records_record_code ON medical_record (record_code);
+CREATE INDEX idx_medical_records_appointment_id ON medical_record (appointment_id);
+CREATE INDEX idx_medical_records_patient_id ON medical_record (patient_id);
+CREATE INDEX idx_medical_records_doctor_id ON medical_record (doctor_id);
+CREATE INDEX idx_medical_records_patient_created ON medical_record (patient_id, created_at);
+CREATE INDEX idx_medical_records_doctor_created ON medical_record (doctor_id, created_at);
 
-CREATE INDEX idx_prescriptions_code ON prescriptions (prescription_code);
-CREATE INDEX idx_prescriptions_medical_record_id ON prescriptions (medical_record_id);
-CREATE INDEX idx_prescriptions_patient_id ON prescriptions (patient_id);
-CREATE INDEX idx_prescriptions_doctor_id ON prescriptions (doctor_id);
-CREATE INDEX idx_prescriptions_status ON prescriptions (status);
+CREATE INDEX idx_prescriptions_code ON prescription (prescription_code);
+CREATE INDEX idx_prescriptions_medical_record_id ON prescription (medical_record_id);
+CREATE INDEX idx_prescriptions_patient_id ON prescription (patient_id);
+CREATE INDEX idx_prescriptions_doctor_id ON prescription (doctor_id);
+CREATE INDEX idx_prescriptions_status ON prescription (status);
 
-CREATE INDEX idx_prescription_items_prescription_id ON prescription_items (prescription_id);
-CREATE INDEX idx_prescription_items_medication_id ON prescription_items (medication_id);
+CREATE INDEX idx_prescription_items_prescription_id ON prescription_item (prescription_id);
+CREATE INDEX idx_prescription_items_medication_id ON prescription_item (medication_id);
 
-CREATE INDEX idx_medications_name ON medications (name);
-CREATE INDEX idx_medications_category ON medications (category);
-CREATE INDEX idx_medications_is_active ON medications (is_active);
+CREATE INDEX idx_medications_name ON medication (name);
+CREATE INDEX idx_medications_category ON medication (category);
+CREATE INDEX idx_medications_is_active ON medication (is_active);
 
-CREATE INDEX idx_invoices_code ON invoices (invoice_code);
-CREATE INDEX idx_invoices_appointment_id ON invoices (appointment_id);
-CREATE INDEX idx_invoices_patient_id ON invoices (patient_id);
-CREATE INDEX idx_invoices_invoice_date ON invoices (invoice_date);
-CREATE INDEX idx_invoices_status ON invoices (status);
-CREATE INDEX idx_invoices_patient_status_date ON invoices (patient_id, status, invoice_date);
-CREATE INDEX idx_invoices_date_status ON invoices (invoice_date, status);
-CREATE INDEX idx_invoices_status_balance ON invoices (status, balance);
+CREATE INDEX idx_invoices_code ON invoice (invoice_code);
+CREATE INDEX idx_invoices_appointment_id ON invoice (appointment_id);
+CREATE INDEX idx_invoices_patient_id ON invoice (patient_id);
+CREATE INDEX idx_invoices_invoice_date ON invoice (invoice_date);
+CREATE INDEX idx_invoices_status ON invoice (status);
+CREATE INDEX idx_invoices_patient_status_date ON invoice (patient_id, status, invoice_date);
+CREATE INDEX idx_invoices_date_status ON invoice (invoice_date, status);
+CREATE INDEX idx_invoices_status_balance ON invoice (status, balance);
 
-CREATE INDEX idx_invoice_items_invoice_id ON invoice_items (invoice_id);
-CREATE INDEX idx_invoice_items_item_type ON invoice_items (item_type);
+CREATE INDEX idx_invoice_item_invoice_id ON invoice_item (invoice_id);
+CREATE INDEX idx_invoice_item_item_type ON invoice_item (item_type);
 
-CREATE INDEX idx_payments_code ON payments (payment_code);
-CREATE INDEX idx_payments_invoice_id ON payments (invoice_id);
-CREATE INDEX idx_payments_patient_id ON payments (patient_id);
-CREATE INDEX idx_payments_payment_date ON payments (payment_date);
-CREATE INDEX idx_payments_status ON payments (status);
-CREATE INDEX idx_payments_status_date ON payments (status, payment_date);
-CREATE INDEX idx_payments_patient_status ON payments (patient_id, status);
+CREATE INDEX idx_payments_code ON payment (payment_code);
+CREATE INDEX idx_payments_invoice_id ON payment (invoice_id);
+CREATE INDEX idx_payments_patient_id ON payment (patient_id);
+CREATE INDEX idx_payments_payment_date ON payment (payment_date);
+CREATE INDEX idx_payments_status ON payment (status);
+CREATE INDEX idx_payments_status_date ON payment (status, payment_date);
+CREATE INDEX idx_payments_patient_status ON payment (patient_id, status);
 
-CREATE INDEX idx_loyalty_transactions_patient_id ON loyalty_transactions (patient_id);
-CREATE INDEX idx_loyalty_transactions_type ON loyalty_transactions (transaction_type);
-CREATE INDEX idx_loyalty_transactions_created ON loyalty_transactions (created_at);
+CREATE INDEX idx_loyalty_transactions_patient_id ON loyalty_transaction (patient_id);
+CREATE INDEX idx_loyalty_transactions_type ON loyalty_transaction (transaction_type);
+CREATE INDEX idx_loyalty_transactions_created ON loyalty_transaction (created_at);
 
-CREATE INDEX idx_promotions_code ON promotions (code);
-CREATE INDEX idx_promotions_dates ON promotions (start_date, end_date);
-CREATE INDEX idx_promotions_active ON promotions (is_active);
+CREATE INDEX idx_promotions_code ON promotion (code);
+CREATE INDEX idx_promotions_dates ON promotion (start_date, end_date);
+CREATE INDEX idx_promotions_active ON promotion (is_active);
 
 CREATE INDEX idx_promotion_usage_promotion_id ON promotion_usage (promotion_id);
 CREATE INDEX idx_promotion_usage_user_id ON promotion_usage (user_id);
@@ -626,14 +610,14 @@ CREATE INDEX idx_equipment_maintenance_equipment ON equipment_maintenance (equip
 CREATE INDEX idx_equipment_maintenance_scheduled ON equipment_maintenance (scheduled_date);
 CREATE INDEX idx_equipment_maintenance_status ON equipment_maintenance (status);
 
-CREATE INDEX idx_revenue_reports_report_date ON revenue_reports (report_date);
-CREATE INDEX idx_revenue_reports_report_type ON revenue_reports (report_type);
+CREATE INDEX idx_revenue_reports_report_date ON revenue_report (report_date);
+CREATE INDEX idx_revenue_reports_report_type ON revenue_report (report_type);
 
-CREATE INDEX idx_daily_reports_date ON daily_reports (report_date);
+CREATE INDEX idx_daily_reports_date ON daily_report (report_date);
 
-CREATE INDEX idx_faqs_category ON faqs (category);
-CREATE INDEX idx_faqs_is_active ON faqs (is_active);
-CREATE INDEX idx_faqs_display_order ON faqs (display_order);
+CREATE INDEX idx_faqs_category ON faq (category);
+CREATE INDEX idx_faqs_is_active ON faq (is_active);
+CREATE INDEX idx_faqs_display_order ON faq (display_order);
 
-CREATE INDEX idx_password_reset_tokens_token ON password_reset_tokens (token);
-CREATE INDEX idx_password_reset_tokens_user_id ON password_reset_tokens (user_id);
+CREATE INDEX idx_password_reset_tokens_token ON password_reset_token (token);
+CREATE INDEX idx_password_reset_tokens_user_id ON password_reset_token (user_id);

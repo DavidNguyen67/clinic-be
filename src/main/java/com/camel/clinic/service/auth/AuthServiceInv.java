@@ -1,8 +1,8 @@
 package com.camel.clinic.service.auth;
 
 import com.camel.clinic.dto.auth.UserProfileDTO;
-import com.camel.clinic.entity.Doctor;
-import com.camel.clinic.entity.Patient;
+import com.camel.clinic.entity.DoctorProfile;
+import com.camel.clinic.entity.PatientProfile;
 import com.camel.clinic.entity.Role;
 import com.camel.clinic.entity.User;
 import com.camel.clinic.repository.DoctorRepository;
@@ -70,7 +70,7 @@ public class AuthServiceInv extends BaseService<User, UserRepository> {
         // Load doctor info if user is a doctor
         if (Role.RoleName.DOCTOR.equals(user.getRole())) {
             UUID userId = user.getId();
-            Optional<Doctor> doctor = doctorRepository.findByUserId(userId);
+            Optional<DoctorProfile> doctor = doctorRepository.findByUserId(userId);
 
             if (doctor.isPresent()) {
 //                List<DoctorSchedule> schedules = doctorScheduleRepository.findByDoctorId(doctor.get().getId());
@@ -83,7 +83,7 @@ public class AuthServiceInv extends BaseService<User, UserRepository> {
 //                    return dto;
 //                }).toList();
 
-                Doctor doc = doctor.get();
+                DoctorProfile doc = doctor.get();
                 UserProfileDTO.DoctorProfileDTO doctorDTO = new UserProfileDTO.DoctorProfileDTO();
                 doctorDTO.setId(doc.getId());
                 doctorDTO.setExperienceYears(doc.getExperienceYears());
@@ -112,12 +112,12 @@ public class AuthServiceInv extends BaseService<User, UserRepository> {
 
         // Load patient info if user is a patient
         if (Role.RoleName.PATIENT.equals(user.getRole())) {
-            Optional<Patient> patient = patientRepository.findAll().stream()
+            Optional<PatientProfile> patient = patientRepository.findAll().stream()
                     .filter(p -> p.getUser().getId().equals(user.getId()))
                     .findFirst();
 
             if (patient.isPresent()) {
-                Patient pat = patient.get();
+                PatientProfile pat = patient.get();
                 UserProfileDTO.PatientProfileDTO patientDTO = new UserProfileDTO.PatientProfileDTO();
                 patientDTO.setId(pat.getId());
                 patientDTO.setPatientCode(pat.getPatientCode());

@@ -3,14 +3,10 @@ package com.camel.clinic.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Table(name = "prescription_items", indexes = {
+@Table(name = "prescription_item", indexes = {
         @Index(name = "idx_prescription_id", columnList = "prescription_id"),
         @Index(name = "idx_medication_id", columnList = "medication_id")
 })

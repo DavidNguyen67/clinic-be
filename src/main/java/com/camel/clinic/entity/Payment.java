@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "payments", indexes = {
+@Table(name = "payment", indexes = {
         @Index(name = "idx_payment_code", columnList = "payment_code"),
         @Index(name = "idx_invoice_id", columnList = "invoice_id"),
         @Index(name = "idx_patient_id", columnList = "patient_id"),
@@ -39,7 +39,7 @@ public class Payment extends SoftDeletableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false, foreignKey = @ForeignKey(name = "fk_payment_patient"))
     @NotNull()
-    private Patient patient;
+    private PatientProfile patientProfile;
 
     @NotNull()
     @Column(nullable = false, precision = 10, scale = 2)

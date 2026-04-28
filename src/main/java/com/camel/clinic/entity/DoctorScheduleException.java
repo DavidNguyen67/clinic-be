@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "doctor_schedule_exceptions", indexes = {
+@Table(name = "doctor_schedule_exception", indexes = {
         @Index(name = "idx_doctor_id", columnList = "doctor_id"),
         @Index(name = "idx_exception_date", columnList = "exception_date"),
         @Index(name = "idx_doctor_date", columnList = "doctor_id, exception_date")
@@ -16,7 +16,7 @@ public class DoctorScheduleException extends SoftDeletableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", nullable = false)
-    private Doctor doctor;
+    private DoctorProfile doctorProfile;
 
     @NotNull
     @Column(name = "exception_date", nullable = false)

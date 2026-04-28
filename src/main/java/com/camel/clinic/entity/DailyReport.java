@@ -3,17 +3,13 @@ package com.camel.clinic.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "daily_reports", uniqueConstraints = @UniqueConstraint(name = "unique_report_date", columnNames = "report_date"), indexes = {
+@Table(name = "daily_report", uniqueConstraints = @UniqueConstraint(name = "unique_report_date", columnNames = "report_date"), indexes = {
         @Index(name = "idx_date", columnList = "report_date")
 })
 @EqualsAndHashCode(callSuper = false)

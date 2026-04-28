@@ -18,7 +18,7 @@ import lombok.*;
 @AllArgsConstructor
 @Setter
 @Getter
-public class Patient extends SoftDeletableEntity {
+public class PatientProfile extends SoftDeletableEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", unique = true, nullable = false, foreignKey = @ForeignKey(name = "fk_patient_user"))
