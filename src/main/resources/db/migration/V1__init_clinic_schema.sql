@@ -1,4 +1,14 @@
--- Initial schema generated from JPA entities in com.camel.clinic.entity
+-- =============================================================================
+-- V1__init_clinic_schema_merged.sql
+-- Schema tổng hợp từ V1 -> V7 (trạng thái cuối cùng)
+-- Các thay đổi đã được áp dụng trực tiếp:
+--   V2: Thêm specialty_id vào appointments
+--   V3: Bỏ date_of_birth khỏi patient_profile
+--   V4: Chuyển date_of_birth trong users từ VARCHAR -> TIMESTAMP
+--   V5: Bỏ cột status khỏi doctors và staff
+--   V6: Thay doctor_schedules bằng doctor_schedule_exceptions
+--   V7: Đổi tên doctors -> doctor_profile, staff -> staff_profile
+-- =============================================================================
 
 CREATE TABLE roles
 (
@@ -6,6 +16,7 @@ CREATE TABLE roles
     name VARCHAR(255) NOT NULL UNIQUE
 );
 
+-- V4: date_of_birth đã được chuyển sang TIMESTAMP (bỏ VARCHAR)
 CREATE TABLE users
 (
     id             UUID PRIMARY KEY,
@@ -13,7 +24,7 @@ CREATE TABLE users
     updated_at     TIMESTAMP,
     deleted_at     TIMESTAMP,
     email          VARCHAR(255) NOT NULL UNIQUE,
-    date_of_birth  VARCHAR(255) NOT NULL,
+    date_of_birth  TIMESTAMP    NOT NULL,
     password_hash  VARCHAR(255) NOT NULL,
     phone          VARCHAR(20)  NOT NULL UNIQUE,
     full_name      VARCHAR(255) NOT NULL,
@@ -60,7 +71,8 @@ CREATE TABLE services
     CONSTRAINT fk_service_specialty FOREIGN KEY (specialty_id) REFERENCES specialties (id)
 );
 
-CREATE TABLE patients
+-- V3: Bỏ cột date_of_birth
+CREATE TABLE patient_profile
 (
     id               UUID PRIMARY KEY,
     created_at       TIMESTAMP   NOT NULL,
@@ -68,7 +80,6 @@ CREATE TABLE patients
     deleted_at       TIMESTAMP,
     user_id          UUID        NOT NULL UNIQUE,
     patient_code     VARCHAR(20) NOT NULL UNIQUE,
-    date_of_birth    TIMESTAMP,
     gender           VARCHAR(10),
     address          TEXT,
     insurance_number VARCHAR(100),
@@ -80,7 +91,9 @@ CREATE TABLE patients
     CONSTRAINT fk_patient_user FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-CREATE TABLE doctors
+-- V5: Bỏ cột status
+-- V7: Đổi tên doctors -> doctor_profile, đổi tên constraints
+CREATE TABLE doctor_profile
 (
     id               UUID PRIMARY KEY,
     created_at       TIMESTAMP      NOT NULL,
@@ -98,12 +111,13 @@ CREATE TABLE doctors
     total_reviews    INTEGER        NOT NULL DEFAULT 0,
     total_patients   INTEGER        NOT NULL DEFAULT 0,
     is_featured      BOOLEAN        NOT NULL DEFAULT FALSE,
-    status           VARCHAR(20)    NOT NULL DEFAULT 'active',
-    CONSTRAINT fk_doctor_user FOREIGN KEY (user_id) REFERENCES users (id),
-    CONSTRAINT fk_doctor_specialty FOREIGN KEY (specialty_id) REFERENCES specialties (id)
+    CONSTRAINT fk_doctor_profile_user FOREIGN KEY (user_id) REFERENCES users (id),
+    CONSTRAINT fk_doctor_profile_specialty FOREIGN KEY (specialty_id) REFERENCES specialties (id)
 );
 
-CREATE TABLE staff
+-- V5: Bỏ cột status
+-- V7: Đổi tên staff -> staff_profile, đổi tên constraint
+CREATE TABLE staff_profile
 (
     id         UUID PRIMARY KEY,
     created_at TIMESTAMP   NOT NULL,
@@ -114,10 +128,10 @@ CREATE TABLE staff
     position   VARCHAR(100),
     department VARCHAR(100),
     hire_date  TIMESTAMP,
-    status     VARCHAR(20) NOT NULL DEFAULT 'active',
-    CONSTRAINT fk_staff_user FOREIGN KEY (user_id) REFERENCES users (id)
+    CONSTRAINT fk_staff_profile_user FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
+-- V2: Thêm cột specialty_id
 CREATE TABLE appointments
 (
     id               UUID PRIMARY KEY,
@@ -128,55 +142,39 @@ CREATE TABLE appointments
     patient_id       UUID        NOT NULL,
     doctor_id        UUID        NOT NULL,
     service_id       UUID,
+    specialty_id     UUID,
     appointment_date TIMESTAMP   NOT NULL,
     start_time       TIMESTAMP   NOT NULL,
     end_time         TIMESTAMP   NOT NULL,
-    status           VARCHAR(20) NOT NULL DEFAULT 'pending',
-    booking_type     VARCHAR(20) NOT NULL DEFAULT 'online',
+    status           VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+    booking_type     VARCHAR(20) NOT NULL DEFAULT 'ONLINE',
     reason           TEXT,
     symptoms         TEXT,
     notes            TEXT,
     queue_number     INTEGER,
-    CONSTRAINT fk_appointment_patient FOREIGN KEY (patient_id) REFERENCES patients (id),
-    CONSTRAINT fk_appointment_doctor FOREIGN KEY (doctor_id) REFERENCES doctors (id),
-    CONSTRAINT fk_appointment_service FOREIGN KEY (service_id) REFERENCES services (id)
+    CONSTRAINT fk_appointment_patient  FOREIGN KEY (patient_id)   REFERENCES patient_profile (id),
+    CONSTRAINT fk_appointment_doctor   FOREIGN KEY (doctor_id)    REFERENCES doctor_profile (id),
+    CONSTRAINT fk_appointment_service  FOREIGN KEY (service_id)   REFERENCES services (id),
+    CONSTRAINT fk_appointment_specialty FOREIGN KEY (specialty_id) REFERENCES specialties (id)
 );
 
-CREATE TABLE doctor_schedules
+-- V6: Thay thế doctor_schedules bằng doctor_schedule_exceptions
+CREATE TABLE doctor_schedule_exceptions
 (
-    id                    UUID PRIMARY KEY,
-    created_at            TIMESTAMP NOT NULL,
-    updated_at            TIMESTAMP,
-    deleted_at            TIMESTAMP,
-    doctor_id             UUID      NOT NULL,
-    day_of_week           INTEGER   NOT NULL,
-    start_time            TIMESTAMP NOT NULL,
-    end_time              TIMESTAMP NOT NULL,
-    slot_duration         INTEGER   NOT NULL DEFAULT 30,
-    max_patients_per_slot INTEGER   NOT NULL DEFAULT 1,
-    location              VARCHAR(255),
-    is_active             BOOLEAN   NOT NULL DEFAULT TRUE,
-    CONSTRAINT fk_schedule_doctor FOREIGN KEY (doctor_id) REFERENCES doctors (id)
-);
-
-CREATE TABLE doctor_leave
-(
-    id         UUID PRIMARY KEY,
-    created_at TIMESTAMP   NOT NULL,
-    updated_at TIMESTAMP,
-    deleted_at TIMESTAMP,
-    doctor_id  UUID        NOT NULL,
-    leave_date TIMESTAMP   NOT NULL,
-    start_time TIMESTAMP,
-    end_time   TIMESTAMP,
-    reason     VARCHAR(255),
-    status     VARCHAR(20) NOT NULL DEFAULT 'pending',
-    CONSTRAINT fk_leave_doctor FOREIGN KEY (doctor_id) REFERENCES doctors (id)
+    id             UUID         NOT NULL PRIMARY KEY,
+    doctor_id      UUID         NOT NULL,
+    exception_date TIMESTAMP NOT NULL,
+    type           VARCHAR(20)  NOT NULL,
+    reason         TEXT,
+    created_at     TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    updated_at     TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    deleted_at     TIMESTAMP    NULL,
+    CONSTRAINT fk_exception_doctor FOREIGN KEY (doctor_id) REFERENCES doctor_profile (id)
 );
 
 CREATE TABLE doctor_performance
 (
-    id                     UUID PRIMARY KEY,
+    id                     UUID           NOT NULL PRIMARY KEY,
     created_at             TIMESTAMP      NOT NULL,
     updated_at             TIMESTAMP,
     deleted_at             TIMESTAMP,
@@ -189,7 +187,7 @@ CREATE TABLE doctor_performance
     total_patients         INTEGER        NOT NULL DEFAULT 0,
     average_rating         NUMERIC(3, 2),
     total_revenue          NUMERIC(12, 2) NOT NULL DEFAULT 0,
-    CONSTRAINT fk_performance_doctor FOREIGN KEY (doctor_id) REFERENCES doctors (id),
+    CONSTRAINT fk_performance_doctor FOREIGN KEY (doctor_id) REFERENCES doctor_profile (id),
     CONSTRAINT unique_doctor_month UNIQUE (doctor_id, month, year)
 );
 
@@ -205,9 +203,9 @@ CREATE TABLE reviews
     rating         INTEGER     NOT NULL,
     title          VARCHAR(255),
     content        TEXT,
-    status         VARCHAR(20) NOT NULL DEFAULT 'pending',
-    CONSTRAINT fk_review_patient FOREIGN KEY (patient_id) REFERENCES patients (id),
-    CONSTRAINT fk_review_doctor FOREIGN KEY (doctor_id) REFERENCES doctors (id),
+    status         VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+    CONSTRAINT fk_review_patient     FOREIGN KEY (patient_id)     REFERENCES patient_profile (id),
+    CONSTRAINT fk_review_doctor      FOREIGN KEY (doctor_id)      REFERENCES doctor_profile (id),
     CONSTRAINT fk_review_appointment FOREIGN KEY (appointment_id) REFERENCES appointments (id)
 );
 
@@ -228,8 +226,8 @@ CREATE TABLE medical_records
     follow_up_date  TIMESTAMP,
     doctor_notes    TEXT,
     CONSTRAINT fk_record_appointment FOREIGN KEY (appointment_id) REFERENCES appointments (id),
-    CONSTRAINT fk_record_patient FOREIGN KEY (patient_id) REFERENCES patients (id),
-    CONSTRAINT fk_record_doctor FOREIGN KEY (doctor_id) REFERENCES doctors (id)
+    CONSTRAINT fk_record_patient     FOREIGN KEY (patient_id)     REFERENCES patient_profile (id),
+    CONSTRAINT fk_record_doctor      FOREIGN KEY (doctor_id)      REFERENCES doctor_profile (id)
 );
 
 CREATE TABLE medications
@@ -260,10 +258,10 @@ CREATE TABLE prescriptions
     doctor_id         UUID        NOT NULL,
     prescription_date TIMESTAMP   NOT NULL,
     notes             TEXT,
-    status            VARCHAR(20) NOT NULL DEFAULT 'active',
+    status            VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
     CONSTRAINT fk_prescription_medical_record FOREIGN KEY (medical_record_id) REFERENCES medical_records (id),
-    CONSTRAINT fk_prescription_patient FOREIGN KEY (patient_id) REFERENCES patients (id),
-    CONSTRAINT fk_prescription_doctor FOREIGN KEY (doctor_id) REFERENCES doctors (id)
+    CONSTRAINT fk_prescription_patient        FOREIGN KEY (patient_id)        REFERENCES patient_profile (id),
+    CONSTRAINT fk_prescription_doctor         FOREIGN KEY (doctor_id)         REFERENCES doctor_profile (id)
 );
 
 CREATE TABLE prescription_items
@@ -280,7 +278,7 @@ CREATE TABLE prescription_items
     quantity        INTEGER   NOT NULL,
     instructions    TEXT,
     CONSTRAINT fk_item_prescription FOREIGN KEY (prescription_id) REFERENCES prescriptions (id),
-    CONSTRAINT fk_item_medication FOREIGN KEY (medication_id) REFERENCES medications (id)
+    CONSTRAINT fk_item_medication   FOREIGN KEY (medication_id)   REFERENCES medications (id)
 );
 
 CREATE TABLE invoices
@@ -299,9 +297,9 @@ CREATE TABLE invoices
     insurance_covered NUMERIC(10, 2) NOT NULL DEFAULT 0,
     patient_paid      NUMERIC(10, 2) NOT NULL DEFAULT 0,
     balance           NUMERIC(10, 2) NOT NULL DEFAULT 0,
-    status            VARCHAR(20)    NOT NULL DEFAULT 'pending',
+    status            VARCHAR(20)    NOT NULL DEFAULT 'PENDING',
     CONSTRAINT fk_invoice_appointment FOREIGN KEY (appointment_id) REFERENCES appointments (id),
-    CONSTRAINT fk_invoice_patient FOREIGN KEY (patient_id) REFERENCES patients (id)
+    CONSTRAINT fk_invoice_patient     FOREIGN KEY (patient_id)     REFERENCES patient_profile (id)
 );
 
 CREATE TABLE invoice_items
@@ -331,9 +329,9 @@ CREATE TABLE payments
     amount         NUMERIC(10, 2) NOT NULL,
     payment_method VARCHAR(20)    NOT NULL,
     payment_date   TIMESTAMP      NOT NULL,
-    status         VARCHAR(20)    NOT NULL DEFAULT 'pending',
+    status         VARCHAR(20)    NOT NULL DEFAULT 'PENDING',
     CONSTRAINT fk_payment_invoice FOREIGN KEY (invoice_id) REFERENCES invoices (id),
-    CONSTRAINT fk_payment_patient FOREIGN KEY (patient_id) REFERENCES patients (id)
+    CONSTRAINT fk_payment_patient FOREIGN KEY (patient_id) REFERENCES patient_profile (id)
 );
 
 CREATE TABLE loyalty_transactions
@@ -350,7 +348,7 @@ CREATE TABLE loyalty_transactions
     description      TEXT,
     balance_after    INTEGER     NOT NULL,
     expires_at       TIMESTAMP,
-    CONSTRAINT fk_loyalty_patient FOREIGN KEY (patient_id) REFERENCES patients (id)
+    CONSTRAINT fk_loyalty_patient FOREIGN KEY (patient_id) REFERENCES patient_profile (id)
 );
 
 CREATE TABLE promotions
@@ -387,8 +385,8 @@ CREATE TABLE promotion_usage
     discount_amount NUMERIC(10, 2) NOT NULL,
     used_at         TIMESTAMP      NOT NULL,
     CONSTRAINT fk_usage_promotion FOREIGN KEY (promotion_id) REFERENCES promotions (id),
-    CONSTRAINT fk_usage_user FOREIGN KEY (user_id) REFERENCES users (id),
-    CONSTRAINT fk_usage_invoice FOREIGN KEY (invoice_id) REFERENCES invoices (id)
+    CONSTRAINT fk_usage_user     FOREIGN KEY (user_id)      REFERENCES users (id),
+    CONSTRAINT fk_usage_invoice  FOREIGN KEY (invoice_id)   REFERENCES invoices (id)
 );
 
 CREATE TABLE medical_equipment
@@ -407,7 +405,7 @@ CREATE TABLE medical_equipment
     purchase_price            NUMERIC(12, 2),
     warranty_expiry           TIMESTAMP,
     location                  VARCHAR(255),
-    status                    VARCHAR(20)  NOT NULL DEFAULT 'operational',
+    status                    VARCHAR(20)  NOT NULL DEFAULT 'OPERATIONAL',
     last_maintenance_date     TIMESTAMP,
     next_maintenance_date     TIMESTAMP,
     maintenance_interval_days INTEGER      NOT NULL DEFAULT 90,
@@ -425,7 +423,7 @@ CREATE TABLE inventory
     quantity        INTEGER     NOT NULL DEFAULT 0,
     expiry_date     TIMESTAMP,
     supplier        VARCHAR(255),
-    status          VARCHAR(20) NOT NULL DEFAULT 'in_stock',
+    status          VARCHAR(20) NOT NULL DEFAULT 'IN_STOCK',
     alert_threshold INTEGER     NOT NULL DEFAULT 10,
     CONSTRAINT fk_inventory_medication FOREIGN KEY (medication_id) REFERENCES medications (id)
 );
@@ -445,7 +443,7 @@ CREATE TABLE equipment_maintenance
     description      TEXT,
     issues_found     TEXT,
     actions_taken    TEXT,
-    status           VARCHAR(20) NOT NULL DEFAULT 'scheduled',
+    status           VARCHAR(20) NOT NULL DEFAULT 'SCHEDULED',
     CONSTRAINT fk_maintenance_equipment FOREIGN KEY (equipment_id) REFERENCES medical_equipment (id)
 );
 
@@ -511,22 +509,26 @@ CREATE TABLE password_reset_tokens
     CONSTRAINT fk_password_reset_token_user FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
+-- =============================================================================
+-- INDEXES
+-- =============================================================================
+
 CREATE INDEX idx_users_email ON users (email);
 CREATE INDEX idx_users_phone ON users (phone);
 
-CREATE INDEX idx_patients_user_id ON patients (user_id);
-CREATE INDEX idx_patients_patient_code ON patients (patient_code);
+CREATE INDEX idx_patients_user_id ON patient_profile (user_id);
+CREATE INDEX idx_patients_patient_code ON patient_profile (patient_code);
 
-CREATE INDEX idx_doctors_user_id ON doctors (user_id);
-CREATE INDEX idx_doctors_doctor_code ON doctors (doctor_code);
-CREATE INDEX idx_doctors_specialty_id ON doctors (specialty_id);
-CREATE INDEX idx_doctors_is_featured ON doctors (is_featured);
-CREATE INDEX idx_doctors_status ON doctors (status);
+-- V7: Đổi tên bảng doctors -> doctor_profile
+CREATE INDEX idx_doctor_profile_user_id ON doctor_profile (user_id);
+CREATE INDEX idx_doctor_profile_doctor_code ON doctor_profile (doctor_code);
+CREATE INDEX idx_doctor_profile_specialty_id ON doctor_profile (specialty_id);
+CREATE INDEX idx_doctor_profile_is_featured ON doctor_profile (is_featured);
 
-CREATE INDEX idx_staff_user_id ON staff (user_id);
-CREATE INDEX idx_staff_staff_code ON staff (staff_code);
-CREATE INDEX idx_staff_department ON staff (department);
-CREATE INDEX idx_staff_status ON staff (status);
+-- V7: Đổi tên bảng staff -> staff_profile
+CREATE INDEX idx_staff_profile_user_id ON staff_profile (user_id);
+CREATE INDEX idx_staff_profile_staff_code ON staff_profile (staff_code);
+CREATE INDEX idx_staff_profile_department ON staff_profile (department);
 
 CREATE INDEX idx_specialties_slug ON specialties (slug);
 CREATE INDEX idx_specialties_is_active ON specialties (is_active);
@@ -545,13 +547,10 @@ CREATE INDEX idx_appointments_doctor_date_status ON appointments (doctor_id, app
 CREATE INDEX idx_appointments_patient_status_date ON appointments (patient_id, status, appointment_date);
 CREATE INDEX idx_appointments_date_status ON appointments (appointment_date, status);
 
-CREATE INDEX idx_doctor_schedules_doctor_id ON doctor_schedules (doctor_id);
-CREATE INDEX idx_doctor_schedules_day_of_week ON doctor_schedules (day_of_week);
-CREATE INDEX idx_doctor_schedules_is_active ON doctor_schedules (is_active);
-
-CREATE INDEX idx_doctor_leave_doctor_id ON doctor_leave (doctor_id);
-CREATE INDEX idx_doctor_leave_leave_date ON doctor_leave (leave_date);
-CREATE INDEX idx_doctor_leave_status ON doctor_leave (status);
+-- V6: Index cho bảng mới doctor_schedule_exceptions
+CREATE INDEX idx_doctor_schedule_exceptions_doctor_id ON doctor_schedule_exceptions (doctor_id);
+CREATE INDEX idx_doctor_schedule_exceptions_date ON doctor_schedule_exceptions (exception_date);
+CREATE INDEX idx_doctor_schedule_exceptions_doctor_date ON doctor_schedule_exceptions (doctor_id, exception_date);
 
 CREATE INDEX idx_doctor_performance_doctor_id ON doctor_performance (doctor_id);
 CREATE INDEX idx_doctor_performance_period ON doctor_performance (year, month);
@@ -638,4 +637,3 @@ CREATE INDEX idx_faqs_display_order ON faqs (display_order);
 
 CREATE INDEX idx_password_reset_tokens_token ON password_reset_tokens (token);
 CREATE INDEX idx_password_reset_tokens_user_id ON password_reset_tokens (user_id);
-
