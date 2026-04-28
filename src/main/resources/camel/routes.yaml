@@ -733,3 +733,77 @@
             ref: specialtyDeleteProcessor
         - marshal:
             json: { }
+
+- route:
+    id: service-list-route
+    from:
+      uri: direct:service-list
+      steps:
+        - process:
+            ref: serviceListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: service-count-route
+    from:
+      uri: direct:service-count
+      steps:
+        - process:
+            ref: serviceCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: service-get-route
+    from:
+      uri: direct:service-get
+      steps:
+        - process:
+            ref: serviceGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: service-create-route
+    from:
+      uri: direct:service-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.services.CreateServiceDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: serviceCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: service-update-route
+    from:
+      uri: direct:service-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.services.UpdateServiceDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: serviceUpdateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: service-delete-route
+    from:
+      uri: direct:service-delete
+      steps:
+        - process:
+            ref: serviceDeleteProcessor
+        - marshal:
+            json: { }

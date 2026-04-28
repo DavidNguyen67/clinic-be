@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
@@ -14,4 +15,17 @@ import java.util.UUID;
 public interface ClinicServiceRepository extends JpaRepository<ClinicService, UUID>, JpaSpecificationExecutor<ClinicService> {
     @EntityGraph(attributePaths = {"specialty"})
     Page<ClinicService> findAll(Pageable pageable);
+
+    @Query(
+            value = "SELECT s" +
+                    " FROM ClinicService s" +
+                    " LEFT JOIN s.specialty sp" +
+                    " WHERE s.isActive = true" +
+                    " AND s.deletedAt IS NULL",
+            countQuery =
+                    "SELECT COUNT(s) FROM ClinicService s" +
+                            " WHERE s.isActive = true" +
+                            " AND s.deletedAt IS NULL"
+    )
+    Page<ClinicService> getAllServices(Pageable pageable);
 }

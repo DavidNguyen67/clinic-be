@@ -6,7 +6,6 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -23,7 +22,7 @@ public abstract class SoftDeletableEntity extends BaseEntity {
     @Column(name = "deleted_at")
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,
-            pattern = "dd/MM/yyyy",
+            pattern = "HH:mm:ss dd/MM/yyyy",
             timezone = "Asia/Ho_Chi_Minh"
     )
     private Date deletedAt;

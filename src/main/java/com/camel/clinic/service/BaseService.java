@@ -59,7 +59,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
                     .body(saved);
         } catch (Exception e) {
             log.error("Error creating entity: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to create entity", e);
+            throw new RuntimeException("Failed to create entity: " + e.getMessage(), e);
         }
     }
 
@@ -143,7 +143,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
             throw e;
         } catch (Exception e) {
             log.error("Error retrieving entity id={}: {}", id, e.getMessage(), e);
-            throw new RuntimeException("Failed to retrieve entity", e);
+            throw new RuntimeException("Failed to retrieve entity: " + e.getMessage(), e);
         }
     }
 
@@ -171,7 +171,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
             throw e;
         } catch (Exception e) {
             log.error("Error updating entity id={}: {}", id, e.getMessage(), e);
-            throw new RuntimeException("Failed to update entity", e);
+            throw new RuntimeException("Failed to update entity: " + e.getMessage(), e);
         }
     }
 
@@ -194,7 +194,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             log.error("Error deleting entity id={}: {}", id, e.getMessage(), e);
-            throw new RuntimeException("Failed to delete entity", e);
+            throw new RuntimeException("Failed to delete entity: " + e.getMessage(), e);
         }
     }
 
