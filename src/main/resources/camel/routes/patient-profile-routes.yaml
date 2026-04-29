@@ -1,0 +1,83 @@
+- route:
+    id: patient-profile-list-route
+    from:
+      uri: direct:patient-profile-list
+      steps:
+        - process:
+            ref: patientProfileListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-profile-count-route
+    from:
+      uri: direct:patient-profile-count
+      steps:
+        - process:
+            ref: patientProfileCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-profile-get-route
+    from:
+      uri: direct:patient-profile-get
+      steps:
+        - process:
+            ref: patientProfileGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-profile-create-route
+    from:
+      uri: direct:patient-profile-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.patientProfile.CreatePatientProfileDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: patientProfileCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-profile-update-route
+    from:
+      uri: direct:patient-profile-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.patientProfile.UpdatePatientProfileDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: patientProfileUpdateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-profile-restore-route
+    from:
+      uri: direct:patient-profile-restore
+      steps:
+        - process:
+            ref: patientProfileRestoreProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-profile-delete-route
+    from:
+      uri: direct:patient-profile-delete
+      steps:
+        - process:
+            ref: patientProfileDeleteProcessor
+        - marshal:
+            json: { }

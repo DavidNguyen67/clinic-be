@@ -1,0 +1,145 @@
+- route:
+    id: auth-register-route
+    from:
+      uri: direct:auth-register
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.RegisterRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: registerAuthProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: auth-login-route
+    from:
+      uri: direct:auth-login
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.LoginRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: loginAuthProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: auth-refresh-route
+    from:
+      uri: direct:auth-refresh
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.RefreshRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: refreshAuthProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: auth-logout-route
+    from:
+      uri: direct:auth-logout
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.LogoutRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: logoutAuthProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: auth-forgot-password-route
+    from:
+      uri: direct:auth-forgot-password
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.ForgotPasswordRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: forgotPasswordAuthProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: auth-verify-otp-route
+    from:
+      uri: direct:auth-verify-otp
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.VerifyOtpRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: verifyOtpAuthProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: auth-reset-password-route
+    from:
+      uri: direct:auth-reset-password
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.ResetPasswordRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: resetPasswordAuthProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: auth-get-profile-route
+    from:
+      uri: direct:auth-get-profile
+      steps:
+        - process:
+            ref: getUserProfile
+        - marshal:
+            json: { }
+
+- route:
+    id: auth-change-password-route
+    from:
+      uri: direct:auth-change-password
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.ChangePasswordRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: changePasswordAuthProcessor
+        - marshal:
+            json: { }

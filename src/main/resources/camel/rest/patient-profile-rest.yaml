@@ -1,0 +1,20 @@
+- rest:
+    path: /v1/admin/patient-profile
+    post:
+      - path: /
+        to: direct:patient-profile-create
+    get:
+      - path: /
+        to: direct:patient-profile-list
+      - path: /count
+        to: direct:patient-profile-count
+      - path: /{id}
+        to: direct:patient-profile-get
+    patch:
+      - path: /{id}
+        to: direct:patient-profile-update
+      - path: /restore/{id}
+        to: direct:patient-profile-restore
+    delete:
+      - path: /{id}
+        to: direct:patient-profile-delete

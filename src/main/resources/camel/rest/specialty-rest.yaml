@@ -1,0 +1,20 @@
+- rest:
+    path: /v1/admin/specialty
+    post:
+      - path: /
+        to: direct:specialty-create
+    get:
+      - path: /
+        to: direct:specialty-list
+      - path: /count
+        to: direct:specialty-count
+      - path: /{id}
+        to: direct:specialty-get
+    patch:
+      - path: /{id}
+        to: direct:specialty-update
+      - path: /restore/{id}
+        to: direct:specialty-restore
+    delete:
+      - path: /{id}
+        to: direct:specialty-delete

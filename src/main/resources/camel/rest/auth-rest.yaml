@@ -1,0 +1,22 @@
+- rest:
+    path: /v1/auth
+    post:
+      - path: /register
+        to: direct:auth-register
+      - path: /login
+        to: direct:auth-login
+      - path: /forgot-password
+        to: direct:auth-forgot-password
+      - path: /verify-otp
+        to: direct:auth-verify-otp
+      - path: /reset-password
+        to: direct:auth-reset-password
+      - path: /change-password
+        to: direct:auth-change-password
+      - path: /refresh
+        to: direct:auth-refresh
+      - path: /logout
+        to: direct:auth-logout
+    get:
+      - path: /profile
+        to: direct:auth-get-profile

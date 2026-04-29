@@ -1,0 +1,29 @@
+- route:
+    id: user-list-route
+    from:
+      uri: direct:user-list
+      steps:
+        - process:
+            ref: userListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: user-count-route
+    from:
+      uri: direct:user-count
+      steps:
+        - process:
+            ref: userCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: user-get-route
+    from:
+      uri: direct:user-get
+      steps:
+        - process:
+            ref: userGetProcessor
+        - marshal:
+            json: { }

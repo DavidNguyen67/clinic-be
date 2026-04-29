@@ -1,23 +1,20 @@
-package com.camel.clinic.config;
+package com.camel.clinic.exception;
 
 import com.camel.clinic.processor.ExceptionProcessor;
+import lombok.AllArgsConstructor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CamelExceptionHandlerConfig extends RouteBuilder {
-
+@AllArgsConstructor
+public class GlobalExceptionHandler extends RouteBuilder {
     private final ExceptionProcessor exceptionProcessor;
-
-    public CamelExceptionHandlerConfig(ExceptionProcessor exceptionProcessor) {
-        this.exceptionProcessor = exceptionProcessor;
-    }
 
     @Override
     public void configure() {
-
         onException(Exception.class)
                 .handled(true)
+                .log(">>> GlobalException caught: ${exception.message}")
                 .process(exceptionProcessor)
                 .marshal().json();
     }

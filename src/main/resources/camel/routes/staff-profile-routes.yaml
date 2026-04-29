@@ -1,0 +1,83 @@
+- route:
+    id: staff-profile-list-route
+    from:
+      uri: direct:staff-profile-list
+      steps:
+        - process:
+            ref: staffProfileListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: staff-profile-count-route
+    from:
+      uri: direct:staff-profile-count
+      steps:
+        - process:
+            ref: staffProfileCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: staff-profile-get-route
+    from:
+      uri: direct:staff-profile-get
+      steps:
+        - process:
+            ref: staffProfileGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: staff-profile-create-route
+    from:
+      uri: direct:staff-profile-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.staffProfile.CreateStaffProfileDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: staffProfileCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: staff-profile-update-route
+    from:
+      uri: direct:staff-profile-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.staffProfile.UpdateStaffProfileDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: staffProfileUpdateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: staff-profile-restore-route
+    from:
+      uri: direct:staff-profile-restore
+      steps:
+        - process:
+            ref: staffProfileRestoreProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: staff-profile-delete-route
+    from:
+      uri: direct:staff-profile-delete
+      steps:
+        - process:
+            ref: staffProfileDeleteProcessor
+        - marshal:
+            json: { }

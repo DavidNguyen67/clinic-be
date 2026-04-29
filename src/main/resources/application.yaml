@@ -45,7 +45,7 @@ spring:
     open-in-view: false
 camel:
   main:
-    routes-include-pattern: classpath:camel/*.yaml
+    routes-include-pattern: classpath:camel/**/*.yaml
   servlet:
     mapping:
       context-path: /api/*

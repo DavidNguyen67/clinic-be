@@ -1,0 +1,20 @@
+- rest:
+    path: /v1/admin/staff-profile
+    post:
+      - path: /
+        to: direct:staff-profile-create
+    get:
+      - path: /
+        to: direct:staff-profile-list
+      - path: /count
+        to: direct:staff-profile-count
+      - path: /{id}
+        to: direct:staff-profile-get
+    patch:
+      - path: /{id}
+        to: direct:staff-profile-update
+      - path: /restore/{id}
+        to: direct:staff-profile-restore
+    delete:
+      - path: /{id}
+        to: direct:staff-profile-delete

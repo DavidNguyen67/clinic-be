@@ -1,0 +1,20 @@
+- rest:
+    path: /v1/admin/service
+    post:
+      - path: /
+        to: direct:service-create
+    get:
+      - path: /
+        to: direct:service-list
+      - path: /count
+        to: direct:service-count
+      - path: /{id}
+        to: direct:service-get
+    patch:
+      - path: /{id}
+        to: direct:service-update
+      - path: /restore/{id}
+        to: direct:service-restore
+    delete:
+      - path: /{id}
+        to: direct:service-delete

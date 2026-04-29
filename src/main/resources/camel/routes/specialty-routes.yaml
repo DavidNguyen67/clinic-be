@@ -1,0 +1,83 @@
+- route:
+    id: specialty-list-route
+    from:
+      uri: direct:specialty-list
+      steps:
+        - process:
+            ref: specialtyListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: specialty-count-route
+    from:
+      uri: direct:specialty-count
+      steps:
+        - process:
+            ref: specialtyCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: specialty-get-route
+    from:
+      uri: direct:specialty-get
+      steps:
+        - process:
+            ref: specialtyGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: specialty-create-route
+    from:
+      uri: direct:specialty-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.specialty.CreateSpecialtyDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: specialtyCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: specialty-update-route
+    from:
+      uri: direct:specialty-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.specialty.UpdateSpecialtyDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: specialtyUpdateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: specialty-restore-route
+    from:
+      uri: direct:specialty-restore
+      steps:
+        - process:
+            ref: specialtyRestoreProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: specialty-delete-route
+    from:
+      uri: direct:specialty-delete
+      steps:
+        - process:
+            ref: specialtyDeleteProcessor
+        - marshal:
+            json: { }
