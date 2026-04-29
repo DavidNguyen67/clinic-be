@@ -52,5 +52,4 @@ public class ServicesServiceInv extends BaseService<ClinicService, ServicesRepos
             throw new RuntimeException("Failed to list entities", e);
         }
     }
-
 }

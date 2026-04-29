@@ -62,3 +62,24 @@
     delete:
       - path: /{id}
         to: direct:service-delete
+
+- rest:
+    path: /v1/admin/doctor-profile
+    post:
+      - path: /
+        to: direct:doctor-profile-create
+    get:
+      - path: /
+        to: direct:doctor-profile-list
+      - path: /count
+        to: direct:doctor-profile-count
+      - path: /{id}
+        to: direct:doctor-profile-get
+    patch:
+      - path: /{id}
+        to: direct:doctor-profile-update
+      - path: /restore/{id}
+        to: direct:doctor-profile-restore
+    delete:
+      - path: /{id}
+        to: direct:doctor-profile-delete

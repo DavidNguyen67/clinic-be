@@ -42,13 +42,17 @@ public class ServicesServiceImp implements ServicesService {
         clinicService.setIsActive(requestBody.getIsActive());
         clinicService.setIsFeatured(requestBody.getIsFeatured());
 
-        Specialty specialty = specialtyServiceInv.retrieve(requestBody.getSpecialtyId(), null).getBody() instanceof Specialty sp ? sp : null;
-        if (specialty == null) {
-            throw new IllegalArgumentException("Specialty with ID " + requestBody.getSpecialtyId() + " not found");
-        } else {
+        String specialtyId = requestBody.getSpecialtyId();
+        if (specialtyId != null && !specialtyId.isEmpty()) {
+            Specialty specialty = specialtyServiceInv.retrieve(specialtyId, null).getBody() instanceof Specialty sp ? sp : null;
+            if (specialty == null) {
+                throw new IllegalArgumentException("Specialty with ID " + specialtyId + " not found");
+            }
             clinicService.setSpecialty(specialty);
-            return servicesServiceInv.create(clinicService);
         }
+
+        return servicesServiceInv.create(clinicService);
+
     }
 
     @Override
@@ -65,17 +69,14 @@ public class ServicesServiceImp implements ServicesService {
         clinicService.setIsFeatured(requestBody.getIsFeatured());
 
         String specialtyId = requestBody.getSpecialtyId();
-        if (specialtyId == null || specialtyId.isEmpty()) {
-            return servicesServiceInv.update(id, clinicService, null);
-        } else {
-            Specialty specialty = specialtyServiceInv.retrieve(requestBody.getSpecialtyId(), null).getBody() instanceof Specialty sp ? sp : null;
+        if (specialtyId != null && !specialtyId.isEmpty()) {
+            Specialty specialty = specialtyServiceInv.retrieve(specialtyId, null).getBody() instanceof Specialty sp ? sp : null;
             if (specialty == null) {
-                throw new IllegalArgumentException("Specialty with ID " + requestBody.getSpecialtyId() + " not found");
-            } else {
-                clinicService.setSpecialty(specialty);
-                return servicesServiceInv.update(id, clinicService, null);
+                throw new IllegalArgumentException("Specialty with ID " + specialtyId + " not found");
             }
+            clinicService.setSpecialty(specialty);
         }
+        return servicesServiceInv.update(id, clinicService, null);
     }
 
     @Override
