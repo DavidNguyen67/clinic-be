@@ -29,8 +29,5 @@ public interface SpecialtyRepository extends JpaRepository<Specialty, UUID>, Jpa
                             " AND s.deletedAt IS NULL" +
                             " AND (:serviceId IS NULL OR sv.id = :serviceId)"
     )
-    Page<Specialty> getAll(
-            Pageable pageable,
-            @Param("serviceId") UUID serviceId
-    );
+    Page<Specialty> findAll(Pageable pageable, @Param("serviceId") UUID serviceId);
 }

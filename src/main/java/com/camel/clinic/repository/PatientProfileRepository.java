@@ -9,5 +9,4 @@ import java.util.UUID;
 
 @Repository
 public interface PatientProfileRepository extends JpaRepository<PatientProfile, UUID>, JpaSpecificationExecutor<PatientProfile> {
-    boolean existsByPatientCode(String patientCode);
 }
