@@ -23,11 +23,11 @@ public class UserServiceInv extends BaseService<User, UserRepository> {
 
     @Override
     protected Specification<User> buildSpec(Map<String, Object> queryParams) {
-        return Specification
-                .where(notDeleted())
+        return Specification.<User>unrestricted()
+                .and(notDeleted())
                 .and(hasField("gender", commonService.parseEnum(User.Gender.class, queryParams.get("gender"))))
                 .and(hasField("status", commonService.parseEnum(User.UserStatus.class, queryParams.get("status"))))
                 .and(hasField("role", commonService.parseEnum(Role.RoleName.class, queryParams.get("role"))))
-                .and(fieldLike("fullName", (String) queryParams.get("keyword")));
+                .and(fieldLike("fullName", (String) queryParams.get("fullName")));
     }
 }

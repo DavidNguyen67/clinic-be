@@ -7,6 +7,7 @@ import com.camel.clinic.util.MapperUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import jakarta.persistence.criteria.JoinType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -296,6 +297,32 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
         return filtered;
     }
 
+
+    protected Specification<T> buildSpec(Map<String, Object> queryParams) {
+        return buildBaseSpec(queryParams); // default: chỉ filter notDeleted + status
+    }
+
+    protected Specification<T> buildBaseSpec(Map<String, Object> queryParams) {
+        return Specification.<T>unrestricted()
+                .and(notDeleted());
+    }
+
+    protected Specification<T> hasNestedField(String join, String fieldName, Object value) {
+        if (value == null) return null;
+        if (value instanceof String s && s.isBlank()) return null;
+        return (root, query, cb) -> cb.equal(root.join(join, JoinType.LEFT).get(fieldName), value);
+    }
+
+    protected Specification<T> nestedFieldLike(String join, String fieldName, String keyword) {
+        if (keyword == null || keyword.isBlank()) return null;
+        return (root, query, cb) ->
+                cb.like(cb.lower(root.join(join, JoinType.LEFT).get(fieldName)), "%" + keyword.toLowerCase() + "%");
+    }
+
+    protected Specification<T> notDeleted() {
+        return (root, query, cb) -> cb.isNull(root.get("deletedAt"));
+    }
+
     protected int parseIntParam(Map<String, Object> params, String key, int defaultValue) {
         Object val = params.get(key);
         if (val == null) return defaultValue;
@@ -306,16 +333,4 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
         }
     }
 
-    protected Specification<T> buildSpec(Map<String, Object> queryParams) {
-        return buildBaseSpec(queryParams); // default: chỉ filter notDeleted + status
-    }
-
-    protected Specification<T> buildBaseSpec(Map<String, Object> queryParams) {
-        return Specification
-                .where(notDeleted());
-    }
-
-    protected Specification<T> notDeleted() {
-        return (root, query, cb) -> cb.isNull(root.get("deletedAt"));
-    }
 }
