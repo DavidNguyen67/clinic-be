@@ -79,7 +79,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
         try {
             int page = parseIntParam(queryParams, "page", 0);
             int size = parseIntParam(queryParams, "size", 20);
-            String sortBy = (String) queryParams.getOrDefault("sortBy", "id");
+            String sortBy = (String) queryParams.getOrDefault("sortBy", "createdAt");
             String sortDir = (String) queryParams.getOrDefault("sortDir", "asc");
 
             Sort sort = sortDir.equalsIgnoreCase("desc")
