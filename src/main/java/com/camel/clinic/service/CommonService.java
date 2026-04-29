@@ -3,6 +3,9 @@ package com.camel.clinic.service;
 import com.camel.clinic.entity.User;
 import com.camel.clinic.exception.NotFoundException;
 import com.camel.clinic.exception.UnauthorizedException;
+import com.camel.clinic.repository.DoctorProfileRepository;
+import com.camel.clinic.repository.PatientProfileRepository;
+import com.camel.clinic.repository.StaffProfileRepository;
 import com.camel.clinic.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.apache.camel.Exchange;
@@ -22,11 +25,15 @@ import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class CommonService {
     private final UserRepository userRepository;
+    private final StaffProfileRepository staffProfileRepository;
+    private final DoctorProfileRepository doctorProfileRepository;
+    private final PatientProfileRepository patientProfileRepository;
 
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -154,5 +161,24 @@ public class CommonService {
             throw new UnauthorizedException("Missing or invalid Authorization header");
         }
         return authHeader.substring(7);
+    }
+
+    public String generateDoctorCode() {
+        return generateCode("DOC");
+    }
+
+    public String generateStaffCode() {
+        return generateCode("STF");
+    }
+
+    public String generatePatientCode() {
+        return generateCode("PAT");
+    }
+
+    public String generateCode(String prefix) {
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        String shortCode = uuid.substring(0, 10).toUpperCase();
+
+        return prefix + shortCode;
     }
 }

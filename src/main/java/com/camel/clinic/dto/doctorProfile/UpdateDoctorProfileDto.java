@@ -15,8 +15,6 @@ public class UpdateDoctorProfileDto {
 
     private String userId;
 
-    @Size(max = 20, message = "Doctor code must not exceed 20 characters")
-    private String doctorCode;
 
     private String specialtyId;
 

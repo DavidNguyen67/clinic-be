@@ -12,9 +12,6 @@ public class CreateDoctorProfileDto {
     @NotBlank(message = "User ID is required")
     private String userId;
 
-    @NotBlank(message = "Doctor code is required")
-    @Size(max = 20, message = "Doctor code must not exceed 20 characters")
-    private String doctorCode;
 
     @NotBlank(message = "Specialty ID is required")
     private String specialtyId;

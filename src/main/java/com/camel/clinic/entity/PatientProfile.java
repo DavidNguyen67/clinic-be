@@ -29,10 +29,6 @@ public class PatientProfile extends SoftDeletableEntity {
     @Column(name = "patient_code", unique = true, nullable = false, length = 20)
     private String patientCode;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 10)
-    private User.Gender gender;
-
     @Column(columnDefinition = "TEXT")
     private String address;
 

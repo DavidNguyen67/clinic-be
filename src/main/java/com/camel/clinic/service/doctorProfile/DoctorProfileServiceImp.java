@@ -5,6 +5,7 @@ import com.camel.clinic.dto.doctorProfile.UpdateDoctorProfileDto;
 import com.camel.clinic.entity.DoctorProfile;
 import com.camel.clinic.entity.Specialty;
 import com.camel.clinic.entity.User;
+import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.specialty.SpecialtyServiceInv;
 import com.camel.clinic.service.user.UserServiceInv;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class DoctorProfileServiceImp implements DoctorProfileService {
     private final DoctorProfileServiceInv serviceInv;
     private final UserServiceInv userServiceInv;
     private final SpecialtyServiceInv specialtyServiceInv;
+    private final CommonService commonService;
 
     @Override
     public ResponseEntity<?> count() {
@@ -35,7 +37,7 @@ public class DoctorProfileServiceImp implements DoctorProfileService {
     @Override
     public ResponseEntity<?> create(CreateDoctorProfileDto requestBody) {
         DoctorProfile doctorProfile = new DoctorProfile();
-        doctorProfile.setDoctorCode(requestBody.getDoctorCode());
+        doctorProfile.setDoctorCode(commonService.generateDoctorCode());
         doctorProfile.setDegree(requestBody.getDegree());
         doctorProfile.setExperienceYears(requestBody.getExperienceYears());
         doctorProfile.setEducation(requestBody.getEducation());
@@ -67,7 +69,6 @@ public class DoctorProfileServiceImp implements DoctorProfileService {
     @Override
     public ResponseEntity<?> update(String id, UpdateDoctorProfileDto requestBody) {
         DoctorProfile doctorProfile = new DoctorProfile();
-        doctorProfile.setDoctorCode(requestBody.getDoctorCode());
         doctorProfile.setDegree(requestBody.getDegree());
         doctorProfile.setExperienceYears(requestBody.getExperienceYears());
         doctorProfile.setEducation(requestBody.getEducation());
