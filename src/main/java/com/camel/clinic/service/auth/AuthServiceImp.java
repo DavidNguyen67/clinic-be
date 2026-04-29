@@ -3,10 +3,6 @@ package com.camel.clinic.service.auth;
 import com.camel.clinic.dto.auth.*;
 import com.camel.clinic.entity.Role;
 import com.camel.clinic.entity.User;
-import com.camel.clinic.repository.DoctorProfileRepository;
-import com.camel.clinic.repository.PatientProfileRepository;
-import com.camel.clinic.repository.SpecialtyRepository;
-import com.camel.clinic.repository.StaffProfileRepository;
 import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.EmailUniqueService;
 import com.camel.clinic.util.JwtUtil;
@@ -40,10 +36,6 @@ public class AuthServiceImp implements AuthService {
     private final OtpService otpService;
     private final EmailService emailService;
     private final EmailUniqueService emailUniqueService;
-    private final DoctorProfileRepository doctorProfileRepository;
-    private final PatientProfileRepository patientProfileRepository;
-    private final StaffProfileRepository staffProfileRepository;
-    private final SpecialtyRepository specialtyRepository;
     private final CommonService commonService;
 
     @Override

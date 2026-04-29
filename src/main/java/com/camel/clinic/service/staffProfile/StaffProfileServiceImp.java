@@ -13,16 +13,16 @@ import java.util.Map;
 @Slf4j
 @AllArgsConstructor
 public class StaffProfileServiceImp implements StaffProfileService {
-    private final StaffProfileServiceInv staffProfileServiceInv;
+    private final StaffProfileServiceInv serviceInv;
 
     @Override
     public ResponseEntity<?> count() {
-        return staffProfileServiceInv.count();
+        return serviceInv.count();
     }
 
     @Override
     public ResponseEntity<?> retrieve(String id) {
-        return staffProfileServiceInv.retrieve(id, null);
+        return serviceInv.retrieve(id, null);
     }
 
     @Override
@@ -37,16 +37,16 @@ public class StaffProfileServiceImp implements StaffProfileService {
 
     @Override
     public ResponseEntity<?> delete(String id) {
-        return staffProfileServiceInv.delete(id);
+        return serviceInv.delete(id);
     }
 
     @Override
     public ResponseEntity<?> restore(String id) {
-        return staffProfileServiceInv.restore(id);
+        return serviceInv.restore(id);
     }
 
     @Override
     public ResponseEntity<?> list(Map<String, Object> queryParams) {
-        return staffProfileServiceInv.list(queryParams);
+        return serviceInv.list(queryParams);
     }
 }

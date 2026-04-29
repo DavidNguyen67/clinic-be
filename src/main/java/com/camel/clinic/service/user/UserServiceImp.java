@@ -11,21 +11,21 @@ import java.util.Map;
 @Slf4j
 @AllArgsConstructor
 public class UserServiceImp implements UserService {
-    private final UserServiceInv userServiceInv;
+    private final UserServiceInv serviceInv;
 
     @Override
     public ResponseEntity<?> list(Map<String, Object> queryParams) {
-        return userServiceInv.list(queryParams);
+        return serviceInv.list(queryParams);
     }
 
     @Override
     public ResponseEntity<?> count() {
-        return userServiceInv.count();
+        return serviceInv.count();
     }
 
     @Override
     public ResponseEntity<?> retrieve(String id) {
-        return userServiceInv.retrieve(id, null);
+        return serviceInv.retrieve(id, null);
     }
 
 }

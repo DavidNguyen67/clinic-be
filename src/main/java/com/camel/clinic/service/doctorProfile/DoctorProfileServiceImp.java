@@ -18,18 +18,18 @@ import java.util.Map;
 @Slf4j
 @AllArgsConstructor
 public class DoctorProfileServiceImp implements DoctorProfileService {
-    private final DoctorProfileServiceInv doctorProfileServiceInv;
+    private final DoctorProfileServiceInv serviceInv;
     private final UserServiceInv userServiceInv;
     private final SpecialtyServiceInv specialtyServiceInv;
 
     @Override
     public ResponseEntity<?> count() {
-        return doctorProfileServiceInv.count();
+        return serviceInv.count();
     }
 
     @Override
     public ResponseEntity<?> retrieve(String id) {
-        return doctorProfileServiceInv.retrieve(id, null);
+        return serviceInv.retrieve(id, null);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class DoctorProfileServiceImp implements DoctorProfileService {
             doctorProfile.setUser(user);
         }
 
-        return doctorProfileServiceInv.create(doctorProfile);
+        return serviceInv.create(doctorProfile);
     }
 
     @Override
@@ -93,21 +93,21 @@ public class DoctorProfileServiceImp implements DoctorProfileService {
             doctorProfile.setUser(user);
         }
 
-        return doctorProfileServiceInv.update(id, doctorProfile, null);
+        return serviceInv.update(id, doctorProfile, null);
     }
 
     @Override
     public ResponseEntity<?> delete(String id) {
-        return doctorProfileServiceInv.delete(id);
+        return serviceInv.delete(id);
     }
 
     @Override
     public ResponseEntity<?> restore(String id) {
-        return doctorProfileServiceInv.restore(id);
+        return serviceInv.restore(id);
     }
 
     @Override
     public ResponseEntity<?> list(Map<String, Object> queryParams) {
-        return doctorProfileServiceInv.list(queryParams);
+        return serviceInv.list(queryParams);
     }
 }

@@ -14,16 +14,16 @@ import java.util.Map;
 @Slf4j
 @AllArgsConstructor
 public class SpecialtyServiceImp implements SpecialtyService {
-    private final SpecialtyServiceInv specialtyServiceInv;
+    private final SpecialtyServiceInv serviceInv;
 
     @Override
     public ResponseEntity<?> count() {
-        return specialtyServiceInv.count();
+        return serviceInv.count();
     }
 
     @Override
     public ResponseEntity<?> retrieve(String id) {
-        return specialtyServiceInv.retrieve(id, null);
+        return serviceInv.retrieve(id, null);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class SpecialtyServiceImp implements SpecialtyService {
         specialty.setIsActive(requestBody.getIsActive());
         specialty.setSpecialtyType(requestBody.getSpecialtyType());
 
-        return specialtyServiceInv.create(specialty);
+        return serviceInv.create(specialty);
     }
 
     @Override
@@ -51,21 +51,21 @@ public class SpecialtyServiceImp implements SpecialtyService {
         specialty.setIsActive(requestBody.getIsActive());
         specialty.setSpecialtyType(requestBody.getSpecialtyType());
 
-        return specialtyServiceInv.update(id, specialty, null);
+        return serviceInv.update(id, specialty, null);
     }
 
     @Override
     public ResponseEntity<?> delete(String id) {
-        return specialtyServiceInv.delete(id);
+        return serviceInv.delete(id);
     }
 
     @Override
     public ResponseEntity<?> restore(String id) {
-        return specialtyServiceInv.restore(id);
+        return serviceInv.restore(id);
     }
 
     @Override
     public ResponseEntity<?> list(Map<String, Object> queryParams) {
-        return specialtyServiceInv.list(queryParams);
+        return serviceInv.list(queryParams);
     }
 }
