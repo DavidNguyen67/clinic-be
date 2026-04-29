@@ -83,3 +83,16 @@
     delete:
       - path: /{id}
         to: direct:doctor-profile-delete
+
+- rest:
+    path: /v1/admin/user
+    post:
+      - path: /
+        to: direct:user-create
+    get:
+      - path: /
+        to: direct:user-list
+      - path: /count
+        to: direct:user-count
+      - path: /{id}
+        to: direct:user-get

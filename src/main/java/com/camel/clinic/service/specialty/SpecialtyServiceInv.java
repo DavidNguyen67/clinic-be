@@ -18,7 +18,6 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class SpecialtyServiceInv extends BaseService<Specialty, SpecialtyRepository> {
-
     public SpecialtyServiceInv(SpecialtyRepository repository) {
         super(Specialty::new, repository);
     }

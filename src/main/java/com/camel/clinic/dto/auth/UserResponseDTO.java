@@ -4,6 +4,8 @@ import com.camel.clinic.entity.Role;
 import com.camel.clinic.entity.User;
 import lombok.Builder;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 @Builder
@@ -19,6 +21,13 @@ public record UserResponseDTO(
         User.Gender gender
 ) {
     public static UserResponseDTO from(User u) {
+        Date date = u.getDateOfBirth();
+        if (date == null) {
+            return null;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.format(date);
+
         return UserResponseDTO.builder()
                 .id(u.getId())
                 .email(u.getEmail())
@@ -27,7 +36,7 @@ public record UserResponseDTO(
                 .role(u.getRole())
                 .status(u.getStatus())
                 .pathAvatar(u.getPathAvatar())
-//                .dob(commonService.formatToDdMMyyyy(dob))
+                .dob(sdf.format(date))
                 .gender(u.getGender())
                 .build();
     }

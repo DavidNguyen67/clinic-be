@@ -89,6 +89,7 @@ public class ServicesServiceImp implements ServicesService {
         return servicesServiceInv.restore(id);
     }
 
+    @Override
     public ResponseEntity<?> list(Map<String, Object> queryParams) {
         return servicesServiceInv.list(queryParams);
     }

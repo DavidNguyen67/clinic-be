@@ -64,4 +64,12 @@ public class RegisterRequestDTO {
         }
         return true;
     }
+
+    @AssertTrue(message = "Specialty ID must be null for non-doctor roles")
+    public boolean isNonDoctorValid() {
+        if (role != Role.RoleName.DOCTOR) {
+            return specialtyId == null;
+        }
+        return true;
+    }
 }

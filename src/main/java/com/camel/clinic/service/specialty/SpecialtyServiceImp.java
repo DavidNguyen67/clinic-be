@@ -64,6 +64,7 @@ public class SpecialtyServiceImp implements SpecialtyService {
         return specialtyServiceInv.restore(id);
     }
 
+    @Override
     public ResponseEntity<?> list(Map<String, Object> queryParams) {
         return specialtyServiceInv.list(queryParams);
     }
