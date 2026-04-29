@@ -2,6 +2,10 @@ package com.camel.clinic.service.patientProfile;
 
 import com.camel.clinic.dto.patientProfile.CreatePatientProfileDto;
 import com.camel.clinic.dto.patientProfile.UpdatePatientProfileDto;
+import com.camel.clinic.entity.PatientProfile;
+import com.camel.clinic.entity.User;
+import com.camel.clinic.service.CommonService;
+import com.camel.clinic.service.user.UserServiceInv;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +18,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class PatientProfileServiceImp implements PatientProfileService {
     private final PatientProfileServiceInv serviceInv;
+    private final CommonService commonService;
+    private final UserServiceInv userServiceInv;
 
     @Override
     public ResponseEntity<?> count() {
@@ -27,12 +33,38 @@ public class PatientProfileServiceImp implements PatientProfileService {
 
     @Override
     public ResponseEntity<?> create(CreatePatientProfileDto requestBody) {
-        return null;
+        PatientProfile patientProfile = new PatientProfile();
+        patientProfile.setBloodType(requestBody.getBloodType());
+        patientProfile.setAllergies(requestBody.getAllergies());
+        patientProfile.setPatientCode(commonService.generatePatientCode());
+        patientProfile.setAddress(requestBody.getAddress());
+        patientProfile.setInsuranceNumber(requestBody.getInsuranceNumber());
+        patientProfile.setChronicDiseases(requestBody.getChronicDiseases());
+        patientProfile.setLoyaltyPoints(0);
+        patientProfile.setTotalVisits(0);
+
+        String userId = requestBody.getUserId();
+        if (userId != null && !userId.isEmpty()) {
+            User user = userServiceInv.retrieve(userId, null).getBody() instanceof User u ? u : null;
+            if (user == null) {
+                throw new IllegalArgumentException("User with ID " + userId + " not found");
+            }
+            patientProfile.setUser(user);
+        }
+
+        return serviceInv.create(patientProfile);
     }
 
     @Override
     public ResponseEntity<?> update(String id, UpdatePatientProfileDto requestBody) {
-        return null;
+        PatientProfile patientProfile = new PatientProfile();
+        patientProfile.setBloodType(requestBody.getBloodType());
+        patientProfile.setAllergies(requestBody.getAllergies());
+        patientProfile.setAddress(requestBody.getAddress());
+        patientProfile.setInsuranceNumber(requestBody.getInsuranceNumber());
+        patientProfile.setChronicDiseases(requestBody.getChronicDiseases());
+
+        return serviceInv.update(id, patientProfile, null);
     }
 
     @Override

@@ -85,15 +85,6 @@ public class DoctorProfileServiceImp implements DoctorProfileService {
             doctorProfile.setSpecialty(specialty);
         }
 
-        String userId = requestBody.getUserId();
-        if (userId != null && !userId.isEmpty()) {
-            User user = userServiceInv.retrieve(userId, null).getBody() instanceof User u ? u : null;
-            if (user == null) {
-                throw new IllegalArgumentException("User with ID " + userId + " not found");
-            }
-            doctorProfile.setUser(user);
-        }
-
         return serviceInv.update(id, doctorProfile, null);
     }
 

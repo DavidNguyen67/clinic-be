@@ -12,10 +12,6 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class UpdateDoctorProfileDto {
-
-    private String userId;
-
-
     private String specialtyId;
 
     @Size(max = 100, message = "Degree must not exceed 100 characters")

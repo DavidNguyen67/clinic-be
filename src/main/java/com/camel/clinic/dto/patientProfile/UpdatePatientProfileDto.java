@@ -8,8 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UpdatePatientProfileDto {
-    private String userId;
-
     @Size(max = 500, message = "Address must not exceed 500 characters")
     private String address;
 
