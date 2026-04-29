@@ -92,3 +92,33 @@
             ref: specialtyDeleteProcessor
         - marshal:
             json: { }
+
+- route:
+    id: public-specialty-list-route
+    from:
+      uri: direct:public-specialty-list
+      steps:
+        - process:
+            ref: specialtyListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-specialty-count-route
+    from:
+      uri: direct:public-specialty-count
+      steps:
+        - process:
+            ref: specialtyCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-specialty-get-route
+    from:
+      uri: direct:public-specialty-get
+      steps:
+        - process:
+            ref: specialtyGetProcessor
+        - marshal:
+            json: { }

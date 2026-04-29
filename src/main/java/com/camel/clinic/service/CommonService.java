@@ -38,6 +38,19 @@ public class CommonService {
         }
     }
 
+    public Boolean parseBoolean(Object value) {
+        if (value == null) return null;
+        if (value instanceof Boolean b) return b;
+        if (value instanceof String s) {
+            return switch (s.trim().toLowerCase()) {
+                case "true", "1", "yes" -> true;
+                case "false", "0", "no" -> false;
+                default -> null;
+            };
+        }
+        return null;
+    }
+
     public Date parseToDate(String rawDate) {
         if (rawDate == null || rawDate.isBlank()) {
             throw new IllegalArgumentException("date is required");

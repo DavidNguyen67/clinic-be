@@ -92,3 +92,33 @@
             ref: doctorScheduleExceptionDeleteProcessor
         - marshal:
             json: { }
+
+- route:
+    id: public-doctor-schedule-exception-list-route
+    from:
+      uri: direct:public-doctor-schedule-exception-list
+      steps:
+        - process:
+            ref: doctorScheduleExceptionListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-doctor-schedule-exception-count-route
+    from:
+      uri: direct:public-doctor-schedule-exception-count
+      steps:
+        - process:
+            ref: doctorScheduleExceptionCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-doctor-schedule-exception-get-route
+    from:
+      uri: direct:public-doctor-schedule-exception-get
+      steps:
+        - process:
+            ref: doctorScheduleExceptionGetProcessor
+        - marshal:
+            json: { }

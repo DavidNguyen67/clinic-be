@@ -92,3 +92,33 @@
             ref: doctorProfileDeleteProcessor
         - marshal:
             json: { }
+
+- route:
+    id: public-doctor-profile-list-route
+    from:
+      uri: direct:public-doctor-profile-list
+      steps:
+        - process:
+            ref: doctorProfileListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-doctor-profile-count-route
+    from:
+      uri: direct:public-doctor-profile-count
+      steps:
+        - process:
+            ref: doctorProfileCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-doctor-profile-get-route
+    from:
+      uri: direct:public-doctor-profile-get
+      steps:
+        - process:
+            ref: doctorProfileGetProcessor
+        - marshal:
+            json: { }

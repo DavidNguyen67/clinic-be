@@ -18,3 +18,13 @@
     delete:
       - path: /{id}
         to: direct:specialty-delete
+
+- rest:
+    path: /v1/public/specialty
+    get:
+      - path: /
+        to: direct:public-specialty-list
+      - path: /count
+        to: direct:public-specialty-count
+      - path: /{id}
+        to: direct:public-specialty-get

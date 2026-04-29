@@ -18,3 +18,13 @@
     delete:
       - path: /{id}
         to: direct:service-delete
+
+- rest:
+    path: /v1/public/service
+    get:
+      - path: /
+        to: direct:public-service-list
+      - path: /count
+        to: direct:public-service-count
+      - path: /{id}
+        to: direct:public-service-get

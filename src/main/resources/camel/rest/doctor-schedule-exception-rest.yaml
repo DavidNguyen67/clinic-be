@@ -18,3 +18,13 @@
     delete:
       - path: /{id}
         to: direct:doctor-schedule-exception-delete
+
+- rest:
+    path: /v1/public/doctor-schedule-exception
+    get:
+      - path: /
+        to: direct:public-doctor-schedule-exception-list
+      - path: /count
+        to: direct:public-doctor-schedule-exception-count
+      - path: /{id}
+        to: direct:public-doctor-schedule-exception-get

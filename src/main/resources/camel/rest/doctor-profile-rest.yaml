@@ -18,3 +18,13 @@
     delete:
       - path: /{id}
         to: direct:doctor-profile-delete
+
+- rest:
+    path: /v1/public/doctor-profile
+    get:
+      - path: /
+        to: direct:public-doctor-profile-list
+      - path: /count
+        to: direct:public-doctor-profile-count
+      - path: /{id}
+        to: direct:public-doctor-profile-get

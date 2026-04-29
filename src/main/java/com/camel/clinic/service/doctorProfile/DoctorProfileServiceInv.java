@@ -33,6 +33,7 @@ public class DoctorProfileServiceInv extends BaseService<DoctorProfile, DoctorPr
                     query.distinct(true);
                     return cb.conjunction();
                 })
+                .and(hasField("isFeatured", commonService.parseBoolean(queryParams.get("isFeatured"))))
                 .and(hasNestedField("user", "status",
                         commonService.parseEnum(User.UserStatus.class, queryParams.get("userStatus"))))
                 .and(hasNestedField("user", "gender",

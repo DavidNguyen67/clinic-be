@@ -92,3 +92,33 @@
             ref: serviceDeleteProcessor
         - marshal:
             json: { }
+
+- route:
+    id: public-service-list-route
+    from:
+      uri: direct:public-service-list
+      steps:
+        - process:
+            ref: serviceListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-service-count-route
+    from:
+      uri: direct:public-service-count
+      steps:
+        - process:
+            ref: serviceCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-service-get-route
+    from:
+      uri: direct:public-service-get
+      steps:
+        - process:
+            ref: serviceGetProcessor
+        - marshal:
+            json: { }
