@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface DoctorRepository extends JpaRepository<DoctorProfile, UUID>, JpaSpecificationExecutor<DoctorProfile> {
+public interface DoctorProfileRepository extends JpaRepository<DoctorProfile, UUID>, JpaSpecificationExecutor<DoctorProfile> {
     boolean existsByDoctorCode(String doctorCode);
 
     Optional<DoctorProfile> findByUserId(UUID userId);

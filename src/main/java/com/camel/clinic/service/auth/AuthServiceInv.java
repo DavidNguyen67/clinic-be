@@ -5,7 +5,7 @@ import com.camel.clinic.entity.DoctorProfile;
 import com.camel.clinic.entity.PatientProfile;
 import com.camel.clinic.entity.Role;
 import com.camel.clinic.entity.User;
-import com.camel.clinic.repository.DoctorRepository;
+import com.camel.clinic.repository.DoctorProfileRepository;
 import com.camel.clinic.repository.PatientRepository;
 import com.camel.clinic.repository.UserRepository;
 import com.camel.clinic.service.BaseService;
@@ -20,13 +20,13 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class AuthServiceInv extends BaseService<User, UserRepository> {
-    private final DoctorRepository doctorRepository;
+    private final DoctorProfileRepository doctorProfileRepository;
     private final PatientRepository patientRepository;
 
-    public AuthServiceInv(UserRepository repository, DoctorRepository doctorRepository,
+    public AuthServiceInv(UserRepository repository, DoctorProfileRepository doctorProfileRepository,
                           PatientRepository patientRepository) {
         super(User::new, repository);
-        this.doctorRepository = doctorRepository;
+        this.doctorProfileRepository = doctorProfileRepository;
         this.patientRepository = patientRepository;
     }
 
@@ -70,7 +70,7 @@ public class AuthServiceInv extends BaseService<User, UserRepository> {
         // Load doctor info if user is a doctor
         if (Role.RoleName.DOCTOR.equals(user.getRole())) {
             UUID userId = user.getId();
-            Optional<DoctorProfile> doctor = doctorRepository.findByUserId(userId);
+            Optional<DoctorProfile> doctor = doctorProfileRepository.findByUserId(userId);
 
             if (doctor.isPresent()) {
 //                List<DoctorSchedule> schedules = doctorScheduleRepository.findByDoctorId(doctor.get().getId());

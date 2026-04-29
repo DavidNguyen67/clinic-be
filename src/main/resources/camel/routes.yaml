@@ -220,6 +220,16 @@
             json: { }
 
 - route:
+    id: specialty-restore-route
+    from:
+      uri: direct:specialty-restore
+      steps:
+        - process:
+            ref: specialtyRestoreProcessor
+        - marshal:
+            json: { }
+
+- route:
     id: specialty-delete-route
     from:
       uri: direct:specialty-delete
@@ -290,6 +300,16 @@
             ref: validationProcessor
         - process:
             ref: serviceUpdateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: service-restore-route
+    from:
+      uri: direct:service-restore
+      steps:
+        - process:
+            ref: serviceRestoreProcessor
         - marshal:
             json: { }
 

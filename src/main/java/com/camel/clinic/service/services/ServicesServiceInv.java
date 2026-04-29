@@ -35,7 +35,7 @@ public class ServicesServiceInv extends BaseService<ClinicService, ServicesRepos
                     : Sort.by(sortBy).ascending();
 
             Pageable pageable = PageRequest.of(page, size, sort);
-            Page<ClinicService> resultPage = repository.getAllServices(pageable);
+            Page<ClinicService> resultPage = repository.getAll(pageable);
 
             ApiPaged<ClinicService> paged = ApiPaged.of(
                     resultPage.getContent(),

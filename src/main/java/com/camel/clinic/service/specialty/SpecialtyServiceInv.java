@@ -43,7 +43,7 @@ public class SpecialtyServiceInv extends BaseService<Specialty, SpecialtyReposit
                     : Sort.by(sortBy).ascending();
 
             Pageable pageable = PageRequest.of(page, size, sort);
-            Page<Specialty> resultPage = repository.getAllSpecialties(pageable, serviceId);
+            Page<Specialty> resultPage = repository.getAll(pageable, serviceId);
 
             ApiPaged<Specialty> paged = ApiPaged.of(
                     resultPage.getContent(),

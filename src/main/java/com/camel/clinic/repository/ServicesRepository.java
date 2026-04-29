@@ -23,5 +23,5 @@ public interface ServicesRepository extends JpaRepository<ClinicService, UUID>, 
                             " WHERE s.isActive = true" +
                             " AND s.deletedAt IS NULL"
     )
-    Page<ClinicService> getAllServices(Pageable pageable);
+    Page<ClinicService> getAll(Pageable pageable);
 }

@@ -36,6 +36,8 @@
     patch:
       - path: /{id}
         to: direct:specialty-update
+      - path: /restore/{id}
+        to: direct:specialty-restore
     delete:
       - path: /{id}
         to: direct:specialty-delete
@@ -55,6 +57,8 @@
     patch:
       - path: /{id}
         to: direct:service-update
+      - path: /restore/{id}
+        to: direct:service-restore
     delete:
       - path: /{id}
         to: direct:service-delete

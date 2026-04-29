@@ -2,7 +2,7 @@ package com.camel.clinic.service.auth;
 
 import com.camel.clinic.dto.auth.*;
 import com.camel.clinic.entity.*;
-import com.camel.clinic.repository.DoctorRepository;
+import com.camel.clinic.repository.DoctorProfileRepository;
 import com.camel.clinic.repository.PatientRepository;
 import com.camel.clinic.repository.SpecialtyRepository;
 import com.camel.clinic.repository.StaffRepository;
@@ -40,7 +40,7 @@ public class AuthServiceImp implements AuthService {
     private final OtpService otpService;
     private final EmailService emailService;
     private final EmailUniqueService emailUniqueService;
-    private final DoctorRepository doctorRepository;
+    private final DoctorProfileRepository doctorProfileRepository;
     private final PatientRepository patientRepository;
     private final StaffRepository staffRepository;
     private final SpecialtyRepository specialtyRepository;
@@ -185,9 +185,9 @@ public class AuthServiceImp implements AuthService {
 
         DoctorProfile doctorProfile = new DoctorProfile();
         doctorProfile.setUser(user);
-        doctorProfile.setDoctorCode(generateUniqueCode("DR", doctorRepository::existsByDoctorCode));
+        doctorProfile.setDoctorCode(generateUniqueCode("DR", doctorProfileRepository::existsByDoctorCode));
         doctorProfile.setSpecialty(specialty);
-        doctorRepository.save(doctorProfile);
+        doctorProfileRepository.save(doctorProfile);
     }
 
     private User.Gender mapPatientGender(User.Gender gender) {
