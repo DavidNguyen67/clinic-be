@@ -1,7 +1,6 @@
 package com.camel.clinic.service.doctorProfile;
 
 import com.camel.clinic.entity.DoctorProfile;
-import com.camel.clinic.entity.User;
 import com.camel.clinic.repository.DoctorProfileRepository;
 import com.camel.clinic.service.BaseService;
 import com.camel.clinic.service.CommonService;
@@ -34,13 +33,7 @@ public class DoctorProfileServiceInv extends BaseService<DoctorProfile, DoctorPr
                     return cb.conjunction();
                 })
                 .and(hasField("isFeatured", commonService.parseBoolean(queryParams.get("isFeatured"))))
-                .and(hasNestedField("user", "status",
-                        commonService.parseEnum(User.UserStatus.class, queryParams.get("userStatus"))))
-                .and(hasNestedField("user", "gender",
-                        commonService.parseEnum(User.Gender.class, queryParams.get("gender"))))
-                .and(nestedFieldLike("user", "fullName",
-                        (String) queryParams.get("fullName")))
-                .and(nestedFieldLike("specialty", "name",
-                        (String) queryParams.get("specialtyName")));
+                .and(nestedFieldLike("user", "fullName", (String) queryParams.get("fullName")))
+                .and(nestedFieldLike("specialty", "name", (String) queryParams.get("specialtyName")));
     }
 }

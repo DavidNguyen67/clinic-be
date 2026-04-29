@@ -26,6 +26,7 @@ public class DoctorProfile extends SoftDeletableEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", unique = true, nullable = false, foreignKey = @ForeignKey(name = "fk_doctor_user"))
     @NotNull()
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User user;
 
     @NotBlank()

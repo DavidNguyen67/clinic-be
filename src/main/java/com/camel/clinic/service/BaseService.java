@@ -105,7 +105,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
             return ResponseEntity.ok(paged);
         } catch (Exception e) {
             log.error("Error listing entities: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to list entities", e);
+            throw new RuntimeException("Failed to list entities: " + e.getMessage(), e);
         }
     }
 
@@ -124,7 +124,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
             return ResponseEntity.ok(total);
         } catch (Exception e) {
             log.error("Error counting entities: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to count entities", e);
+            throw new RuntimeException("Failed to count entities: " + e.getMessage(), e);
         }
     }
 
@@ -254,7 +254,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             log.error("Error fetching entities by ids: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to get entities by ids", e);
+            throw new RuntimeException("Failed to get entities by ids: " + e.getMessage(), e);
         }
     }
 

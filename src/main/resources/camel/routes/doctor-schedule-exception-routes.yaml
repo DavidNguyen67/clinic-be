@@ -46,7 +46,7 @@
       steps:
         - setHeader:
             name: X-DTO-Class
-            constant: com.camel.clinic.dto.doctorScheduleException.CreateDoctorProfileDto
+            constant: com.camel.clinic.dto.doctorScheduleException.CreateDoctorScheduleExceptionDto
         - process:
             ref: requestDeserializerProcessor
         - process:
@@ -63,7 +63,7 @@
       steps:
         - setHeader:
             name: X-DTO-Class
-            constant: com.camel.clinic.dto.doctorScheduleException.UpdateDoctorProfileDto
+            constant: com.camel.clinic.dto.doctorScheduleException.UpdateDoctorScheduleExceptionDto
         - process:
             ref: requestDeserializerProcessor
         - process:
