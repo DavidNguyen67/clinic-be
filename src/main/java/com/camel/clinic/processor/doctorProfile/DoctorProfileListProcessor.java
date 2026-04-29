@@ -14,13 +14,13 @@ import java.util.Map;
 @AllArgsConstructor
 @Slf4j
 public class DoctorProfileListProcessor implements Processor {
-    private final DoctorProfileServiceImp doctorProfileServiceImp;
+    private final DoctorProfileServiceImp serviceImp;
 
     @Override
     public void process(Exchange exchange) {
         Map<String, Object> queryParams = exchange.getIn().getHeaders();
 
-        ResponseEntity<?> response = doctorProfileServiceImp.list(queryParams);
+        ResponseEntity<?> response = serviceImp.list(queryParams);
 
         exchange.getMessage().setBody(response);
     }

@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Slf4j
 public class SpecialtyDeleteProcessor implements Processor {
-    private final SpecialtyServiceImp specialtyServiceImp;
+    private final SpecialtyServiceImp serviceImp;
 
     @Override
     public void process(Exchange exchange) throws Exception {
         String id = exchange.getIn().getHeader("id", String.class);
 
-        ResponseEntity<?> response = specialtyServiceImp.delete(id);
+        ResponseEntity<?> response = serviceImp.delete(id);
         exchange.getIn().setBody(response);
     }
 }

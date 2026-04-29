@@ -1,24 +1,20 @@
-package com.camel.clinic.processor.doctorProfile;
+package com.camel.clinic.processor.staffProfile;
 
 import com.camel.clinic.service.doctorProfile.DoctorProfileServiceImp;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-@Component("doctorProfileDeleteProcessor")
+@Component("staffProfileCountProcessor")
 @AllArgsConstructor
-@Slf4j
-public class DoctorProfileDeleteProcessor implements Processor {
+public class StaffProfileCountProcessor implements Processor {
     private final DoctorProfileServiceImp serviceImp;
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        String id = exchange.getIn().getHeader("id", String.class);
-
-        ResponseEntity<?> response = serviceImp.delete(id);
-        exchange.getIn().setBody(response);
+        ResponseEntity<?> response = serviceImp.count();
+        exchange.getMessage().setBody(response);
     }
 }

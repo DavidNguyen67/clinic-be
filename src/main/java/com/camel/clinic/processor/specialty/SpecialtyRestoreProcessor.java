@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 @Component("specialtyRestoreProcessor")
 @AllArgsConstructor
 public class SpecialtyRestoreProcessor implements Processor {
-    private final SpecialtyServiceImp specialtyServiceImp;
+    private final SpecialtyServiceImp serviceImp;
 
     @Override
     public void process(Exchange exchange) throws Exception {
         String id = exchange.getIn().getHeader("id", String.class);
-        ResponseEntity<?> response = specialtyServiceImp.restore(id);
+        ResponseEntity<?> response = serviceImp.restore(id);
         exchange.getMessage().setBody(response);
     }
 }

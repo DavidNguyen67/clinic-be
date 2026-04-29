@@ -6,7 +6,7 @@ import com.camel.clinic.entity.PatientProfile;
 import com.camel.clinic.entity.Role;
 import com.camel.clinic.entity.User;
 import com.camel.clinic.repository.DoctorProfileRepository;
-import com.camel.clinic.repository.PatientRepository;
+import com.camel.clinic.repository.PatientProfileRepository;
 import com.camel.clinic.repository.UserRepository;
 import com.camel.clinic.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +21,13 @@ import java.util.UUID;
 @Slf4j
 public class AuthServiceInv extends BaseService<User, UserRepository> {
     private final DoctorProfileRepository doctorProfileRepository;
-    private final PatientRepository patientRepository;
+    private final PatientProfileRepository patientProfileRepository;
 
     public AuthServiceInv(UserRepository repository, DoctorProfileRepository doctorProfileRepository,
-                          PatientRepository patientRepository) {
+                          PatientProfileRepository patientProfileRepository) {
         super(User::new, repository);
         this.doctorProfileRepository = doctorProfileRepository;
-        this.patientRepository = patientRepository;
+        this.patientProfileRepository = patientProfileRepository;
     }
 
     public Optional<User> findByEmail(String email) {
@@ -112,7 +112,7 @@ public class AuthServiceInv extends BaseService<User, UserRepository> {
 
         // Load patient info if user is a patient
         if (Role.RoleName.PATIENT.equals(user.getRole())) {
-            Optional<PatientProfile> patient = patientRepository.findAll().stream()
+            Optional<PatientProfile> patient = patientProfileRepository.findAll().stream()
                     .filter(p -> p.getUser().getId().equals(user.getId()))
                     .findFirst();
 

@@ -1,7 +1,7 @@
-package com.camel.clinic.processor.services;
+package com.camel.clinic.processor.patientProfile;
 
-import com.camel.clinic.dto.services.CreateServiceDto;
-import com.camel.clinic.service.services.ServicesServiceImp;
+import com.camel.clinic.dto.patientProfile.CreatePatientProfileDto;
+import com.camel.clinic.service.patientProfile.PatientProfileServiceImp;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
@@ -9,15 +9,15 @@ import org.apache.camel.Processor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-@Component("serviceCreateProcessor")
+@Component("patientProfileCreateProcessor")
 @AllArgsConstructor
 @Slf4j
-public class ServiceCreateProcessor implements Processor {
-    private final ServicesServiceImp serviceImp;
+public class PatientProfileCreateProcessor implements Processor {
+    private final PatientProfileServiceImp serviceImp;
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        CreateServiceDto request = exchange.getIn().getBody(CreateServiceDto.class);
+        CreatePatientProfileDto request = exchange.getIn().getBody(CreatePatientProfileDto.class);
         ResponseEntity<?> response = serviceImp.create(request);
         exchange.getIn().setBody(response);
     }

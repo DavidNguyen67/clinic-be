@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 @Component("serviceCountProcessor")
 @AllArgsConstructor
 public class ServiceCountProcessor implements Processor {
-    private final ServicesServiceImp servicesServiceImp;
+    private final ServicesServiceImp serviceImp;
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        ResponseEntity<?> response = servicesServiceImp.count();
+        ResponseEntity<?> response = serviceImp.count();
         exchange.getMessage().setBody(response);
     }
 }

@@ -1,6 +1,6 @@
-package com.camel.clinic.processor.services;
+package com.camel.clinic.processor.patientProfile;
 
-import com.camel.clinic.service.services.ServicesServiceImp;
+import com.camel.clinic.service.patientProfile.PatientProfileServiceImp;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
@@ -8,11 +8,11 @@ import org.apache.camel.Processor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-@Component("serviceDeleteProcessor")
+@Component("patientProfileDeleteProcessor")
 @AllArgsConstructor
 @Slf4j
-public class ServiceDeleteProcessor implements Processor {
-    private final ServicesServiceImp serviceImp;
+public class PatientProfileDeleteProcessor implements Processor {
+    private final PatientProfileServiceImp serviceImp;
 
     @Override
     public void process(Exchange exchange) throws Exception {

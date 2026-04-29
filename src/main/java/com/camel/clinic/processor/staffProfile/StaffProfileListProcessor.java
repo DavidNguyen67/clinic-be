@@ -1,6 +1,6 @@
-package com.camel.clinic.processor.user;
+package com.camel.clinic.processor.staffProfile;
 
-import com.camel.clinic.service.user.UserServiceImp;
+import com.camel.clinic.service.staffProfile.StaffProfileServiceImp;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@Component("userListProcessor")
+@Component("staffProfileListProcessor")
 @AllArgsConstructor
 @Slf4j
-public class UserListProcessor implements Processor {
-    private final UserServiceImp serviceImp;
+public class StaffProfileListProcessor implements Processor {
+    private final StaffProfileServiceImp serviceImp;
 
     @Override
     public void process(Exchange exchange) {

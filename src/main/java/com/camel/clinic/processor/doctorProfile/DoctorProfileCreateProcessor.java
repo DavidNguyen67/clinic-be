@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Slf4j
 public class DoctorProfileCreateProcessor implements Processor {
-    private final DoctorProfileServiceImp doctorProfileServiceImp;
+    private final DoctorProfileServiceImp serviceImp;
 
     @Override
     public void process(Exchange exchange) throws Exception {
         CreateDoctorProfileDto request = exchange.getIn().getBody(CreateDoctorProfileDto.class);
-        ResponseEntity<?> response = doctorProfileServiceImp.create(request);
+        ResponseEntity<?> response = serviceImp.create(request);
         exchange.getIn().setBody(response);
     }
 }

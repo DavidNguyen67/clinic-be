@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Slf4j
 public class UserGetProcessor implements Processor {
-    private final UserServiceImp userServiceImp;
+    private final UserServiceImp serviceImp;
 
     @Override
     public void process(Exchange exchange) {
         String id = exchange.getIn().getHeader("id", String.class);
-        ResponseEntity<?> response = userServiceImp.retrieve(id);
+        ResponseEntity<?> response = serviceImp.retrieve(id);
         exchange.getIn().setBody(response);
     }
 }

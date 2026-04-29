@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 @Component("doctorProfileRestoreProcessor")
 @AllArgsConstructor
 public class DoctorProfileRestoreProcessor implements Processor {
-    private final DoctorProfileServiceImp doctorProfileServiceImp;
+    private final DoctorProfileServiceImp serviceImp;
 
     @Override
     public void process(Exchange exchange) throws Exception {
         String id = exchange.getIn().getHeader("id", String.class);
-        ResponseEntity<?> response = doctorProfileServiceImp.restore(id);
+        ResponseEntity<?> response = serviceImp.restore(id);
         exchange.getMessage().setBody(response);
     }
 }

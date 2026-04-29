@@ -1,11 +1,12 @@
 package com.camel.clinic.service.auth;
 
 import com.camel.clinic.dto.auth.*;
-import com.camel.clinic.entity.*;
+import com.camel.clinic.entity.Role;
+import com.camel.clinic.entity.User;
 import com.camel.clinic.repository.DoctorProfileRepository;
-import com.camel.clinic.repository.PatientRepository;
+import com.camel.clinic.repository.PatientProfileRepository;
 import com.camel.clinic.repository.SpecialtyRepository;
-import com.camel.clinic.repository.StaffRepository;
+import com.camel.clinic.repository.StaffProfileRepository;
 import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.EmailUniqueService;
 import com.camel.clinic.util.JwtUtil;
@@ -25,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.function.Predicate;
 
 @Service
 @Slf4j
@@ -41,8 +41,8 @@ public class AuthServiceImp implements AuthService {
     private final EmailService emailService;
     private final EmailUniqueService emailUniqueService;
     private final DoctorProfileRepository doctorProfileRepository;
-    private final PatientRepository patientRepository;
-    private final StaffRepository staffRepository;
+    private final PatientProfileRepository patientProfileRepository;
+    private final StaffProfileRepository staffProfileRepository;
     private final SpecialtyRepository specialtyRepository;
     private final CommonService commonService;
 
@@ -119,7 +119,6 @@ public class AuthServiceImp implements AuthService {
             user.setPasswordHash(passwordEncoder.encode(req.getPassword()));
 
             user = authServiceInv.save(user);
-            createRoleProfile(user, req, role);
 
             String accessToken = jwtUtil.generateToken(user);
             String refreshToken = jwtUtil.generateRefreshToken(user.getId());
@@ -144,66 +143,6 @@ public class AuthServiceImp implements AuthService {
             }
             throw e;
         }
-    }
-
-    private void createRoleProfile(User user, RegisterRequestDTO req, Role.RoleName role) throws BadRequestException {
-        switch (role) {
-            case PATIENT -> createPatientProfile(user, req);
-            case STAFF -> createStaffProfile(user);
-            case DOCTOR -> createDoctorProfile(user, req);
-            case ADMIN -> {
-            }
-            default -> throw new BadRequestException("Unsupported role for self-registration");
-        }
-    }
-
-    private void createPatientProfile(User user, RegisterRequestDTO req) {
-        PatientProfile patientProfile = new PatientProfile();
-        patientProfile.setUser(user);
-        patientProfile.setPatientCode(generateUniqueCode("PT", patientRepository::existsByPatientCode));
-        patientProfile.setGender(req.getGender());
-        patientRepository.save(patientProfile);
-    }
-
-    private void createStaffProfile(User user) {
-        StaffProfile staffProfile = new StaffProfile();
-        staffProfile.setUser(user);
-        staffProfile.setStaffCode(generateUniqueCode("ST", staffRepository::existsByStaffCode));
-        staffProfile.setHireDate(new Date());
-        staffRepository.save(staffProfile);
-    }
-
-    private void createDoctorProfile(User user, RegisterRequestDTO req) throws BadRequestException {
-        UUID specialtyId = req.getSpecialtyId();
-        if (specialtyId == null) {
-            throw new BadRequestException("specialtyId is required for doctor registration");
-        }
-
-        Specialty specialty = specialtyRepository.findById(specialtyId)
-                .filter(Specialty::getIsActive)
-                .orElseThrow(() -> new BadRequestException("Specialty not found or inactive"));
-
-        DoctorProfile doctorProfile = new DoctorProfile();
-        doctorProfile.setUser(user);
-        doctorProfile.setDoctorCode(generateUniqueCode("DR", doctorProfileRepository::existsByDoctorCode));
-        doctorProfile.setSpecialty(specialty);
-        doctorProfileRepository.save(doctorProfile);
-    }
-
-    private User.Gender mapPatientGender(User.Gender gender) {
-        return switch (gender) {
-            case MALE -> User.Gender.MALE;
-            case FEMALE -> User.Gender.FEMALE;
-            default -> User.Gender.OTHER;
-        };
-    }
-
-    private String generateUniqueCode(String prefix, Predicate<String> existsCheck) {
-        String code;
-        do {
-            code = prefix + "-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-        } while (existsCheck.test(code));
-        return code;
     }
 
     @Override

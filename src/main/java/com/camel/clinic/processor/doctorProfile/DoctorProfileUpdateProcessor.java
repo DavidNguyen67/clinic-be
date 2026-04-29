@@ -13,14 +13,14 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Slf4j
 public class DoctorProfileUpdateProcessor implements Processor {
-    private final DoctorProfileServiceImp doctorProfileServiceImp;
+    private final DoctorProfileServiceImp serviceImp;
 
     @Override
     public void process(Exchange exchange) throws Exception {
         UpdateDoctorProfileDto request = exchange.getIn().getBody(UpdateDoctorProfileDto.class);
         String id = exchange.getIn().getHeader("id", String.class);
 
-        ResponseEntity<?> response = doctorProfileServiceImp.update(id, request);
+        ResponseEntity<?> response = serviceImp.update(id, request);
         exchange.getIn().setBody(response);
     }
 }
