@@ -8,8 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -49,27 +47,4 @@ public class RegisterRequestDTO {
 
     @NotNull(message = "Role is required")
     private Role.RoleName role;
-
-    private UUID specialtyId;
-
-    @AssertTrue(message = "Specialty ID must be a valid UUID and required for doctors")
-    public boolean isValidPromotion() {
-        if (role == Role.RoleName.DOCTOR) {
-            try {
-                UUID.fromString(specialtyId.toString());
-                return true;
-            } catch (IllegalArgumentException e) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @AssertTrue(message = "Specialty ID must be null for non-doctor roles")
-    public boolean isNonDoctorValid() {
-        if (role != Role.RoleName.DOCTOR) {
-            return specialtyId == null;
-        }
-        return true;
-    }
 }

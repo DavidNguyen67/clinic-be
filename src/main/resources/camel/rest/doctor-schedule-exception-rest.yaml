@@ -1,0 +1,20 @@
+- rest:
+    path: /v1/admin/doctor-schedule-exception
+    post:
+      - path: /
+        to: direct:doctor-schedule-exception-create
+    get:
+      - path: /
+        to: direct:doctor-schedule-exception-list
+      - path: /count
+        to: direct:doctor-schedule-exception-count
+      - path: /{id}
+        to: direct:doctor-schedule-exception-get
+    patch:
+      - path: /{id}
+        to: direct:doctor-schedule-exception-update
+      - path: /restore/{id}
+        to: direct:doctor-schedule-exception-restore
+    delete:
+      - path: /{id}
+        to: direct:doctor-schedule-exception-delete

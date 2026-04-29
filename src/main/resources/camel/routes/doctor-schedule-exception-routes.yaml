@@ -1,0 +1,94 @@
+- onException:
+    exception:
+      - java.lang.Exception
+    handled:
+      constant: true
+    steps:
+      - process:
+          ref: exceptionProcessor
+      - marshal:
+          json: { }
+
+- route:
+    id: doctor-schedule-exception-list-route
+    from:
+      uri: direct:doctor-schedule-exception-list
+      steps:
+        - process:
+            ref: doctorScheduleExceptionListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-schedule-exception-count-route
+    from:
+      uri: direct:doctor-schedule-exception-count
+      steps:
+        - process:
+            ref: doctorScheduleExceptionCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-schedule-exception-get-route
+    from:
+      uri: direct:doctor-schedule-exception-get
+      steps:
+        - process:
+            ref: doctorScheduleExceptionGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-schedule-exception-create-route
+    from:
+      uri: direct:doctor-schedule-exception-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.doctorScheduleException.CreateDoctorProfileDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: doctorScheduleExceptionCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-schedule-exception-update-route
+    from:
+      uri: direct:doctor-schedule-exception-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.doctorScheduleException.UpdateDoctorProfileDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: doctorScheduleExceptionUpdateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-schedule-exception-restore-route
+    from:
+      uri: direct:doctor-schedule-exception-restore
+      steps:
+        - process:
+            ref: doctorScheduleExceptionRestoreProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-schedule-exception-delete-route
+    from:
+      uri: direct:doctor-schedule-exception-delete
+      steps:
+        - process:
+            ref: doctorScheduleExceptionDeleteProcessor
+        - marshal:
+            json: { }

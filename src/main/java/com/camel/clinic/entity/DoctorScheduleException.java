@@ -3,6 +3,7 @@ package com.camel.clinic.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.util.Date;
 
@@ -12,6 +13,11 @@ import java.util.Date;
         @Index(name = "idx_exception_date", columnList = "exception_date"),
         @Index(name = "idx_doctor_date", columnList = "doctor_id, exception_date")
 })
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
 public class DoctorScheduleException extends SoftDeletableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
