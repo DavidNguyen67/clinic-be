@@ -1,20 +1,11 @@
 package com.camel.clinic.service;
 
 import com.camel.clinic.entity.User;
-import com.camel.clinic.exception.NotFoundException;
+import com.camel.clinic.exception.BadRequestException;
 import com.camel.clinic.exception.UnauthorizedException;
-import com.camel.clinic.repository.DoctorProfileRepository;
-import com.camel.clinic.repository.PatientProfileRepository;
-import com.camel.clinic.repository.StaffProfileRepository;
-import com.camel.clinic.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -27,26 +18,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class CommonService {
-    private final UserRepository userRepository;
-    private final StaffProfileRepository staffProfileRepository;
-    private final DoctorProfileRepository doctorProfileRepository;
-    private final PatientProfileRepository patientProfileRepository;
-
-    public User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new UnauthorizedException("User not authenticated");
-        }
-        return userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new NotFoundException("User not found"));
-    }
-
     public void requireRole(User user, String role) {
         if (!role.equals(user.getRole().name())) {
-            throw new UnauthorizedException("Required role: " + role);
+            throw new BadRequestException("Only user target has role: " + role);
         }
     }
 
@@ -58,16 +36,6 @@ public class CommonService {
         } catch (NumberFormatException e) {
             return defaultValue;
         }
-    }
-
-    public String getStringParam(Map<String, Object> queryParams, String... keys) {
-        for (String key : keys) {
-            Object value = queryParams.get(key);
-            if (value instanceof String str && !str.isBlank()) {
-                return str.trim();
-            }
-        }
-        return null;
     }
 
     public Date parseToDate(String rawDate) {
@@ -104,57 +72,6 @@ public class CommonService {
         throw new IllegalArgumentException("Unsupported date format");
     }
 
-    public <T> Map<String, Object> buildPageResponse(Page<T> page) {
-        List<?> data = page.getContent();
-        long totalItems = page.getTotalElements();
-        int size = page.getSize();
-        return Map.of(
-                "data", data,
-                "totalItems", totalItems,
-                "page", page.getNumber(),
-                "size", size,
-                "totalPages", (int) Math.ceil((double) totalItems / size)
-        );
-    }
-
-    public Date parseAppointmentDate(Object raw) {
-        if (raw == null || raw.toString().isBlank()) return null;
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            sdf.setLenient(false);
-            return sdf.parse(raw.toString());
-        } catch (ParseException e) {
-            throw new IllegalArgumentException("Invalid appointmentDate format, expected dd/MM/yyyy");
-        }
-    }
-
-    public Pageable buildPageable(Map<String, Object> queryParams) {
-        int page = parseIntParam(queryParams, "page", 0);
-        int size = parseIntParam(queryParams, "size", 20);
-        String sortBy = (String) queryParams.getOrDefault("sortBy", "id");
-        String sortDir = (String) queryParams.getOrDefault("sortDir", "asc");
-        Sort sort = sortDir.equalsIgnoreCase("desc")
-                ? Sort.by(sortBy).descending()
-                : Sort.by(sortBy).ascending();
-        return PageRequest.of(page, size, sort);
-    }
-
-    public String formatToDdMMyyyy(LocalDate date) {
-        if (date == null) {
-            return null; // hoặc throw tùy bạn
-        }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return date.format(formatter);
-    }
-
-    public String formatToDdMMyyyy(Date date) {
-        if (date == null) {
-            return null;
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return sdf.format(date);
-    }
-
     public String getAuthHeader(Exchange exchange) {
         String authHeader = exchange.getIn().getHeader("Authorization", String.class);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -180,5 +97,17 @@ public class CommonService {
         String shortCode = uuid.substring(0, 10).toUpperCase();
 
         return prefix + shortCode;
+    }
+
+    public <E extends Enum<E>> E parseEnum(Class<E> enumClass, Object value) {
+        if (value == null) return null;
+        String s = value.toString().trim();
+        if (s.isBlank()) return null;
+        try {
+            return Enum.valueOf(enumClass, s.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            log.warn("Failed to parse enum {} from value '{}'", enumClass.getSimpleName(), s);
+            return null;
+        }
     }
 }

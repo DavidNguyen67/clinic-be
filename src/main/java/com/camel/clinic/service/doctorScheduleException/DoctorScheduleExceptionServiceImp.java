@@ -41,13 +41,11 @@ public class DoctorScheduleExceptionServiceImp implements DoctorScheduleExceptio
         doctorScheduleException.setReason(requestBody.getReason());
 
         String doctorProfileId = requestBody.getDoctorProfileId();
-        if (doctorProfileId != null && !doctorProfileId.isEmpty()) {
-            DoctorProfile doctorProfile = doctorProfileServiceInv.retrieve(doctorProfileId, null).getBody() instanceof DoctorProfile dp ? dp : null;
-            if (doctorProfile == null) {
-                throw new IllegalArgumentException("Doctor Profile with ID " + doctorProfileId + " not found");
-            }
-            doctorScheduleException.setDoctorProfile(doctorProfile);
+        DoctorProfile doctorProfile = doctorProfileServiceInv.retrieve(doctorProfileId, null).getBody() instanceof DoctorProfile dp ? dp : null;
+        if (doctorProfile == null) {
+            throw new IllegalArgumentException("Doctor Profile with ID " + doctorProfileId + " not found");
         }
+        doctorScheduleException.setDoctorProfile(doctorProfile);
 
         return serviceInv.create(doctorScheduleException);
     }

@@ -44,13 +44,12 @@ public class PatientProfileServiceImp implements PatientProfileService {
         patientProfile.setTotalVisits(0);
 
         String userId = requestBody.getUserId();
-        if (userId != null && !userId.isEmpty()) {
-            User user = userServiceInv.retrieve(userId, null).getBody() instanceof User u ? u : null;
-            if (user == null) {
-                throw new IllegalArgumentException("User with ID " + userId + " not found");
-            }
-            patientProfile.setUser(user);
+        User user = userServiceInv.retrieve(userId, null).getBody() instanceof User u ? u : null;
+        if (user == null) {
+            throw new IllegalArgumentException("User with ID " + userId + " not found");
         }
+        commonService.requireRole(user, "PATIENT");
+        patientProfile.setUser(user);
 
         return serviceInv.create(patientProfile);
     }

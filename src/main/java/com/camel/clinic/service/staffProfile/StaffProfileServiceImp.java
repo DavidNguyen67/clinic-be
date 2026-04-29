@@ -41,13 +41,12 @@ public class StaffProfileServiceImp implements StaffProfileService {
         staffProfile.setHireDate(hireDate);
 
         String userId = requestBody.getUserId();
-        if (userId != null && !userId.isEmpty()) {
-            User user = userServiceInv.retrieve(userId, null).getBody() instanceof User u ? u : null;
-            if (user == null) {
-                throw new IllegalArgumentException("User with ID " + userId + " not found");
-            }
-            staffProfile.setUser(user);
+        User user = userServiceInv.retrieve(userId, null).getBody() instanceof User u ? u : null;
+        if (user == null) {
+            throw new IllegalArgumentException("User with ID " + userId + " not found");
         }
+        commonService.requireRole(user, "STAFF");
+        staffProfile.setUser(user);
 
         return serviceInv.create(staffProfile);
     }

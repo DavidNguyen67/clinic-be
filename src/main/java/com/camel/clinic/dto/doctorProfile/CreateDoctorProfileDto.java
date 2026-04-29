@@ -12,7 +12,6 @@ public class CreateDoctorProfileDto {
     @NotBlank(message = "User ID is required")
     private String userId;
 
-
     @NotBlank(message = "Specialty ID is required")
     private String specialtyId;
 

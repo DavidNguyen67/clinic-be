@@ -45,6 +45,14 @@ public class DoctorProfileServiceImp implements DoctorProfileService {
         doctorProfile.setConsultationFee(requestBody.getConsultationFee());
         doctorProfile.setIsFeatured(requestBody.getIsFeatured());
 
+        String userId = requestBody.getUserId();
+        User user = userServiceInv.retrieve(userId, null).getBody() instanceof User u ? u : null;
+        if (user == null) {
+            throw new IllegalArgumentException("User with ID " + userId + " not found");
+        }
+        commonService.requireRole(user, "DOCTOR");
+        doctorProfile.setUser(user);
+
         String specialtyId = requestBody.getSpecialtyId();
         if (specialtyId != null && !specialtyId.isEmpty()) {
             Specialty specialty = specialtyServiceInv.retrieve(specialtyId, null).getBody() instanceof Specialty sp ? sp : null;
@@ -52,15 +60,6 @@ public class DoctorProfileServiceImp implements DoctorProfileService {
                 throw new IllegalArgumentException("Specialty with ID " + specialtyId + " not found");
             }
             doctorProfile.setSpecialty(specialty);
-        }
-
-        String userId = requestBody.getUserId();
-        if (userId != null && !userId.isEmpty()) {
-            User user = userServiceInv.retrieve(userId, null).getBody() instanceof User u ? u : null;
-            if (user == null) {
-                throw new IllegalArgumentException("User with ID " + userId + " not found");
-            }
-            doctorProfile.setUser(user);
         }
 
         return serviceInv.create(doctorProfile);

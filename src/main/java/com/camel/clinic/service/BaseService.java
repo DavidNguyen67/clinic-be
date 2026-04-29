@@ -87,10 +87,10 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
 
             Pageable pageable = PageRequest.of(page, size, sort);
 
-            Specification<T> notDeleted = (root, query, cb) ->
-                    cb.isNull(root.get("deletedAt"));
+            // Subclass có thể override buildSpec() để thêm filter riêng
+            Specification<T> spec = buildSpec(queryParams);
 
-            Page<T> resultPage = repository.findAll(notDeleted, pageable);
+            Page<T> resultPage = repository.findAll(spec, pageable);
 
             ApiPaged<T> paged = ApiPaged.of(
                     resultPage.getContent(),
@@ -259,6 +259,18 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
 
     // ==================== HELPERS ====================
 
+    protected Specification<T> hasField(String fieldName, Object value) {
+        if (value == null) return null;
+        if (value instanceof String s && s.isBlank()) return null;
+        return (root, query, cb) -> cb.equal(root.get(fieldName), value);
+    }
+
+    protected Specification<T> fieldLike(String fieldName, String keyword) {
+        if (keyword == null || keyword.isBlank()) return null;
+        return (root, query, cb) ->
+                cb.like(cb.lower(root.get(fieldName)), "%" + keyword.toLowerCase() + "%");
+    }
+
     /**
      * Lọc fields của entity trước khi trả về response.
      * Nếu fields == null hoặc rỗng thì trả về toàn bộ entity.
@@ -294,4 +306,16 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
         }
     }
 
+    protected Specification<T> buildSpec(Map<String, Object> queryParams) {
+        return buildBaseSpec(queryParams); // default: chỉ filter notDeleted + status
+    }
+
+    protected Specification<T> buildBaseSpec(Map<String, Object> queryParams) {
+        return Specification
+                .where(notDeleted());
+    }
+
+    protected Specification<T> notDeleted() {
+        return (root, query, cb) -> cb.isNull(root.get("deletedAt"));
+    }
 }
