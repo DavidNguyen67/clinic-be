@@ -24,13 +24,7 @@ public class GetUserProfile implements Processor {
     public void process(Exchange exchange) throws Exception {
         String accessToken = commonService.getAuthHeader(exchange);
         String userIdStr = jwtUtil.getUserIdFromToken(accessToken);
-        UUID userId;
-        try {
-            userId = UUID.fromString(userIdStr);
-        } catch (Exception e) {
-            log.error("Invalid user ID in token: {}", userIdStr, e);
-            throw new RuntimeException("Invalid user ID in token: " + e.getMessage());
-        }
+        UUID userId = commonService.parseUuid(userIdStr);
 
         ResponseEntity<?> response = authServiceImp.getUserProfile(userId);
         exchange.getIn().setBody(response);

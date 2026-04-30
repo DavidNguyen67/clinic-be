@@ -332,5 +332,4 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
             return defaultValue;
         }
     }
-
 }

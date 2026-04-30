@@ -123,4 +123,16 @@ public class CommonService {
             return null;
         }
     }
+
+    public UUID parseUuid(Object value) {
+        if (value == null) return null;
+        String s = value.toString().trim();
+        if (s.isBlank()) return null;
+        try {
+            return UUID.fromString(s);
+        } catch (IllegalArgumentException e) {
+            log.warn("Failed to parse UUID from value '{}'", s);
+            return null;
+        }
+    }
 }

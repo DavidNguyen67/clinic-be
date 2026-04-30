@@ -26,7 +26,7 @@ public class ClinicService extends SoftDeletableEntity {
     @JoinColumn(name = "specialty_id", foreignKey = @ForeignKey(name = "fk_service_specialty"))
     @JsonBackReference("specialty-services")
     private Specialty specialty;
-    
+
     @NotBlank()
     @Column(nullable = false, length = 255)
     private String name;

@@ -34,7 +34,7 @@ public class Specialty extends SoftDeletableEntity {
     private String description;
 
     @OneToMany(mappedBy = "specialty", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
+    @JsonIgnore()
     private List<ClinicService> services = new ArrayList<>();
 
     @Column(length = 500)
@@ -53,7 +53,7 @@ public class Specialty extends SoftDeletableEntity {
 
     @OneToMany(mappedBy = "specialty", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("specialty-items")
-    @JsonIgnore
+    @JsonIgnore()
     private List<DoctorProfile> doctorProfiles = new ArrayList<>();
 
     public enum SpecialtyType {

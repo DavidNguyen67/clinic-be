@@ -24,6 +24,7 @@ public class SpecialtyServiceInv extends BaseService<Specialty, SpecialtyReposit
     protected Specification<Specialty> buildSpec(Map<String, Object> queryParams) {
         return Specification.<Specialty>unrestricted()
                 .and(notDeleted())
+                .and(fieldLike("slug", (String) queryParams.get("slug")))
                 .and(hasField("isActive", commonService.parseBoolean(queryParams.get("isActive"))));
     }
 }

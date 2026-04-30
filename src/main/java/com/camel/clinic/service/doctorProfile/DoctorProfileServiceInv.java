@@ -26,10 +26,12 @@ public class DoctorProfileServiceInv extends BaseService<DoctorProfile, DoctorPr
         return Specification.<DoctorProfile>unrestricted()
                 .and(notDeleted())
                 .and((root, query, cb) -> {
-                    root.fetch("user", JoinType.LEFT);
-                    root.fetch("specialty", JoinType.LEFT);
                     assert query != null;
-                    query.distinct(true);
+                    if (!query.getResultType().equals(Long.class)) {
+                        root.fetch("user", JoinType.LEFT);
+                        root.fetch("specialty", JoinType.LEFT);
+                        query.distinct(true);
+                    }
                     return cb.conjunction();
                 })
                 .and(hasField("isFeatured", commonService.parseBoolean(queryParams.get("isFeatured"))))

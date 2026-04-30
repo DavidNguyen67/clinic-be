@@ -151,7 +151,7 @@ public class AuthServiceImp implements AuthService {
         if (!tokenStoreService.matchesRefreshToken(userId, refreshToken)) {
             throw new BadRequestException("Refresh token revoked");
         }
-        User user = authServiceInv.findById(java.util.UUID.fromString(userId))
+        User user = authServiceInv.findById(commonService.parseUuid((userId)))
                 .orElseThrow(() -> new BadRequestException("User not found"));
 
         String newAccessToken = jwtUtil.generateToken(user);
