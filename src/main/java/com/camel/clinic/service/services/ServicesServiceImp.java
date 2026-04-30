@@ -57,7 +57,10 @@ public class ServicesServiceImp implements ServicesService {
 
     @Override
     public ResponseEntity<?> update(String id, UpdateServiceDto requestBody) {
-        ClinicService clinicService = new ClinicService();
+        ClinicService clinicService = serviceInv.retrieve(id, null).getBody() instanceof ClinicService cs ? cs : null;
+        if (clinicService == null) {
+            throw new IllegalArgumentException("ClinicService with ID " + id + " not found");
+        }
         clinicService.setName(requestBody.getName());
         clinicService.setSlug(requestBody.getSlug());
         clinicService.setDescription(requestBody.getDescription());

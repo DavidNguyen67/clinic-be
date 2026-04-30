@@ -56,7 +56,10 @@ public class PatientProfileServiceImp implements PatientProfileService {
 
     @Override
     public ResponseEntity<?> update(String id, UpdatePatientProfileDto requestBody) {
-        PatientProfile patientProfile = new PatientProfile();
+        PatientProfile patientProfile = serviceInv.retrieve(id, null).getBody() instanceof PatientProfile pp ? pp : null;
+        if (patientProfile == null) {
+            throw new IllegalArgumentException("PatientProfile with ID " + id + " not found");
+        }
         patientProfile.setBloodType(requestBody.getBloodType());
         patientProfile.setAllergies(requestBody.getAllergies());
         patientProfile.setAddress(requestBody.getAddress());

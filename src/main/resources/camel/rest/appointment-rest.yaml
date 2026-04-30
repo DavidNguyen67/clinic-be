@@ -1,0 +1,33 @@
+- rest:
+    path: /v1/admin/appointment
+    post:
+      - path: /
+        to: direct:appointment-create
+    get:
+      - path: /
+        to: direct:appointment-list
+      - path: /count
+        to: direct:appointment-count
+      - path: /{id}
+        to: direct:appointment-get
+    patch:
+      - path: /{id}
+        to: direct:appointment-update
+      - path: /restore/{id}
+        to: direct:appointment-restore
+    delete:
+      - path: /{id}
+        to: direct:appointment-delete
+
+- rest:
+    path: /v1/public/appointment
+    get:
+      - path: /
+        to: direct:public-appointment-list
+      - path: /count
+        to: direct:public-appointment-count
+      - path: /{id}
+        to: direct:public-appointment-get
+    post:
+      - path: /
+        to: direct:public-appointment-create

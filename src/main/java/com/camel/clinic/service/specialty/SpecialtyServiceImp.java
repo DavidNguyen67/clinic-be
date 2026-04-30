@@ -42,7 +42,10 @@ public class SpecialtyServiceImp implements SpecialtyService {
 
     @Override
     public ResponseEntity<?> update(String id, UpdateSpecialtyDto requestBody) {
-        Specialty specialty = new Specialty();
+        Specialty specialty = serviceInv.retrieve(id, null).getBody() instanceof Specialty s ? s : null;
+        if (specialty == null) {
+            throw new IllegalArgumentException("Specialty with ID " + id + " not found");
+        }
         specialty.setName(requestBody.getName());
         specialty.setSlug(requestBody.getSlug());
         specialty.setDescription(requestBody.getDescription());

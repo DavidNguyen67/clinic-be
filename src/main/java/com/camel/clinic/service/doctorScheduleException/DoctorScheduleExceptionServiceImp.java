@@ -52,7 +52,10 @@ public class DoctorScheduleExceptionServiceImp implements DoctorScheduleExceptio
 
     @Override
     public ResponseEntity<?> update(String id, UpdateDoctorScheduleExceptionDto requestBody) {
-        DoctorScheduleException doctorScheduleException = new DoctorScheduleException();
+        DoctorScheduleException doctorScheduleException = serviceInv.retrieve(id, null).getBody() instanceof DoctorScheduleException dse ? dse : null;
+        if (doctorScheduleException == null) {
+            throw new IllegalArgumentException("DoctorScheduleException with ID " + id + " not found");
+        }
         Date exceptionDate = commonService.parseToDate(requestBody.getExceptionDate());
         doctorScheduleException.setExceptionDate(exceptionDate);
         doctorScheduleException.setType(requestBody.getType());

@@ -105,11 +105,15 @@ public class CommonService {
         return generateCode("PAT");
     }
 
+    public String generateAppointmentCode() {
+        return generateCode("APT");
+    }
+
     public String generateCode(String prefix) {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         String shortCode = uuid.substring(0, 10).toUpperCase();
 
-        return prefix + shortCode;
+        return prefix + "-" + shortCode;
     }
 
     public <E extends Enum<E>> E parseEnum(Class<E> enumClass, Object value) {

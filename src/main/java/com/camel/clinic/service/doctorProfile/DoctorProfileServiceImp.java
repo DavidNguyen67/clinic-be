@@ -67,7 +67,11 @@ public class DoctorProfileServiceImp implements DoctorProfileService {
 
     @Override
     public ResponseEntity<?> update(String id, UpdateDoctorProfileDto requestBody) {
-        DoctorProfile doctorProfile = new DoctorProfile();
+        DoctorProfile doctorProfile = serviceInv.retrieve(id, null).getBody() instanceof DoctorProfile dp ? dp : null;
+        if (doctorProfile == null) {
+            throw new IllegalArgumentException("DoctorProfile with ID " + id + " not found");
+        }
+
         doctorProfile.setDegree(requestBody.getDegree());
         doctorProfile.setExperienceYears(requestBody.getExperienceYears());
         doctorProfile.setEducation(requestBody.getEducation());

@@ -1,0 +1,141 @@
+- onException:
+    exception:
+      - java.lang.Exception
+    handled:
+      constant: true
+    steps:
+      - process:
+          ref: exceptionProcessor
+      - marshal:
+          json: { }
+
+- route:
+    id: appointment-list-route
+    from:
+      uri: direct:appointment-list
+      steps:
+        - process:
+            ref: appointmentListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: appointment-count-route
+    from:
+      uri: direct:appointment-count
+      steps:
+        - process:
+            ref: appointmentCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: appointment-get-route
+    from:
+      uri: direct:appointment-get
+      steps:
+        - process:
+            ref: appointmentGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: appointment-create-route
+    from:
+      uri: direct:appointment-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.appointment.CreateAppointmentDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: appointmentCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: appointment-update-route
+    from:
+      uri: direct:appointment-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.appointment.UpdateAppointmentDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: appointmentUpdateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: appointment-restore-route
+    from:
+      uri: direct:appointment-restore
+      steps:
+        - process:
+            ref: appointmentRestoreProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: appointment-delete-route
+    from:
+      uri: direct:appointment-delete
+      steps:
+        - process:
+            ref: appointmentDeleteProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-appointment-list-route
+    from:
+      uri: direct:public-appointment-list
+      steps:
+        - process:
+            ref: appointmentListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-appointment-count-route
+    from:
+      uri: direct:public-appointment-count
+      steps:
+        - process:
+            ref: appointmentCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-appointment-get-route
+    from:
+      uri: direct:public-appointment-get
+      steps:
+        - process:
+            ref: appointmentGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-appointment-create-route
+    from:
+      uri: direct:public-appointment-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.appointment.CreateAppointmentDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: appointmentCreateProcessor
+        - marshal:
+            json: { }

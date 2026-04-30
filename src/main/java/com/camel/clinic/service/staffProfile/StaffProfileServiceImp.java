@@ -36,6 +36,7 @@ public class StaffProfileServiceImp implements StaffProfileService {
     public ResponseEntity<?> create(CreateStaffProfileDto requestBody) {
         StaffProfile staffProfile = new StaffProfile();
         staffProfile.setPosition(requestBody.getPosition());
+        staffProfile.setStaffCode(commonService.generateStaffCode());
         staffProfile.setDepartment(requestBody.getDepartment());
         Date hireDate = commonService.parseToDate(requestBody.getHireDate());
         staffProfile.setHireDate(hireDate);
@@ -53,7 +54,10 @@ public class StaffProfileServiceImp implements StaffProfileService {
 
     @Override
     public ResponseEntity<?> update(String id, UpdateStaffProfileDto requestBody) {
-        StaffProfile staffProfile = new StaffProfile();
+        StaffProfile staffProfile = serviceInv.retrieve(id, null).getBody() instanceof StaffProfile sp ? sp : null;
+        if (staffProfile == null) {
+            throw new IllegalArgumentException("StaffProfile with ID " + id + " not found");
+        }
         staffProfile.setPosition(requestBody.getPosition());
         staffProfile.setDepartment(requestBody.getDepartment());
         Date hireDate = commonService.parseToDate(requestBody.getHireDate());
