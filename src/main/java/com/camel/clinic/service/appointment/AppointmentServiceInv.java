@@ -1,7 +1,7 @@
 package com.camel.clinic.service.appointment;
 
 import com.camel.clinic.dto.ApiPaged;
-import com.camel.clinic.dto.appointment.AppointmentResponseDto;
+import com.camel.clinic.dto.appointment.ResponseAppointmentDto;
 import com.camel.clinic.entity.Appointment;
 import com.camel.clinic.repository.AppointmentRepository;
 import com.camel.clinic.service.BaseService;
@@ -30,9 +30,9 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
         ResponseEntity<?> base = super.list(queryParams);
 
         if (base.getBody() instanceof ApiPaged<?> paged) {
-            List<AppointmentResponseDto> data = paged.getData().stream()
+            List<ResponseAppointmentDto> data = paged.getData().stream()
                     .filter(e -> e instanceof Appointment)
-                    .map(e -> AppointmentResponseDto.from((Appointment) e))
+                    .map(e -> ResponseAppointmentDto.from((Appointment) e))
                     .toList();
 
             return ResponseEntity.ok(ApiPaged.of(
@@ -52,7 +52,7 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
     public ResponseEntity<?> retrieve(String id, String fields) {
         ResponseEntity<?> base = super.retrieve(id, fields);
         if (base.getBody() instanceof Appointment record) {
-            return ResponseEntity.ok(AppointmentResponseDto.from(record));
+            return ResponseEntity.ok(ResponseAppointmentDto.from(record));
         }
         return base;
     }
@@ -61,7 +61,7 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
     public ResponseEntity<?> restore(String id) {
         ResponseEntity<?> base = super.restore(id);
         if (base.getBody() instanceof Appointment record) {
-            return ResponseEntity.ok(AppointmentResponseDto.from(record));
+            return ResponseEntity.ok(ResponseAppointmentDto.from(record));
         }
         return base;
     }

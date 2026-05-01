@@ -1,8 +1,8 @@
 package com.camel.clinic.service.appointment;
 
 import com.camel.clinic.dto.ApiPaged;
-import com.camel.clinic.dto.appointment.AppointmentResponseDto;
 import com.camel.clinic.dto.appointment.CreateAppointmentDto;
+import com.camel.clinic.dto.appointment.ResponseAppointmentDto;
 import com.camel.clinic.dto.appointment.UpdateAppointmentDto;
 import com.camel.clinic.entity.*;
 import com.camel.clinic.exception.BadRequestException;
@@ -98,7 +98,7 @@ public class AppointmentServiceImp implements AppointmentService {
         appointment.setStatus(Appointment.AppointmentStatus.PENDING);
 
         ResponseEntity<Appointment> saved = (ResponseEntity<Appointment>) serviceInv.create(appointment);
-        return ResponseEntity.ok(AppointmentResponseDto.from(saved.getBody()));
+        return ResponseEntity.ok(ResponseAppointmentDto.from(saved.getBody()));
     }
 
     @Override
@@ -194,7 +194,7 @@ public class AppointmentServiceImp implements AppointmentService {
 
         ResponseEntity<Appointment> saved = (ResponseEntity<Appointment>) serviceInv.update(id, appointment, null);
 
-        return ResponseEntity.ok(AppointmentResponseDto.from(saved.getBody()));
+        return ResponseEntity.ok(ResponseAppointmentDto.from(saved.getBody()));
     }
 
     @Override

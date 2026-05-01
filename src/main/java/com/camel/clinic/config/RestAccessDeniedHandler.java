@@ -1,6 +1,6 @@
 package com.camel.clinic.config;
 
-import com.camel.clinic.dto.RestErrorResponse;
+import com.camel.clinic.dto.RestErrorDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +32,7 @@ public class RestAccessDeniedHandler implements AccessDeniedHandler {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        RestErrorResponse errorResponse = new RestErrorResponse();
+        RestErrorDto errorResponse = new RestErrorDto();
         errorResponse.setStatusCode("FORBIDDEN");
         errorResponse.setStatusCodeValue(HttpServletResponse.SC_FORBIDDEN);
         errorResponse.setBody(accessDeniedException.getMessage());

@@ -12,7 +12,7 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RestErrorResponse {
+public class RestErrorDto {
     private Map<String, Object> headers = new HashMap<>();
     private Object body;
     private String statusCode;

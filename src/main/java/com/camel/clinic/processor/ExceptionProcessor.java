@@ -1,6 +1,6 @@
 package com.camel.clinic.processor;
 
-import com.camel.clinic.dto.RestErrorResponse;
+import com.camel.clinic.dto.RestErrorDto;
 import com.camel.clinic.exception.BadRequestException;
 import com.camel.clinic.exception.NotFoundException;
 import com.camel.clinic.exception.UnauthorizedException;
@@ -56,7 +56,7 @@ public class ExceptionProcessor implements Processor {
 
         message = resolveMessage(cause, status);
 
-        RestErrorResponse errorResponse = new RestErrorResponse();
+        RestErrorDto errorResponse = new RestErrorDto();
         errorResponse.setStatusCode(code);
         errorResponse.setStatusCodeValue(status);
         errorResponse.setBody(message);

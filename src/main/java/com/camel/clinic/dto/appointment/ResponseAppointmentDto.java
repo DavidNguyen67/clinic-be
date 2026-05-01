@@ -13,7 +13,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppointmentResponseDto {
+public class ResponseAppointmentDto {
     private String id;
     private String appointmentCode;
 
@@ -64,8 +64,8 @@ public class AppointmentResponseDto {
     )
     private Date deletedAt;
 
-    public static AppointmentResponseDto from(Appointment a) {
-        AppointmentResponseDto res = new AppointmentResponseDto();
+    public static ResponseAppointmentDto from(Appointment a) {
+        ResponseAppointmentDto res = new ResponseAppointmentDto();
         res.setId(a.getId().toString());
         res.setAppointmentCode(a.getAppointmentCode());
         res.setAppointmentDate(a.getAppointmentDate());
