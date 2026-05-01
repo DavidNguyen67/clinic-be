@@ -1,0 +1,30 @@
+- rest:
+    path: /v1/admin/faq
+    post:
+      - path: /
+        to: direct:faq-create
+    get:
+      - path: /
+        to: direct:faq-list
+      - path: /count
+        to: direct:faq-count
+      - path: /{id}
+        to: direct:faq-get
+    patch:
+      - path: /{id}
+        to: direct:faq-update
+      - path: /restore/{id}
+        to: direct:faq-restore
+    delete:
+      - path: /{id}
+        to: direct:faq-delete
+
+- rest:
+    path: /v1/public/faq
+    get:
+      - path: /
+        to: direct:public-faq-list
+      - path: /count
+        to: direct:public-faq-count
+      - path: /{id}
+        to: direct:public-faq-get

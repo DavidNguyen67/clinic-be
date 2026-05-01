@@ -1,0 +1,124 @@
+- onException:
+    exception:
+      - java.lang.Exception
+    handled:
+      constant: true
+    steps:
+      - process:
+          ref: exceptionProcessor
+      - marshal:
+          json: { }
+
+- route:
+    id: faq-list-route
+    from:
+      uri: direct:faq-list
+      steps:
+        - process:
+            ref: faqListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: faq-count-route
+    from:
+      uri: direct:faq-count
+      steps:
+        - process:
+            ref: faqCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: faq-get-route
+    from:
+      uri: direct:faq-get
+      steps:
+        - process:
+            ref: faqGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: faq-create-route
+    from:
+      uri: direct:faq-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.faq.CreateFaqDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: faqCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: faq-update-route
+    from:
+      uri: direct:faq-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.faq.UpdateFaqDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: faqUpdateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: faq-restore-route
+    from:
+      uri: direct:faq-restore
+      steps:
+        - process:
+            ref: faqRestoreProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: faq-delete-route
+    from:
+      uri: direct:faq-delete
+      steps:
+        - process:
+            ref: faqDeleteProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-faq-list-route
+    from:
+      uri: direct:public-faq-list
+      steps:
+        - process:
+            ref: faqListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-faq-count-route
+    from:
+      uri: direct:public-faq-count
+      steps:
+        - process:
+            ref: faqCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-faq-get-route
+    from:
+      uri: direct:public-faq-get
+      steps:
+        - process:
+            ref: faqGetProcessor
+        - marshal:
+            json: { }
