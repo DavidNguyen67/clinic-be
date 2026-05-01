@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -42,6 +43,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
     /**
      * Tạo mới một bản ghi
      */
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> create(T data) {
         try {
             T initObject = entityFactory.get();
@@ -156,6 +158,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
     /**
      * Cập nhật bản ghi theo id (partial update — chỉ ghi đè field không null)
      */
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> update(String id, T data, String fields) {
         try {
             T existing = repository.findById(UUID.fromString(id))
@@ -184,6 +187,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
     /**
      * Xóa bản ghi theo id
      */
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> delete(String id) {
         try {
             if (!repository.existsById(UUID.fromString(id))) {
@@ -207,6 +211,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
     /**
      * Khôi phục bản ghi đã bị soft-delete
      */
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> restore(String id) {
         try {
             Specification<T> spec = (root, query, cb) -> cb.and(
@@ -331,5 +336,50 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
         } catch (NumberFormatException e) {
             return defaultValue;
         }
+    }
+
+    // Trong BaseService hoặc 1 class SpecificationUtils riêng
+    protected <T, V> Specification<T> fieldIn(String fieldName, Object raw, Class<V> type) {
+        if (raw == null) return Specification.unrestricted();
+
+        // Single value
+        if (type.isInstance(raw)) {
+            V value = type.cast(raw);
+            return (root, query, cb) -> cb.equal(root.get(fieldName), value);
+        }
+
+        // List value
+        if (raw instanceof List<?> list && !list.isEmpty()) {
+            List<V> values = list.stream()
+                    .filter(type::isInstance)
+                    .map(type::cast)
+                    .toList();
+            if (values.isEmpty()) return Specification.unrestricted();
+            return (root, query, cb) -> root.get(fieldName).in(values);
+        }
+
+        return Specification.unrestricted();
+    }
+
+    protected <T> Specification<T> fieldOnDate(String fieldName, Date date) {
+        if (date == null) return Specification.unrestricted();
+        return (root, query, cb) -> {
+            Calendar cal = Calendar.getInstance();
+
+            cal.setTime(date);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            Date startOfDay = cal.getTime();
+
+            cal.set(Calendar.HOUR_OF_DAY, 23);
+            cal.set(Calendar.MINUTE, 59);
+            cal.set(Calendar.SECOND, 59);
+            cal.set(Calendar.MILLISECOND, 999);
+            Date endOfDay = cal.getTime();
+
+            return cb.between(root.get(fieldName), startOfDay, endOfDay);
+        };
     }
 }

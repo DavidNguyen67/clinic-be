@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Map;
 
 @Slf4j
@@ -38,6 +39,8 @@ public class DoctorScheduleExceptionServiceInv extends BaseService<DoctorSchedul
                     return cb.conjunction();
                 })
                 .and(hasField("type", commonService.parseEnum(DoctorScheduleException.ExceptionType.class, queryParams.get("type"))))
-                .and(hasNestedField("doctorProfile", "id", commonService.parseUuid(queryParams.get("doctorId"))));
+                .and(hasNestedField("doctorProfile", "id", commonService.parseUuid(queryParams.get("doctorId"))))
+                .and(fieldOnDate("exceptionDate", (Date) queryParams.get("exceptionDate")));
+
     }
 }

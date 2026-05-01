@@ -13,10 +13,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -93,6 +90,7 @@ public class CommonService {
         return authHeader.substring(7);
     }
 
+
     public String generateDoctorCode() {
         return generateCode("DOC");
     }
@@ -138,5 +136,16 @@ public class CommonService {
             log.warn("Failed to parse UUID from value '{}'", s);
             return null;
         }
+    }
+
+    public String formatDate(Date date) {
+        return formatDate(date, "HH:mm:ss dd/MM/yyyy");
+    }
+
+    public String formatDate(Date date, String pattern) {
+        if (date == null) return null;
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        sdf.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+        return sdf.format(date);
     }
 }

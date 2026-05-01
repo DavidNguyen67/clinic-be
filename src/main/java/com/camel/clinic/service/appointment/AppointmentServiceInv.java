@@ -1,15 +1,19 @@
 package com.camel.clinic.service.appointment;
 
+import com.camel.clinic.dto.ApiPaged;
+import com.camel.clinic.dto.appointment.AppointmentResponseDto;
 import com.camel.clinic.entity.Appointment;
 import com.camel.clinic.repository.AppointmentRepository;
 import com.camel.clinic.service.BaseService;
 import jakarta.persistence.criteria.JoinType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -18,6 +22,48 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
 
     public AppointmentServiceInv(AppointmentRepository repository) {
         super(Appointment::new, repository);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> list(Map<String, Object> queryParams) {
+        ResponseEntity<?> base = super.list(queryParams);
+
+        if (base.getBody() instanceof ApiPaged<?> paged) {
+            List<AppointmentResponseDto> data = paged.getData().stream()
+                    .filter(e -> e instanceof Appointment)
+                    .map(e -> AppointmentResponseDto.from((Appointment) e))
+                    .toList();
+
+            return ResponseEntity.ok(ApiPaged.of(
+                    data,
+                    paged.getTotal(),
+                    paged.getPage(),
+                    paged.getSize(),
+                    paged.getTotalPages()
+            ));
+        }
+
+        return base;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> retrieve(String id, String fields) {
+        ResponseEntity<?> base = super.retrieve(id, fields);
+        if (base.getBody() instanceof Appointment record) {
+            return ResponseEntity.ok(AppointmentResponseDto.from(record));
+        }
+        return base;
+    }
+
+    @Override
+    public ResponseEntity<?> restore(String id) {
+        ResponseEntity<?> base = super.restore(id);
+        if (base.getBody() instanceof Appointment record) {
+            return ResponseEntity.ok(AppointmentResponseDto.from(record));
+        }
+        return base;
     }
 
     @Override
@@ -35,31 +81,9 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
                     }
                     return cb.conjunction();
                 })
-                .and(hasField("status", queryParams.get("status")))
+                .and(fieldIn("status", queryParams.get("status"), Appointment.AppointmentStatus.class))
                 .and(hasNestedField("doctorProfile", "id", queryParams.get("doctorProfileId")))
                 .and(hasNestedField("patientProfile", "id", queryParams.get("patientProfileId")))
-                .and(appointmentOnDate((Date) queryParams.get("appointmentDate")));
-    }
-
-    private Specification<Appointment> appointmentOnDate(Date date) {
-        if (date == null) return Specification.unrestricted();
-        return (root, query, cb) -> {
-            Calendar cal = Calendar.getInstance();
-
-            cal.setTime(date);
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            Date startOfDay = cal.getTime();
-
-            cal.set(Calendar.HOUR_OF_DAY, 23);
-            cal.set(Calendar.MINUTE, 59);
-            cal.set(Calendar.SECOND, 59);
-            cal.set(Calendar.MILLISECOND, 999);
-            Date endOfDay = cal.getTime();
-
-            return cb.between(root.get("appointmentDate"), startOfDay, endOfDay);
-        };
+                .and(fieldOnDate("appointmentDate", (Date) queryParams.get("appointmentDate")));
     }
 }
