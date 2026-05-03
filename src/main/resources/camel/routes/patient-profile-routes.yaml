@@ -8,7 +8,7 @@
           ref: exceptionProcessor
       - marshal:
           json: { }
-          
+
 - route:
     id: patient-profile-list-route
     from:
@@ -90,5 +90,15 @@
       steps:
         - process:
             ref: patientProfileDeleteProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-patient-profile-count-route
+    from:
+      uri: direct:public-patient-profile-count
+      steps:
+        - process:
+            ref: patientProfileCountProcessor
         - marshal:
             json: { }

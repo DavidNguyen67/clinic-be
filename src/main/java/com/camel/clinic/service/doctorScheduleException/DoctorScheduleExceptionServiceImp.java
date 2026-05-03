@@ -1,5 +1,6 @@
 package com.camel.clinic.service.doctorScheduleException;
 
+import com.camel.clinic.dto.ApiPaged;
 import com.camel.clinic.dto.doctorScheduleException.CreateDoctorScheduleExceptionDto;
 import com.camel.clinic.dto.doctorScheduleException.UpdateDoctorScheduleExceptionDto;
 import com.camel.clinic.entity.DoctorProfile;
@@ -12,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -36,6 +39,13 @@ public class DoctorScheduleExceptionServiceImp implements DoctorScheduleExceptio
     public ResponseEntity<?> create(CreateDoctorScheduleExceptionDto requestBody) {
         DoctorScheduleException doctorScheduleException = new DoctorScheduleException();
         Date exceptionDate = commonService.parseToDate(requestBody.getExceptionDate());
+
+        List<DoctorScheduleException> existingExceptionsResponse = getCurrentDoctorScheduleException(requestBody.getDoctorProfileId(), exceptionDate);
+
+        if (existingExceptionsResponse != null && !existingExceptionsResponse.isEmpty()) {
+            throw new IllegalArgumentException("A DoctorScheduleException already exists for doctor profile ID " + requestBody.getDoctorProfileId() + " on date " + exceptionDate);
+        }
+
         doctorScheduleException.setExceptionDate(exceptionDate);
         doctorScheduleException.setType(requestBody.getType());
         doctorScheduleException.setReason(requestBody.getReason());
@@ -79,4 +89,24 @@ public class DoctorScheduleExceptionServiceImp implements DoctorScheduleExceptio
     public ResponseEntity<?> list(Map<String, Object> queryParams) {
         return serviceInv.list(queryParams);
     }
+
+    private List<DoctorScheduleException> getCurrentDoctorScheduleException(String doctorProfileId, Date exceptionDate) {
+        Map<String, Object> queryParams = Map.of(
+                "doctorId", doctorProfileId,
+                "exceptionDate", exceptionDate
+        );
+        ResponseEntity<?> response = serviceInv.list(queryParams);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            ApiPaged<DoctorScheduleException> responseBody = (ApiPaged<DoctorScheduleException>) response.getBody();
+
+            assert responseBody != null;
+            return responseBody.getData().stream()
+                    .filter(Objects::nonNull)
+                    .toList();
+        } else {
+            throw new RuntimeException("Failed to retrieve DoctorScheduleException for doctor profile ID " + doctorProfileId + " and date " + exceptionDate + ": " + response.getBody());
+        }
+    }
+
 }

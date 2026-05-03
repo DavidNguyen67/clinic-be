@@ -104,6 +104,16 @@
             json: { }
 
 - route:
+    id: public-specialty-list-with-doctor-count-route
+    from:
+      uri: direct:public-specialty-list-with-doctor-count
+      steps:
+        - process:
+            ref: specialtyListWithDoctorCountProcessor
+        - marshal:
+            json: { }
+
+- route:
     id: public-specialty-count-route
     from:
       uri: direct:public-specialty-count

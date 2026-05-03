@@ -18,3 +18,9 @@
     delete:
       - path: /{id}
         to: direct:patient-profile-delete
+
+- rest:
+    path: /v1/public/patient-profile
+    get:
+      - path: /count
+        to: direct:public-patient-profile-count

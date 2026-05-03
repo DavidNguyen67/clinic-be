@@ -382,4 +382,13 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
             return cb.between(root.get(fieldName), startOfDay, endOfDay);
         };
     }
+
+    protected Specification<T> fieldBetweenDates(String fieldName, Date from, Date to) {
+        return (root, query, cb) -> {
+            if (from == null && to == null) return cb.conjunction();
+            if (from == null) return cb.lessThanOrEqualTo(root.get(fieldName), to);
+            if (to == null) return cb.greaterThanOrEqualTo(root.get(fieldName), from);
+            return cb.between(root.get(fieldName), from, to);
+        };
+    }
 }

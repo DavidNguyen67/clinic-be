@@ -24,6 +24,8 @@
     get:
       - path: /
         to: direct:public-specialty-list
+      - path: /with-doctor-count
+        to: direct:public-specialty-list-with-doctor-count
       - path: /count
         to: direct:public-specialty-count
       - path: /{id}

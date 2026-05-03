@@ -68,6 +68,11 @@ public class SpecialtyServiceImp implements SpecialtyService {
     }
 
     @Override
+    public ResponseEntity<?> listWithDoctorCount(Map<String, Object> queryParams) {
+        return serviceInv.listWithDoctorCount(queryParams);
+    }
+
+    @Override
     public ResponseEntity<?> list(Map<String, Object> queryParams) {
         return serviceInv.list(queryParams);
     }

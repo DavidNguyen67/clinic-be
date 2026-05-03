@@ -40,7 +40,9 @@ public class DoctorScheduleExceptionServiceInv extends BaseService<DoctorSchedul
                 })
                 .and(hasField("type", commonService.parseEnum(DoctorScheduleException.ExceptionType.class, queryParams.get("type"))))
                 .and(hasNestedField("doctorProfile", "id", commonService.parseUuid(queryParams.get("doctorId"))))
-                .and(fieldOnDate("exceptionDate", (Date) queryParams.get("exceptionDate")));
+                .and(fieldOnDate("exceptionDate", (Date) queryParams.get("exceptionDate")))
+                .and(fieldBetweenDates("exceptionDate",
+                        commonService.parseToDate((String) queryParams.get("from")), commonService.parseToDate((String) queryParams.get("to"))));
 
     }
 }

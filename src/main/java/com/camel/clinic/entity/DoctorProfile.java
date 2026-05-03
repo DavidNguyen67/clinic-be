@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 @Getter
 public class DoctorProfile extends SoftDeletableEntity {
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", unique = true, nullable = false, foreignKey = @ForeignKey(name = "fk_doctor_user"))
     @NotNull()
     private User user;
@@ -31,7 +31,7 @@ public class DoctorProfile extends SoftDeletableEntity {
     @Column(name = "doctor_code", unique = true, nullable = false, length = 20)
     private String doctorCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "specialty_id", nullable = false, foreignKey = @ForeignKey(name = "fk_doctor_specialty"))
     @NotNull()
     private Specialty specialty;

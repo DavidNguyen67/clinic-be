@@ -20,4 +20,6 @@ public interface SpecialtyService {
     ResponseEntity<?> delete(String id);
 
     ResponseEntity<?> restore(String id);
+
+    ResponseEntity<?> listWithDoctorCount(Map<String, Object> queryParams);
 }
