@@ -33,7 +33,7 @@ public class SpecialtyServiceInv extends BaseService<Specialty, SpecialtyReposit
         return Specification.<Specialty>unrestricted()
                 .and(notDeleted())
                 .and(fieldLike("slug", (String) queryParams.get("slug")))
-                .and(hasField("isActive", CommonService.parseBoolean(queryParams.get("isActive"))));
+                .and(fieldEquals("isActive", CommonService.parseBoolean(queryParams.get("isActive"))));
     }
 
     public ResponseEntity<?> listWithDoctorCount(Map<String, Object> queryParams) {

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -82,8 +83,29 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
                     return cb.conjunction();
                 })
                 .and(fieldIn("status", queryParams.get("status"), Appointment.AppointmentStatus.class))
-                .and(hasNestedField("doctorProfile", "id", CommonService.parseUuid(queryParams.get("doctorProfileId"))))
-                .and(hasNestedField("patientProfile", "id", CommonService.parseUuid(queryParams.get("patientProfileId"))))
-                .and(fieldOnDate("appointmentDate", CommonService.parseToDate((String) queryParams.get("appointmentDate"))));
+                .and(nestedFieldEqual("doctorProfile", "id", CommonService.parseUuid(queryParams.get("doctorProfileId"))))
+                .and(nestedFieldEqual("patientProfile", "id", CommonService.parseUuid(queryParams.get("patientProfileId"))))
+                .and(fieldOnDate("appointmentDate",
+                        CommonService.parseToDate(
+                                (String) queryParams.get("appointmentDate"))))
+                .and(fieldBetweenDates("appointmentDate",
+                        CommonService.parseToDate((String) queryParams.get("fromDate"), "HH:mm dd/MM/yyyy"),
+                        CommonService.parseToDate((String) queryParams.get("toDate"), "HH:mm dd/MM/yyyy")
+                ));
+    }
+
+    public boolean isExistAppointmentForDoctorAt(String doctorProfileId, Date appointmentDate) {
+        String dateStr = CommonService.formatDate(appointmentDate, "HH:mm dd/MM/yyyy");
+        Date date = CommonService.parseToDate(dateStr, "HH:mm dd/MM/yyyy");
+        Date toDate = new Date(date.getTime() + 59 * 60 * 1000); // Add 59 minutes to cover the same hour
+        Date fromDate = new Date(date.getTime() - 59 * 60 * 1000); // Subtract 59 minutes to cover the same hour
+
+        long count = repository.count(buildSpec(Map.of(
+                "doctorProfileId", doctorProfileId,
+                "fromDate", CommonService.formatDate(fromDate, "HH:mm dd/MM/yyyy"),
+                "toDate", CommonService.formatDate(toDate, "HH:mm dd/MM/yyyy")
+        )));
+
+        return count > 0;
     }
 }

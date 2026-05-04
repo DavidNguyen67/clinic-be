@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Map;
 
 @Slf4j
@@ -35,11 +36,21 @@ public class DoctorScheduleExceptionServiceInv extends BaseService<DoctorSchedul
                     }
                     return cb.conjunction();
                 })
-                .and(hasField("type", CommonService.parseEnum(DoctorScheduleException.ExceptionType.class, queryParams.get("type"))))
-                .and(hasNestedField("doctorProfile", "id", CommonService.parseUuid(queryParams.get("doctorId"))))
-                .and(fieldOnDate("exceptionDate", CommonService.parseToDate((String) queryParams.get("exceptionDate"), "HH:mm dd/MM/yyyy")))
+                .and(fieldEquals("type", CommonService.parseEnum(DoctorScheduleException.ExceptionType.class, queryParams.get("type"))))
+                .and(nestedFieldEqual("doctorProfile", "id", CommonService.parseUuid(queryParams.get("doctorId"))))
+                .and(fieldOnDate("exceptionDate", CommonService.parseToDate((String) queryParams.get("exceptionDate"), "dd/MM/yyyy")))
                 .and(fieldBetweenDates("exceptionDate",
                         CommonService.parseToDate((String) queryParams.get("from")), CommonService.parseToDate((String) queryParams.get("to"))));
 
+    }
+
+    public boolean isDoctorAvailable(String doctorProfileId, Date exceptionDate) {
+        long count = repository.count(buildSpec(Map.of(
+                "doctorId", doctorProfileId,
+                "exceptionDate", CommonService.formatDate(exceptionDate, "dd/MM/yyyy"),
+                "type", DoctorScheduleException.ExceptionType.EXTRA
+        )));
+
+        return count <= 0;
     }
 }

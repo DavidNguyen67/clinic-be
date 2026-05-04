@@ -265,7 +265,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
 
     // ==================== HELPERS ====================
 
-    protected Specification<T> hasField(String fieldName, Object value) {
+    protected Specification<T> fieldEquals(String fieldName, Object value) {
         if (value == null) return null;
         if (value instanceof String s && s.isBlank()) return null;
         return (root, query, cb) -> cb.equal(root.get(fieldName), value);
@@ -312,7 +312,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
                 .and(notDeleted());
     }
 
-    protected Specification<T> hasNestedField(String join, String fieldName, Object value) {
+    protected Specification<T> nestedFieldEqual(String join, String fieldName, Object value) {
         if (value == null) return null;
         if (value instanceof String s && s.isBlank()) return null;
         return (root, query, cb) -> cb.equal(root.join(join, JoinType.LEFT).get(fieldName), value);

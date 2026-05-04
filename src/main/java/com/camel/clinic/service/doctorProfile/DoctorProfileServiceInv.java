@@ -32,10 +32,10 @@ public class DoctorProfileServiceInv extends BaseService<DoctorProfile, DoctorPr
                     }
                     return cb.conjunction();
                 })
-                .and(hasField("isFeatured", CommonService.parseBoolean(queryParams.get("isFeatured"))))
+                .and(fieldEquals("isFeatured", CommonService.parseBoolean(queryParams.get("isFeatured"))))
                 .and(nestedFieldLike("user", "fullName", (String) queryParams.get("fullName")))
                 .and(nestedFieldLike("specialty", "name", (String) queryParams.get("specialtyName")))
-                .and(hasNestedField("specialty", "id", CommonService.parseUuid(queryParams.get("specialtyId"))));
+                .and(nestedFieldEqual("specialty", "id", CommonService.parseUuid(queryParams.get("specialtyId"))));
     }
 
 }
