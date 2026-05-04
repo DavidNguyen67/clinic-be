@@ -112,9 +112,7 @@ public class AuthServiceInv extends BaseService<User, UserRepository> {
 
         // Load patient info if user is a patient
         if (Role.RoleName.PATIENT.equals(user.getRole())) {
-            Optional<PatientProfile> patient = patientProfileRepository.findAll().stream()
-                    .filter(p -> p.getUser().getId().equals(user.getId()))
-                    .findFirst();
+            Optional<PatientProfile> patient = patientProfileRepository.findByUserId(user.getId());
 
             if (patient.isPresent()) {
                 PatientProfile pat = patient.get();
