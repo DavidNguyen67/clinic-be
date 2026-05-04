@@ -121,7 +121,7 @@ public class AuthServiceInv extends BaseService<User, UserRepository> {
                 patientDTO.setPatientCode(pat.getPatientCode());
                 patientDTO.setAddress(pat.getAddress());
                 patientDTO.setInsuranceNumber(pat.getInsuranceNumber());
-                patientDTO.setBloodType(String.valueOf(pat.getBloodType()));
+                patientDTO.setBloodType(pat.getBloodType().getDisplayName());
                 patientDTO.setAllergies(pat.getAllergies());
                 patientDTO.setChronicDiseases(pat.getChronicDiseases());
                 patientDTO.setLoyaltyPoints(pat.getLoyaltyPoints());

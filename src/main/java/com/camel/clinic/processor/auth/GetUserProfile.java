@@ -18,13 +18,12 @@ import java.util.UUID;
 public class GetUserProfile implements Processor {
     private final AuthServiceImp authServiceImp;
     private final JwtUtil jwtUtil;
-    private final CommonService commonService;
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        String accessToken = commonService.getAuthHeader(exchange);
+        String accessToken = CommonService.getAuthHeader(exchange);
         String userIdStr = jwtUtil.getUserIdFromToken(accessToken);
-        UUID userId = commonService.parseUuid(userIdStr);
+        UUID userId = CommonService.parseUuid(userIdStr);
 
         ResponseEntity<?> response = authServiceImp.getUserProfile(userId);
         exchange.getIn().setBody(response);

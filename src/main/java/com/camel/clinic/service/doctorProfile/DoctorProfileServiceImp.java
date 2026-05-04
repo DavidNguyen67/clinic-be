@@ -22,7 +22,6 @@ public class DoctorProfileServiceImp implements DoctorProfileService {
     private final DoctorProfileServiceInv serviceInv;
     private final UserServiceInv userServiceInv;
     private final SpecialtyServiceInv specialtyServiceInv;
-    private final CommonService commonService;
 
     @Override
     public ResponseEntity<?> count() {
@@ -37,7 +36,7 @@ public class DoctorProfileServiceImp implements DoctorProfileService {
     @Override
     public ResponseEntity<?> create(CreateDoctorProfileDto requestBody) {
         DoctorProfile doctorProfile = new DoctorProfile();
-        doctorProfile.setDoctorCode(commonService.generateDoctorCode());
+        doctorProfile.setDoctorCode(CommonService.generateDoctorCode());
         doctorProfile.setDegree(requestBody.getDegree());
         doctorProfile.setExperienceYears(requestBody.getExperienceYears());
         doctorProfile.setEducation(requestBody.getEducation());
@@ -50,7 +49,7 @@ public class DoctorProfileServiceImp implements DoctorProfileService {
         if (user == null) {
             throw new IllegalArgumentException("User with ID " + userId + " not found");
         }
-        commonService.requireRole(user, "DOCTOR");
+        CommonService.requireRole(user, "DOCTOR");
         doctorProfile.setUser(user);
 
         String specialtyId = requestBody.getSpecialtyId();

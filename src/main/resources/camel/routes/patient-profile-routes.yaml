@@ -102,3 +102,37 @@
             ref: patientProfileCountProcessor
         - marshal:
             json: { }
+
+- route:
+    id: public-patient-profile-create-route
+    from:
+      uri: direct:public-patient-profile-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.patientProfile.CreatePatientProfileDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: patientProfileCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: public-patient-profile-update-route
+    from:
+      uri: direct:public-patient-profile-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.patientProfile.UpdatePatientProfileDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: patientProfileUpdateProcessor
+        - marshal:
+            json: { }

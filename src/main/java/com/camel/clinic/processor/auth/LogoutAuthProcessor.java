@@ -15,14 +15,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LogoutAuthProcessor implements Processor {
     private final AuthServiceImp authServiceImp;
-    private final CommonService commonService;
 
     @Override
     public void process(Exchange exchange) throws Exception {
         LogoutRequestDTO request = exchange.getIn().getBody(LogoutRequestDTO.class);
 
         String refreshToken = request.getRefreshToken();
-        String accessToken = commonService.getAuthHeader(exchange);
+        String accessToken = CommonService.getAuthHeader(exchange);
 
         ResponseEntity<?> response = authServiceImp.logout(refreshToken, accessToken);
         exchange.getIn().setBody(response);

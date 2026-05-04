@@ -17,12 +17,11 @@ import org.springframework.stereotype.Component;
 public class ChangePasswordAuthProcessor implements Processor {
     private final AuthServiceImp authServiceImp;
     private final JwtUtil jwtUtil;
-    private final CommonService commonService;
 
     @Override
     public void process(Exchange exchange) throws Exception {
         ChangePasswordRequestDTO request = exchange.getIn().getBody(ChangePasswordRequestDTO.class);
-        String accessToken = commonService.getAuthHeader(exchange);
+        String accessToken = CommonService.getAuthHeader(exchange);
         String email = jwtUtil.getEmailFromToken(accessToken);
 
         ResponseEntity<?> response = authServiceImp.changePassword(request, email);

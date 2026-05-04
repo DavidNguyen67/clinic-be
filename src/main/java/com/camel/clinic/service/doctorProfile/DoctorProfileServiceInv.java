@@ -14,11 +14,9 @@ import java.util.Map;
 @Slf4j
 @Service
 public class DoctorProfileServiceInv extends BaseService<DoctorProfile, DoctorProfileRepository> {
-    private final CommonService commonService;
 
-    public DoctorProfileServiceInv(DoctorProfileRepository repository, CommonService commonService) {
+    public DoctorProfileServiceInv(DoctorProfileRepository repository) {
         super(DoctorProfile::new, repository);
-        this.commonService = commonService;
     }
 
     @Override
@@ -34,10 +32,10 @@ public class DoctorProfileServiceInv extends BaseService<DoctorProfile, DoctorPr
                     }
                     return cb.conjunction();
                 })
-                .and(hasField("isFeatured", commonService.parseBoolean(queryParams.get("isFeatured"))))
+                .and(hasField("isFeatured", CommonService.parseBoolean(queryParams.get("isFeatured"))))
                 .and(nestedFieldLike("user", "fullName", (String) queryParams.get("fullName")))
                 .and(nestedFieldLike("specialty", "name", (String) queryParams.get("specialtyName")))
-                .and(hasNestedField("specialty", "id", commonService.parseUuid(queryParams.get("specialtyId"))));
+                .and(hasNestedField("specialty", "id", CommonService.parseUuid(queryParams.get("specialtyId"))));
     }
 
 }

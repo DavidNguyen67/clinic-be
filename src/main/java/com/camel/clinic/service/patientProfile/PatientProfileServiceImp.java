@@ -18,7 +18,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class PatientProfileServiceImp implements PatientProfileService {
     private final PatientProfileServiceInv serviceInv;
-    private final CommonService commonService;
     private final UserServiceInv userServiceInv;
 
     @Override
@@ -36,7 +35,7 @@ public class PatientProfileServiceImp implements PatientProfileService {
         PatientProfile patientProfile = new PatientProfile();
         patientProfile.setBloodType(requestBody.getBloodType());
         patientProfile.setAllergies(requestBody.getAllergies());
-        patientProfile.setPatientCode(commonService.generatePatientCode());
+        patientProfile.setPatientCode(CommonService.generatePatientCode());
         patientProfile.setAddress(requestBody.getAddress());
         patientProfile.setInsuranceNumber(requestBody.getInsuranceNumber());
         patientProfile.setChronicDiseases(requestBody.getChronicDiseases());
@@ -48,7 +47,7 @@ public class PatientProfileServiceImp implements PatientProfileService {
         if (user == null) {
             throw new IllegalArgumentException("User with ID " + userId + " not found");
         }
-        commonService.requireRole(user, "PATIENT");
+        CommonService.requireRole(user, "PATIENT");
         patientProfile.setUser(user);
 
         return serviceInv.create(patientProfile);

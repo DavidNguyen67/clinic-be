@@ -35,7 +35,7 @@ public class UserProfileDTO {
     private Boolean phoneVerified;
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,
-            pattern = "dd/MM/yyyy",
+            pattern = "HH:mm:ss dd/MM/yyyy",
             timezone = "Asia/Ho_Chi_Minh"
     )
     private Date lastLogin;

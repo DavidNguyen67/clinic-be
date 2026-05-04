@@ -19,13 +19,13 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 public class CommonService {
-    public void requireRole(User user, String role) {
+    public static void requireRole(User user, String role) {
         if (!role.equals(user.getRole().name())) {
             throw new BadRequestException("Only user target has role: " + role);
         }
     }
 
-    public int parseIntParam(Map<String, Object> params, String key, int defaultValue) {
+    public static int parseIntParam(Map<String, Object> params, String key, int defaultValue) {
         Object val = params.get(key);
         if (val == null) return defaultValue;
         try {
@@ -35,33 +35,45 @@ public class CommonService {
         }
     }
 
-    public Boolean parseBoolean(Object value) {
-        if (value == null) return null;
-        if (value instanceof Boolean b) return b;
-        if (value instanceof String s) {
-            return switch (s.trim().toLowerCase()) {
+    public static Boolean parseBoolean(Object value) {
+        return switch (value) {
+            case Boolean b -> b;
+            case String s -> switch (s.trim().toLowerCase()) {
                 case "true", "1", "yes" -> true;
                 case "false", "0", "no" -> false;
                 default -> null;
             };
-        }
-        return null;
+            case null, default -> null;
+        };
     }
 
-    public Date parseToDate(String rawDate) {
+    public static Date parseToDate(String rawDate) {
         if (rawDate == null || rawDate.isBlank()) {
-            throw new IllegalArgumentException("date is required");
+            return null;
         }
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             sdf.setLenient(false);
             return sdf.parse(rawDate);
         } catch (ParseException e) {
-            throw new IllegalArgumentException("Invalid date format, expected dd/MM/yyyy");
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 
-    public LocalDate parseToLocalDate(String rawDate) {
+    public static Date parseToDate(String rawDate, String pattern) {
+        if (rawDate == null || rawDate.isBlank()) {
+            return null;
+        }
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+            sdf.setLenient(false);
+            return sdf.parse(rawDate);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public static LocalDate parseToLocalDate(String rawDate) {
         if (rawDate == null || rawDate.isBlank()) {
             throw new IllegalArgumentException("date is required");
         }
@@ -82,7 +94,7 @@ public class CommonService {
         throw new IllegalArgumentException("Unsupported date format");
     }
 
-    public String getAuthHeader(Exchange exchange) {
+    public static String getAuthHeader(Exchange exchange) {
         String authHeader = exchange.getIn().getHeader("Authorization", String.class);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new UnauthorizedException("Missing or invalid Authorization header");
@@ -90,31 +102,30 @@ public class CommonService {
         return authHeader.substring(7);
     }
 
-
-    public String generateDoctorCode() {
+    public static String generateDoctorCode() {
         return generateCode("DOC");
     }
 
-    public String generateStaffCode() {
+    public static String generateStaffCode() {
         return generateCode("STF");
     }
 
-    public String generatePatientCode() {
+    public static String generatePatientCode() {
         return generateCode("PAT");
     }
 
-    public String generateAppointmentCode() {
+    public static String generateAppointmentCode() {
         return generateCode("APT");
     }
 
-    public String generateCode(String prefix) {
+    public static String generateCode(String prefix) {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         String shortCode = uuid.substring(0, 10).toUpperCase();
 
         return prefix + "-" + shortCode;
     }
 
-    public <E extends Enum<E>> E parseEnum(Class<E> enumClass, Object value) {
+    public static <E extends Enum<E>> E parseEnum(Class<E> enumClass, Object value) {
         if (value == null) return null;
         String s = value.toString().trim();
         if (s.isBlank()) return null;
@@ -126,7 +137,7 @@ public class CommonService {
         }
     }
 
-    public UUID parseUuid(Object value) {
+    public static UUID parseUuid(Object value) {
         if (value == null) return null;
         String s = value.toString().trim();
         if (s.isBlank()) return null;
@@ -138,11 +149,11 @@ public class CommonService {
         }
     }
 
-    public String formatDate(Date date) {
-        return formatDate(date, "HH:mm:ss dd/MM/yyyy");
+    public static String formatDate(Date date) {
+        return formatDate(date, "dd/MM/yyyy");
     }
 
-    public String formatDate(Date date, String pattern) {
+    public static String formatDate(Date date, String pattern) {
         if (date == null) return null;
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         sdf.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));

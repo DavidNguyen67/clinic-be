@@ -5,6 +5,7 @@ import com.camel.clinic.dto.appointment.ResponseAppointmentDto;
 import com.camel.clinic.entity.Appointment;
 import com.camel.clinic.repository.AppointmentRepository;
 import com.camel.clinic.service.BaseService;
+import com.camel.clinic.service.CommonService;
 import jakarta.persistence.criteria.JoinType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
@@ -12,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -82,8 +82,8 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
                     return cb.conjunction();
                 })
                 .and(fieldIn("status", queryParams.get("status"), Appointment.AppointmentStatus.class))
-                .and(hasNestedField("doctorProfile", "id", queryParams.get("doctorProfileId")))
-                .and(hasNestedField("patientProfile", "id", queryParams.get("patientProfileId")))
-                .and(fieldOnDate("appointmentDate", (Date) queryParams.get("appointmentDate")));
+                .and(hasNestedField("doctorProfile", "id", CommonService.parseUuid(queryParams.get("doctorProfileId"))))
+                .and(hasNestedField("patientProfile", "id", CommonService.parseUuid(queryParams.get("patientProfileId"))))
+                .and(fieldOnDate("appointmentDate", CommonService.parseToDate((String) queryParams.get("appointmentDate"))));
     }
 }

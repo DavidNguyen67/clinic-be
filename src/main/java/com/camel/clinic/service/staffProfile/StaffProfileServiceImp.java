@@ -19,7 +19,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class StaffProfileServiceImp implements StaffProfileService {
     private final StaffProfileServiceInv serviceInv;
-    private final CommonService commonService;
     private final UserServiceInv userServiceInv;
 
     @Override
@@ -36,9 +35,9 @@ public class StaffProfileServiceImp implements StaffProfileService {
     public ResponseEntity<?> create(CreateStaffProfileDto requestBody) {
         StaffProfile staffProfile = new StaffProfile();
         staffProfile.setPosition(requestBody.getPosition());
-        staffProfile.setStaffCode(commonService.generateStaffCode());
+        staffProfile.setStaffCode(CommonService.generateStaffCode());
         staffProfile.setDepartment(requestBody.getDepartment());
-        Date hireDate = commonService.parseToDate(requestBody.getHireDate());
+        Date hireDate = CommonService.parseToDate(requestBody.getHireDate());
         staffProfile.setHireDate(hireDate);
 
         String userId = requestBody.getUserId();
@@ -46,7 +45,7 @@ public class StaffProfileServiceImp implements StaffProfileService {
         if (user == null) {
             throw new IllegalArgumentException("User with ID " + userId + " not found");
         }
-        commonService.requireRole(user, "STAFF");
+        CommonService.requireRole(user, "STAFF");
         staffProfile.setUser(user);
 
         return serviceInv.create(staffProfile);
@@ -60,7 +59,7 @@ public class StaffProfileServiceImp implements StaffProfileService {
         }
         staffProfile.setPosition(requestBody.getPosition());
         staffProfile.setDepartment(requestBody.getDepartment());
-        Date hireDate = commonService.parseToDate(requestBody.getHireDate());
+        Date hireDate = CommonService.parseToDate(requestBody.getHireDate());
         staffProfile.setHireDate(hireDate);
 
         return serviceInv.update(id, staffProfile, null);

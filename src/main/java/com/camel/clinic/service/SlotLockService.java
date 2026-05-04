@@ -5,8 +5,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -21,15 +19,15 @@ public class SlotLockService {
 
     public boolean tryLock(UUID doctorId, Date appointmentDate, UUID requestId) {
         String key = LOCK_PREFIX + doctorId + ":" + appointmentDate.toInstant().toEpochMilli();
-        return Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent(
+        return !Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent(
                 key,
                 requestId.toString(),
                 Duration.ofSeconds(LOCK_TTL_SECONDS)
         ));
     }
 
-    public void releaseLock(UUID doctorId, LocalDate date, LocalTime time) {
-        String key = LOCK_PREFIX + doctorId + ":" + date + ":" + time;
+    public void releaseLock(UUID doctorId, Date appointmentDate) {
+        String key = LOCK_PREFIX + doctorId + ":" + appointmentDate.toInstant().toEpochMilli();
         redisTemplate.delete(key);
     }
 }

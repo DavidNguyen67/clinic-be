@@ -22,7 +22,6 @@ import java.util.Objects;
 @AllArgsConstructor
 public class DoctorScheduleExceptionServiceImp implements DoctorScheduleExceptionService {
     private final DoctorScheduleExceptionServiceInv serviceInv;
-    private final CommonService commonService;
     private final DoctorProfileServiceInv doctorProfileServiceInv;
 
     @Override
@@ -38,7 +37,7 @@ public class DoctorScheduleExceptionServiceImp implements DoctorScheduleExceptio
     @Override
     public ResponseEntity<?> create(CreateDoctorScheduleExceptionDto requestBody) {
         DoctorScheduleException doctorScheduleException = new DoctorScheduleException();
-        Date exceptionDate = commonService.parseToDate(requestBody.getExceptionDate());
+        Date exceptionDate = CommonService.parseToDate(requestBody.getExceptionDate());
 
         List<DoctorScheduleException> existingExceptionsResponse = getCurrentDoctorScheduleException(requestBody.getDoctorProfileId(), exceptionDate);
 
@@ -66,7 +65,7 @@ public class DoctorScheduleExceptionServiceImp implements DoctorScheduleExceptio
         if (doctorScheduleException == null) {
             throw new IllegalArgumentException("DoctorScheduleException with ID " + id + " not found");
         }
-        Date exceptionDate = commonService.parseToDate(requestBody.getExceptionDate());
+        Date exceptionDate = CommonService.parseToDate(requestBody.getExceptionDate());
         doctorScheduleException.setExceptionDate(exceptionDate);
         doctorScheduleException.setType(requestBody.getType());
         doctorScheduleException.setReason(requestBody.getReason());

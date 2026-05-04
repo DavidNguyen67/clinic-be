@@ -21,6 +21,12 @@
 
 - rest:
     path: /v1/public/patient-profile
+    post:
+      - path: /
+        to: direct:public-patient-profile-create
     get:
       - path: /count
         to: direct:public-patient-profile-count
+    patch:
+      - path: /{id}
+        to: direct:public-patient-profile-update

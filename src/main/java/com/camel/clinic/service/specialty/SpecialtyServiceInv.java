@@ -21,12 +21,10 @@ import java.util.Map;
 @Slf4j
 @Service
 public class SpecialtyServiceInv extends BaseService<Specialty, SpecialtyRepository> {
-    private final CommonService commonService;
     private final EntityManager entityManager;
 
-    public SpecialtyServiceInv(SpecialtyRepository repository, CommonService commonService, EntityManager entityManager) {
+    public SpecialtyServiceInv(SpecialtyRepository repository, EntityManager entityManager) {
         super(Specialty::new, repository);
-        this.commonService = commonService;
         this.entityManager = entityManager;
     }
 
@@ -35,7 +33,7 @@ public class SpecialtyServiceInv extends BaseService<Specialty, SpecialtyReposit
         return Specification.<Specialty>unrestricted()
                 .and(notDeleted())
                 .and(fieldLike("slug", (String) queryParams.get("slug")))
-                .and(hasField("isActive", commonService.parseBoolean(queryParams.get("isActive"))));
+                .and(hasField("isActive", CommonService.parseBoolean(queryParams.get("isActive"))));
     }
 
     public ResponseEntity<?> listWithDoctorCount(Map<String, Object> queryParams) {

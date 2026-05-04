@@ -11,17 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.Map;
 
 @Slf4j
 @Service
 public class DoctorScheduleExceptionServiceInv extends BaseService<DoctorScheduleException, DoctorScheduleExceptionRepository> {
-    private final CommonService commonService;
 
-    public DoctorScheduleExceptionServiceInv(DoctorScheduleExceptionRepository repository, CommonService commonService) {
+    public DoctorScheduleExceptionServiceInv(DoctorScheduleExceptionRepository repository) {
         super(DoctorScheduleException::new, repository);
-        this.commonService = commonService;
     }
 
     @Override
@@ -38,11 +35,11 @@ public class DoctorScheduleExceptionServiceInv extends BaseService<DoctorSchedul
                     }
                     return cb.conjunction();
                 })
-                .and(hasField("type", commonService.parseEnum(DoctorScheduleException.ExceptionType.class, queryParams.get("type"))))
-                .and(hasNestedField("doctorProfile", "id", commonService.parseUuid(queryParams.get("doctorId"))))
-                .and(fieldOnDate("exceptionDate", (Date) queryParams.get("exceptionDate")))
+                .and(hasField("type", CommonService.parseEnum(DoctorScheduleException.ExceptionType.class, queryParams.get("type"))))
+                .and(hasNestedField("doctorProfile", "id", CommonService.parseUuid(queryParams.get("doctorId"))))
+                .and(fieldOnDate("exceptionDate", CommonService.parseToDate((String) queryParams.get("exceptionDate"), "HH:mm dd/MM/yyyy")))
                 .and(fieldBetweenDates("exceptionDate",
-                        commonService.parseToDate((String) queryParams.get("from")), commonService.parseToDate((String) queryParams.get("to"))));
+                        CommonService.parseToDate((String) queryParams.get("from")), CommonService.parseToDate((String) queryParams.get("to"))));
 
     }
 }

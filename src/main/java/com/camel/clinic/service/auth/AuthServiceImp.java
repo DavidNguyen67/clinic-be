@@ -3,13 +3,14 @@ package com.camel.clinic.service.auth;
 import com.camel.clinic.dto.auth.*;
 import com.camel.clinic.entity.Role;
 import com.camel.clinic.entity.User;
+import com.camel.clinic.exception.BadRequestException;
+import com.camel.clinic.exception.NotFoundException;
 import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.EmailUniqueService;
 import com.camel.clinic.util.JwtUtil;
 import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,7 +37,6 @@ public class AuthServiceImp implements AuthService {
     private final OtpService otpService;
     private final EmailService emailService;
     private final EmailUniqueService emailUniqueService;
-    private final CommonService commonService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -54,8 +54,7 @@ public class AuthServiceImp implements AuthService {
 
         // Check if user is active
         if (user.getStatus() != User.UserStatus.ACTIVE) {
-            throw new BadRequestException(
-                    "Account is not active");
+            throw new BadRequestException("Account is not active");
         }
 
         // Update last login
@@ -104,7 +103,7 @@ public class AuthServiceImp implements AuthService {
             user.setEmail(email);
             user.setFullName(req.getName());
             user.setPhone(req.getPhone());
-            Date dob = commonService.parseToDate(req.getDateOfBirth());
+            Date dob = CommonService.parseToDate(req.getDateOfBirth());
             user.setDateOfBirth(dob);
             user.setGender(req.getGender());
             user.setRole(role);
@@ -151,8 +150,8 @@ public class AuthServiceImp implements AuthService {
         if (!tokenStoreService.matchesRefreshToken(userId, refreshToken)) {
             throw new BadRequestException("Refresh token revoked");
         }
-        User user = authServiceInv.findById(commonService.parseUuid((userId)))
-                .orElseThrow(() -> new BadRequestException("User not found"));
+        User user = authServiceInv.findById(CommonService.parseUuid((userId)))
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         String newAccessToken = jwtUtil.generateToken(user);
         String newRefreshToken = jwtUtil.generateRefreshToken(user.getId());
@@ -220,16 +219,16 @@ public class AuthServiceImp implements AuthService {
             throw new BadRequestException("Invalid reset token");
         }
         User user = authServiceInv.findByEmail(email)
-                .orElseThrow(() -> new BadRequestException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
         user.setPasswordHash(passwordEncoder.encode(req.getNewPassword()));
         authServiceInv.save(user);
         return ResponseEntity.noContent().build();
     }
 
     @Override
-    public ResponseEntity<?> getUserProfile(UUID userId) throws BadRequestException {
+    public ResponseEntity<?> getUserProfile(UUID userId) throws NotFoundException {
         User user = authServiceInv.findById(userId)
-                .orElseThrow(() -> new BadRequestException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
         UserProfileDTO profile = authServiceInv.buildUserProfileDTO(user);
         return ResponseEntity.ok(profile);
     }
@@ -238,7 +237,7 @@ public class AuthServiceImp implements AuthService {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> changePassword(ChangePasswordRequestDTO req, String email) throws BadRequestException {
         User user = authServiceInv.findByEmail(email)
-                .orElseThrow(() -> new BadRequestException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
         if (!passwordEncoder.matches(req.getCurrentPassword(), user.getPasswordHash())) {
             throw new BadRequestException("Current password is incorrect");
         }
