@@ -74,5 +74,5 @@ logging:
     org.springframework.jdbc.core: TRACE
 
 cors:
-  allowed-origins: *
+  allowed-origins: "*"
 
