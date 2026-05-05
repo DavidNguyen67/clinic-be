@@ -391,4 +391,10 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
             return cb.between(root.get(fieldName), from, to);
         };
     }
+
+    protected Specification<T> excludeId(Object value) {
+        if (value == null) return Specification.unrestricted();
+        UUID excludeUuid = value instanceof UUID u ? u : CommonService.parseUuid(value);
+        return (root, query, cb) -> cb.notEqual(root.get("id"), excludeUuid);
+    }
 }

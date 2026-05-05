@@ -23,7 +23,7 @@ public class UpdateAppointmentDto {
     )
     @Future(message = "Appointment date must be in the future")
     private Date appointmentDate;
-    
+
     private AppointmentStatus status;
 
     private BookingType bookingType;

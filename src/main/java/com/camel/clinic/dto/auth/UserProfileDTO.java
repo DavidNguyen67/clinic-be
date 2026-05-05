@@ -40,6 +40,13 @@ public class UserProfileDTO {
     )
     private Date lastLogin;
 
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "HH:mm:ss dd/MM/yyyy",
+            timezone = "Asia/Ho_Chi_Minh"
+    )
+    private Date createdAt;
+
     // Doctor specific fields
     private DoctorProfileDTO doctor;
 

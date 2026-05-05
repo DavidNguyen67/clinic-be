@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Getter
@@ -36,12 +37,14 @@ public class ResponseAppointmentDto {
 
     private String doctorProfileId;
     private String doctorName;
+    private String doctorPathAvatar;
 
     private String specialtyId;
     private String specialtyName;
 
     private String clinicServiceId;
     private String clinicServiceName;
+    private BigDecimal fee;
 
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,
@@ -78,6 +81,8 @@ public class ResponseAppointmentDto {
         res.setCreatedAt(a.getCreatedAt());
         res.setUpdatedAt(a.getUpdatedAt());
         res.setDeletedAt(a.getDeletedAt());
+        res.setFee(a.getDoctorProfile().getConsultationFee());
+        res.setDoctorPathAvatar(a.getDoctorProfile().getUser().getPathAvatar());
 
         if (a.getPatientProfile() != null) {
             res.setPatientProfileId(a.getPatientProfile().getId().toString());

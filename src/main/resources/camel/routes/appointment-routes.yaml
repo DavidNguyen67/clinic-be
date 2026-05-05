@@ -139,3 +139,30 @@
             ref: appointmentCreateProcessor
         - marshal:
             json: { }
+
+- route:
+    id: patient-appointment-list-route
+    from:
+      uri: direct:patient-appointment-list
+      steps:
+        - process:
+            ref: appointmentListPatientProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-appointment-update-route
+    from:
+      uri: direct:patient-appointment-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.appointment.UpdateAppointmentDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: appointmentUpdateProcessor
+        - marshal:
+            json: { }

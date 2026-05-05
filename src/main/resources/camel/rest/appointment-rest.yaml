@@ -31,3 +31,12 @@
     post:
       - path: /
         to: direct:public-appointment-create
+
+- rest:
+    path: /v1/patient/appointment
+    get:
+      - path: /
+        to: direct:patient-appointment-list
+    patch:
+      - path: /{id}
+        to: direct:patient-appointment-update

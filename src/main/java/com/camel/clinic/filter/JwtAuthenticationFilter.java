@@ -28,9 +28,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/api/v1/auth/",
             "/api/auth/"
     );
-    private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
     private final TokenStoreService tokenStoreService;
+    private final JwtUtil jwtUtil;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {

@@ -31,12 +31,12 @@ import java.util.*;
 public class AuthServiceImp implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final AuthServiceInv authServiceInv;
-    private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final TokenStoreService tokenStoreService;
     private final OtpService otpService;
     private final EmailService emailService;
     private final EmailUniqueService emailUniqueService;
+    private final JwtUtil jwtUtil;
 
     @Override
     @Transactional(rollbackFor = Exception.class)

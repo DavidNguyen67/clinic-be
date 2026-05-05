@@ -82,6 +82,7 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
                     }
                     return cb.conjunction();
                 })
+                .and(excludeId(CommonService.parseUuid(queryParams.get("excludeId"))))
                 .and(fieldIn("status", queryParams.get("status"), Appointment.AppointmentStatus.class))
                 .and(nestedFieldEqual("doctorProfile", "id", CommonService.parseUuid(queryParams.get("doctorProfileId"))))
                 .and(nestedFieldEqual("patientProfile", "id", CommonService.parseUuid(queryParams.get("patientProfileId"))))
@@ -94,7 +95,7 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
                 ));
     }
 
-    public boolean isExistAppointmentForDoctorAt(String doctorProfileId, Date appointmentDate) {
+    public boolean isExistAppointmentForDoctorAt(String doctorProfileId, Date appointmentDate, String excludeAppointmentId) {
         String dateStr = CommonService.formatDate(appointmentDate, "HH:mm dd/MM/yyyy");
         Date date = CommonService.parseToDate(dateStr, "HH:mm dd/MM/yyyy");
         Date toDate = new Date(date.getTime() + 59 * 60 * 1000); // Add 59 minutes to cover the same hour
@@ -103,7 +104,8 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
         long count = repository.count(buildSpec(Map.of(
                 "doctorProfileId", doctorProfileId,
                 "fromDate", CommonService.formatDate(fromDate, "HH:mm dd/MM/yyyy"),
-                "toDate", CommonService.formatDate(toDate, "HH:mm dd/MM/yyyy")
+                "toDate", CommonService.formatDate(toDate, "HH:mm dd/MM/yyyy"),
+                "excludeId", excludeAppointmentId
         )));
 
         return count > 0;

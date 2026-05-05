@@ -51,7 +51,7 @@ public class AppointmentServiceImp implements AppointmentService {
             );
         }
 
-        if (serviceInv.isExistAppointmentForDoctorAt(doctorProfileId, appointmentDate)) {
+        if (serviceInv.isExistAppointmentForDoctorAt(doctorProfileId, appointmentDate, null)) {
             throw new BadRequestException(
                     "Doctor already has an appointment at the selected time. Please choose a different time or doctor."
             );
@@ -86,7 +86,59 @@ public class AppointmentServiceImp implements AppointmentService {
 
     @Override
     public ResponseEntity<?> update(String id, UpdateAppointmentDto requestBody) {
-        return null;
+        Appointment appointment = serviceInv.retrieve(id, null).getBody() instanceof Appointment a ? a : null;
+
+        if (appointment == null) {
+            throw new BadRequestException("Appointment with ID " + id + " not found");
+        }
+
+        if (appointment.getStatus() != Appointment.AppointmentStatus.PENDING) {
+            throw new BadRequestException("Only PENDING appointments can be updated");
+        }
+
+        String targetDoctorId = requestBody.getDoctorProfileId() != null
+                ? requestBody.getDoctorProfileId()
+                : appointment.getDoctorProfile().getId().toString();
+
+        Date targetDate = requestBody.getAppointmentDate() != null
+                ? requestBody.getAppointmentDate()
+                : appointment.getAppointmentDate();
+
+        boolean doctorChanged = requestBody.getDoctorProfileId() != null;
+        boolean dateChanged = requestBody.getAppointmentDate() != null;
+
+        if (doctorChanged || dateChanged) {
+            if (!doctorScheduleExceptionServiceInv.isDoctorAvailable(targetDoctorId, targetDate)) {
+                throw new BadRequestException(
+                        "Doctor is not available at the selected time. Please choose a different time or doctor."
+                );
+            }
+
+            if (serviceInv.isExistAppointmentForDoctorAt(targetDoctorId, targetDate, id)) {
+                throw new BadRequestException(
+                        "Doctor already has an appointment at the selected time. Please choose a different time or doctor."
+                );
+            }
+        }
+
+        if (doctorChanged) {
+            DoctorProfile newDoctor = (DoctorProfile) doctorProfileServiceInv
+                    .retrieve(targetDoctorId, null)
+                    .getBody();
+            appointment.setDoctorProfile(newDoctor);
+            appointment.setSpecialty(newDoctor != null ? newDoctor.getSpecialty() : appointment.getSpecialty());
+        }
+
+        appointment.setAppointmentDate(targetDate);
+
+        appointment.setStatus(requestBody.getStatus());
+        appointment.setBookingType(requestBody.getBookingType());
+        appointment.setReason(requestBody.getReason());
+        appointment.setSymptoms(requestBody.getSymptoms());
+        appointment.setNotes(requestBody.getNotes());
+
+        Appointment saved = (Appointment) serviceInv.update(id, appointment, null).getBody();
+        return ResponseEntity.ok(saved);
     }
 
     @Override
