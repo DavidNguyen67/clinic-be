@@ -1,12 +1,14 @@
 package com.camel.clinic.service.appointment;
 
 import com.camel.clinic.dto.appointment.CreateAppointmentDto;
+import com.camel.clinic.dto.appointment.ResponseAppointmentDto;
 import com.camel.clinic.dto.appointment.UpdateAppointmentDto;
 import com.camel.clinic.entity.Appointment;
 import com.camel.clinic.entity.DoctorProfile;
 import com.camel.clinic.entity.PatientProfile;
 import com.camel.clinic.entity.Specialty;
 import com.camel.clinic.exception.BadRequestException;
+import com.camel.clinic.repository.AppointmentRepository;
 import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.doctorProfile.DoctorProfileServiceInv;
 import com.camel.clinic.service.doctorScheduleException.DoctorScheduleExceptionServiceInv;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -28,6 +31,7 @@ public class AppointmentServiceImp implements AppointmentService {
     private final DoctorScheduleExceptionServiceInv doctorScheduleExceptionServiceInv;
     private final DoctorProfileServiceInv doctorProfileServiceInv;
     private final PatientProfileServiceInv patientProfileServiceInv;
+    private final AppointmentRepository appointmentRepository;
 
     @Override
     public ResponseEntity<?> count() {
@@ -86,7 +90,7 @@ public class AppointmentServiceImp implements AppointmentService {
 
     @Override
     public ResponseEntity<?> update(String id, UpdateAppointmentDto requestBody) {
-        Appointment appointment = serviceInv.retrieve(id, null).getBody() instanceof Appointment a ? a : null;
+        ResponseAppointmentDto appointment = serviceInv.retrieve(id, null).getBody() instanceof ResponseAppointmentDto a ? a : null;
 
         if (appointment == null) {
             throw new BadRequestException("Appointment with ID " + id + " not found");
@@ -98,7 +102,7 @@ public class AppointmentServiceImp implements AppointmentService {
 
         String targetDoctorId = requestBody.getDoctorProfileId() != null
                 ? requestBody.getDoctorProfileId()
-                : appointment.getDoctorProfile().getId().toString();
+                : appointment.getDoctorProfileId();
 
         Date targetDate = requestBody.getAppointmentDate() != null
                 ? requestBody.getAppointmentDate()
@@ -121,24 +125,28 @@ public class AppointmentServiceImp implements AppointmentService {
             }
         }
 
+        Appointment appointmentEntity = appointmentRepository.findById(UUID.fromString(id)).orElse(null);
+
         if (doctorChanged) {
             DoctorProfile newDoctor = (DoctorProfile) doctorProfileServiceInv
                     .retrieve(targetDoctorId, null)
                     .getBody();
-            appointment.setDoctorProfile(newDoctor);
-            appointment.setSpecialty(newDoctor != null ? newDoctor.getSpecialty() : appointment.getSpecialty());
+            assert appointmentEntity != null;
+            appointmentEntity.setDoctorProfile(newDoctor);
+            appointmentEntity.setSpecialty(newDoctor != null ? newDoctor.getSpecialty() : appointmentEntity.getSpecialty());
         }
 
-        appointment.setAppointmentDate(targetDate);
+        assert appointmentEntity != null;
+        appointmentEntity.setAppointmentDate(targetDate);
+        appointmentEntity.setStatus(requestBody.getStatus());
+        appointmentEntity.setBookingType(requestBody.getBookingType());
+        appointmentEntity.setReason(requestBody.getReason());
+        appointmentEntity.setSymptoms(requestBody.getSymptoms());
+        appointmentEntity.setNotes(requestBody.getNotes());
 
-        appointment.setStatus(requestBody.getStatus());
-        appointment.setBookingType(requestBody.getBookingType());
-        appointment.setReason(requestBody.getReason());
-        appointment.setSymptoms(requestBody.getSymptoms());
-        appointment.setNotes(requestBody.getNotes());
-
-        Appointment saved = (Appointment) serviceInv.update(id, appointment, null).getBody();
-        return ResponseEntity.ok(saved);
+        Appointment saved = (Appointment) serviceInv.update(id, appointmentEntity, null).getBody();
+        assert saved != null;
+        return ResponseEntity.ok(ResponseAppointmentDto.from(saved));
     }
 
     @Override
