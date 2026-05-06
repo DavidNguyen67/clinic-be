@@ -11,6 +11,7 @@ import com.camel.clinic.service.doctorProfile.DoctorProfileServiceInv;
 import com.camel.clinic.service.doctorScheduleException.DoctorScheduleExceptionServiceInv;
 import com.camel.clinic.service.patientProfile.PatientProfileServiceInv;
 import com.camel.clinic.util.AppointmentStatusTransition;
+import com.camel.clinic.util.SecuritiesUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -188,7 +189,7 @@ public class AppointmentServiceImp implements AppointmentService {
     }
 
     private Role.RoleName resolveActorRole() {
-        List<Role.RoleName> roles = CommonService.getAuthorities();
+        List<Role.RoleName> roles = SecuritiesUtils.getAuthorities();
 
         // Ưu tiên ADMIN vì ADMIN có nhiều roles trong authorities
         if (roles.contains(Role.RoleName.ADMIN)) return Role.RoleName.ADMIN;

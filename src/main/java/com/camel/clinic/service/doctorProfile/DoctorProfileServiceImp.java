@@ -8,6 +8,7 @@ import com.camel.clinic.entity.User;
 import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.specialty.SpecialtyServiceInv;
 import com.camel.clinic.service.user.UserServiceInv;
+import com.camel.clinic.util.SecuritiesUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +50,7 @@ public class DoctorProfileServiceImp implements DoctorProfileService {
         if (user == null) {
             throw new IllegalArgumentException("User with ID " + userId + " not found");
         }
-        CommonService.requireRole(user, "DOCTOR");
+        SecuritiesUtils.requireRole(user, "DOCTOR");
         doctorProfile.setUser(user);
 
         String specialtyId = requestBody.getSpecialtyId();

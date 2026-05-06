@@ -1,9 +1,9 @@
 package com.camel.clinic.processor.auth;
 
 import com.camel.clinic.dto.auth.ChangePasswordRequestDTO;
-import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.auth.AuthServiceImp;
 import com.camel.clinic.util.JwtUtil;
+import com.camel.clinic.util.SecuritiesUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
@@ -21,7 +21,7 @@ public class ChangePasswordAuthProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         ChangePasswordRequestDTO request = exchange.getIn().getBody(ChangePasswordRequestDTO.class);
-        String accessToken = CommonService.getAuthHeader(exchange);
+        String accessToken = SecuritiesUtils.getAccessToken(exchange);
         String email = jwtUtil.getEmailFromToken(accessToken);
 
         ResponseEntity<?> response = authServiceImp.changePassword(request, email);

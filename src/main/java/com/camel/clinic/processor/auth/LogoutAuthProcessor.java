@@ -1,8 +1,8 @@
 package com.camel.clinic.processor.auth;
 
 import com.camel.clinic.dto.auth.LogoutRequestDTO;
-import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.auth.AuthServiceImp;
+import com.camel.clinic.util.SecuritiesUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
@@ -21,7 +21,7 @@ public class LogoutAuthProcessor implements Processor {
         LogoutRequestDTO request = exchange.getIn().getBody(LogoutRequestDTO.class);
 
         String refreshToken = request.getRefreshToken();
-        String accessToken = CommonService.getAuthHeader(exchange);
+        String accessToken = SecuritiesUtils.getAccessToken(exchange);
 
         ResponseEntity<?> response = authServiceImp.logout(refreshToken, accessToken);
         exchange.getIn().setBody(response);

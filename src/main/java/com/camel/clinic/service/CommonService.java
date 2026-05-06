@@ -1,13 +1,7 @@
 package com.camel.clinic.service;
 
-import com.camel.clinic.entity.Role;
-import com.camel.clinic.entity.User;
-import com.camel.clinic.exception.BadRequestException;
-import com.camel.clinic.exception.UnauthorizedException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Exchange;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -21,11 +15,6 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 public class CommonService {
-    public static void requireRole(User user, String role) {
-        if (!role.equals(user.getRole().name())) {
-            throw new BadRequestException("Only user target has role: " + role);
-        }
-    }
 
     public static int parseIntParam(Map<String, Object> params, String key, int defaultValue) {
         Object val = params.get(key);
@@ -94,31 +83,6 @@ public class CommonService {
             }
         }
         throw new IllegalArgumentException("Unsupported date format");
-    }
-
-    public static String getAuthHeader(Exchange exchange) {
-        String authHeader = exchange.getIn().getHeader("Authorization", String.class);
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new UnauthorizedException("Missing or invalid Authorization header");
-        }
-        return authHeader.substring(7);
-    }
-
-    public static List<Role.RoleName> getAuthorities() {
-        return SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getAuthorities()
-                .stream()
-                .map(a -> {
-                    try {
-                        return Role.RoleName.valueOf(a.getAuthority());
-                    } catch (IllegalArgumentException e) {
-                        return null; // bỏ qua authority không map được
-                    }
-                })
-                .filter(Objects::nonNull)
-                .toList();
     }
 
     public static String generateDoctorCode() {

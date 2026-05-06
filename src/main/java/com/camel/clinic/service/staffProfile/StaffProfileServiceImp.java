@@ -6,6 +6,7 @@ import com.camel.clinic.entity.StaffProfile;
 import com.camel.clinic.entity.User;
 import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.user.UserServiceInv;
+import com.camel.clinic.util.SecuritiesUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class StaffProfileServiceImp implements StaffProfileService {
         if (user == null) {
             throw new IllegalArgumentException("User with ID " + userId + " not found");
         }
-        CommonService.requireRole(user, "STAFF");
+        SecuritiesUtils.requireRole(user, "STAFF");
         staffProfile.setUser(user);
 
         return serviceInv.create(staffProfile);

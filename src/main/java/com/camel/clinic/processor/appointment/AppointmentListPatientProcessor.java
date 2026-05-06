@@ -5,6 +5,7 @@ import com.camel.clinic.repository.PatientProfileRepository;
 import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.appointment.AppointmentServiceImp;
 import com.camel.clinic.util.JwtUtil;
+import com.camel.clinic.util.SecuritiesUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
@@ -26,7 +27,7 @@ public class AppointmentListPatientProcessor implements Processor {
     @Override
     public void process(Exchange exchange) {
         Map<String, Object> queryParams = exchange.getIn().getHeaders();
-        String accessToken = CommonService.getAuthHeader(exchange);
+        String accessToken = SecuritiesUtils.getAccessToken(exchange);
         String userIdStr = jwtUtil.getUserIdFromToken(accessToken);
         UUID userId = CommonService.parseUuid(userIdStr);
 

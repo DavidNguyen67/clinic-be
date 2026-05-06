@@ -3,6 +3,7 @@ package com.camel.clinic.processor.auth;
 import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.auth.AuthServiceImp;
 import com.camel.clinic.util.JwtUtil;
+import com.camel.clinic.util.SecuritiesUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
@@ -21,7 +22,7 @@ public class GetUserProfile implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        String accessToken = CommonService.getAuthHeader(exchange);
+        String accessToken = SecuritiesUtils.getAccessToken(exchange);
         String userIdStr = jwtUtil.getUserIdFromToken(accessToken);
         UUID userId = CommonService.parseUuid(userIdStr);
 
