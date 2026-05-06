@@ -38,7 +38,7 @@ public final class AppointmentStatusTransition {
                     ADMIN, EnumSet.allOf(Appointment.AppointmentStatus.class)
             );
     // ── Special rules không thể diễn tả chỉ bằng map ────────────────────────
-    private static final Set<Role.RoleName> REACTIVATION_ALLOWED = EnumSet.of(PATIENT);
+    private static final Set<Role.RoleName> REACTIVATION_ALLOWED = EnumSet.of(PATIENT, ADMIN);
 
     private AppointmentStatusTransition() {
     }
@@ -60,7 +60,7 @@ public final class AppointmentStatusTransition {
         if (from == CANCELLED && to == PENDING) {
             if (!REACTIVATION_ALLOWED.contains(actor)) {
                 throw new BadRequestException(
-                        "Only the patient who made the appointment can reactivate a cancelled appointment");
+                        "Only the patient who made the appointment and admin can reactivate a cancelled appointment");
             }
             return;
         }
