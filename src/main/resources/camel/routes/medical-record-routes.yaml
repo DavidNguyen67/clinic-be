@@ -1,0 +1,124 @@
+- onException:
+    exception:
+      - java.lang.Exception
+    handled:
+      constant: true
+    steps:
+      - process:
+          ref: exceptionProcessor
+      - marshal:
+          json: { }
+
+- route:
+    id: medical-record-list-route
+    from:
+      uri: direct:medical-record-list
+      steps:
+        - process:
+            ref: medicalRecordListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: medical-record-count-route
+    from:
+      uri: direct:medical-record-count
+      steps:
+        - process:
+            ref: medicalRecordCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: medical-record-get-route
+    from:
+      uri: direct:medical-record-get
+      steps:
+        - process:
+            ref: medicalRecordGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: medical-record-create-route
+    from:
+      uri: direct:medical-record-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.medicalRecord.CreateMedicalRecordDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: medicalRecordCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: medical-record-update-route
+    from:
+      uri: direct:medical-record-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.medicalRecord.UpdateMedicalRecordDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: medicalRecordUpdateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: medical-record-restore-route
+    from:
+      uri: direct:medical-record-restore
+      steps:
+        - process:
+            ref: medicalRecordRestoreProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: medical-record-delete-route
+    from:
+      uri: direct:medical-record-delete
+      steps:
+        - process:
+            ref: medicalRecordDeleteProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-medical-record-list-route
+    from:
+      uri: direct:patient-medical-record-list
+      steps:
+        - process:
+            ref: medicalRecordListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-medical-record-count-route
+    from:
+      uri: direct:patient-medical-record-count
+      steps:
+        - process:
+            ref: medicalRecordCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-medical-record-get-route
+    from:
+      uri: direct:patient-medical-record-get
+      steps:
+        - process:
+            ref: medicalRecordGetProcessor
+        - marshal:
+            json: { }

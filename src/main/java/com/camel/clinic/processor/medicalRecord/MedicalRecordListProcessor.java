@@ -1,7 +1,7 @@
-package com.camel.clinic.processor.appointment;
+package com.camel.clinic.processor.medicalRecord;
 
 import com.camel.clinic.repository.PatientProfileRepository;
-import com.camel.clinic.service.appointment.AppointmentServiceImp;
+import com.camel.clinic.service.medicalRecord.MedicalRecordServiceImp;
 import com.camel.clinic.util.JwtUtil;
 import com.camel.clinic.util.SecuritiesUtils;
 import lombok.AllArgsConstructor;
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@Component("appointmentListPatientProcessor")
+@Component("medicalRecordListProcessor")
 @AllArgsConstructor
 @Slf4j
-public class AppointmentListPatientProcessor implements Processor {
-    private final AppointmentServiceImp serviceImp;
-    private final PatientProfileRepository patientProfileRepository;
+public class MedicalRecordListProcessor implements Processor {
+    private final MedicalRecordServiceImp serviceImp;
     private final JwtUtil jwtUtil;
+    private final PatientProfileRepository patientProfileRepository;
 
     @Override
     public void process(Exchange exchange) {

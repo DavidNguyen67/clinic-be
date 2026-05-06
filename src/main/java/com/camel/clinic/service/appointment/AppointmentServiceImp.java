@@ -65,11 +65,19 @@ public class AppointmentServiceImp implements AppointmentService {
                 .retrieve(doctorProfileId, null)
                 .getBody();
 
+        if (doctorProfile == null) {
+            throw new BadRequestException("Doctor profile with ID " + doctorProfileId + " not found");
+        }
+
         PatientProfile patientProfile = (PatientProfile) patientProfileServiceInv
                 .retrieve(patientProfileId, null)
                 .getBody();
 
-        Specialty specialty = doctorProfile != null ? doctorProfile.getSpecialty() : null;
+        if (patientProfile == null) {
+            throw new BadRequestException("Patient profile with ID " + patientProfileId + " not found");
+        }
+
+        Specialty specialty = doctorProfile.getSpecialty();
 
         Appointment appointment = new Appointment();
         appointment.setAppointmentCode(CommonService.generateAppointmentCode());
