@@ -3,25 +3,24 @@ package com.camel.clinic.service.appointment;
 import com.camel.clinic.dto.appointment.CreateAppointmentDto;
 import com.camel.clinic.dto.appointment.ResponseAppointmentDto;
 import com.camel.clinic.dto.appointment.UpdateAppointmentDto;
-import com.camel.clinic.entity.Appointment;
-import com.camel.clinic.entity.DoctorProfile;
-import com.camel.clinic.entity.PatientProfile;
-import com.camel.clinic.entity.Specialty;
+import com.camel.clinic.entity.*;
 import com.camel.clinic.exception.BadRequestException;
 import com.camel.clinic.repository.AppointmentRepository;
 import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.doctorProfile.DoctorProfileServiceInv;
 import com.camel.clinic.service.doctorScheduleException.DoctorScheduleExceptionServiceInv;
 import com.camel.clinic.service.patientProfile.PatientProfileServiceInv;
+import com.camel.clinic.util.AppointmentStatusTransition;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
+import static com.camel.clinic.entity.Appointment.AppointmentStatus.CANCELLED;
+import static com.camel.clinic.entity.Appointment.AppointmentStatus.PENDING;
 
 @Service
 @Slf4j
@@ -81,7 +80,7 @@ public class AppointmentServiceImp implements AppointmentService {
         appointment.setReason(requestBody.getReason());
         appointment.setSymptoms(requestBody.getSymptoms());
         appointment.setNotes(requestBody.getNotes());
-        appointment.setStatus(Appointment.AppointmentStatus.PENDING);
+        appointment.setStatus(PENDING);
 
         Appointment saved = (Appointment) serviceInv.create(appointment).getBody();
 
@@ -90,59 +89,82 @@ public class AppointmentServiceImp implements AppointmentService {
 
     @Override
     public ResponseEntity<?> update(String id, UpdateAppointmentDto requestBody) {
-        ResponseAppointmentDto appointment = serviceInv.retrieve(id, null).getBody() instanceof ResponseAppointmentDto a ? a : null;
+        Role.RoleName actorRole = resolveActorRole();
+
+        ResponseAppointmentDto appointment = serviceInv.retrieve(id, null).getBody()
+                instanceof ResponseAppointmentDto a ? a : null;
 
         if (appointment == null) {
             throw new BadRequestException("Appointment with ID " + id + " not found");
         }
 
-        if (appointment.getStatus() != Appointment.AppointmentStatus.PENDING) {
-            throw new BadRequestException("Only PENDING appointments can be updated");
+        Appointment.AppointmentStatus currentStatus = appointment.getStatus();
+
+        Appointment.AppointmentStatus targetStatus = requestBody.getStatus() != null
+                ? requestBody.getStatus()
+                : currentStatus;
+
+        AppointmentStatusTransition.validate(currentStatus, targetStatus, actorRole);
+
+        boolean isReactivation = currentStatus == CANCELLED && targetStatus == PENDING;
+
+        boolean canEditDetails = currentStatus == PENDING || isReactivation;
+
+        if (!canEditDetails && hasDetailChanges(requestBody)) {
+            throw new BadRequestException(String.format(
+                    "Cannot change appointment details when status is %s. " +
+                            "Only status transition is allowed.", currentStatus));
         }
 
-        String targetDoctorId = requestBody.getDoctorProfileId() != null
+
+        String targetDoctorId = (canEditDetails && requestBody.getDoctorProfileId() != null)
                 ? requestBody.getDoctorProfileId()
                 : appointment.getDoctorProfileId();
 
-        Date targetDate = requestBody.getAppointmentDate() != null
+        Date targetDate = (canEditDetails && requestBody.getAppointmentDate() != null)
                 ? requestBody.getAppointmentDate()
                 : appointment.getAppointmentDate();
 
-        boolean doctorChanged = requestBody.getDoctorProfileId() != null;
-        boolean dateChanged = requestBody.getAppointmentDate() != null;
+        boolean doctorChanged = canEditDetails && requestBody.getDoctorProfileId() != null;
+        boolean dateChanged = canEditDetails && requestBody.getAppointmentDate() != null;
 
-        if (doctorChanged || dateChanged) {
+
+        // ── 4. Check doctor availability ─────────────────────────────────────────
+        // Trigger khi đổi doctor/date, hoặc reactivate (slot cũ có thể đã bị chiếm)
+        if (doctorChanged || dateChanged || isReactivation) {
             if (!doctorScheduleExceptionServiceInv.isDoctorAvailable(targetDoctorId, targetDate)) {
                 throw new BadRequestException(
-                        "Doctor is not available at the selected time. Please choose a different time or doctor."
-                );
+                        "Doctor is not available at the selected time. Please choose a different time or doctor.");
             }
-
             if (serviceInv.isExistAppointmentForDoctorAt(targetDoctorId, targetDate, id)) {
                 throw new BadRequestException(
-                        "Doctor already has an appointment at the selected time. Please choose a different time or doctor."
-                );
+                        "Doctor already has an appointment at the selected time. Please choose a different time or doctor.");
             }
         }
 
-        Appointment appointmentEntity = appointmentRepository.findById(UUID.fromString(id)).orElse(null);
+        Appointment appointmentEntity = appointmentRepository
+                .findById(UUID.fromString(id))
+                .orElseThrow(() -> new BadRequestException("Appointment with ID " + id + " not found"));
 
         if (doctorChanged) {
             DoctorProfile newDoctor = (DoctorProfile) doctorProfileServiceInv
                     .retrieve(targetDoctorId, null)
                     .getBody();
-            assert appointmentEntity != null;
             appointmentEntity.setDoctorProfile(newDoctor);
-            appointmentEntity.setSpecialty(newDoctor != null ? newDoctor.getSpecialty() : appointmentEntity.getSpecialty());
+            appointmentEntity.setSpecialty(newDoctor != null
+                    ? newDoctor.getSpecialty()
+                    : appointmentEntity.getSpecialty());
         }
 
-        assert appointmentEntity != null;
+        appointmentEntity.setStatus(targetStatus);
         appointmentEntity.setAppointmentDate(targetDate);
-        appointmentEntity.setStatus(requestBody.getStatus());
-        appointmentEntity.setBookingType(requestBody.getBookingType());
-        appointmentEntity.setReason(requestBody.getReason());
-        appointmentEntity.setSymptoms(requestBody.getSymptoms());
-        appointmentEntity.setNotes(requestBody.getNotes());
+
+        if (canEditDetails) {
+            appointmentEntity.setBookingType(requestBody.getBookingType());
+            appointmentEntity.setReason(requestBody.getReason());
+            appointmentEntity.setSymptoms(requestBody.getSymptoms());
+            appointmentEntity.setNotes(requestBody.getNotes());
+        }
 
         Appointment saved = (Appointment) serviceInv.update(id, appointmentEntity, null).getBody();
         assert saved != null;
@@ -163,5 +185,33 @@ public class AppointmentServiceImp implements AppointmentService {
     @Override
     public ResponseEntity<?> list(Map<String, Object> queryParams) {
         return serviceInv.list(queryParams);
+    }
+
+    private Role.RoleName resolveActorRole() {
+        List<Role.RoleName> roles = CommonService.getAuthorities();
+
+        // Ưu tiên ADMIN vì ADMIN có nhiều roles trong authorities
+        if (roles.contains(Role.RoleName.ADMIN)) return Role.RoleName.ADMIN;
+
+        return roles.stream()
+                .map(r -> {
+                    try {
+                        return Role.RoleName.valueOf(r.name());
+                    } catch (IllegalArgumentException e) {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElseThrow(() -> new BadRequestException("Cannot determine actor role"));
+    }
+
+    private boolean hasDetailChanges(UpdateAppointmentDto dto) {
+        return dto.getDoctorProfileId() != null
+                || dto.getAppointmentDate() != null
+                || dto.getBookingType() != null
+                || dto.getReason() != null
+                || dto.getSymptoms() != null
+                || dto.getNotes() != null;
     }
 }

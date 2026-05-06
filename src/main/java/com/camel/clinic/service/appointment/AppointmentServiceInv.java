@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -101,12 +102,16 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
         Date toDate = new Date(date.getTime() + 59 * 60 * 1000); // Add 59 minutes to cover the same hour
         Date fromDate = new Date(date.getTime() - 59 * 60 * 1000); // Subtract 59 minutes to cover the same hour
 
-        long count = repository.count(buildSpec(Map.of(
-                "doctorProfileId", doctorProfileId,
-                "fromDate", CommonService.formatDate(fromDate, "HH:mm dd/MM/yyyy"),
-                "toDate", CommonService.formatDate(toDate, "HH:mm dd/MM/yyyy"),
-                "excludeId", excludeAppointmentId
-        )));
+        Map<String, Object> params = new HashMap<>();
+        params.put("doctorProfileId", doctorProfileId);
+        params.put("fromDate", CommonService.formatDate(fromDate, "HH:mm dd/MM/yyyy"));
+        params.put("toDate", CommonService.formatDate(toDate, "HH:mm dd/MM/yyyy"));
+
+        if (excludeAppointmentId != null) {
+            params.put("excludeId", excludeAppointmentId);
+        }
+
+        long count = repository.count(buildSpec(params));
 
         return count > 0;
     }

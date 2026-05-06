@@ -32,21 +32,21 @@ public class Appointment extends SoftDeletableEntity {
     @Column(name = "appointment_code", unique = true, nullable = false, length = 20)
     private String appointmentCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "patient_id", nullable = false, foreignKey = @ForeignKey(name = "fk_appointment_patient"))
     @NotNull
     private PatientProfile patientProfile;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor_id", nullable = false, foreignKey = @ForeignKey(name = "fk_appointment_doctor"))
     @NotNull
     private DoctorProfile doctorProfile;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "specialty_id", foreignKey = @ForeignKey(name = "fk_appointment_specialty"))
     private Specialty specialty;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "service_id", foreignKey = @ForeignKey(name = "fk_appointment_service"))
     private ClinicService clinicService;
 

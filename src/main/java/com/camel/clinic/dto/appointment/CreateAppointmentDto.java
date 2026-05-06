@@ -35,5 +35,4 @@ public class CreateAppointmentDto {
     private String symptoms;
 
     private String notes;
-
 }

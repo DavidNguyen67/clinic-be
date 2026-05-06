@@ -1,11 +1,13 @@
 package com.camel.clinic.service;
 
+import com.camel.clinic.entity.Role;
 import com.camel.clinic.entity.User;
 import com.camel.clinic.exception.BadRequestException;
 import com.camel.clinic.exception.UnauthorizedException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -100,6 +102,23 @@ public class CommonService {
             throw new UnauthorizedException("Missing or invalid Authorization header");
         }
         return authHeader.substring(7);
+    }
+
+    public static List<Role.RoleName> getAuthorities() {
+        return SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getAuthorities()
+                .stream()
+                .map(a -> {
+                    try {
+                        return Role.RoleName.valueOf(a.getAuthority());
+                    } catch (IllegalArgumentException e) {
+                        return null; // bỏ qua authority không map được
+                    }
+                })
+                .filter(Objects::nonNull)
+                .toList();
     }
 
     public static String generateDoctorCode() {
