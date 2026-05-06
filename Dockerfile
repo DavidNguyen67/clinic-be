@@ -6,7 +6,7 @@ COPY pom.xml .
 RUN mvn dependency:go-offline -B
 
 COPY src ./src
-#COPY keys ./keys
+COPY keys ./keys
 RUN mvn clean package -DskipTests -B
 
 FROM eclipse-temurin:21-jre-alpine AS runner
@@ -17,7 +17,7 @@ RUN addgroup --system --gid 1001 spring && \
     adduser --system --uid 1001 --ingroup spring springboot
 
 COPY --from=builder --chown=springboot:spring /app/target/*.jar app.jar
-#COPY --from=builder --chown=springboot:spring /app/keys ./keys
+COPY --from=builder --chown=springboot:spring /app/keys ./keys
 
 USER springboot
 

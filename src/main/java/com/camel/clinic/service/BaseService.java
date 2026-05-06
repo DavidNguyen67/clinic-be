@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -396,5 +397,27 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
         if (value == null) return Specification.unrestricted();
         UUID excludeUuid = value instanceof UUID u ? u : CommonService.parseUuid(value);
         return (root, query, cb) -> cb.notEqual(root.get("id"), excludeUuid);
+    }
+
+    protected Specification<T> keywordSpec(String keyword, String[][] fields) {
+        if (keyword == null || keyword.isBlank()) return Specification.unrestricted();
+        if (fields == null || fields.length == 0) return Specification.unrestricted();
+
+        String pattern = "%" + keyword.toLowerCase().trim() + "%";
+
+        return (root, query, cb) -> {
+            Predicate[] predicates = Arrays.stream(fields)
+                    .map(f -> switch (f.length) {
+                        case 1 -> // direct: {"fullName"}
+                                cb.like(cb.lower(root.get(f[0])), pattern);
+                        case 2 -> // nested 1 level: {"specialty", "name"}
+                                cb.like(cb.lower(root.join(f[0], JoinType.LEFT).get(f[1])), pattern);
+                        case 3 -> // nested 2 level: {"doctorProfile", "user", "fullName"}
+                                cb.like(cb.lower(root.join(f[0], JoinType.LEFT).join(f[1], JoinType.LEFT).get(f[2])), pattern);
+                        default -> cb.conjunction();
+                    })
+                    .toArray(Predicate[]::new);
+            return cb.or(predicates);
+        };
     }
 }
