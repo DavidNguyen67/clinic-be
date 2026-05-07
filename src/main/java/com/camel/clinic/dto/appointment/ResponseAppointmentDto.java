@@ -1,6 +1,7 @@
 package com.camel.clinic.dto.appointment;
 
 import com.camel.clinic.entity.Appointment;
+import com.camel.clinic.entity.ClinicService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -42,8 +44,9 @@ public class ResponseAppointmentDto {
     private String specialtyId;
     private String specialtyName;
 
-    private String clinicServiceId;
-    private String clinicServiceName;
+    private String invoiceId;
+
+    private List<ClinicService> clinicServices;
     private BigDecimal fee;
 
     @JsonFormat(
@@ -97,11 +100,9 @@ public class ResponseAppointmentDto {
         if (a.getSpecialty() != null) {
             res.setSpecialtyId(a.getSpecialty().getId().toString());
             res.setSpecialtyName(a.getSpecialty().getName());
-        }
 
-        if (a.getClinicService() != null) {
-            res.setClinicServiceId(a.getClinicService().getId().toString());
-            res.setClinicServiceName(a.getClinicService().getName());
+            List<ClinicService> services = a.getSpecialty().getServices();
+            res.setClinicServices(services);
         }
 
         return res;

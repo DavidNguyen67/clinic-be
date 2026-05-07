@@ -4,6 +4,7 @@ import com.camel.clinic.entity.Appointment.AppointmentStatus;
 import com.camel.clinic.entity.Appointment.BookingType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,9 @@ import java.util.Date;
 @NoArgsConstructor
 public class UpdateAppointmentDto {
     private String doctorProfileId;
+
+    @NotNull(message = "Invoice ID is required")
+    private String invoiceId;
 
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,

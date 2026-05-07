@@ -1,5 +1,6 @@
 package com.camel.clinic.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -37,8 +38,9 @@ public class Invoice extends SoftDeletableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "appointment_id", foreignKey = @ForeignKey(name = "fk_invoice_appointment"))
+    @JsonBackReference("appointment-invoices")
     private Appointment appointment;
-
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false, foreignKey = @ForeignKey(name = "fk_invoice_patient"))
     @NotNull()
@@ -93,11 +95,30 @@ public class Invoice extends SoftDeletableEntity {
     }
 
     public void calculateTotals() {
-        this.subtotal = items.stream()
+
+        BigDecimal subtotalValue = items.stream()
                 .map(InvoiceItem::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        this.totalAmount = this.subtotal.subtract(this.discountAmount);
-        this.balance = this.totalAmount.subtract(this.insuranceCovered).subtract(this.patientPaid);
+
+        BigDecimal discount = discountAmount != null
+                ? discountAmount
+                : BigDecimal.ZERO;
+
+        BigDecimal insurance = insuranceCovered != null
+                ? insuranceCovered
+                : BigDecimal.ZERO;
+
+        BigDecimal paid = patientPaid != null
+                ? patientPaid
+                : BigDecimal.ZERO;
+
+        this.subtotal = subtotalValue;
+
+        this.totalAmount = subtotalValue.subtract(discount);
+
+        this.balance = totalAmount
+                .subtract(insurance)
+                .subtract(paid);
     }
 
     public enum InvoiceStatus {

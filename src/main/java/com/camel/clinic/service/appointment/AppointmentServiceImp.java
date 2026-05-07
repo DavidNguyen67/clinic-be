@@ -3,12 +3,17 @@ package com.camel.clinic.service.appointment;
 import com.camel.clinic.dto.appointment.CreateAppointmentDto;
 import com.camel.clinic.dto.appointment.ResponseAppointmentDto;
 import com.camel.clinic.dto.appointment.UpdateAppointmentDto;
+import com.camel.clinic.dto.invoice.CreateInvoiceDto;
+import com.camel.clinic.dto.invoice.UpdateInvoiceDto;
+import com.camel.clinic.dto.invoiceItem.UpdateInvoiceItemDto;
 import com.camel.clinic.entity.*;
 import com.camel.clinic.exception.BadRequestException;
 import com.camel.clinic.repository.AppointmentRepository;
 import com.camel.clinic.service.CommonService;
 import com.camel.clinic.service.doctorProfile.DoctorProfileServiceInv;
 import com.camel.clinic.service.doctorScheduleException.DoctorScheduleExceptionServiceInv;
+import com.camel.clinic.service.invoice.InvoiceServiceImp;
+import com.camel.clinic.service.invoice.InvoiceServiceInv;
 import com.camel.clinic.service.patientProfile.PatientProfileServiceInv;
 import com.camel.clinic.util.AppointmentStatusTransition;
 import com.camel.clinic.util.SecuritiesUtils;
@@ -16,12 +21,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.camel.clinic.entity.Appointment.AppointmentStatus.CANCELLED;
-import static com.camel.clinic.entity.Appointment.AppointmentStatus.PENDING;
+import static com.camel.clinic.entity.Appointment.AppointmentStatus.*;
 
 @Service
 @Slf4j
@@ -31,7 +34,9 @@ public class AppointmentServiceImp implements AppointmentService {
     private final DoctorScheduleExceptionServiceInv doctorScheduleExceptionServiceInv;
     private final DoctorProfileServiceInv doctorProfileServiceInv;
     private final PatientProfileServiceInv patientProfileServiceInv;
+    private final InvoiceServiceImp invoiceServiceImp;
     private final AppointmentRepository appointmentRepository;
+    private final InvoiceServiceInv invoiceServiceInv;
 
     @Override
     public ResponseEntity<?> count() {
@@ -93,6 +98,13 @@ public class AppointmentServiceImp implements AppointmentService {
 
         Appointment saved = (Appointment) serviceInv.create(appointment).getBody();
 
+        CreateInvoiceDto createInvoiceDto = new CreateInvoiceDto();
+        createInvoiceDto.setAppointmentId(saved.getId().toString());
+        createInvoiceDto.setInvoiceDate(appointmentDate);
+
+        createInvoiceDto.setItems(List.of());
+        invoiceServiceImp.create(createInvoiceDto);
+
         return ResponseEntity.ok(saved);
     }
 
@@ -125,7 +137,6 @@ public class AppointmentServiceImp implements AppointmentService {
                             "Only status transition is allowed.", currentStatus));
         }
 
-
         String targetDoctorId = (canEditDetails && requestBody.getDoctorProfileId() != null)
                 ? requestBody.getDoctorProfileId()
                 : appointment.getDoctorProfileId();
@@ -155,6 +166,31 @@ public class AppointmentServiceImp implements AppointmentService {
                 .findById(UUID.fromString(id))
                 .orElseThrow(() -> new BadRequestException("Appointment with ID " + id + " not found"));
 
+        if (targetStatus == CONFIRMED && appointmentEntity.getStatus() != CONFIRMED) {
+            String invoiceId = requestBody.getInvoiceId();
+            Invoice invoice = invoiceServiceInv
+                    .retrieve(invoiceId, null)
+                    .getBody() instanceof Invoice inv ? inv : null;
+
+            List<ClinicService> services = appointmentEntity.getSpecialty().getServices();
+
+            List<UpdateInvoiceItemDto> items = new ArrayList<>();
+
+            for (ClinicService service : services) {
+                UpdateInvoiceItemDto item = new UpdateInvoiceItemDto();
+                item.setQuantity(1);
+                item.setItemName(service.getName());
+                item.setUnitPrice(service.getPrice());
+                item.setItemType(InvoiceItem.ItemType.SERVICE);
+                items.add(item);
+            }
+
+            UpdateInvoiceDto invoiceRequest = new UpdateInvoiceDto();
+            invoiceRequest.setItems(items);
+
+            invoiceServiceImp.update(invoice.getId().toString(), invoiceRequest);
+        }
+
         if (doctorChanged) {
             DoctorProfile newDoctor = (DoctorProfile) doctorProfileServiceInv
                     .retrieve(targetDoctorId, null)
@@ -181,7 +217,6 @@ public class AppointmentServiceImp implements AppointmentService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> delete(String id) {
         return serviceInv.delete(id);
     }

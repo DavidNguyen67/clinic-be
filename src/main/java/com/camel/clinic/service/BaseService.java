@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -67,6 +68,34 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
         }
     }
 
+    /**
+     * Tạo nhiều bản ghi cùng lúc
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<?> bulkCreate(List<T> dataList) {
+        try {
+            if (dataList == null || dataList.isEmpty()) {
+                return ResponseEntity.badRequest().body("Request body must not be empty");
+            }
+
+            List<T> toSave = dataList.stream()
+                    .map(data -> {
+                        T initObject = entityFactory.get();
+                        MapperUtils.convertModelToEntity(data, initObject);
+                        return initObject;
+                    })
+                    .toList();
+
+            List<T> saved = repository.saveAll(toSave);
+            log.info("Bulk created {} entities", saved.size());
+
+            return ResponseEntity.status(HttpStatus.MULTI_STATUS).body(saved);
+        } catch (Exception e) {
+            log.error("Error bulk creating entities: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to bulk create entities: " + e.getMessage(), e);
+        }
+    }
+
     // ==================== LIST ====================
 
     /**
@@ -78,6 +107,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
      * - sortBy   : tên field để sort (default "id")
      * - sortDir  : "asc" hoặc "desc" (default "asc")
      */
+    @Transactional(readOnly = true)
     public ResponseEntity<?> list(Map<String, Object> queryParams) {
         try {
             int page = parseIntParam(queryParams, "page", 0);
@@ -117,6 +147,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
      *
      * @return tổng số bản ghi
      */
+    @Transactional(readOnly = true)
     public ResponseEntity<?> count() {
         try {
             Specification<T> notDeleted = (root, query, cb) ->
@@ -138,6 +169,7 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
      *
      * @param fields comma-separated tên các field muốn trả về, null = trả hết
      */
+    @Transactional(readOnly = true)
     public ResponseEntity<?> retrieve(String id, String fields) {
         try {
             T entity = repository.findById(UUID.fromString(id))

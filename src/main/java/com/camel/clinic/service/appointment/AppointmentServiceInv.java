@@ -3,9 +3,11 @@ package com.camel.clinic.service.appointment;
 import com.camel.clinic.dto.ApiPaged;
 import com.camel.clinic.dto.appointment.ResponseAppointmentDto;
 import com.camel.clinic.entity.Appointment;
+import com.camel.clinic.entity.Specialty;
 import com.camel.clinic.repository.AppointmentRepository;
 import com.camel.clinic.service.BaseService;
 import com.camel.clinic.service.CommonService;
+import jakarta.persistence.criteria.Fetch;
 import jakarta.persistence.criteria.JoinType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
@@ -77,9 +79,13 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
                     if (!query.getResultType().equals(Long.class)) {
                         root.fetch("doctorProfile", JoinType.LEFT);
                         root.fetch("patientProfile", JoinType.LEFT);
-                        root.fetch("specialty", JoinType.LEFT);
+
+                        Fetch<Appointment, Specialty> specialtyFetch = root.fetch("specialty", JoinType.LEFT);
+                        specialtyFetch.fetch("services", JoinType.LEFT);
+
                         root.fetch("clinicService", JoinType.LEFT);
                         query.distinct(true);
+
                     }
                     return cb.conjunction();
                 })

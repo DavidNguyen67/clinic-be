@@ -1,12 +1,15 @@
 package com.camel.clinic.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -78,6 +81,10 @@ public class Appointment extends SoftDeletableEntity {
 
     @Column(name = "queue_number")
     private Integer queueNumber;
+
+    @OneToMany(mappedBy = "appointment", fetch = FetchType.LAZY)
+    @JsonManagedReference("appointment-invoices")
+    private List<Invoice> invoices = new ArrayList<>();
 
     public enum AppointmentStatus {
         PENDING,

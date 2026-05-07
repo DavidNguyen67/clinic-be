@@ -141,19 +141,19 @@
             json: { }
 
 - route:
-    id: patient-appointment-list-route
+    id: staff-appointment-list-route
     from:
-      uri: direct:patient-appointment-list
+      uri: direct:staff-appointment-list
       steps:
         - process:
-            ref: appointmentListPatientProcessor
+            ref: appointmentListProcessor
         - marshal:
             json: { }
 
 - route:
-    id: patient-appointment-update-route
+    id: staff-appointment-update-route
     from:
-      uri: direct:patient-appointment-update
+      uri: direct:staff-appointment-update
       steps:
         - setHeader:
             name: X-DTO-Class

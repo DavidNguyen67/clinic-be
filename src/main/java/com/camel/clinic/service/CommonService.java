@@ -105,6 +105,10 @@ public class CommonService {
         return generateCode("PRM");
     }
 
+    public static String generateInvoiceCode() {
+        return generateCode("INV");
+    }
+
     public static String generateCode(String prefix) {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         String shortCode = uuid.substring(0, 10).toUpperCase();
