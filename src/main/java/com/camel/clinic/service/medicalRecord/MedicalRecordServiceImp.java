@@ -41,6 +41,18 @@ public class MedicalRecordServiceImp implements MedicalRecordService {
         String patientProfileId = requestBody.getPatientProfileId();
         String appointmentId = requestBody.getAppointmentId();
 
+        Appointment appointment = (Appointment) medicalRecordServiceInv
+                .retrieve(appointmentId, null)
+                .getBody();
+
+        if (appointment == null) {
+            throw new BadRequestException("Appointment with ID " + appointmentId + " not found");
+        }
+
+        if (appointment.getStatus() != Appointment.AppointmentStatus.COMPLETED) {
+            throw new BadRequestException("Cannot create medical record for appointment with status " + appointment.getStatus());
+        }
+
         DoctorProfile doctorProfile = (DoctorProfile) doctorProfileServiceInv
                 .retrieve(doctorProfileId, null)
                 .getBody();
@@ -57,13 +69,6 @@ public class MedicalRecordServiceImp implements MedicalRecordService {
             throw new BadRequestException("Patient profile with ID " + patientProfileId + " not found");
         }
 
-        Appointment appointment = (Appointment) medicalRecordServiceInv
-                .retrieve(appointmentId, null)
-                .getBody();
-
-        if (appointment == null) {
-            throw new BadRequestException("Appointment with ID " + appointmentId + " not found");
-        }
 
         MedicalRecord medicalRecord = new MedicalRecord();
         medicalRecord.setDoctorProfile(doctorProfile);
@@ -86,6 +91,16 @@ public class MedicalRecordServiceImp implements MedicalRecordService {
             throw new IllegalArgumentException("MedicalRecord with ID " + id + " not found");
         }
 
+        Appointment appointment = (Appointment) medicalRecordServiceInv
+                .retrieve(requestBody.getAppointmentId(), null).getBody();
+        if (appointment == null) {
+            throw new BadRequestException("Appointment with ID " + requestBody.getAppointmentId() + " not found");
+        }
+
+        if (appointment.getStatus() != Appointment.AppointmentStatus.COMPLETED) {
+            throw new BadRequestException("Cannot update medical record for appointment with status " + appointment.getStatus());
+        }
+
         DoctorProfile doctorProfile = (DoctorProfile) doctorProfileServiceInv
                 .retrieve(requestBody.getDoctorProfileId(), null).getBody();
         if (doctorProfile == null) {
@@ -98,11 +113,6 @@ public class MedicalRecordServiceImp implements MedicalRecordService {
             throw new BadRequestException("Patient profile with ID " + requestBody.getPatientProfileId() + " not found");
         }
 
-        Appointment appointment = (Appointment) medicalRecordServiceInv
-                .retrieve(requestBody.getAppointmentId(), null).getBody();
-        if (appointment == null) {
-            throw new BadRequestException("Appointment with ID " + requestBody.getAppointmentId() + " not found");
-        }
 
         medicalRecord.setDoctorProfile(doctorProfile);
         medicalRecord.setPatientProfile(patientProfile);
