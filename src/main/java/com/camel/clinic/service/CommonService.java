@@ -101,6 +101,10 @@ public class CommonService {
         return generateCode("APT");
     }
 
+    public static String generatePromotionCode() {
+        return generateCode("PRM");
+    }
+
     public static String generateCode(String prefix) {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         String shortCode = uuid.substring(0, 10).toUpperCase();

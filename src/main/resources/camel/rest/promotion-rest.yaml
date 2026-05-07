@@ -1,0 +1,51 @@
+- rest:
+    path: /v1/admin/promotion
+    post:
+      - path: /
+        to: direct:promotion-create
+    get:
+      - path: /
+        to: direct:promotion-list
+      - path: /count
+        to: direct:promotion-count
+      - path: /{id}
+        to: direct:promotion-get
+    patch:
+      - path: /{id}
+        to: direct:promotion-update
+      - path: /restore/{id}
+        to: direct:promotion-restore
+    delete:
+      - path: /{id}
+        to: direct:promotion-delete
+
+- rest:
+    path: /v1/staff/promotion
+    post:
+      - path: /
+        to: direct:staff-promotion-create
+    get:
+      - path: /
+        to: direct:staff-promotion-list
+      - path: /count
+        to: direct:staff-promotion-count
+      - path: /{id}
+        to: direct:staff-promotion-get
+    patch:
+      - path: /{id}
+        to: direct:staff-promotion-update
+      - path: /restore/{id}
+        to: direct:staff-promotion-restore
+    delete:
+      - path: /{id}
+        to: direct:staff-promotion-delete
+
+- rest:
+    path: /v1/patient/promotion
+    get:
+      - path: /
+        to: direct:patient-promotion-list
+      - path: /count
+        to: direct:patient-promotion-count
+      - path: /{id}
+        to: direct:patient-promotion-get

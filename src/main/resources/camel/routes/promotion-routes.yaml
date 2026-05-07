@@ -1,0 +1,208 @@
+- onException:
+    exception:
+      - java.lang.Exception
+    handled:
+      constant: true
+    steps:
+      - process:
+          ref: exceptionProcessor
+      - marshal:
+          json: { }
+
+- route:
+    id: promotion-list-route
+    from:
+      uri: direct:promotion-list
+      steps:
+        - process:
+            ref: promotionListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: promotion-count-route
+    from:
+      uri: direct:promotion-count
+      steps:
+        - process:
+            ref: promotionCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: promotion-get-route
+    from:
+      uri: direct:promotion-get
+      steps:
+        - process:
+            ref: promotionGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: promotion-create-route
+    from:
+      uri: direct:promotion-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.promotion.CreatePromotionDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: promotionCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: promotion-update-route
+    from:
+      uri: direct:promotion-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.promotion.UpdatePromotionDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: promotionUpdateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: promotion-restore-route
+    from:
+      uri: direct:promotion-restore
+      steps:
+        - process:
+            ref: promotionRestoreProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: promotion-delete-route
+    from:
+      uri: direct:promotion-delete
+      steps:
+        - process:
+            ref: promotionDeleteProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: staff-promotion-list-route
+    from:
+      uri: direct:staff-promotion-list
+      steps:
+        - process:
+            ref: promotionListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: staff-promotion-count-route
+    from:
+      uri: direct:staff-promotion-count
+      steps:
+        - process:
+            ref: promotionCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: staff-promotion-get-route
+    from:
+      uri: direct:staff-promotion-get
+      steps:
+        - process:
+            ref: promotionGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: staff-promotion-create-route
+    from:
+      uri: direct:staff-promotion-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.staff-promotion.CreatePromotionDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: promotionCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: staff-promotion-update-route
+    from:
+      uri: direct:staff-promotion-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.staff-promotion.UpdatePromotionDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: promotionUpdateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: staff-promotion-restore-route
+    from:
+      uri: direct:staff-promotion-restore
+      steps:
+        - process:
+            ref: promotionRestoreProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: staff-promotion-delete-route
+    from:
+      uri: direct:staff-promotion-delete
+      steps:
+        - process:
+            ref: promotionDeleteProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-promotion-list-route
+    from:
+      uri: direct:patient-promotion-list
+      steps:
+        - process:
+            ref: promotionListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-promotion-count-route
+    from:
+      uri: direct:patient-promotion-count
+      steps:
+        - process:
+            ref: promotionCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-promotion-get-route
+    from:
+      uri: direct:patient-promotion-get
+      steps:
+        - process:
+            ref: promotionGetProcessor
+        - marshal:
+            json: { }
