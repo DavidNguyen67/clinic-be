@@ -70,4 +70,13 @@ public class UpdatePromotionDto {
         if (startDate == null || endDate == null) return true;
         return endDate.after(startDate);
     }
+
+    @AssertTrue(message = "Max discount amount must be greater than 0 when discount type is PERCENTAGE")
+    public boolean isMaxDiscountAmountValid() {
+        if (discountType == DiscountType.PERCENTAGE) {
+            return maxDiscountAmount != null && maxDiscountAmount.compareTo(BigDecimal.ZERO) > 0
+                    && maxDiscountAmount.compareTo(BigDecimal.valueOf(100)) <= 0;
+        }
+        return true;
+    }
 }
