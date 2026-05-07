@@ -79,13 +79,13 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
                     if (!query.getResultType().equals(Long.class)) {
                         root.fetch("doctorProfile", JoinType.LEFT);
                         root.fetch("patientProfile", JoinType.LEFT);
+//                        root.fetch("invoices", JoinType.LEFT);
 
                         Fetch<Appointment, Specialty> specialtyFetch = root.fetch("specialty", JoinType.LEFT);
                         specialtyFetch.fetch("services", JoinType.LEFT);
 
                         root.fetch("clinicService", JoinType.LEFT);
                         query.distinct(true);
-
                     }
                     return cb.conjunction();
                 })
