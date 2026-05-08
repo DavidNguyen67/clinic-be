@@ -15,7 +15,7 @@ public interface InvoiceService {
 
     ResponseEntity<?> create(CreateInvoiceDto requestBody);
 
-    ResponseEntity<?> update(String id, UpdateInvoiceDto requestBody);
+    ResponseEntity<?> update(String id, UpdateInvoiceDto requestBody, boolean isFromProcessor);
 
     ResponseEntity<?> delete(String id);
 

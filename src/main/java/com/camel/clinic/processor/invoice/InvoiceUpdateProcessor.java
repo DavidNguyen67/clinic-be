@@ -20,7 +20,7 @@ public class InvoiceUpdateProcessor implements Processor {
         UpdateInvoiceDto request = exchange.getIn().getBody(UpdateInvoiceDto.class);
         String id = exchange.getIn().getHeader("id", String.class);
 
-        ResponseEntity<?> response = serviceImp.update(id, request);
+        ResponseEntity<?> response = serviceImp.update(id, request, true);
         exchange.getIn().setBody(response);
     }
 }

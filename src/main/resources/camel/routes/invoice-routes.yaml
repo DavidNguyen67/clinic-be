@@ -10,9 +10,9 @@
           json: { }
 
 - route:
-    id: invoice-list-route
+    id: staff-invoice-list-route
     from:
-      uri: direct:invoice-list
+      uri: direct:staff-invoice-list
       steps:
         - process:
             ref: invoiceListProcessor
@@ -20,9 +20,9 @@
             json: { }
 
 - route:
-    id: invoice-count-route
+    id: staff-invoice-count-route
     from:
-      uri: direct:invoice-count
+      uri: direct:staff-invoice-count
       steps:
         - process:
             ref: invoiceCountProcessor
@@ -30,9 +30,9 @@
             json: { }
 
 - route:
-    id: invoice-get-route
+    id: staff-invoice-get-route
     from:
-      uri: direct:invoice-get
+      uri: direct:staff-invoice-get
       steps:
         - process:
             ref: invoiceGetProcessor
@@ -40,13 +40,13 @@
             json: { }
 
 - route:
-    id: invoice-create-route
+    id: staff-invoice-create-route
     from:
-      uri: direct:invoice-create
+      uri: direct:staff-invoice-create
       steps:
         - setHeader:
             name: X-DTO-Class
-            constant: com.camel.clinic.dto.invoice.CreateFaqDto
+            constant: com.camel.clinic.dto.invoice.CreateInvoiceDto
         - process:
             ref: requestDeserializerProcessor
         - process:
@@ -57,13 +57,13 @@
             json: { }
 
 - route:
-    id: invoice-update-route
+    id: staff-invoice-update-route
     from:
-      uri: direct:invoice-update
+      uri: direct:staff-invoice-update
       steps:
         - setHeader:
             name: X-DTO-Class
-            constant: com.camel.clinic.dto.invoice.UpdateFaqDto
+            constant: com.camel.clinic.dto.invoice.UpdateInvoiceDto
         - process:
             ref: requestDeserializerProcessor
         - process:
@@ -74,9 +74,9 @@
             json: { }
 
 - route:
-    id: invoice-restore-route
+    id: staff-invoice-restore-route
     from:
-      uri: direct:invoice-restore
+      uri: direct:staff-invoice-restore
       steps:
         - process:
             ref: invoiceRestoreProcessor
@@ -84,9 +84,9 @@
             json: { }
 
 - route:
-    id: invoice-delete-route
+    id: staff-invoice-delete-route
     from:
-      uri: direct:invoice-delete
+      uri: direct:staff-invoice-delete
       steps:
         - process:
             ref: invoiceDeleteProcessor
@@ -120,5 +120,22 @@
       steps:
         - process:
             ref: invoiceGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-invoice-update-route
+    from:
+      uri: direct:patient-invoice-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.invoice.UpdateInvoiceDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: invoiceUpdateProcessor
         - marshal:
             json: { }

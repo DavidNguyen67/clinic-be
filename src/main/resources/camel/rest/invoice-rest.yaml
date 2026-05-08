@@ -1,23 +1,23 @@
 - rest:
-    path: /v1/admin/invoice
+    path: /v1/staff/invoice
     post:
       - path: /
-        to: direct:invoice-create
+        to: direct:staff-invoice-create
     get:
       - path: /
-        to: direct:invoice-list
+        to: direct:staff-invoice-list
       - path: /count
-        to: direct:invoice-count
+        to: direct:staff-invoice-count
       - path: /{id}
-        to: direct:invoice-get
+        to: direct:staff-invoice-get
     patch:
       - path: /{id}
-        to: direct:invoice-update
+        to: direct:staff-invoice-update
       - path: /restore/{id}
-        to: direct:invoice-restore
+        to: direct:staff-invoice-restore
     delete:
       - path: /{id}
-        to: direct:invoice-delete
+        to: direct:staff-invoice-delete
 
 - rest:
     path: /v1/patient/invoice
@@ -28,3 +28,6 @@
         to: direct:patient-invoice-count
       - path: /{id}
         to: direct:patient-invoice-get
+    patch:
+      - path: /{id}
+        to: direct:patient-invoice-update

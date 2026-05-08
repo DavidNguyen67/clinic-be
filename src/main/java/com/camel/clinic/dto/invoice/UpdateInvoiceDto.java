@@ -4,10 +4,8 @@ package com.camel.clinic.dto.invoice;
 import com.camel.clinic.dto.invoiceItem.UpdateInvoiceItemDto;
 import com.camel.clinic.entity.Invoice.InvoiceStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -42,7 +40,5 @@ public class UpdateInvoiceDto {
 
     private InvoiceStatus status;
 
-    @Size(min = 1, message = "Invoice must have at least one item")
-    @Valid
-    private List<UpdateInvoiceItemDto> items;
+    private List<UpdateInvoiceItemDto> items = List.of();
 }

@@ -34,7 +34,16 @@ public class InvoiceServiceInv extends BaseService<Invoice, InvoiceRepository> {
                     }
                     return cb.conjunction();
                 })
-                .and(nestedFieldEqual("appointment", "id", CommonService.parseToUuid(queryParams.get("appointmentId"))));
+                .and(multiFieldLike((String) queryParams.get("fullName"),
+                                new String[]{"patientProfile", "user", "fullName"}
+                        )
+                                .and(multiFieldEquals(queryParams.get("patientProfileId"),
+                                        new String[]{"patientProfile", "id"}
+                                )).and(multiFieldOnDate(CommonService.parseToDate((String) queryParams.get("invoiceDate")),
+                                        new String[]{"invoiceDate"},
+                                        new String[]{"createdAt"}
+                                ))
+                );
     }
 
     public boolean isExistInvoiceByAppointmentId(String appointmentId) {

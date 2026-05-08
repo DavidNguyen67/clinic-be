@@ -1,5 +1,6 @@
 package com.camel.clinic.service.invoice;
 
+import com.camel.clinic.dto.ApiPaged;
 import com.camel.clinic.dto.invoice.CreateInvoiceDto;
 import com.camel.clinic.dto.invoice.UpdateInvoiceDto;
 import com.camel.clinic.entity.Appointment;
@@ -87,7 +88,7 @@ public class InvoiceServiceImp implements InvoiceService {
     }
 
     @Override
-    public ResponseEntity<?> update(String id, UpdateInvoiceDto requestBody) {
+    public ResponseEntity<?> update(String id, UpdateInvoiceDto requestBody, boolean isFromProcessor) {
         Invoice invoice = serviceInv.retrieve(id, null).getBody() instanceof Invoice inv ? inv : null;
         if (invoice == null) {
             throw new IllegalArgumentException("Invoice with ID " + id + " not found");
@@ -99,25 +100,42 @@ public class InvoiceServiceImp implements InvoiceService {
         invoice.setInsuranceCovered(requestBody.getInsuranceCovered());
         invoice.setPatientPaid(requestBody.getPatientPaid());
 
-        List<InvoiceItem> itemsList = requestBody.getItems().stream()
-                .map(itemDto -> {
-                    InvoiceItem item = new InvoiceItem();
-                    item.setQuantity(itemDto.getQuantity());
-                    item.setItemType(itemDto.getItemType());
-                    item.setUnitPrice(itemDto.getUnitPrice());
-                    item.setInvoice(invoice);
-                    item.setItemName(itemDto.getItemName());
-                    item.calculateTotalPrice();
-                    return item;
-                })
-                .toList();
+        if (isFromProcessor) {
+//            List<InvoiceItem> itemsList =
+            Map<String, Object> params = Map.of("invoiceId", id);
+            ResponseEntity<ApiPaged<?>> itemsPage =
+                    (ResponseEntity<ApiPaged<?>>) invoiceItemServiceInv.list(params);
+            List<InvoiceItem> itemsList = itemsPage.getBody() != null ? (List<InvoiceItem>) itemsPage.getBody().getData() : List.of();
 
-        invoiceItemServiceInv.bulkCreate(itemsList);
+            invoice.setItems(itemsList);
+            invoice.calculateTotals();
+            invoice.setItems(null);
+        } else {
+            List<InvoiceItem> itemsList = requestBody.getItems().stream()
+                    .map(itemDto -> {
+                        InvoiceItem item = new InvoiceItem();
+                        item.setQuantity(itemDto.getQuantity());
+                        item.setItemType(itemDto.getItemType());
+                        item.setUnitPrice(itemDto.getUnitPrice());
+                        item.setInvoice(invoice);
+                        item.setItemName(itemDto.getItemName());
+                        item.calculateTotalPrice();
+                        return item;
+                    })
+                    .toList();
 
-        invoice.setItems(itemsList);
-        invoice.calculateTotals();
+            invoiceItemServiceInv.bulkCreate(itemsList);
 
-        invoice.setItems(null);
+            invoice.setItems(itemsList);
+            invoice.calculateTotals();
+            invoice.setItems(null);
+        }
+
+        if (invoice.getBalance().equals(BigDecimal.ZERO) &&
+                (EnumSet.of(Invoice.InvoiceStatus.DRAFT, Invoice.InvoiceStatus.PAID)
+                        .contains(invoice.getStatus()))) {
+            invoice.setStatus(Invoice.InvoiceStatus.PAID);
+        }
 
         return serviceInv.update(id, invoice, null);
     }

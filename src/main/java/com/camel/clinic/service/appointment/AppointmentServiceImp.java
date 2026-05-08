@@ -193,7 +193,7 @@ public class AppointmentServiceImp implements AppointmentService {
             UpdateInvoiceDto invoiceRequest = new UpdateInvoiceDto();
             invoiceRequest.setItems(items);
 
-            invoiceServiceImp.update(invoice.getId().toString(), invoiceRequest);
+            invoiceServiceImp.update(invoice.getId().toString(), invoiceRequest, false);
         }
 
         if (targetStatus == CHECKED_IN && appointmentEntity.getStatus() != CHECKED_IN) {
