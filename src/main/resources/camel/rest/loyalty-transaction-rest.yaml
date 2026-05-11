@@ -28,3 +28,5 @@
         to: direct:patient-loyalty-transaction-count
       - path: /{id}
         to: direct:patient-loyalty-transaction-get
+      - path: /statistics
+        to: direct:patient-loyalty-statistics

@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
 public interface LoyaltyTransactionService {
+    ResponseEntity<?> calculateStatistics(Map<String, Object> queryParams);
+    
     ResponseEntity<?> list(Map<String, Object> queryParams);
 
     ResponseEntity<?> count();

@@ -33,6 +33,11 @@ public class LoyaltyTransactionServiceImp implements LoyaltyTransactionService {
     }
 
     @Override
+    public ResponseEntity<?> calculateStatistics(Map<String, Object> queryParams) {
+        return serviceInv.calculateStatistics(queryParams);
+    }
+
+    @Override
     public ResponseEntity<?> list(Map<String, Object> queryParams) {
         return serviceInv.list(queryParams);
     }

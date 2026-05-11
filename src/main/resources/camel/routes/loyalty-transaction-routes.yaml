@@ -122,3 +122,13 @@
             ref: loyaltyTransactionGetProcessor
         - marshal:
             json: { }
+
+- route:
+    id: patient-loyalty-statistics-route
+    from:
+      uri: direct:patient-loyalty-statistics
+      steps:
+        - process:
+            ref: loyaltyTransactionStatisticsProcessor
+        - marshal:
+            json: { }
