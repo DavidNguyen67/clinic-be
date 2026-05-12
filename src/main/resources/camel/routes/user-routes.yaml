@@ -20,6 +20,26 @@
             json: { }
 
 - route:
+    id: user-statistics-route
+    from:
+      uri: direct:user-statistics
+      steps:
+        - process:
+            ref: userStatisticsProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: user-seed-route
+    from:
+      uri: direct:user-seed
+      steps:
+        - process:
+            ref: userSeedProcessor
+        - marshal:
+            json: { }
+
+- route:
     id: user-count-route
     from:
       uri: direct:user-count

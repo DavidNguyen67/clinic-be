@@ -20,6 +20,16 @@
             json: { }
 
 - route:
+    id: doctor-profile-seed-route
+    from:
+      uri: direct:doctor-profile-seed
+      steps:
+        - process:
+            ref: doctorProfileSeedProcessor
+        - marshal:
+            json: { }
+
+- route:
     id: doctor-profile-count-route
     from:
       uri: direct:doctor-profile-count

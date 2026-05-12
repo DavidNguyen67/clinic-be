@@ -1,5 +1,6 @@
 package com.camel.clinic.repository;
 
+import com.camel.clinic.entity.Role;
 import com.camel.clinic.entity.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
     List<String> findEmailsBatch(Pageable pageable);
 
     Optional<User> findByPhone(String phone);
+
+    List<User> findAllByRole(Role.RoleName role);
 }

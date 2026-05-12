@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -25,7 +26,16 @@ public class UserServiceInv extends BaseService<User, UserRepository> {
                 .and(notDeleted())
                 .and(fieldEquals("gender", CommonService.parseToEnum(User.Gender.class, queryParams.get("gender"))))
                 .and(fieldEquals("status", CommonService.parseToEnum(User.UserStatus.class, queryParams.get("status"))))
-                .and(fieldEquals("role", CommonService.parseToEnum(Role.RoleName.class, queryParams.get("role"))))
+                .and(multiFieldIn(
+                        parseEnumList(queryParams.get("role"), Role.RoleName.class),
+                        new String[]{"role"}
+                ))
                 .and(fieldLike("fullName", (String) queryParams.get("fullName")));
+    }
+
+    public long countByRole(Role.RoleName role, Map<String, Object> baseParams) {
+        Map<String, Object> params = new HashMap<>(baseParams);
+        params.put("role", role != null ? role.name() : null);
+        return repository.count(buildSpec(params));
     }
 }

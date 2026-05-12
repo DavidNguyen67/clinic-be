@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -63,6 +64,41 @@ public class DoctorProfileServiceImp implements DoctorProfileService {
         }
 
         return serviceInv.create(doctorProfile);
+    }
+
+    @Override
+    public ResponseEntity<?> bulkCreate(List<CreateDoctorProfileDto> requestBody) {
+        List<DoctorProfile> doctorProfiles = requestBody.stream().map(dto -> {
+            DoctorProfile doctorProfile = new DoctorProfile();
+            doctorProfile.setDoctorCode(CommonService.generateDoctorCode());
+            doctorProfile.setDegree(dto.getDegree());
+            doctorProfile.setExperienceYears(dto.getExperienceYears());
+            doctorProfile.setEducation(dto.getEducation());
+            doctorProfile.setBio(dto.getBio());
+            doctorProfile.setConsultationFee(dto.getConsultationFee());
+            doctorProfile.setIsFeatured(dto.getIsFeatured());
+
+            String userId = dto.getUserId();
+            User user = userServiceInv.retrieve(userId, null).getBody() instanceof User u ? u : null;
+            if (user == null) {
+                throw new IllegalArgumentException("User with ID " + userId + " not found");
+            }
+            SecuritiesUtils.requireRole(user, "DOCTOR");
+            doctorProfile.setUser(user);
+
+            String specialtyId = dto.getSpecialtyId();
+            if (specialtyId != null && !specialtyId.isEmpty()) {
+                Specialty specialty = specialtyServiceInv.retrieve(specialtyId, null).getBody() instanceof Specialty sp ? sp : null;
+                if (specialty == null) {
+                    throw new IllegalArgumentException("Specialty with ID " + specialtyId + " not found");
+                }
+                doctorProfile.setSpecialty(specialty);
+            }
+
+            return doctorProfile;
+        }).toList();
+
+        return serviceInv.bulkCreate(doctorProfiles);
     }
 
     @Override

@@ -3,6 +3,8 @@
     post:
       - path: /
         to: direct:doctor-profile-create
+      - path: /seed
+        to: direct:doctor-profile-seed
     get:
       - path: /
         to: direct:doctor-profile-list

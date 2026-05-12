@@ -1,9 +1,14 @@
 - rest:
     path: /v1/admin/user
+    post:
+      - path: /seed
+        to: direct:user-seed
     get:
       - path: /
         to: direct:user-list
       - path: /count
-        to: direct:user-count
+        to: direct:user-count\
+      - path: /statistics
+        to: direct:user-statistics
       - path: /{id}
         to: direct:user-get
