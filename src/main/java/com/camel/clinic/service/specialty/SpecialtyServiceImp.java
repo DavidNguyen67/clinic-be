@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -38,6 +39,22 @@ public class SpecialtyServiceImp implements SpecialtyService {
         specialty.setSpecialtyType(requestBody.getSpecialtyType());
 
         return serviceInv.create(specialty);
+    }
+
+    @Override
+    public ResponseEntity<?> bulkCreate(List<CreateSpecialtyDto> requestBody) {
+        List<Specialty> specialties = requestBody.stream().map(dto -> {
+            Specialty specialty = new Specialty();
+            specialty.setName(dto.getName());
+            specialty.setSlug(dto.getSlug());
+            specialty.setDescription(dto.getDescription());
+            specialty.setImage(dto.getImage());
+            specialty.setDisplayOrder(dto.getDisplayOrder());
+            specialty.setIsActive(dto.getIsActive());
+            specialty.setSpecialtyType(dto.getSpecialtyType());
+            return specialty;
+        }).toList();
+        return serviceInv.bulkCreate(specialties);
     }
 
     @Override

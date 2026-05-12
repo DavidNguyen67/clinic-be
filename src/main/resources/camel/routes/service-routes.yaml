@@ -20,6 +20,16 @@
             json: { }
 
 - route:
+    id: service-seed-route
+    from:
+      uri: direct:service-seed
+      steps:
+        - process:
+            ref: servicesSeedProcessor
+        - marshal:
+            json: { }
+
+- route:
     id: service-count-route
     from:
       uri: direct:service-count

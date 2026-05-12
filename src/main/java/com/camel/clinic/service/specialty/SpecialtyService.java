@@ -4,6 +4,7 @@ import com.camel.clinic.dto.specialty.CreateSpecialtyDto;
 import com.camel.clinic.dto.specialty.UpdateSpecialtyDto;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Map;
 
 public interface SpecialtyService {
@@ -14,6 +15,8 @@ public interface SpecialtyService {
     ResponseEntity<?> retrieve(String id);
 
     ResponseEntity<?> create(CreateSpecialtyDto requestBody);
+
+    ResponseEntity<?> bulkCreate(List<CreateSpecialtyDto> requestBody);
 
     ResponseEntity<?> update(String id, UpdateSpecialtyDto requestBody);
 

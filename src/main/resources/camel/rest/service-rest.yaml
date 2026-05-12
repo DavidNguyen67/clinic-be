@@ -3,6 +3,9 @@
     post:
       - path: /
         to: direct:service-create
+      - path: /seed
+        to: direct:service-seed
+    
     get:
       - path: /
         to: direct:service-list

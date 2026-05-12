@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -52,7 +53,33 @@ public class ServicesServiceImp implements ServicesService {
         }
 
         return serviceInv.create(clinicService);
+    }
 
+    @Override
+    public ResponseEntity<?> bulkCreate(List<CreateServiceDto> requestBody) {
+        List<ClinicService> clinicServices = requestBody.stream().map(dto -> {
+            ClinicService clinicService = new ClinicService();
+            clinicService.setName(dto.getName());
+            clinicService.setSlug(dto.getSlug());
+            clinicService.setDescription(dto.getDescription());
+            clinicService.setImage(dto.getImage());
+            clinicService.setPrice(dto.getPrice());
+            clinicService.setPromotionalPrice(dto.getPromotionalPrice());
+            clinicService.setDuration(dto.getDuration());
+            clinicService.setIsActive(dto.getIsActive());
+            clinicService.setIsFeatured(dto.getIsFeatured());
+
+            String specialtyId = dto.getSpecialtyId();
+            if (specialtyId != null && !specialtyId.isEmpty()) {
+                Specialty specialty = specialtyServiceInv.retrieve(specialtyId, null).getBody() instanceof Specialty sp ? sp : null;
+                if (specialty == null) {
+                    throw new IllegalArgumentException("Specialty with ID " + specialtyId + " not found");
+                }
+                clinicService.setSpecialty(specialty);
+            }
+            return clinicService;
+        }).toList();
+        return serviceInv.bulkCreate(clinicServices);
     }
 
     @Override

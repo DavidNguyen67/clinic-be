@@ -4,6 +4,7 @@ import com.camel.clinic.dto.services.CreateServiceDto;
 import com.camel.clinic.dto.services.UpdateServiceDto;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ServicesService {
@@ -14,6 +15,8 @@ public interface ServicesService {
     ResponseEntity<?> retrieve(String id);
 
     ResponseEntity<?> create(CreateServiceDto requestBody);
+
+    ResponseEntity<?> bulkCreate(List<CreateServiceDto> requestBody);
 
     ResponseEntity<?> update(String id, UpdateServiceDto requestBody);
 

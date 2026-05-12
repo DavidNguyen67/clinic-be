@@ -10,6 +10,16 @@
           json: { }
 
 - route:
+    id: specialty-seed-route
+    from:
+      uri: direct:specialty-seed
+      steps:
+        - process:
+            ref: specialtySeedProcessor
+        - marshal:
+            json: { }
+
+- route:
     id: specialty-list-route
     from:
       uri: direct:specialty-list

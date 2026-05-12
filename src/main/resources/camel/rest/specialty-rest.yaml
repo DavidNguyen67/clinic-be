@@ -3,6 +3,8 @@
     post:
       - path: /
         to: direct:specialty-create
+      - path: /seed
+        to: direct:specialty-seed
     get:
       - path: /
         to: direct:specialty-list
