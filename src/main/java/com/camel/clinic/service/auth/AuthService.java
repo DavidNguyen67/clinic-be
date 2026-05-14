@@ -25,5 +25,7 @@ public interface AuthService {
     ResponseEntity<?> getUserProfile(UUID userId) throws NotFoundException;
 
     ResponseEntity<?> changePassword(ChangePasswordRequestDTO req, String email) throws BadRequestException;
+
+    ResponseEntity<?> updateProfile(String id, UpdateProfileDto req) throws BadRequestException;
 }
 

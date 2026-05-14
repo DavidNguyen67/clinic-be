@@ -164,3 +164,20 @@
             ref: countEmailAuthProcessor
         - marshal:
             json: { }
+
+- route:
+    id: auth-update-profile-route
+    from:
+      uri: direct:auth-update-profile
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.auth.ChangePasswordRequestDTO
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: updateProfileAuthProcessor
+        - marshal:
+            json: { }

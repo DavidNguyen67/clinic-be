@@ -33,7 +33,7 @@ import java.util.*;
 @AllArgsConstructor
 public class AuthServiceImp implements AuthService {
     private final AuthenticationManager authenticationManager;
-    private final AuthServiceInv authServiceInv;
+    private final AuthServiceInv serviceInv;
     private final PasswordEncoder passwordEncoder;
     private final TokenStoreService tokenStoreService;
     private final OtpService otpService;
@@ -54,7 +54,7 @@ public class AuthServiceImp implements AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        User user = authServiceInv.findByEmail(request.getEmail())
+        User user = serviceInv.findByEmail(request.getEmail())
                 .orElseThrow(() -> new BadRequestException("Invalid email or password"));
 
         // Check if user is active
@@ -64,7 +64,7 @@ public class AuthServiceImp implements AuthService {
 
         // Update last login
         user.setLastLogin(new Date());
-        authServiceInv.save(user);
+        serviceInv.save(user);
 
         // Generate tokens with full user information
         String accessToken = jwtUtil.generateToken(user);
@@ -95,13 +95,13 @@ public class AuthServiceImp implements AuthService {
                 throw new BadRequestException("Email already exists");
             }
 
-            if (authServiceInv.findByEmail(email).isPresent()) {
+            if (serviceInv.findByEmail(email).isPresent()) {
                 emailUniqueService.addToCache(email);
                 throw new BadRequestException("Email already exists");
             }
 
 
-            if (authServiceInv.findByPhone(req.getPhone()).isPresent()) {
+            if (serviceInv.findByPhone(req.getPhone()).isPresent()) {
                 throw new BadRequestException("Phone number already exists");
             }
 
@@ -115,7 +115,7 @@ public class AuthServiceImp implements AuthService {
             user.setRole(role);
             user.setPasswordHash(passwordEncoder.encode(req.getPassword()));
 
-            user = authServiceInv.save(user);
+            user = serviceInv.save(user);
 
             String accessToken = jwtUtil.generateToken(user);
             String refreshToken = jwtUtil.generateRefreshToken(user.getId());
@@ -174,7 +174,7 @@ public class AuthServiceImp implements AuthService {
         if (!tokenStoreService.matchesRefreshToken(userId, refreshToken)) {
             throw new BadRequestException("Refresh token revoked");
         }
-        User user = authServiceInv.findById(CommonService.parseToUuid((userId)))
+        User user = serviceInv.findById(CommonService.parseToUuid((userId)))
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         String newAccessToken = jwtUtil.generateToken(user);
@@ -214,7 +214,7 @@ public class AuthServiceImp implements AuthService {
     public ResponseEntity<?> forgotPassword(ForgotPasswordRequestDTO req) throws BadRequestException {
         String email = Optional.ofNullable(req.getEmail()).orElse("").trim().toLowerCase();
         // Do not leak existence, but for simplicity we still validate format via DTO.
-        authServiceInv.findByEmail(email).ifPresent(u -> {
+        serviceInv.findByEmail(email).ifPresent(u -> {
             String otp = otpService.generateAndStoreOtp(email);
             emailService.sendOtpEmail(email, otp);
         });
@@ -240,32 +240,49 @@ public class AuthServiceImp implements AuthService {
         if (email == null) {
             throw new BadRequestException("Invalid reset token");
         }
-        User user = authServiceInv.findByEmail(email)
+        User user = serviceInv.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
         user.setPasswordHash(passwordEncoder.encode(req.getNewPassword()));
-        authServiceInv.save(user);
+        serviceInv.save(user);
         return ResponseEntity.noContent().build();
     }
 
     @Override
     public ResponseEntity<?> getUserProfile(UUID userId) throws NotFoundException {
-        User user = authServiceInv.findById(userId)
+        User user = serviceInv.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
-        UserProfileDTO profile = authServiceInv.buildUserProfileDTO(user);
+        UserProfileDTO profile = serviceInv.buildUserProfileDTO(user);
         return ResponseEntity.ok(profile);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> changePassword(ChangePasswordRequestDTO req, String email) throws BadRequestException {
-        User user = authServiceInv.findByEmail(email)
+        User user = serviceInv.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
         if (!passwordEncoder.matches(req.getCurrentPassword(), user.getPasswordHash())) {
             throw new BadRequestException("Current password is incorrect");
         }
         user.setPasswordHash(passwordEncoder.encode(req.getNewPassword()));
-        authServiceInv.save(user);
+        serviceInv.save(user);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<?> updateProfile(String id, UpdateProfileDto req) throws BadRequestException {
+        User user = serviceInv.retrieve(id, null).getBody() instanceof User u ? u : null;
+        if (user == null) {
+            throw new IllegalArgumentException("User with ID " + id + " not found");
+        }
+
+        user.setEmail(req.getEmail());
+        user.setFullName(req.getFullName());
+        user.setPhone(req.getPhone());
+        user.setDateOfBirth(req.getDateOfBirth());
+        user.setGender(req.getGender());
+        user.setPathAvatar(req.getPathAvatar());
+        
+        return serviceInv.update(id, user, null);
     }
 
 }
