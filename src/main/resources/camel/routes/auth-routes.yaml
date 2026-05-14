@@ -172,7 +172,7 @@
       steps:
         - setHeader:
             name: X-DTO-Class
-            constant: com.camel.clinic.dto.auth.ChangePasswordRequestDTO
+            constant: com.camel.clinic.dto.auth.UpdateProfileDto
         - process:
             ref: requestDeserializerProcessor
         - process:

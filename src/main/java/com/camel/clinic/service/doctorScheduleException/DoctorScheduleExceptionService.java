@@ -4,6 +4,7 @@ import com.camel.clinic.dto.doctorScheduleException.CreateDoctorScheduleExceptio
 import com.camel.clinic.dto.doctorScheduleException.UpdateDoctorScheduleExceptionDto;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Map;
 
 public interface DoctorScheduleExceptionService {
@@ -14,6 +15,8 @@ public interface DoctorScheduleExceptionService {
     ResponseEntity<?> retrieve(String id);
 
     ResponseEntity<?> create(CreateDoctorScheduleExceptionDto requestBody);
+
+    ResponseEntity<?> bulkCreate(List<CreateDoctorScheduleExceptionDto> requestBody);
 
     ResponseEntity<?> update(String id, UpdateDoctorScheduleExceptionDto requestBody);
 

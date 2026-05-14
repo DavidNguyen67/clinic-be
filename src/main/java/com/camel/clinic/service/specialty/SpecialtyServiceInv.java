@@ -34,6 +34,7 @@ public class SpecialtyServiceInv extends BaseService<Specialty, SpecialtyReposit
         return Specification.<Specialty>unrestricted()
                 .and(notDeleted())
                 .and(fieldLike("slug", (String) queryParams.get("slug")))
+                .and(multiFieldLike((String) queryParams.get("keyword"), new String[]{"name"}))
                 .and(fieldEquals("isActive", CommonService.parseBoolean(queryParams.get("isActive"))));
     }
 

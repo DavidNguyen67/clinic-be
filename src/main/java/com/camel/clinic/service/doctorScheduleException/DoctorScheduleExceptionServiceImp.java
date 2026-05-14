@@ -12,10 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -57,6 +55,70 @@ public class DoctorScheduleExceptionServiceImp implements DoctorScheduleExceptio
         doctorScheduleException.setDoctorProfile(doctorProfile);
 
         return serviceInv.create(doctorScheduleException);
+    }
+
+    @Override
+    public ResponseEntity<?> bulkCreate(List<CreateDoctorScheduleExceptionDto> requestBody) {
+        if (requestBody == null || requestBody.isEmpty()) {
+            throw new IllegalArgumentException("Request body must not be empty");
+        }
+
+        Map<String, List<CreateDoctorScheduleExceptionDto>> groupedByDoctor = requestBody.stream()
+                .collect(Collectors.groupingBy(CreateDoctorScheduleExceptionDto::getDoctorProfileId));
+
+        boolean hasDuplicateInRequest = requestBody.stream()
+                .map(dto -> dto.getDoctorProfileId() + "_" + dto.getExceptionDate())
+                .collect(Collectors.toSet())
+                .size() < requestBody.size();
+
+        if (hasDuplicateInRequest) {
+            throw new IllegalArgumentException("Request contains duplicate entries for the same doctor and date");
+        }
+
+        List<DoctorScheduleException> toCreate = new ArrayList<>();
+
+        for (Map.Entry<String, List<CreateDoctorScheduleExceptionDto>> entry : groupedByDoctor.entrySet()) {
+            String doctorProfileId = entry.getKey();
+            List<CreateDoctorScheduleExceptionDto> dtos = entry.getValue();
+
+            DoctorProfile doctorProfile = doctorProfileServiceInv.retrieve(doctorProfileId, null).getBody()
+                    instanceof DoctorProfile dp ? dp : null;
+            if (doctorProfile == null) {
+                throw new IllegalArgumentException("Doctor Profile with ID " + doctorProfileId + " not found");
+            }
+
+//            List<Date> dates = dtos.stream()
+//                    .map(dto -> CommonService.parseToDate(dto.getExceptionDate()))
+//                    .toList();
+//
+//            List<DoctorScheduleException> existingExceptions =
+//                    serviceInv.getExceptionsByDoctorAndDates(doctorProfileId, dates);
+
+//            Set<String> existingDateStrings = existingExceptions.stream()
+//                    .map(e -> e.getExceptionDate().toString())
+//                    .collect(Collectors.toSet());
+
+            for (CreateDoctorScheduleExceptionDto dto : dtos) {
+                Date exceptionDate = CommonService.parseToDate(dto.getExceptionDate());
+
+//                if (existingDateStrings.contains(exceptionDate.toString())) {
+//                    throw new IllegalArgumentException(
+//                            "A DoctorScheduleException already exists for doctor profile ID "
+//                                    + doctorProfileId + " on date " + exceptionDate
+//                    );
+//                }
+
+                DoctorScheduleException entity = new DoctorScheduleException();
+                entity.setExceptionDate(exceptionDate);
+                entity.setType(dto.getType());
+                entity.setReason(dto.getReason());
+                entity.setDoctorProfile(doctorProfile);
+
+                toCreate.add(entity);
+            }
+        }
+
+        return serviceInv.bulkCreate(toCreate);
     }
 
     @Override

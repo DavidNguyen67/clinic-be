@@ -277,11 +277,11 @@ public class AuthServiceImp implements AuthService {
 
         user.setEmail(req.getEmail());
         user.setFullName(req.getFullName());
-        user.setPhone(req.getPhone());
-        user.setDateOfBirth(req.getDateOfBirth());
+        user.setPhone(req.getPhoneNumber());
+        user.setDateOfBirth(CommonService.parseToDate(req.getDateOfBirth()));
         user.setGender(req.getGender());
         user.setPathAvatar(req.getPathAvatar());
-        
+
         return serviceInv.update(id, user, null);
     }
 

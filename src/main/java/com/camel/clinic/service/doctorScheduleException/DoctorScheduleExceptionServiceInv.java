@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -52,5 +53,12 @@ public class DoctorScheduleExceptionServiceInv extends BaseService<DoctorSchedul
         )));
 
         return count <= 0;
+    }
+
+    public List<DoctorScheduleException> getExceptionsByDoctorAndDates(String doctorProfileId, Date exceptionDates) {
+        return repository.findAll(buildSpec(Map.of(
+                "doctorId", doctorProfileId,
+                "exceptionDate", CommonService.formatDate(exceptionDates, "dd/MM/yyyy")
+        )));
     }
 }

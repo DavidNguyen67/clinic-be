@@ -3,6 +3,8 @@
     post:
       - path: /
         to: direct:doctor-schedule-exception-create
+      - path: /bulk-create
+        to: direct:doctor-schedule-exception-bulk-create
     get:
       - path: /
         to: direct:doctor-schedule-exception-list

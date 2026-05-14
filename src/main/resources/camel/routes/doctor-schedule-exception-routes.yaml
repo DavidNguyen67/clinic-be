@@ -57,6 +57,17 @@
             json: { }
 
 - route:
+    id: doctor-schedule-exception-bulk-create-route
+    from:
+      uri: direct:doctor-schedule-exception-bulk-create
+      steps:
+        - process:
+            ref: doctorScheduleExceptionBulkCreateProcessor
+        - marshal:
+            json: { }
+
+
+- route:
     id: doctor-schedule-exception-update-route
     from:
       uri: direct:doctor-schedule-exception-update

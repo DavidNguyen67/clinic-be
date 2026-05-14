@@ -7,8 +7,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
-
 @Getter
 @Setter
 public class UpdateProfileDto {
@@ -20,10 +18,10 @@ public class UpdateProfileDto {
             regexp = "^\\d{2}/\\d{2}/\\d{4}$",
             message = "Date of birth must be in format DD/MM/YYYY"
     )
-    private Date dateOfBirth;
+    private String dateOfBirth;
 
     @Pattern(regexp = "^(\\+84|0)[3|5|7|8|9][0-9]{8}$", message = "Invalid Vietnamese phone number")
-    private String phone;
+    private String phoneNumber;
 
     @Size(max = 255, message = "Full name must not exceed 255 characters")
     private String fullName;

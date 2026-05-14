@@ -27,6 +27,12 @@
     get:
       - path: /count
         to: direct:public-patient-profile-count
+
+- rest:
+    path: /v1/patient/patient-profile
+    post:
+      - path: /
+        to: direct:patient-patient-profile-create
     patch:
       - path: /{id}
-        to: direct:public-patient-profile-update
+        to: direct:patient-patient-profile-update
