@@ -170,8 +170,8 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
                         CommonService.parseToDate(
                                 (String) queryParams.get("appointmentDate"))))
                 .and(multiFieldBetweenDates(
-                        CommonService.parseToDate((String) queryParams.get("fromDate"), "HH:mm dd/MM/yyyy"),
-                        CommonService.parseToDate((String) queryParams.get("toDate"), "HH:mm dd/MM/yyyy"),
+                        CommonService.parseToDate((String) queryParams.get("fromDate"), "dd/MM/yyyy"),
+                        CommonService.parseToDate((String) queryParams.get("toDate"), "dd/MM/yyyy"),
                         new String[]{"appointmentDate"})
                 )
                 .and(keywordSpec(

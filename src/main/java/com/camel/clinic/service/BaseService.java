@@ -428,20 +428,8 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
     protected <T> Specification<T> fieldOnDate(String fieldName, Date date) {
         if (date == null) return Specification.unrestricted();
         return (root, query, cb) -> {
-            Calendar cal = Calendar.getInstance();
-
-            cal.setTime(date);
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            Date startOfDay = cal.getTime();
-
-            cal.set(Calendar.HOUR_OF_DAY, 23);
-            cal.set(Calendar.MINUTE, 59);
-            cal.set(Calendar.SECOND, 59);
-            cal.set(Calendar.MILLISECOND, 999);
-            Date endOfDay = cal.getTime();
+            Date startOfDay = atStartOfDay(date);
+            Date endOfDay = atEndOfDay(date);
 
             return cb.between(root.get(fieldName), startOfDay, endOfDay);
         };
@@ -534,19 +522,8 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
     protected Specification<T> multiFieldOnDate(Date date, String[]... fields) {
         if (date == null) return Specification.unrestricted();
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        Date startOfDay = cal.getTime();
-
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        cal.set(Calendar.MILLISECOND, 999);
-        Date endOfDay = cal.getTime();
+        Date startOfDay = atStartOfDay(date);
+        Date endOfDay = atEndOfDay(date);
 
         return (root, query, cb) -> {
             Predicate[] predicates = Arrays.stream(fields)
@@ -566,6 +543,10 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
 
     protected Specification<T> multiFieldBetweenDates(Date from, Date to, String[]... fields) {
         if (from == null && to == null) return Specification.unrestricted();
+
+        Date normalizedFrom = from != null ? atStartOfDay(from) : null;
+        Date normalizedTo = to != null ? atEndOfDay(to) : null;
+
         return (root, query, cb) -> {
             Predicate[] predicates = Arrays.stream(fields)
                     .map(f -> {
@@ -576,9 +557,9 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
                             default -> null;
                         };
                         if (path == null) return cb.conjunction();
-                        if (from == null) return cb.lessThanOrEqualTo(path, to);
-                        if (to == null) return cb.greaterThanOrEqualTo(path, from);
-                        return cb.between(path, from, to);
+                        if (normalizedFrom == null) return cb.lessThanOrEqualTo(path, normalizedTo);
+                        if (normalizedTo == null) return cb.greaterThanOrEqualTo(path, normalizedFrom);
+                        return cb.between(path, normalizedFrom, normalizedTo);
                     })
                     .toArray(Predicate[]::new);
             return cb.or(predicates);
@@ -614,5 +595,26 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
         }
 
         return List.of();
+    }
+
+    private Date atEndOfDay(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        return cal.getTime();
+    }
+
+
+    private Date atStartOfDay(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
 }

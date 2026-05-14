@@ -15,5 +15,7 @@ public interface UserService {
 
     ResponseEntity<?> calculateStatistics();
 
+    ResponseEntity<?> countWithSpec(Map<String, Object> queryParams);
+
     ResponseEntity<?> retrieve(String id);
 }

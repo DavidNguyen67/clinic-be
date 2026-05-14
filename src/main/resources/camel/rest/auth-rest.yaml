@@ -20,3 +20,5 @@
     get:
       - path: /profile
         to: direct:auth-get-profile
+      - path: /count-email
+        to: direct:auth-count-email

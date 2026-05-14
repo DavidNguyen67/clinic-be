@@ -219,9 +219,7 @@ public class AuthServiceImp implements AuthService {
             emailService.sendOtpEmail(email, otp);
         });
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "If the email exists, an OTP has been sent");
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok("If the email exists, an OTP has been sent for password reset");
     }
 
     @Override

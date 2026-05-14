@@ -63,10 +63,14 @@ public class UserServiceImp implements UserService {
                 .staffsCount(staffsCount)
                 .build();
         statistics.calculateTotalCount();
-        
+
         return ResponseEntity.ok(statistics);
     }
 
+    @Override
+    public ResponseEntity<?> countWithSpec(Map<String, Object> queryParams) {
+        return serviceInv.countWithSpec(queryParams);
+    }
 
     @Override
     public ResponseEntity<?> retrieve(String id) {

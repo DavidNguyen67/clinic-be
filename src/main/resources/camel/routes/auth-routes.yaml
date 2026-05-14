@@ -154,3 +154,13 @@
             ref: changePasswordAuthProcessor
         - marshal:
             json: { }
+
+- route:
+    id: auth-count-email-route
+    from:
+      uri: direct:auth-count-email
+      steps:
+        - process:
+            ref: countEmailAuthProcessor
+        - marshal:
+            json: { }
