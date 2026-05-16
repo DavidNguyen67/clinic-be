@@ -184,6 +184,7 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
                 .and(multiFieldNotIn(parseEnumList(queryParams.get("excludeStatus"), Appointment.AppointmentStatus.class)
                         , new String[]{"status"}))
                 .and(excludeId(CommonService.parseToUuid(queryParams.get("excludeId"))))
+                .and(fieldIn("bookingType", CommonService.parseToEnum(Appointment.BookingType.class, queryParams.get("bookingType")), Appointment.BookingType.class))
                 .and(fieldIn("status", CommonService.parseToEnum(Appointment.AppointmentStatus.class, queryParams.get("status")), Appointment.AppointmentStatus.class))
                 .and(nestedFieldEqual("doctorProfile", "id", CommonService.parseToUuid(queryParams.get("doctorProfileId"))))
                 .and(nestedFieldEqual("patientProfile", "id", CommonService.parseToUuid(queryParams.get("patientProfileId"))))
