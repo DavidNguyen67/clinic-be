@@ -2,21 +2,21 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_REPO     = 'davidnguyendev/be-clinic'
+        DOCKERHUB_REPO = 'davidnguyendev/be-clinic'
         APP_CONTAINER_NAME = 'be-clinic'
-        APP_PORT           = '8080'
-        KEEP_IMAGES        = '3'
+        APP_PORT = '8080'
+        KEEP_IMAGES = '3'
 
-        DOCKERHUB_CREDS    = 'dockerhub-credentials'
-        DOCKER_USER        = 'dockerhub-username'
-        DOCKER_PASS        = 'dockerhub-password'
-        SSH_CREDS          = 'vps-ssh-credentials'
-        TELEGRAM_CREDS     = 'telegram-bot-token'
-        TELEGRAM_CHAT_ID   = 'telegram-chat-id'
+        DOCKERHUB_CREDS = 'dockerhub-credentials'
+        DOCKER_USER = 'dockerhub-username'
+        DOCKER_PASS = 'dockerhub-password'
+        SSH_CREDS = 'vps-ssh-credentials'
+        TELEGRAM_CREDS = 'telegram-bot-token'
+        TELEGRAM_CHAT_ID = 'telegram-chat-id'
         JENKINS_API_CREDS = 'jenkins-api-credentials'
 
-        VPS_HOST           = '159.223.41.100'
-        VPS_USER           = 'root'
+        VPS_HOST = '159.223.41.100'
+        VPS_USER = 'root'
     }
 
     triggers {
@@ -43,10 +43,10 @@ pipeline {
                     // FIX: dùng def để tránh memory-leak warning,
                     //      rồi gán lại vào env.* để các stage sau dùng được
                     def commitShort = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
-                    def imageTag    = "${DOCKERHUB_REPO}:${commitShort}"
+                    def imageTag = "${DOCKERHUB_REPO}:${commitShort}"
 
                     env.GIT_COMMIT_SHORT = commitShort
-                    env.IMAGE_TAG        = imageTag
+                    env.IMAGE_TAG = imageTag
 
                     echo "📦 Image sẽ được tag: ${env.IMAGE_TAG}"
                 }
@@ -76,9 +76,9 @@ pipeline {
             }
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: "${DOCKERHUB_CREDS}",
-                    usernameVariable: 'DOCKER_USER',
-                    passwordVariable: 'DOCKER_PASS'
+                        credentialsId: "${DOCKERHUB_CREDS}",
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
                 )]) {
                     // FIX: dùng single-quote shell (''') + nối chuỗi Groovy cho IMAGE_TAG
                     //      để tránh secret bị interpolate vào Groovy string
@@ -100,18 +100,18 @@ pipeline {
             }
             steps {
                 withCredentials([
-                    sshUserPrivateKey(
-                        credentialsId: "${SSH_CREDS}",
-                        keyFileVariable: 'SSH_KEY'
-                    ),
-                    usernamePassword(
-                        credentialsId: "${DOCKERHUB_CREDS}",
-                        usernameVariable: 'DOCKER_USER',
-                        passwordVariable: 'DOCKER_PASS'
-                    )
+                        sshUserPrivateKey(
+                                credentialsId: "${SSH_CREDS}",
+                                keyFileVariable: 'SSH_KEY'
+                        ),
+                        usernamePassword(
+                                credentialsId: "${DOCKERHUB_CREDS}",
+                                usernameVariable: 'DOCKER_USER',
+                                passwordVariable: 'DOCKER_PASS'
+                        )
                 ]) {
                     script {
-                        def tag  = env.IMAGE_TAG
+                        def tag = env.IMAGE_TAG
                         def repo = DOCKERHUB_REPO
                         def keep = KEEP_IMAGES
                         def name = APP_CONTAINER_NAME
@@ -194,12 +194,12 @@ pipeline {
         success {
             script {
                 sendTelegram(
-                    "✅ *BUILD THÀNH CÔNG*\n" +
-                    "📦 *Project:* `${env.JOB_NAME}`\n" +
-                    "🔖 *Image:* `${env.IMAGE_TAG}`\n" +
-                    "🔢 *Build:* [#${env.BUILD_NUMBER}](${env.BUILD_URL})\n" +
-                    "🌿 *Branch:* `${env.GIT_BRANCH}`\n" +
-                    "⏱️ *Thời gian:* ${currentBuild.durationString}"
+                        "✅ *BUILD THÀNH CÔNG*\n" +
+                                "📦 *Project:* `${env.JOB_NAME}`\n" +
+                                "🔖 *Image:* `${env.IMAGE_TAG}`\n" +
+                                "🔢 *Build:* [#${env.BUILD_NUMBER}](${env.BUILD_URL})\n" +
+                                "🌿 *Branch:* `${env.GIT_BRANCH}`\n" +
+                                "⏱️ *Thời gian:* ${currentBuild.durationString}"
                 )
             }
         }
@@ -207,12 +207,12 @@ pipeline {
         failure {
             script {
                 sendTelegram(
-                    "❌ *BUILD THẤT BẠI*\n" +
-                    "📦 *Project:* `${env.JOB_NAME}`\n" +
-                    "🔢 *Build:* [#${env.BUILD_NUMBER}](${env.BUILD_URL})\n" +
-                    "🌿 *Branch:* `${env.GIT_BRANCH}`\n" +
-                    "⏱️ *Thời gian:* ${currentBuild.durationString}\n" +
-                    "👉 Log đính kèm bên dưới ↓"
+                        "❌ *BUILD THẤT BẠI*\n" +
+                                "📦 *Project:* `${env.JOB_NAME}`\n" +
+                                "🔢 *Build:* [#${env.BUILD_NUMBER}](${env.BUILD_URL})\n" +
+                                "🌿 *Branch:* `${env.GIT_BRANCH}`\n" +
+                                "⏱️ *Thời gian:* ${currentBuild.durationString}\n" +
+                                "👉 Log đính kèm bên dưới ↓"
                 )
                 sendLogFile("failure")
             }
@@ -221,12 +221,12 @@ pipeline {
         aborted {
             script {
                 sendTelegram(
-                    "⚠️ *BUILD BỊ HỦY*\n" +
-                    "📦 *Project:* `${env.JOB_NAME}`\n" +
-                    "🔢 *Build:* [#${env.BUILD_NUMBER}](${env.BUILD_URL})\n" +
-                    "🌿 *Branch:* `${env.GIT_BRANCH}`\n" +
-                    "⏱️ *Thời gian:* ${currentBuild.durationString}\n" +
-                    "👉 Log đính kèm bên dưới ↓"
+                        "⚠️ *BUILD BỊ HỦY*\n" +
+                                "📦 *Project:* `${env.JOB_NAME}`\n" +
+                                "🔢 *Build:* [#${env.BUILD_NUMBER}](${env.BUILD_URL})\n" +
+                                "🌿 *Branch:* `${env.GIT_BRANCH}`\n" +
+                                "⏱️ *Thời gian:* ${currentBuild.durationString}\n" +
+                                "👉 Log đính kèm bên dưới ↓"
                 )
                 sendLogFile("aborted")
             }
@@ -246,8 +246,8 @@ pipeline {
 //      khi message chứa ký tự đặc biệt (&, =, newline, quote…)
 def sendTelegram(String message) {
     withCredentials([
-        string(credentialsId: "${TELEGRAM_CREDS}",   variable: 'BOT_TOKEN'),
-        string(credentialsId: "${TELEGRAM_CHAT_ID}", variable: 'CHAT_ID')
+            string(credentialsId: "${TELEGRAM_CREDS}", variable: 'BOT_TOKEN'),
+            string(credentialsId: "${TELEGRAM_CHAT_ID}", variable: 'CHAT_ID')
     ]) {
         // Ghi message ra file tạm để tránh vấn đề escape trên command line
         def tmpFile = "/tmp/tg_msg_${env.BUILD_NUMBER}.txt"
@@ -267,32 +267,33 @@ def sendTelegram(String message) {
 // Helper: xuất log build → gửi file .log lên Telegram
 def sendLogFile(String status) {
     withCredentials([
-        string(credentialsId: "${TELEGRAM_CREDS}",   variable: 'BOT_TOKEN'),
-        string(credentialsId: "${TELEGRAM_CHAT_ID}", variable: 'CHAT_ID'),
-        usernamePassword(
-            credentialsId: "${JENKINS_API_CREDS}",
-            usernameVariable: 'JENKINS_USER',
-            passwordVariable: 'JENKINS_TOKEN'
-        )
+            string(credentialsId: "${TELEGRAM_CREDS}", variable: 'BOT_TOKEN'),
+            string(credentialsId: "${TELEGRAM_CHAT_ID}", variable: 'CHAT_ID'),
+            usernamePassword(
+                    credentialsId: "${JENKINS_API_CREDS}",
+                    usernameVariable: 'JENKINS_USER',
+                    passwordVariable: 'JENKINS_TOKEN'
+            )
     ]) {
         script {
             def safeJobName = env.JOB_NAME.replaceAll('[^a-zA-Z0-9_-]', '_')
             def logFileName = "${safeJobName}_build-${env.BUILD_NUMBER}_${status}.log"
             def logFilePath = "/tmp/${logFileName}"
-            def caption     = "📋 Build log — ${env.JOB_NAME} #${env.BUILD_NUMBER} [${status.toUpperCase()}]"
+            def caption = "📋 Build log — ${env.JOB_NAME} #${env.BUILD_NUMBER} [${status.toUpperCase()}]"
 
             sh """
                 # 1. Tải console log với auth
-                curl -s --max-time 30 \\
-                    -u "\${JENKINS_USER}:\${JENKINS_TOKEN}" \\
-                    "\${JENKINS_URL}job/${env.JOB_NAME}/${env.BUILD_NUMBER}/consoleText" \\
+                 # 1. Tải console log với auth
+                curl -s --max-time 30 \\\\
+                    -u "\\${JENKINS_USER}:\\${JENKINS_TOKEN}" \\\\
+                    "\\${JENKINS_URL}job/${env.JOB_NAME}/${env.BUILD_NUMBER}/consoleText" \\\\
                     -o "${logFilePath}" || true
 
                 # Fallback qua BUILD_URL
                 if [ ! -s "${logFilePath}" ]; then
-                    curl -s --max-time 30 \\
-                        -u "\${JENKINS_USER}:\${JENKINS_TOKEN}" \\
-                        "\${BUILD_URL}consoleText" \\
+                    curl -s --max-time 30 \\\\
+                        -u "\\${JENKINS_USER}:\\${JENKINS_TOKEN}" \\\\
+                        "\\${BUILD_URL}consoleText" \\\\
                         -o "${logFilePath}" || true
                 fi
 
