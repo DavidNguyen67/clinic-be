@@ -36,10 +36,9 @@ pipeline {
 
         stage('🔍 Checkout') {
             when {
-                anyOf {
-                    branch 'main'
-                    branch 'master'
-                }
+               expression {
+                       return env.GIT_BRANCH == 'master' || env.GIT_BRANCH == 'origin/master'
+               }
             }
             steps {
                 checkout scm
@@ -58,10 +57,9 @@ pipeline {
 
         stage('🏗️ Build Docker Image') {
             when {
-                anyOf {
-                    branch 'main'
-                    branch 'master'
-                }
+               expression {
+                       return env.GIT_BRANCH == 'master' || env.GIT_BRANCH == 'origin/master'
+               }
             }
             steps {
                 script {
@@ -75,10 +73,9 @@ pipeline {
 
         stage('🚀 Push to DockerHub') {
             when {
-                anyOf {
-                    branch 'main'
-                    branch 'master'
-                }
+               expression {
+                       return env.GIT_BRANCH == 'master' || env.GIT_BRANCH == 'origin/master'
+               }
             }
             steps {
                 withCredentials([usernamePassword(
@@ -98,10 +95,9 @@ pipeline {
 
         stage('🌐 Deploy to VPS') {
             when {
-                anyOf {
-                    branch 'main'
-                    branch 'master'
-                }
+               expression {
+                       return env.GIT_BRANCH == 'master' || env.GIT_BRANCH == 'origin/master'
+               }
             }
             steps {
                 withCredentials([
