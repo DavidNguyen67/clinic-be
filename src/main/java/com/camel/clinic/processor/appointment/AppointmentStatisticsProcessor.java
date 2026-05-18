@@ -38,6 +38,9 @@ public class AppointmentStatisticsProcessor implements Processor {
                             "Patient profile not found for user ID: " + userId));
 
             queryParams.put("patientProfileId", profile.getId().toString());
+            ResponseEntity<?> response = serviceImp.calculatePatientStatistics(queryParams);
+            exchange.getMessage().setBody(response);
+
 
         }
         if (role == Role.RoleName.DOCTOR) {
@@ -46,10 +49,9 @@ public class AppointmentStatisticsProcessor implements Processor {
                             "Doctor profile not found for user ID: " + userId));
 
             queryParams.put("doctorProfileId", userId);
+
+            ResponseEntity<?> response = serviceImp.calculateDoctorStatistics(queryParams);
+            exchange.getMessage().setBody(response);
         }
-
-        ResponseEntity<?> response = serviceImp.calculateStatistics(queryParams);
-
-        exchange.getMessage().setBody(response);
     }
 }

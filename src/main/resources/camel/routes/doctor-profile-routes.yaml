@@ -132,3 +132,37 @@
             ref: doctorProfileGetProcessor
         - marshal:
             json: { }
+
+- route:
+    id: doctor-doctor-profile-create-route
+    from:
+      uri: direct:doctor-doctor-profile-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.doctorProfile.CreateDoctorProfileDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: doctorProfileCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-doctor-profile-update-route
+    from:
+      uri: direct:doctor-doctor-profile-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.doctorProfile.UpdateDoctorProfileDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: doctorProfileUpdateProcessor
+        - marshal:
+            json: { }

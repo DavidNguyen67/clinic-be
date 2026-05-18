@@ -37,8 +37,13 @@ public class AppointmentServiceImp implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final InvoiceRepository invoiceRepository;
 
-    public ResponseEntity<?> calculateStatistics(Map<String, Object> queryParams) {
-        return serviceInv.calculateStatistics(queryParams);
+    public ResponseEntity<?> calculatePatientStatistics(Map<String, Object> queryParams) {
+        return serviceInv.calculatePatientStatistics(queryParams);
+    }
+
+    @Override
+    public ResponseEntity<?> calculateDoctorStatistics(Map<String, Object> queryParams) {
+        return serviceInv.calculateDoctorStatistics(queryParams);
     }
 
     @Override

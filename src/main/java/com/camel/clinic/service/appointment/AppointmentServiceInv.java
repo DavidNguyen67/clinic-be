@@ -1,6 +1,7 @@
 package com.camel.clinic.service.appointment;
 
 import com.camel.clinic.dto.ApiPaged;
+import com.camel.clinic.dto.DateRange;
 import com.camel.clinic.dto.appointment.AppointmentStatisticsDto;
 import com.camel.clinic.dto.appointment.ResponseAppointmentDto;
 import com.camel.clinic.entity.Appointment;
@@ -77,7 +78,7 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
         return base;
     }
 
-    public ResponseEntity<?> calculateStatistics(Map<String, Object> queryParams) {
+    public ResponseEntity<?> calculatePatientStatistics(Map<String, Object> queryParams) {
         String inputDateStr = (String) queryParams.get("appointmentDate");
         Date inputDate = inputDateStr != null
                 ? CommonService.parseToDate(inputDateStr, "dd/MM/yyyy")
@@ -183,9 +184,10 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
                 })
                 .and(multiFieldNotIn(parseEnumList(queryParams.get("excludeStatus"), Appointment.AppointmentStatus.class)
                         , new String[]{"status"}))
+                .and(multiFieldIn(parseEnumList(queryParams.get("status"), Appointment.AppointmentStatus.class)
+                        , new String[]{"status"}))
                 .and(excludeId(CommonService.parseToUuid(queryParams.get("excludeId"))))
                 .and(fieldIn("bookingType", CommonService.parseToEnum(Appointment.BookingType.class, queryParams.get("bookingType")), Appointment.BookingType.class))
-                .and(fieldIn("status", CommonService.parseToEnum(Appointment.AppointmentStatus.class, queryParams.get("status")), Appointment.AppointmentStatus.class))
                 .and(nestedFieldEqual("doctorProfile", "id", CommonService.parseToUuid(queryParams.get("doctorProfileId"))))
                 .and(nestedFieldEqual("patientProfile", "id", CommonService.parseToUuid(queryParams.get("patientProfileId"))))
                 .and(fieldOnDate("appointmentDate",
@@ -261,4 +263,61 @@ public class AppointmentServiceInv extends BaseService<Appointment, AppointmentR
                 .map(appointment -> ResponseEntity.ok(ResponseAppointmentDto.from(appointment)))
                 .orElse(ResponseEntity.noContent().build());
     }
+
+
+    private Map<String, Object> buildRangeParams(Map<String, Object> base, DateRange range) {
+        Map<String, Object> p = new HashMap<>(base);
+        p.put("fromDate", CommonService.formatDate(range.getStart(), "HH:mm dd/MM/yyyy"));
+        p.put("toDate", CommonService.formatDate(range.getEnd(), "HH:mm dd/MM/yyyy"));
+        p.remove("appointmentDate");
+        return p;
+    }
+
+    public ResponseEntity<?> calculateDoctorStatistics(Map<String, Object> queryParams) {
+        // ── 1. Resolve target date ───────────────────────────────────────────────
+        String inputDateStr = (String) queryParams.get("appointmentDate");
+        Date inputDate = inputDateStr != null
+                ? CommonService.parseToDate(inputDateStr, "dd/MM/yyyy")
+                : CommonService.getCurrentDate();
+
+        // ── 2. Build date ranges ─────────────────────────────────────────────────
+        DateRange currentMonth = CommonService.buildMonthRange(inputDate);
+        DateRange lastMonth = CommonService.buildLastMonthRange(inputDate);
+
+        // ── 3. Query current month ───────────────────────────────────────────────
+        Map<String, Object> currentParams = buildRangeParams(queryParams, currentMonth);
+        long currentCompleted = countByStatus(Appointment.AppointmentStatus.COMPLETED, currentParams);
+        long currentCancelled = countByStatus(Appointment.AppointmentStatus.CANCELLED, currentParams);
+        // BUG FIX: was COMPLETED — should be PENDING
+        long currentPending = countByStatus(Appointment.AppointmentStatus.PENDING, currentParams);
+        long currentTotal = repository.count(buildSpec(currentParams));
+
+        // ── 4. Query last month ──────────────────────────────────────────────────
+        Map<String, Object> lastParams = buildRangeParams(queryParams, lastMonth);
+        long lastCompleted = countByStatus(Appointment.AppointmentStatus.COMPLETED, lastParams);
+        long lastCancelled = countByStatus(Appointment.AppointmentStatus.CANCELLED, lastParams);
+        long lastPending = countByStatus(Appointment.AppointmentStatus.PENDING, lastParams);
+        long lastTotal = repository.count(buildSpec(lastParams));
+
+        // ── 5. Assemble response ─────────────────────────────────────────────────
+        Map<String, Object> stats = new HashMap<>();
+
+        stats.put("totalAppointments", buildStat(currentTotal, lastTotal));
+        stats.put("completed", buildStat(currentCompleted, lastCompleted));
+        stats.put("cancelled", buildStat(currentCancelled, lastCancelled));
+        stats.put("pending", buildStat(currentPending, lastPending));
+
+        return ResponseEntity.ok(stats);
+    }
+
+    private Map<String, Object> buildStat(long current, long last) {
+        double deltaPercent = last == 0 ? 0.0 : (double) (current - last) / last * 100;
+        Map<String, Object> m = new HashMap<>();
+        m.put("value", current);
+        m.put("lastMonth", last);
+        m.put("delta", current - last);          // e.g. +13 / -3
+        m.put("deltaPercent", Math.round(deltaPercent * 10) / 10.0); // e.g. +11.0 %
+        return m;
+    }
+
 }

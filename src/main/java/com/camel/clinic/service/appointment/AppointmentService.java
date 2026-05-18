@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
 public interface AppointmentService {
-    ResponseEntity<?> calculateStatistics(Map<String, Object> queryParams);
+    ResponseEntity<?> calculatePatientStatistics(Map<String, Object> queryParams);
+
+    ResponseEntity<?> calculateDoctorStatistics(Map<String, Object> queryParams);
 
     ResponseEntity<?> list(Map<String, Object> queryParams);
 

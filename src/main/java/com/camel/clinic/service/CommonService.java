@@ -1,5 +1,6 @@
 package com.camel.clinic.service;
 
+import com.camel.clinic.dto.DateRange;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -179,4 +180,32 @@ public class CommonService {
             throw new IllegalArgumentException("Failed to parse payload: " + e.getMessage());
         }
     }
+
+    public static DateRange buildLastMonthRange(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.MONTH, -1);      // roll back one month
+        return buildMonthRange(cal.getTime());
+    }
+
+    public static DateRange buildMonthRange(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date start = cal.getTime();
+
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);     // BUG FIX: was missing
+        cal.set(Calendar.MILLISECOND, 999);
+        Date end = cal.getTime();
+
+        return new DateRange(start, end);
+    }
+
 }

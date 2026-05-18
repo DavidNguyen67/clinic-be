@@ -22,6 +22,15 @@
         to: direct:doctor-profile-delete
 
 - rest:
+    path: /v1/doctor/doctor-profile
+    post:
+      - path: /
+        to: direct:doctor-doctor-profile-create
+    patch:
+      - path: /{id}
+        to: direct:doctor-doctor-profile-update
+
+- rest:
     path: /v1/public/doctor-profile
     get:
       - path: /

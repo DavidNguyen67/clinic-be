@@ -64,6 +64,7 @@ public class AuthServiceInv extends BaseService<User, UserRepository> {
         profile.setEmailVerified(user.getEmailVerified());
         profile.setPhoneVerified(user.getPhoneVerified());
         profile.setCreatedAt(user.getCreatedAt());
+        profile.setUpdatedAt(user.getUpdatedAt());
         if (user.getLastLogin() != null) {
             profile.setLastLogin(user.getLastLogin());
         }
