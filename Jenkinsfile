@@ -252,11 +252,12 @@ def sendTelegram(String message) {
         def tmpFile = "/tmp/tg_msg_${env.BUILD_NUMBER}.txt"
         writeFile file: tmpFile, text: message
         sh """
+            TEXT=\$(cat ${tmpFile})
             curl -s -X POST "https://api.telegram.org/bot\${BOT_TOKEN}/sendMessage" \\
                 -F chat_id="\${CHAT_ID}" \\
                 -F parse_mode="Markdown" \\
                 -F disable_web_page_preview="true" \\
-                -F text=<${tmpFile}
+                -F text="\${TEXT}"
             rm -f ${tmpFile}
         """
     }
