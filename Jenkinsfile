@@ -12,8 +12,7 @@ pipeline {
         TELEGRAM_CREDS     = 'telegram-bot-token'
         TELEGRAM_CHAT_ID   = 'telegram-chat-id'
 
-        // ⚠️ Thay bằng IP thật của VPS
-        VPS_HOST           = 'http://159.223.41.100'
+        VPS_HOST           = '159.223.41.100'
         VPS_USER           = 'root'
     }
 
