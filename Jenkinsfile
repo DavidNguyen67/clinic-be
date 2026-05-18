@@ -128,8 +128,24 @@ pipeline {
                             docker pull ${tag}
 
                             echo "=== [3/5] Dung & xoa container cu (neu co) ==="
+                            docker kill ${name} 2>/dev/null || true
                             docker stop ${name} 2>/dev/null || true
-                            docker rm   ${name} 2>/dev/null || true
+                            docker rm -f ${name} 2>/dev/null || true
+
+                            echo "--- Cho port 8080 release..."
+                            for i in \$(seq 1 15); do
+                                if ! ss -tlnp | grep -q ':8080 '; then
+                                    echo "--- Port 8080 da free sau \${i}s"
+                                    break
+                                fi
+                                if [ "\$i" -eq 15 ]; then
+                                    echo "--- Port van bi chiem sau 15s, thu kill process..."
+                                    # Kill bất kỳ process nào đang giữ 8080 (kể cả non-docker)
+                                    fuser -k 8080/tcp 2>/dev/null || true
+                                    sleep 1
+                                fi
+                                sleep 1
+                            done
 
                             echo "=== [4/5] Chay container moi ==="
                             docker run -d \\
@@ -173,7 +189,6 @@ pipeline {
         }
     }
 
-    // POST — Telegram notification
     post {
         success {
             script {
