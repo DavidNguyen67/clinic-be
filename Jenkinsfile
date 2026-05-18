@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_REPO     = 'your-dockerhub-username/your-app-name'   // VD: john/my-spring-app
-        APP_CONTAINER_NAME = 'my-spring-app'                            // Tên container chạy trên VPS
+        DOCKERHUB_REPO     = 'davidnguyendev/be-clinic'   // VD: john/my-spring-app
+        APP_CONTAINER_NAME = 'be-clinic'                            // Tên container chạy trên VPS
         APP_PORT           = '8080'                                      // Port expose ra ngoài VPS
         KEEP_IMAGES        = '3'                                         // Số lượng image giữ lại trên VPS
 
@@ -13,8 +13,8 @@ pipeline {
         TELEGRAM_CREDS     = 'telegram-bot-token'       // Secret text — token của Bot
         TELEGRAM_CHAT_ID   = 'telegram-chat-id'         // Secret text — chat/group ID
 
-        VPS_HOST           = 'your.vps.ip.address'      // IP hoặc domain VPS chạy app
-        VPS_USER           = 'ubuntu'                   // SSH user trên VPS
+        VPS_HOST           = 'vps.ip.address'      // IP hoặc domain VPS chạy app
+        VPS_USER           = 'root'                   // SSH user trên VPS
 
         // Computed
         GIT_COMMIT_SHORT   = ''
