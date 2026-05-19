@@ -1,5 +1,6 @@
 package com.camel.clinic.processor.appointment;
 
+import com.camel.clinic.entity.DoctorProfile;
 import com.camel.clinic.entity.PatientProfile;
 import com.camel.clinic.entity.Role;
 import com.camel.clinic.repository.DoctorProfileRepository;
@@ -44,11 +45,11 @@ public class AppointmentStatisticsProcessor implements Processor {
 
         }
         if (role == Role.RoleName.DOCTOR) {
-            doctorProfileRepository.findByUserId(CommonService.parseToUuid(userId))
+            DoctorProfile doctorProfile = doctorProfileRepository.findByUserId(CommonService.parseToUuid(userId))
                     .orElseThrow(() -> new RuntimeException(
-                            "Doctor profile not found for user ID: " + userId));
+                            "DoctorProfile not found for user ID: " + userId));
 
-            queryParams.put("doctorProfileId", userId);
+            queryParams.put("doctorProfileId", doctorProfile.getId().toString());
 
             ResponseEntity<?> response = serviceImp.calculateDoctorStatistics(queryParams);
             exchange.getMessage().setBody(response);
