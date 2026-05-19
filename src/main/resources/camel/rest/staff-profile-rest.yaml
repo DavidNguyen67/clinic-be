@@ -18,3 +18,12 @@
     delete:
       - path: /{id}
         to: direct:staff-profile-delete
+
+- rest:
+    path: /v1/staff/staff-profile
+    post:
+      - path: /
+        to: direct:staff-staff-profile-create
+    patch:
+      - path: /{id}
+        to: direct:staff-staff-profile-update

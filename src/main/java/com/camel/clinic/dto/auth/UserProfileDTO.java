@@ -60,6 +60,8 @@ public class UserProfileDTO {
     // Patient specific fields
     private PatientProfileDTO patient;
 
+    private StaffProfileDTO staff;
+
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -119,6 +121,23 @@ public class UserProfileDTO {
         private String chronicDiseases;
         private Integer loyaltyPoints;
         private Integer totalVisits;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class StaffProfileDTO {
+        private String staffCode;
+        private String position;
+        private String department;
+
+        @JsonFormat(
+                shape = JsonFormat.Shape.STRING,
+                pattern = "HH:mm:ss dd/MM/yyyy",
+                timezone = "Asia/Ho_Chi_Minh"
+        )
+        private Date hireDate;
     }
 }
 

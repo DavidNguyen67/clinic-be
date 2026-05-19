@@ -1,12 +1,10 @@
 package com.camel.clinic.service.auth;
 
 import com.camel.clinic.dto.auth.UserProfileDTO;
-import com.camel.clinic.entity.DoctorProfile;
-import com.camel.clinic.entity.PatientProfile;
-import com.camel.clinic.entity.Role;
-import com.camel.clinic.entity.User;
+import com.camel.clinic.entity.*;
 import com.camel.clinic.repository.DoctorProfileRepository;
 import com.camel.clinic.repository.PatientProfileRepository;
+import com.camel.clinic.repository.StaffProfileRepository;
 import com.camel.clinic.repository.UserRepository;
 import com.camel.clinic.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +20,14 @@ import java.util.UUID;
 public class AuthServiceInv extends BaseService<User, UserRepository> {
     private final DoctorProfileRepository doctorProfileRepository;
     private final PatientProfileRepository patientProfileRepository;
+    private final StaffProfileRepository staffProfileRepository;
 
     public AuthServiceInv(UserRepository repository, DoctorProfileRepository doctorProfileRepository,
-                          PatientProfileRepository patientProfileRepository) {
+                          PatientProfileRepository patientProfileRepository, StaffProfileRepository staffProfileRepository) {
         super(User::new, repository);
         this.doctorProfileRepository = doctorProfileRepository;
         this.patientProfileRepository = patientProfileRepository;
+        this.staffProfileRepository = staffProfileRepository;
     }
 
     public Optional<User> findByEmail(String email) {
@@ -120,6 +120,21 @@ public class AuthServiceInv extends BaseService<User, UserRepository> {
                 patientDTO.setTotalVisits(pat.getTotalVisits());
 
                 profile.setPatient(patientDTO);
+            }
+        }
+
+        if (Role.RoleName.STAFF.equals(user.getRole())) {
+            Optional<StaffProfile> staffProfile = staffProfileRepository.findByUserId(user.getId());
+
+            if (staffProfile.isPresent()) {
+                StaffProfile pat = staffProfile.get();
+                UserProfileDTO.StaffProfileDTO staffDTO = new UserProfileDTO.StaffProfileDTO();
+                staffDTO.setStaffCode(pat.getStaffCode());
+                staffDTO.setPosition(pat.getPosition());
+                staffDTO.setDepartment(pat.getDepartment());
+                staffDTO.setHireDate(pat.getHireDate());
+
+                profile.setStaff(staffDTO);
             }
         }
 

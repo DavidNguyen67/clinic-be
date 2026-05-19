@@ -92,3 +92,37 @@
             ref: staffProfileDeleteProcessor
         - marshal:
             json: { }
+
+- route:
+    id: staff-staff-profile-create-route
+    from:
+      uri: direct:staff-staff-profile-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.staffProfile.CreateStaffProfileDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: staffProfileCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: staff-staff-profile-update-route
+    from:
+      uri: direct:staff-staff-profile-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.staffProfile.UpdateStaffProfileDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: staffProfileUpdateProcessor
+        - marshal:
+            json: { }
