@@ -17,7 +17,16 @@ public class ReviewGetProcessor implements Processor {
     @Override
     public void process(Exchange exchange) {
         String id = exchange.getIn().getHeader("id", String.class);
-        ResponseEntity<?> response = serviceImp.retrieve(id);
+
+        String appointmentId = exchange.getIn().getHeader("appointmentId", String.class);
+        ResponseEntity<?> response;
+
+        if (id != null) {
+            response = serviceImp.retrieve(id);
+        } else {
+            response = serviceImp.retrieveByAppointmentId(appointmentId);
+        }
+
         exchange.getIn().setBody(response);
     }
 }

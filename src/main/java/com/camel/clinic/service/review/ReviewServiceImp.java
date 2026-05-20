@@ -31,6 +31,11 @@ public class ReviewServiceImp implements ReviewService {
     }
 
     @Override
+    public ResponseEntity<?> retrieveByAppointmentId(String appointmentId) {
+        return serviceInv.retrieveByAppointmentId(appointmentId);
+    }
+
+    @Override
     public ResponseEntity<?> create(CreateReviewDto requestBody) {
         return null;
     }

@@ -13,6 +13,8 @@ public interface ReviewService {
 
     ResponseEntity<?> retrieve(String id);
 
+    ResponseEntity<?> retrieveByAppointmentId(String appointmentId);
+
     ResponseEntity<?> create(CreateReviewDto requestBody);
 
     ResponseEntity<?> update(String id, UpdateReviewDto requestBody);

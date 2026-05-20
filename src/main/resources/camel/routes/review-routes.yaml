@@ -124,6 +124,16 @@
             json: { }
 
 - route:
+    id: patient-review-get-by-appointment-route
+    from:
+      uri: direct:patient-review-get-by-appointment
+      steps:
+        - process:
+            ref: reviewGetProcessor
+        - marshal:
+            json: { }
+
+- route:
     id: patient-review-create-route
     from:
       uri: direct:patient-review-create
