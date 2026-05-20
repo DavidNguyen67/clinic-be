@@ -33,6 +33,10 @@ public class DoctorProfileServiceInv extends BaseService<DoctorProfile, DoctorPr
     protected Specification<DoctorProfile> buildSpec(Map<String, Object> queryParams) {
         return Specification.<DoctorProfile>unrestricted()
                 .and(notDeleted())
+                .and(multiFieldGreaterThan(CommonService.parseToLong(queryParams.get("minFee")), true,
+                        new String[]{"consultationFee"}))
+                .and(multiFieldLessThan(CommonService.parseToLong(queryParams.get("maxFee")), true,
+                        new String[]{"consultationFee"}))
                 .and((root, query, cb) -> {
                     assert query != null;
                     if (!query.getResultType().equals(Long.class)) {

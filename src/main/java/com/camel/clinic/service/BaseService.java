@@ -581,6 +581,48 @@ public abstract class BaseService<T extends SoftDeletableEntity, R extends JpaRe
         };
     }
 
+    protected <V extends Comparable<? super V>> Specification<T> multiFieldGreaterThan(V value, boolean orEqual, String[]... fields) {
+        if (value == null) return Specification.unrestricted();
+        return (root, query, cb) -> {
+            Predicate[] predicates = Arrays.stream(fields)
+                    .map(f -> {
+                        jakarta.persistence.criteria.Path<V> path = switch (f.length) {
+                            case 1 -> root.get(f[0]);
+                            case 2 -> root.join(f[0], JoinType.LEFT).get(f[1]);
+                            case 3 -> root.join(f[0], JoinType.LEFT).join(f[1], JoinType.LEFT).get(f[2]);
+                            default -> null;
+                        };
+                        if (path == null) return cb.conjunction();
+                        return orEqual
+                                ? cb.greaterThanOrEqualTo(path, value)
+                                : cb.greaterThan(path, value);
+                    })
+                    .toArray(Predicate[]::new);
+            return cb.or(predicates);
+        };
+    }
+
+    protected <V extends Comparable<? super V>> Specification<T> multiFieldLessThan(V value, boolean orEqual, String[]... fields) {
+        if (value == null) return Specification.unrestricted();
+        return (root, query, cb) -> {
+            Predicate[] predicates = Arrays.stream(fields)
+                    .map(f -> {
+                        jakarta.persistence.criteria.Path<V> path = switch (f.length) {
+                            case 1 -> root.get(f[0]);
+                            case 2 -> root.join(f[0], JoinType.LEFT).get(f[1]);
+                            case 3 -> root.join(f[0], JoinType.LEFT).join(f[1], JoinType.LEFT).get(f[2]);
+                            default -> null;
+                        };
+                        if (path == null) return cb.conjunction();
+                        return orEqual
+                                ? cb.lessThanOrEqualTo(path, value)
+                                : cb.lessThan(path, value);
+                    })
+                    .toArray(Predicate[]::new);
+            return cb.or(predicates);
+        };
+    }
+
     protected <E extends Enum<E>> List<E> parseEnumList(Object raw, Class<E> enumClass) {
         if (raw == null) return List.of();
 

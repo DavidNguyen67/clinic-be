@@ -67,6 +67,16 @@ public class CommonService {
         }
     }
 
+    public static Long parseToLong(Object value) {
+        if (value == null) return null;
+        try {
+            return Long.parseLong(value.toString().trim());
+        } catch (NumberFormatException e) {
+            log.warn("Failed to parse Long from value '{}'", value);
+            return null;
+        }
+    }
+
     public static LocalDate parseToLocalDate(String rawDate) {
         if (rawDate == null || rawDate.isBlank()) {
             throw new IllegalArgumentException("date is required");
