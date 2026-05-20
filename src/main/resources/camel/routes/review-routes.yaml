@@ -46,7 +46,7 @@
       steps:
         - setHeader:
             name: X-DTO-Class
-            constant: com.camel.clinic.dto.review.CreatePromotionDto
+            constant: com.camel.clinic.dto.review.CreateReviewDto
         - process:
             ref: requestDeserializerProcessor
         - process:
@@ -63,7 +63,7 @@
       steps:
         - setHeader:
             name: X-DTO-Class
-            constant: com.camel.clinic.dto.review.UpdatePromotionDto
+            constant: com.camel.clinic.dto.review.UpdateReviewDto
         - process:
             ref: requestDeserializerProcessor
         - process:
@@ -140,7 +140,7 @@
       steps:
         - setHeader:
             name: X-DTO-Class
-            constant: com.camel.clinic.dto.review.CreatePromotionDto
+            constant: com.camel.clinic.dto.review.CreateReviewDto
         - process:
             ref: requestDeserializerProcessor
         - process:
@@ -157,7 +157,7 @@
       steps:
         - setHeader:
             name: X-DTO-Class
-            constant: com.camel.clinic.dto.review.UpdatePromotionDto
+            constant: com.camel.clinic.dto.review.UpdateReviewDto
         - process:
             ref: requestDeserializerProcessor
         - process:

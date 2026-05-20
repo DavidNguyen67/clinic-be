@@ -23,16 +23,18 @@ public class ReviewServiceInv extends BaseService<Review, ReviewRepository> {
     protected Specification<Review> buildSpec(Map<String, Object> queryParams) {
         return Specification.<Review>unrestricted()
                 .and(notDeleted())
-                .and(multiFieldEquals(queryParams.get("appointmentId"),
+                .and(multiFieldEquals(CommonService.parseToUuid(queryParams.get("appointmentId")),
                         new String[]{"appointment", "id"}
                 ));
     }
 
     public ResponseEntity<?> retrieveByAppointmentId(String appointmentId) {
         Map<String, Object> params = new HashMap<>();
-        params.put("appointmentId", CommonService.parseToUuid(appointmentId));
+        params.put("appointmentId", appointmentId);
 
-        Review review = repository.findOne(buildSpec(params)).orElse(null);
+        Specification<Review> spec = buildSpec(params);
+
+        Review review = repository.findOne(spec).orElse(null);
 
         return ResponseEntity.ok(review);
     }
