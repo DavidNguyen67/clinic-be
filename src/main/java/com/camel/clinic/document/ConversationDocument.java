@@ -1,6 +1,7 @@
 package com.camel.clinic.document;
 
 import com.camel.clinic.util.ConversationType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
@@ -40,9 +41,16 @@ public class ConversationDocument extends SofDeleteDocument {
     public static class LastMessageSnapshot {
         @Field("sender_id")
         private String senderId;
+        
         @Field("content")
         private String content;
+
         @Field("sent_at")
+        @JsonFormat(
+                shape = JsonFormat.Shape.STRING,
+                pattern = "HH:mm:ss dd/MM/yyyy",
+                timezone = "Asia/Ho_Chi_Minh"
+        )
         private Date sentAt;
     }
 }

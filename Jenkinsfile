@@ -14,6 +14,7 @@ pipeline {
         TELEGRAM_CREDS = 'telegram-bot-token'
         TELEGRAM_CHAT_ID = 'telegram-chat-id'
         JENKINS_API_CREDS = 'jenkins-api-credentials'
+        ENV_FILE = 'be-clinic-env'
 
         VPS_HOST = '159.223.41.100'
         VPS_USER = 'root'
@@ -60,9 +61,13 @@ pipeline {
             }
             steps {
                 script {
-                    echo "🔨 Building image: ${env.IMAGE_TAG}"
-                    sh "docker build -t ${env.IMAGE_TAG} ."
-                    sh "docker tag ${env.IMAGE_TAG} ${DOCKERHUB_REPO}:latest"
+                    withCredentials([file(credentialsId: "${env.ENV_FILE}", variable: 'DOTENV_FILE')]) {
+                        echo "🔨 Building image: ${env.IMAGE_TAG}"
+                        sh 'cp $DOTENV_FILE .env'
+                        sh "docker build -t ${env.IMAGE_TAG} ."
+                        sh "docker tag ${env.IMAGE_TAG} ${DOCKERHUB_REPO}:latest"
+                        sh 'rm -f .env'
+                    }
                 }
             }
         }

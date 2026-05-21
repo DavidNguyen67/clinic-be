@@ -1,19 +1,21 @@
 spring:
   jackson:
-    time-zone: Asia/Ho_Chi_Minh
+    time-zone: ${TZ}
   application:
-    name: clinic
+    name: ${APP_NAME}
+
   datasource:
-    url: jdbc:postgresql://159.223.41.100:5432/clinic_postgres
-    username: davidnguyen67dev
-    password: ThZLSkGbHn7koUctpL26ARzGK-maNiKDC-_xs9i-6J0
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 10
-      minimum-idle: 5
-      connection-timeout: 30000
-      idle-timeout: 600000
-      max-lifetime: 1800000
+      maximum-pool-size: ${DB_POOL_MAX}
+      minimum-idle: ${DB_POOL_MIN}
+      connection-timeout: ${DB_CONN_TIMEOUT}
+      idle-timeout: ${DB_IDLE_TIMEOUT}
+      max-lifetime: ${DB_MAX_LIFETIME}
+
   flyway:
     enabled: true
     baseline-on-migrate: true
@@ -21,19 +23,20 @@ spring:
     locations: classpath:db/migration
     validate-on-migrate: true
     clean-disabled: true
-    user: davidnguyen67dev
-    password: ThZLSkGbHn7koUctpL26ARzGK-maNiKDC-_xs9i-6J0
-    url: jdbc:postgresql://159.223.41.100:5432/clinic_postgres
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
     schemas:
       - public
+
   data:
     mongodb:
-      uri: mongodb://davidnguyen67dev:HBtGezbW83PBfJFKqqAbJWeQmdT3KdJzIEAnwrvTz88@159.223.41.100:27017/clinic_mongo?authSource=admin
-
+      uri: ${MONGODB_URI}
     redis:
-      host: 159.223.41.100
-      port: 6379
-      password: QpHCCS28JmdwWcr8g4-lwS8nWc0Lz-abTn0KJ0Brv2g
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD}
+
   jpa:
     hibernate:
       ddl-auto: validate
@@ -48,22 +51,23 @@ spring:
         jdbc:
           batch_size: 50
     open-in-view: false
+
   rabbitmq:
-    host: 159.223.41.100
-    port: 5672
-    username: davidnguyen67dev
-    password: e-ldCzHx-gUF4FImdj2eYcpl3DBDFLz7O0bsmidINAA
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
     virtual-host: /
     connection-timeout: 60000
     listener:
       simple:
-        acknowledge-mode: manual          # ACK thủ công để tránh mất message
-        prefetch: 10                       # Xử lý tối đa 10 msg/consumer cùng lúc
+        acknowledge-mode: manual
+        prefetch: 10
         retry:
           enabled: true
-          initial-interval: 3000           # Retry sau 3s
-          max-attempts: 3                  # Tối đa 3 lần retry
-          multiplier: 2.0                  # Backoff: 3s → 6s → 12s
+          initial-interval: 3000
+          max-attempts: 3
+          multiplier: 2.0
           max-interval: 30000
     template:
       retry:
@@ -71,11 +75,12 @@ spring:
         initial-interval: 1000
         max-attempts: 3
         multiplier: 2.0
+
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: davidnguyen67dev@gmail.com
-    password: "cjdo pixq zoht netl"
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -83,32 +88,30 @@ spring:
           starttls:
             enable: true
             required: true
-        debug: true
+        debug: ${MAIL_DEBUG:false}
 
 rabbitmq:
   exchange:
-    notification: clinic.notification.exchange
-    task: clinic.task.exchange
-    pubsub: clinic.pubsub.exchange
-    dead-letter: clinic.dlx.exchange       # Dead Letter Exchange
+    notification: ${RABBITMQ_EXCHANGE_NOTIFICATION}
+    task: ${RABBITMQ_EXCHANGE_TASK}
+    pubsub: ${RABBITMQ_EXCHANGE_PUBSUB}
+    dead-letter: ${RABBITMQ_EXCHANGE_DLX}
   queue:
-    email: clinic.email.queue
-    push-notification: clinic.push.queue
-    task-background: clinic.task.queue
-    pubsub-broadcast: clinic.pubsub.queue
-    # Dead Letter Queues
-    email-dlq: clinic.email.dlq
-    push-dlq: clinic.push.dlq
-    task-dlq: clinic.task.dlq
+    email: ${RABBITMQ_QUEUE_EMAIL}
+    push-notification: ${RABBITMQ_QUEUE_PUSH}
+    task-background: ${RABBITMQ_QUEUE_TASK}
+    pubsub-broadcast: ${RABBITMQ_QUEUE_PUBSUB}
+    email-dlq: ${RABBITMQ_QUEUE_EMAIL_DLQ}
+    push-dlq: ${RABBITMQ_QUEUE_PUSH_DLQ}
+    task-dlq: ${RABBITMQ_QUEUE_TASK_DLQ}
   routing-key:
-    email: clinic.email
-    push-notification: clinic.push
-    task-background: clinic.task
-    pubsub-broadcast: clinic.pubsub
-    # DLQ routing keys
-    email-dlq: clinic.email.dead
-    push-dlq: clinic.push.dead
-    task-dlq: clinic.task.dead
+    email: ${RABBITMQ_RK_EMAIL}
+    push-notification: ${RABBITMQ_RK_PUSH}
+    task-background: ${RABBITMQ_RK_TASK}
+    pubsub-broadcast: ${RABBITMQ_RK_PUBSUB}
+    email-dlq: ${RABBITMQ_RK_EMAIL_DLQ}
+    push-dlq: ${RABBITMQ_RK_PUSH_DLQ}
+    task-dlq: ${RABBITMQ_RK_TASK_DLQ}
 
 camel:
   main:
@@ -141,6 +144,6 @@ logging:
     org.springframework.jdbc.core: TRACE
 
 cors:
-  allowed-origins: "*"
+  allowed-origins: ${CORS_ALLOWED_ORIGINS}
 
 kind: Application
