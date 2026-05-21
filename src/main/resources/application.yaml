@@ -28,7 +28,7 @@ spring:
       - public
   data:
     mongodb:
-      uri: mongodb://davidnguyen67dev:HBtGezbW83PBfJFKqqAbJWeQmdT3KdJzIEAnwrvTz88@159.223.41.100:27017/clinic_mongo?authSource=admin
+      uri: ${MONGODB_URI:mongodb://localhost:27017/clinic_mongo}
 
     redis:
       host: 159.223.41.100
