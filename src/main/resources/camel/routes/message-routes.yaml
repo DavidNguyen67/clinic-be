@@ -1,0 +1,180 @@
+- onException:
+    exception:
+      - java.lang.Exception
+    handled:
+      constant: true
+    steps:
+      - process:
+          ref: exceptionProcessor
+      - marshal:
+          json: { }
+
+# PATIENT routes
+- route:
+    id: patient-message-list-route
+    from:
+      uri: direct:patient-message-list
+      steps:
+        - process:
+            ref: messageListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-message-count-route
+    from:
+      uri: direct:patient-message-count
+      steps:
+        - process:
+            ref: messageCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-message-get-route
+    from:
+      uri: direct:patient-message-get
+      steps:
+        - process:
+            ref: messageGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-message-create-route
+    from:
+      uri: direct:patient-message-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.message.CreateMessageDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: messageCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-message-update-route
+    from:
+      uri: direct:patient-message-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.message.UpdateMessageDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: messageUpdateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-message-restore-route
+    from:
+      uri: direct:patient-message-restore
+      steps:
+        - process:
+            ref: messageRestoreProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-message-delete-route
+    from:
+      uri: direct:patient-message-delete
+      steps:
+        - process:
+            ref: messageDeleteProcessor
+        - marshal:
+            json: { }
+            
+# DOCTOR routes
+- route:
+    id: doctor-message-list-route
+    from:
+      uri: direct:doctor-message-list
+      steps:
+        - process:
+            ref: messageListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-message-count-route
+    from:
+      uri: direct:doctor-message-count
+      steps:
+        - process:
+            ref: messageCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-message-get-route
+    from:
+      uri: direct:doctor-message-get
+      steps:
+        - process:
+            ref: messageGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-message-create-route
+    from:
+      uri: direct:doctor-message-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.message.CreateMessageDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: messageCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-message-update-route
+    from:
+      uri: direct:doctor-message-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.message.UpdateMessageDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: messageUpdateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-message-restore-route
+    from:
+      uri: direct:doctor-message-restore
+      steps:
+        - process:
+            ref: messageRestoreProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-message-delete-route
+    from:
+      uri: direct:doctor-message-delete
+      steps:
+        - process:
+            ref: messageDeleteProcessor
+        - marshal:
+            json: { }

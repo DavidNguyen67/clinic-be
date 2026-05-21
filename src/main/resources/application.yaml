@@ -27,6 +27,9 @@ spring:
     schemas:
       - public
   data:
+    mongodb:
+      uri: mongodb://davidnguyen67dev:HBtGezbW83PBfJFKqqAbJWeQmdT3KdJzIEAnwrvTz88@159.223.41.100:27017/clinic_mongo?authSource=admin
+
     redis:
       host: 159.223.41.100
       port: 6379
@@ -139,3 +142,5 @@ logging:
 
 cors:
   allowed-origins: "*"
+
+kind: Application

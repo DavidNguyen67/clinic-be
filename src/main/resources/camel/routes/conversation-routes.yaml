@@ -1,0 +1,183 @@
+- onException:
+    exception:
+      - java.lang.Exception
+    handled:
+      constant: true
+    steps:
+      - process:
+          ref: exceptionProcessor
+      - marshal:
+          json: { }
+
+- route:
+    id: patient-conversation-list-route
+    from:
+      uri: direct:patient-conversation-list
+      steps:
+        - process:
+            ref: conversationListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-conversation-count-route
+    from:
+      uri: direct:patient-conversation-count
+      steps:
+        - process:
+            ref: conversationCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-conversation-get-route
+    from:
+      uri: direct:patient-conversation-get
+      steps:
+        - process:
+            ref: conversationGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-conversation-create-route
+    from:
+      uri: direct:patient-conversation-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.conversation.CreateConversationDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: conversationCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-conversation-update-route
+    from:
+      uri: direct:patient-conversation-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.conversation.UpdateConversationDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: conversationUpdateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-conversation-restore-route
+    from:
+      uri: direct:patient-conversation-restore
+      steps:
+        - process:
+            ref: conversationRestoreProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: patient-conversation-delete-route
+    from:
+      uri: direct:patient-conversation-delete
+      steps:
+        - process:
+            ref: conversationDeleteProcessor
+        - marshal:
+            json: { }
+
+# ───────────────────────────────────────────
+# DOCTOR routes
+# ───────────────────────────────────────────
+
+- route:
+    id: doctor-conversation-list-route
+    from:
+      uri: direct:doctor-conversation-list
+      steps:
+        - process:
+            ref: conversationListProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-conversation-count-route
+    from:
+      uri: direct:doctor-conversation-count
+      steps:
+        - process:
+            ref: conversationCountProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-conversation-get-route
+    from:
+      uri: direct:doctor-conversation-get
+      steps:
+        - process:
+            ref: conversationGetProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-conversation-create-route
+    from:
+      uri: direct:doctor-conversation-create
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.conversation.CreateConversationDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: conversationCreateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-conversation-update-route
+    from:
+      uri: direct:doctor-conversation-update
+      steps:
+        - setHeader:
+            name: X-DTO-Class
+            constant: com.camel.clinic.dto.conversation.UpdateConversationDto
+        - process:
+            ref: requestDeserializerProcessor
+        - process:
+            ref: validationProcessor
+        - process:
+            ref: conversationUpdateProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-conversation-restore-route
+    from:
+      uri: direct:doctor-conversation-restore
+      steps:
+        - process:
+            ref: conversationRestoreProcessor
+        - marshal:
+            json: { }
+
+- route:
+    id: doctor-conversation-delete-route
+    from:
+      uri: direct:doctor-conversation-delete
+      steps:
+        - process:
+            ref: conversationDeleteProcessor
+        - marshal:
+            json: { }
+

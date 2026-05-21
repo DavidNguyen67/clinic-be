@@ -1,0 +1,41 @@
+- rest:
+    path: /v1/patient/message
+    post:
+      - path: /
+        to: direct:patient-message-create
+    get:
+      - path: /
+        to: direct:patient-message-list
+      - path: /count
+        to: direct:patient-message-count
+      - path: /{id}
+        to: direct:patient-message-get
+    patch:
+      - path: /{id}
+        to: direct:patient-message-update
+      - path: /restore/{id}
+        to: direct:patient-message-restore
+    delete:
+      - path: /{id}
+        to: direct:patient-message-delete
+
+- rest:
+    path: /v1/doctor/message
+    post:
+      - path: /
+        to: direct:doctor-message-create
+    get:
+      - path: /
+        to: direct:doctor-message-list
+      - path: /count
+        to: direct:doctor-message-count
+      - path: /{id}
+        to: direct:doctor-message-get
+    patch:
+      - path: /{id}
+        to: direct:doctor-message-update
+      - path: /restore/{id}
+        to: direct:doctor-message-restore
+    delete:
+      - path: /{id}
+        to: direct:doctor-message-delete

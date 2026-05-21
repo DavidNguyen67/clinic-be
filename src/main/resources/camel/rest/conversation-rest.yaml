@@ -1,0 +1,41 @@
+- rest:
+    path: /v1/patient/conversation
+    post:
+      - path: /
+        to: direct:patient-conversation-create
+    get:
+      - path: /
+        to: direct:patient-conversation-list
+      - path: /count
+        to: direct:patient-conversation-count
+      - path: /{id}
+        to: direct:patient-conversation-get
+    patch:
+      - path: /{id}
+        to: direct:patient-conversation-update
+      - path: /restore/{id}
+        to: direct:patient-conversation-restore
+    delete:
+      - path: /{id}
+        to: direct:patient-conversation-delete
+
+- rest:
+    path: /v1/doctor/conversation
+    post:
+      - path: /
+        to: direct:doctor-conversation-create
+    get:
+      - path: /
+        to: direct:doctor-conversation-list
+      - path: /count
+        to: direct:doctor-conversation-count
+      - path: /{id}
+        to: direct:doctor-conversation-get
+    patch:
+      - path: /{id}
+        to: direct:doctor-conversation-update
+      - path: /restore/{id}
+        to: direct:doctor-conversation-restore
+    delete:
+      - path: /{id}
+        to: direct:doctor-conversation-delete
