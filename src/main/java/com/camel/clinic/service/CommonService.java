@@ -225,6 +225,12 @@ public class CommonService {
         String s = value.toString().trim();
         if (s.isBlank()) return Collections.emptyList();
 
+        if (s.startsWith("[") && s.endsWith("]")) {
+            s = s.substring(1, s.length() - 1).trim();
+        }
+
+        if (s.isBlank()) return Collections.emptyList();
+
         return Arrays.stream(s.split(","))
                 .map(String::trim)
                 .filter(part -> !part.isBlank())

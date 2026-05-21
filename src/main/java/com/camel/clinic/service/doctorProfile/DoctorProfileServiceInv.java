@@ -34,7 +34,6 @@ public class DoctorProfileServiceInv extends BaseService<DoctorProfile, DoctorPr
         return repository.findAll(buildSpec(Map.of("ids", ids)));
     }
 
-
     @Override
     protected Specification<DoctorProfile> buildSpec(Map<String, Object> queryParams) {
         List<String> ids = (List<String>) queryParams.get("ids");
