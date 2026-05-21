@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class MessageServiceInv extends BaseMongoService<MessageDocument, MessageRepository> {
-    protected final MongoTemplate mongoTemplate;
+    public final MongoTemplate mongoTemplate;
 
     public MessageServiceInv(MessageRepository repository, MongoTemplate mongoTemplate) {
         super(MessageDocument::new, repository, mongoTemplate, MessageDocument.class);

@@ -5,7 +5,7 @@ import com.camel.clinic.entity.User;
 import com.camel.clinic.repository.UserRepository;
 import com.camel.clinic.service.BaseService;
 import com.camel.clinic.service.CommonService;
-import com.camel.clinic.service.EmailUniqueService;
+import com.camel.clinic.service.redis.EmailUniqueService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;

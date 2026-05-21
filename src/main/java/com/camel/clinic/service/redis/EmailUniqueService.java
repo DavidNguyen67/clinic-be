@@ -1,4 +1,4 @@
-package com.camel.clinic.service;
+package com.camel.clinic.service.redis;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

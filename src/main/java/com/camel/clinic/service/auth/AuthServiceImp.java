@@ -6,7 +6,7 @@ import com.camel.clinic.entity.User;
 import com.camel.clinic.exception.BadRequestException;
 import com.camel.clinic.exception.NotFoundException;
 import com.camel.clinic.service.CommonService;
-import com.camel.clinic.service.EmailUniqueService;
+import com.camel.clinic.service.redis.EmailUniqueService;
 import com.camel.clinic.util.JwtUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

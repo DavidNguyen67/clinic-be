@@ -1,4 +1,4 @@
-package com.camel.clinic.service;
+package com.camel.clinic.service.redis;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
