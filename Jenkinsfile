@@ -61,13 +61,9 @@ pipeline {
             }
             steps {
                 script {
-                    withCredentials([file(credentialsId: "${env.ENV_FILE}", variable: 'DOTENV_FILE')]) {
-                        echo "🔨 Building image: ${env.IMAGE_TAG}"
-                        sh 'cp $DOTENV_FILE .env'
-                        sh "docker build -t ${env.IMAGE_TAG} ."
-                        sh "docker tag ${env.IMAGE_TAG} ${DOCKERHUB_REPO}:latest"
-                        sh 'rm -f .env'
-                    }
+                    echo "🔨 Building image: ${env.IMAGE_TAG}"
+                    sh "docker build -t ${env.IMAGE_TAG} ."
+                    sh "docker tag ${env.IMAGE_TAG} ${DOCKERHUB_REPO}:latest"
                 }
             }
         }
@@ -106,6 +102,7 @@ pipeline {
                                 credentialsId: "${SSH_CREDS}",
                                 keyFileVariable: 'SSH_KEY'
                         ),
+                        file(credentialsId: "${ENV_FILE}", variable: 'DOTENV_FILE'),
                         usernamePassword(
                                 credentialsId: "${DOCKERHUB_CREDS}",
                                 usernameVariable: 'DOCKER_USER',
@@ -120,7 +117,6 @@ pipeline {
                         def port = APP_PORT
                         def host = VPS_HOST
                         def user = VPS_USER
-
                         def deployScript = """#!/bin/bash
                                 set -e
 
@@ -154,6 +150,7 @@ pipeline {
                                 docker run -d \\
                                     --name ${name} \\
                                     --restart unless-stopped \\
+                                    --env-file /opt/be-clinic/.env \\
                                     -p ${port}:8080 \\
                                     ${tag}
 
@@ -168,10 +165,23 @@ pipeline {
                                 docker logout
                                 echo "Deploy thanh cong!"
                                 """
+
+
                         // Ghi script vào file tạm trên Jenkins agent
                         writeFile file: '/tmp/deploy.sh', text: deployScript
 
                         // scp file lên VPS, rồi ssh chạy — truyền credentials qua env vars
+                        sh '''
+                            ssh -i "$SSH_KEY" \
+                                -o StrictHostKeyChecking=no \
+                                -o ConnectTimeout=10 \
+                                ''' + "${user}@${host}" + ''' "mkdir -p /opt/be-clinic"
+                        
+                            scp -i "$SSH_KEY" \
+                                -o StrictHostKeyChecking=no \
+                                -o ConnectTimeout=10 \
+                                "$DOTENV_FILE" ''' + "${user}@${host}" + ''':/opt/be-clinic/.env
+                        '''
                         sh '''
                                 scp -i "$SSH_KEY" \
                                     -o StrictHostKeyChecking=no \
