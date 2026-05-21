@@ -16,6 +16,8 @@ public interface MessageService {
 
     ResponseEntity<?> create(CreateMessageDto requestBody, String senderId);
 
+    void markAsRead(String messageId, String userId);
+
     ResponseEntity<?> update(String id, UpdateMessageDto requestBody, String senderId);
 
     ResponseEntity<?> delete(String id);

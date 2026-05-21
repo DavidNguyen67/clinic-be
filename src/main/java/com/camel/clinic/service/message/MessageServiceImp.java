@@ -1,13 +1,16 @@
 package com.camel.clinic.service.message;
 
+import com.camel.clinic.document.ConversationDocument;
 import com.camel.clinic.document.MessageDocument;
 import com.camel.clinic.dto.message.CreateMessageDto;
 import com.camel.clinic.dto.message.ResponseMessageDto;
 import com.camel.clinic.dto.message.UpdateMessageDto;
 import com.camel.clinic.exception.BadRequestException;
+import com.camel.clinic.service.conversation.ConversationServiceInv;
 import com.camel.clinic.util.MessageStatus;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.camel.ProducerTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,8 @@ import java.util.Map;
 public class MessageServiceImp implements MessageService {
 
     private final MessageServiceInv serviceInv;
+    private final ConversationServiceInv conversationServiceInv;
+    private final ProducerTemplate producerTemplate;
 
     @Override
     public ResponseEntity<?> list(Map<String, Object> queryParams) {
@@ -45,7 +50,36 @@ public class MessageServiceImp implements MessageService {
         message.setStatus(MessageStatus.SENT);
         message.setReplyTo(requestBody.getReplyTo());
 
-        return serviceInv.create(message);
+        MessageDocument saved = (MessageDocument) serviceInv.create(message).getBody();
+
+        ConversationDocument conversation = conversationServiceInv.findOne(
+                Map.of("userId", senderId, "conversationId", requestBody.getConversationId())
+        );
+
+        if (conversation != null) {
+            ConversationDocument.LastMessageSnapshot lastMsg = new ConversationDocument.LastMessageSnapshot();
+            lastMsg.setSenderId(senderId);
+            lastMsg.setContent(requestBody.getContent());
+            assert saved != null;
+            lastMsg.setSentAt(saved.getCreatedAt());
+
+            ConversationDocument patch = new ConversationDocument();
+            patch.setLastMessage(lastMsg);
+
+            conversationServiceInv.update(conversation.getId(), patch, null);
+        }
+        //TODO:Async publish sang RabbitMQ qua Camel (cho notification/email về sau)
+//        producerTemplate.asyncSendBody(
+//                "spring-rabbitmq:chat.exchange?routingKey=chat.message.new",
+//                saved
+//        );
+        assert saved != null;
+        return ResponseEntity.ok(ResponseMessageDto.from(saved));
+    }
+
+    @Override
+    public void markAsRead(String messageId, String userId) {
+        serviceInv.markAsRead(messageId, userId);
     }
 
     @Override
