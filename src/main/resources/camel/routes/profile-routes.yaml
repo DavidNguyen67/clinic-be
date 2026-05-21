@@ -1,0 +1,20 @@
+- onException:
+    exception:
+      - java.lang.Exception
+    handled:
+      constant: true
+    steps:
+      - process:
+          ref: exceptionProcessor
+      - marshal:
+          json: { }
+
+- route:
+    id: public-profile-list-route
+    from:
+      uri: direct:public-profile-list
+      steps:
+        - process:
+            ref: profileListProcessor
+        - marshal:
+            json: { }

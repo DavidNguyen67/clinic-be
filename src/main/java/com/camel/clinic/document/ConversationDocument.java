@@ -1,6 +1,7 @@
 package com.camel.clinic.document;
 
 import com.camel.clinic.util.ConversationType;
+import com.camel.clinic.util.MessageType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,9 +42,12 @@ public class ConversationDocument extends SofDeleteDocument {
     public static class LastMessageSnapshot {
         @Field("sender_id")
         private String senderId;
-        
+
         @Field("content")
         private String content;
+
+        @Field("type")
+        private MessageType type;
 
         @Field("sent_at")
         @JsonFormat(

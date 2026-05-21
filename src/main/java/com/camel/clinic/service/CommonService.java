@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -218,4 +220,23 @@ public class CommonService {
         return new DateRange(start, end);
     }
 
+    public static <T> List<T> parseToList(Object value, Function<String, T> parser) {
+        if (value == null) return Collections.emptyList();
+        String s = value.toString().trim();
+        if (s.isBlank()) return Collections.emptyList();
+
+        return Arrays.stream(s.split(","))
+                .map(String::trim)
+                .filter(part -> !part.isBlank())
+                .map(part -> {
+                    try {
+                        return parser.apply(part);
+                    } catch (Exception e) {
+                        log.warn("Failed to parse value '{}'", part);
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
 }

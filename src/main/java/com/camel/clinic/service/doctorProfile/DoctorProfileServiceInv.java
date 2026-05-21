@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -29,10 +30,19 @@ public class DoctorProfileServiceInv extends BaseService<DoctorProfile, DoctorPr
         super(DoctorProfile::new, repository);
     }
 
+    public List<DoctorProfile> findInIds(List<String> ids) {
+        return repository.findAll(buildSpec(Map.of("ids", ids)));
+    }
+
+
     @Override
     protected Specification<DoctorProfile> buildSpec(Map<String, Object> queryParams) {
+        List<String> ids = (List<String>) queryParams.get("ids");
+        List<UUID> uuids = CommonService.parseToList(ids, UUID::fromString);
+
         return Specification.<DoctorProfile>unrestricted()
                 .and(notDeleted())
+                .and(multiFieldIn(uuids, new String[]{"id"}))
                 .and(multiFieldGreaterThan(CommonService.parseToLong(queryParams.get("minFee")), true,
                         new String[]{"consultationFee"}))
                 .and(multiFieldLessThan(CommonService.parseToLong(queryParams.get("maxFee")), true,

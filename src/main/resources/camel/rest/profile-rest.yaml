@@ -1,0 +1,5 @@
+- rest:
+    path: /v1/public/profile
+    get:
+      - path: /
+        to: direct:public-profile-list
