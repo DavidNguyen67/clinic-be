@@ -43,4 +43,9 @@ public class ConversationServiceInv extends BaseMongoService<ConversationDocumen
     public ConversationDocument findOne(Map<String, Object> queryParams) {
         return mongoTemplate.findOne(Query.query(buildCriteria(queryParams)), ConversationDocument.class);
     }
+
+    @Override
+    protected ConversationDocument toResponse(ConversationDocument doc) {
+        return doc;
+    }
 }

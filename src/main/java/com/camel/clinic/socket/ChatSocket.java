@@ -1,4 +1,4 @@
-package com.camel.clinic.listener;
+package com.camel.clinic.socket;
 
 import com.camel.clinic.dto.chat.ReadReceiptDto;
 import com.camel.clinic.dto.chat.TypingPayloadDto;
@@ -6,6 +6,7 @@ import com.camel.clinic.dto.message.CreateMessageDto;
 import com.camel.clinic.dto.message.ResponseMessageDto;
 import com.camel.clinic.service.message.MessageServiceImp;
 import lombok.AllArgsConstructor;
+import org.apache.camel.ProducerTemplate;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -16,10 +17,11 @@ import java.security.Principal;
 
 @Controller
 @AllArgsConstructor
-public class ChatListener {
+public class ChatSocket {
 
     private final SimpMessagingTemplate messagingTemplate;
     private final MessageServiceImp messageServiceImp;
+    private final ProducerTemplate producerTemplate;
 
     @MessageMapping("/chat/{conversationId}")
     public void sendMessage(
@@ -30,6 +32,11 @@ public class ChatListener {
         ResponseMessageDto saved =
                 messageServiceImp.create(payload, principal.getName()).getBody()
                         instanceof ResponseMessageDto msg ? msg : null;
+        // TODO:Async publish sang RabbitMQ qua Camel (cho notification/email về sau)
+        //        producerTemplate.asyncSendBody(
+        //                "spring-rabbitmq:chat.exchange?routingKey=chat.message.new",
+        //                saved
+        //        );
         assert saved != null;
         messagingTemplate.convertAndSend(
                 "/topic/conversation/" + conversationId,

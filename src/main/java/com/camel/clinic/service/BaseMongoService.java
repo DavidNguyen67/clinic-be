@@ -121,7 +121,10 @@ public abstract class BaseMongoService<T extends SofDeleteDocument, R extends Mo
             long total = mongoTemplate.count(query, documentClass);
 
             query.with(pageable);
-            List<T> content = mongoTemplate.find(query, documentClass);
+            List<T> content = mongoTemplate.find(query, documentClass)
+                    .stream()
+                    .map(this::toResponse)  // ← thêm dòng này
+                    .toList();
 
             Page<T> resultPage = new PageImpl<>(content, pageable, total);
 
@@ -563,5 +566,9 @@ public abstract class BaseMongoService<T extends SofDeleteDocument, R extends Mo
         cal.set(Calendar.SECOND, 59);
         cal.set(Calendar.MILLISECOND, 999);
         return cal.getTime();
+    }
+
+    protected T toResponse(T document) {
+        return document; // default: trả nguyên
     }
 }

@@ -10,7 +10,6 @@ import com.camel.clinic.service.conversation.ConversationServiceInv;
 import com.camel.clinic.util.MessageStatus;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.ProducerTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,6 @@ public class MessageServiceImp implements MessageService {
 
     private final MessageServiceInv serviceInv;
     private final ConversationServiceInv conversationServiceInv;
-    private final ProducerTemplate producerTemplate;
 
     @Override
     public ResponseEntity<?> list(Map<String, Object> queryParams) {
@@ -68,11 +66,6 @@ public class MessageServiceImp implements MessageService {
 
             conversationServiceInv.update(conversation.getId(), patch, null);
         }
-        //TODO:Async publish sang RabbitMQ qua Camel (cho notification/email về sau)
-//        producerTemplate.asyncSendBody(
-//                "spring-rabbitmq:chat.exchange?routingKey=chat.message.new",
-//                saved
-//        );
         assert saved != null;
         return ResponseEntity.ok(ResponseMessageDto.from(saved));
     }
